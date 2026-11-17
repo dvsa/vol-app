@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Form;
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Validator\ValidateIf;
@@ -12,6 +13,7 @@ use Laminas\Form\ElementInterface;
 use Laminas\InputFilter\InputFilter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Validator\ValidatorChain;
+use Laminas\Validator\NotEmpty;
 use Laminas\Validator\ValidatorPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -40,9 +42,13 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
         $this->translator = m::mock(TranslationHelperService::class);
         $validatorPluginManager = m::mock(ValidatorPluginManager::class);
         $validatorPluginManager->shouldReceive('get')
+            ->with(NotEmpty::class)
+            ->andReturn($this->createMock(NotEmpty::class))
+            ->once();
+        $validatorPluginManager->shouldReceive('get')
             ->with(ValidateIf::class)
-            ->andReturn($this->createMock(ValidateIf::class), $this->createMock(ValidateIf::class))
-            ->twice();
+            ->andReturn($this->createMock(ValidateIf::class))
+            ->once();
 
         $serviceManager = $this->createMock(ServiceLocatorInterface::class);
         $serviceManager->method('get')->willReturnMap([
@@ -94,12 +100,9 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
         $uploadNowInput->shouldReceive('setRequired')->with(false);
         $uploadNowInput->shouldReceive('setContinueIfEmpty')->with(true);
         $uploadNowInput->shouldReceive('getValidatorChain')->andReturn($validatorChain);
-        $uploadLaterInput = m::mock(\Laminas\InputFilter\Input::class);
-        $uploadLaterInput->shouldReceive('setRequired')->with(false);
         $uploadedFileCountInput = m::mock(\Laminas\InputFilter\Input::class);
         $uploadedFileCountInput->shouldReceive('getValidatorChain')->andReturn($validatorChain);
         $evidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn($uploadNowInput);
-        $evidenceInputFilter->shouldReceive('get')->with('uploadLaterRadio')->andReturn($uploadLaterInput);
         $evidenceInputFilter->shouldReceive('get')->with('uploadedFileCount')->andReturn($uploadedFileCountInput);
 
         $mockForm->shouldReceive('getInputFilter')->andReturn($inputFilter);
@@ -111,38 +114,33 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
 
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
+        $uploadNowRadioElement = m::mock(ElementInterface::class)
+            ->shouldReceive('setName')->with('uploadNow')->once()
+            ->shouldReceive('getValueOptions')->andReturn([
+                RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+            ])
+            ->shouldReceive('setValueOptions')->with([
+                RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+                RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+            ])
+            ->shouldReceive('setOption')->with('single-radio', false)->once()
+            ->shouldReceive('setAttribute')->with('required', true)->once()
+            ->getMock();
+        $uploadLaterRadioElement = m::mock(ElementInterface::class)
+            ->shouldReceive('getValueOptions')->andReturn([
+                RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+            ])
+            ->getMock();
+        $evidenceFieldset = m::mock(ElementInterface::class)
+            ->shouldReceive('get')->with('uploadNowRadio')->andReturn($uploadNowRadioElement)->once()
+            ->shouldReceive('get')->with('uploadLaterRadio')->andReturn($uploadLaterRadioElement)->once()
+            ->shouldReceive('remove')->with('uploadLaterRadio')->once()
+            ->shouldReceive('setOption')->with('hint', 'BAR')->once()
+            ->getMock();
+
         $mockForm->shouldReceive('get')
             ->with('evidence')
-            ->andReturn(
-                m::mock(ElementInterface::class)
-                    ->shouldReceive('get')
-                    ->with('uploadNowRadio')
-                    ->andReturn(
-                        m::mock(ElementInterface::class)
-                            ->shouldReceive('setName')
-                            ->with('uploadNow')
-                            ->once()
-                            ->shouldReceive('setAttribute')
-                            ->with('required', true)
-                            ->once()
-                            ->getMock()
-                    )
-                    ->once()
-                    ->shouldReceive('get')
-                    ->with('uploadLaterRadio')
-                    ->andReturn(
-                        m::mock(ElementInterface::class)
-                            ->shouldReceive('setName')
-                            ->with('uploadNow')
-                            ->once()
-                            ->getMock()
-                    )
-                    ->once()
-                    ->shouldReceive('setOption')
-                    ->with('hint', 'BAR')
-                    ->once()
-                    ->getMock()
-            )
+            ->andReturn($evidenceFieldset)
             ->once();
 
         $this->formHelper->shouldReceive('createFormWithRequest')

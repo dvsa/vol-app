@@ -25,28 +25,16 @@ class FinancialEvidence implements MapperInterface
     #[\Override]
     public static function mapFromResult(array $data)
     {
-        $uploadNow = null;
-        $uploadLater = null;
-
-        // switch / case do not distinguishes 0 and null so need to use this trick
-        switch (true) {
-            case $data['financialEvidenceUploaded'] === RefData::AD_UPLOAD_NOW:
-                $uploadNow = RefData::AD_UPLOAD_NOW;
-                break;
-            case $data['financialEvidenceUploaded'] === RefData::AD_UPLOAD_LATER:
-                $uploadLater = RefData::AD_UPLOAD_LATER;
-                break;
-        }
-
-        $evidenceFieldset = [
-            'uploadNowRadio' => $uploadNow,
-            'uploadLaterRadio' => $uploadLater,
-        ];
+        $uploadChoice = in_array($data['financialEvidenceUploaded'], [RefData::AD_UPLOAD_NOW, RefData::AD_UPLOAD_LATER], true)
+            ? $data['financialEvidenceUploaded']
+            : null;
 
         return [
             'id'       => $data['id'],
             'version'  => $data['version'],
-            'evidence' => $evidenceFieldset
+            'evidence' => [
+                'uploadNowRadio' => $uploadChoice,
+            ],
         ];
     }
 
@@ -63,24 +51,20 @@ class FinancialEvidence implements MapperInterface
             return [];
         }
 
-        $uploadNow = null;
-        $uploadLater = null;
+        $uploadChoice = null;
         $sendByPost = null;
 
         $postUploadNow = (int) ($data['evidence']['uploadNow'] ?? 0);
-        if ($postUploadNow === RefData::AD_UPLOAD_NOW) {
-            $uploadNow = RefData::AD_UPLOAD_NOW;
+        if (in_array($postUploadNow, [RefData::AD_UPLOAD_NOW, RefData::AD_UPLOAD_LATER], true)) {
+            $uploadChoice = $postUploadNow;
         } elseif ($postUploadNow === RefData::AD_POST) {
             $sendByPost = RefData::AD_POST;
-        } elseif ($postUploadNow === RefData::AD_UPLOAD_LATER) {
-            $uploadLater = RefData::AD_UPLOAD_LATER;
         }
 
         $evidenceFieldset = array_merge(
             $data['evidence'],
             [
-                'uploadNowRadio' => $uploadNow,
-                'uploadLaterRadio' => $uploadLater,
+                'uploadNowRadio' => $uploadChoice,
                 'uploadedFileCount' => isset($data['evidence']['files']['list'])
                     ? count($data['evidence']['files']['list'])
                     : 0
@@ -104,9 +88,9 @@ class FinancialEvidence implements MapperInterface
         $dataEvidence = $data['evidence'];
         if (
             isset($dataEvidence['uploadNowRadio'])
-            && (int) $dataEvidence['uploadNowRadio'] === RefData::AD_UPLOAD_NOW
+            && in_array((int) $dataEvidence['uploadNowRadio'], [RefData::AD_UPLOAD_NOW, RefData::AD_UPLOAD_LATER], true)
         ) {
-            $uploadNow = RefData::AD_UPLOAD_NOW;
+            $uploadNow = (int) $dataEvidence['uploadNowRadio'];
         } elseif (
             isset($dataEvidence['uploadLaterRadio'])
             && (int) $dataEvidence['uploadLaterRadio'] === RefData::AD_UPLOAD_LATER

@@ -5,7 +5,6 @@ namespace Common\FormService\Form\Lva;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
-use Common\RefData;
 use Common\Validator\FileUploadCount;
 use Common\Validator\ValidateIf;
 use Laminas\Form\Form;
@@ -33,9 +32,15 @@ class FinancialEvidence extends AbstractLvaFormService
     {
         $evidenceFieldset = $form->get('evidence');
         $uploadNowRadio = $evidenceFieldset->get('uploadNowRadio');
+        $uploadLaterRadio = $evidenceFieldset->get('uploadLaterRadio');
         $uploadNowRadio->setName('uploadNow');
+        $uploadNowRadio->setValueOptions(array_replace(
+            $uploadNowRadio->getValueOptions(),
+            $uploadLaterRadio->getValueOptions()
+        ));
+        $uploadNowRadio->setOption('single-radio', false);
         $uploadNowRadio->setAttribute('required', true);
-        $evidenceFieldset->get('uploadLaterRadio')->setName('uploadNow');
+        $evidenceFieldset->remove('uploadLaterRadio');
         $this->formHelper->remove($form, 'evidence->uploadNow');
 
         $evidenceHint = $this->translator->translateReplace(
@@ -55,23 +60,10 @@ class FinancialEvidence extends AbstractLvaFormService
         $uploadNowInput->setRequired(false);
         $uploadNowInput->setContinueIfEmpty(true);
 
-        $uploadLaterInput = $evidenceInputFilter->get('uploadLaterRadio');
-        $uploadLaterInput->setRequired(false);
-
-        $requiredChoiceValidator = $this->validatorPluginManager->get(ValidateIf::class);
+        $requiredChoiceValidator = $this->validatorPluginManager->get(NotEmpty::class);
         $requiredChoiceValidator->setOptions([
-            'context_field' => 'uploadLaterRadio',
-            'context_values' => [RefData::AD_UPLOAD_LATER],
-            'context_truth' => false,
-            'validators' => [
-                [
-                    'name' => NotEmpty::class,
-                    'options' => [
-                        'messages' => [
-                            NotEmpty::IS_EMPTY => 'financialEvidence_uploadNow-error',
-                        ],
-                    ],
-                ],
+            'messages' => [
+                NotEmpty::IS_EMPTY => 'financialEvidence_uploadNow-error',
             ],
         ]);
         $uploadNowInput->getValidatorChain()->attach($requiredChoiceValidator);

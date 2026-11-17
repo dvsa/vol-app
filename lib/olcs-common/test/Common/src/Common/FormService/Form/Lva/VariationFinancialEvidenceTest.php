@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CommonTest\Common\FormService\Form\Lva;
 
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Validator\ValidateIf;
@@ -13,6 +14,7 @@ use Laminas\Form\FormInterface;
 use Laminas\InputFilter\InputFilterInterface;
 use Laminas\InputFilter\InputInterface;
 use Laminas\ServiceManager\ServiceManager;
+use Laminas\Validator\NotEmpty;
 use Laminas\Validator\ValidatorPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -83,26 +85,41 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
 
         $uploadNowRadioElement = m::mock(ElementInterface::class);
         $uploadNowRadioElement->expects('setName')->with('uploadNow');
+        $uploadNowRadioElement->expects('getValueOptions')->andReturn([
+            RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+        ]);
+        $uploadNowRadioElement->expects('setValueOptions')->with([
+            RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+            RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+        ]);
+        $uploadNowRadioElement->expects('setOption')->with('single-radio', false);
         $uploadNowRadioElement->expects('setAttribute')->with('required', true);
 
         $uploadLaterRadioElement = m::mock(ElementInterface::class);
-        $uploadLaterRadioElement->expects('setName')->with('uploadNow');
+        $uploadLaterRadioElement->expects('getValueOptions')->andReturn([
+            RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+        ]);
 
         $evidenceFieldset = m::mock(FieldsetInterface::class);
         $evidenceFieldset->expects('get')->with('uploadNowRadio')->andReturn($uploadNowRadioElement);
         $evidenceFieldset->expects('get')->with('uploadLaterRadio')->andReturn($uploadLaterRadioElement);
+        $evidenceFieldset->expects('remove')->with('uploadLaterRadio');
         $evidenceFieldset->expects('setOption')->with('hint', 'BAR');
 
         $validateIfValidator = m::mock(ValidateIf::class);
         $validateIfValidator->expects('setOptions')->with(m::type('array'));
 
-        $requiredChoiceValidator = m::mock(ValidateIf::class);
+        $requiredChoiceValidator = m::mock(NotEmpty::class);
         $requiredChoiceValidator->expects('setOptions')->with(m::type('array'));
 
         $this->validatorPluginManager->shouldReceive('get')
+            ->with(NotEmpty::class)
+            ->andReturn($requiredChoiceValidator)
+            ->once();
+        $this->validatorPluginManager->shouldReceive('get')
             ->with(ValidateIf::class)
-            ->andReturn($requiredChoiceValidator, $validateIfValidator)
-            ->twice();
+            ->andReturn($validateIfValidator)
+            ->once();
 
         $fileCountInput = m::mock(InputInterface::class);
         $fileCountInput->expects('getValidatorChain->attach')->with($validateIfValidator);
@@ -112,13 +129,9 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
         $uploadNowInput->expects('setContinueIfEmpty')->with(true);
         $uploadNowInput->expects('getValidatorChain->attach')->with($requiredChoiceValidator);
 
-        $uploadLaterInput = m::mock(InputInterface::class);
-        $uploadLaterInput->expects('setRequired')->with(false);
-
         $evidenceInputFilter = m::mock(InputFilterInterface::class);
         $evidenceInputFilter->expects('get')->with('uploadedFileCount')->andReturn($fileCountInput);
         $evidenceInputFilter->expects('get')->with('uploadNowRadio')->andReturn($uploadNowInput);
-        $evidenceInputFilter->expects('get')->with('uploadLaterRadio')->andReturn($uploadLaterInput);
 
         $inputFilterInterface = m::mock(InputFilterInterface::class);
         $inputFilterInterface->expects('get')->with('evidence')->andReturn($evidenceInputFilter);

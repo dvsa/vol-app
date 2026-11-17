@@ -11,12 +11,10 @@ use Common\RefData;
 use Common\Validator\ValidateIf;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\FieldsetInterface;
-use Laminas\Form\FormInterface;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilterInterface;
 use Laminas\InputFilter\InputInterface;
 use Laminas\Validator\NotEmpty;
-use Laminas\Validator\ValidatorChain;
 use Laminas\Validator\ValidatorPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -78,40 +76,45 @@ final class FinancialEvidenceTest extends MockeryTestCase
 
         $uploadNowRadioElement = m::mock(ElementInterface::class);
         $uploadNowRadioElement->expects('setName')->with('uploadNow');
+        $uploadNowRadioElement->expects('getValueOptions')->andReturn([
+            RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+        ]);
+        $uploadNowRadioElement->expects('setValueOptions')->with([
+            RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+            RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+        ]);
+        $uploadNowRadioElement->expects('setOption')->with('single-radio', false);
         $uploadNowRadioElement->expects('setAttribute')->with('required', true);
 
         $uploadLaterRadioElement = m::mock(ElementInterface::class);
-        $uploadLaterRadioElement->expects('setName')->with('uploadNow');
+        $uploadLaterRadioElement->expects('getValueOptions')->andReturn([
+            RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+        ]);
 
         $evidenceFieldset = m::mock(FieldsetInterface::class);
         $evidenceFieldset->expects('get')->with('uploadNowRadio')->andReturn($uploadNowRadioElement);
         $evidenceFieldset->expects('get')->with('uploadLaterRadio')->andReturn($uploadLaterRadioElement);
+        $evidenceFieldset->expects('remove')->with('uploadLaterRadio');
         $evidenceFieldset->expects('setOption')->with('hint', 'BAR');
 
         $validateIfValidator = m::mock(ValidateIf::class);
         $validateIfValidator->expects('setOptions')->with(m::type('array'));
 
-        $requiredChoiceValidator = m::mock(ValidateIf::class);
+        $requiredChoiceValidator = m::mock(NotEmpty::class);
         $requiredChoiceValidator->expects('setOptions')->with([
-            'context_field' => 'uploadLaterRadio',
-            'context_values' => [RefData::AD_UPLOAD_LATER],
-            'context_truth' => false,
-            'validators' => [
-                [
-                    'name' => NotEmpty::class,
-                    'options' => [
-                        'messages' => [
-                            NotEmpty::IS_EMPTY => 'financialEvidence_uploadNow-error',
-                        ],
-                    ],
-                ],
+            'messages' => [
+                NotEmpty::IS_EMPTY => 'financialEvidence_uploadNow-error',
             ],
         ]);
 
         $this->validatorPluginManager->shouldReceive('get')
+            ->with(NotEmpty::class)
+            ->andReturn($requiredChoiceValidator)
+            ->once();
+        $this->validatorPluginManager->shouldReceive('get')
             ->with(ValidateIf::class)
-            ->andReturn($requiredChoiceValidator, $validateIfValidator)
-            ->twice();
+            ->andReturn($validateIfValidator)
+            ->once();
 
         $fileCountInput = m::mock(InputInterface::class);
         $fileCountInput->expects('getValidatorChain->attach')->with($validateIfValidator);
@@ -121,13 +124,9 @@ final class FinancialEvidenceTest extends MockeryTestCase
         $uploadNowInput->expects('setContinueIfEmpty')->with(true);
         $uploadNowInput->expects('getValidatorChain->attach')->with($requiredChoiceValidator);
 
-        $uploadLaterInput = m::mock(InputInterface::class);
-        $uploadLaterInput->expects('setRequired')->with(false);
-
         $evidenceInputFilter = m::mock(InputFilterInterface::class);
         $evidenceInputFilter->expects('get')->with('uploadedFileCount')->andReturn($fileCountInput);
         $evidenceInputFilter->expects('get')->with('uploadNowRadio')->andReturn($uploadNowInput);
-        $evidenceInputFilter->expects('get')->with('uploadLaterRadio')->andReturn($uploadLaterInput);
 
         $inputFilterInterface = m::mock(InputFilterInterface::class);
         $inputFilterInterface->expects('get')->with('evidence')->andReturn($evidenceInputFilter);
@@ -153,38 +152,27 @@ final class FinancialEvidenceTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('requiredChoiceProvider')]
-    public function testUploadChoiceIsRequired($uploadNow, $uploadLater, bool $isValid): void
+    public function testUploadChoiceIsRequired($uploadChoice, bool $isValid): void
     {
-        $validatorChain = new ValidatorChain();
-        $validatorChain->attach(new NotEmpty([
+        $input = new Input();
+        $input->setRequired(false);
+        $input->setContinueIfEmpty(true);
+        $input->getValidatorChain()->attach(new NotEmpty([
             'messages' => [
                 NotEmpty::IS_EMPTY => 'financialEvidence_uploadNow-error',
             ],
         ]));
+        $input->setValue($uploadChoice);
 
-        $requiredChoiceValidator = new ValidateIf();
-        $requiredChoiceValidator->setOptions([
-            'context_field' => 'uploadLaterRadio',
-            'context_values' => [RefData::AD_UPLOAD_LATER],
-            'context_truth' => false,
-        ]);
-        $requiredChoiceValidator->setValidatorChain($validatorChain);
-
-        $input = new Input();
-        $input->setRequired(false);
-        $input->setContinueIfEmpty(true);
-        $input->getValidatorChain()->attach($requiredChoiceValidator);
-        $input->setValue($uploadNow);
-
-        $this->assertSame($isValid, $input->isValid(['uploadLaterRadio' => $uploadLater]));
+        $this->assertSame($isValid, $input->isValid());
     }
 
     public static function requiredChoiceProvider(): array
     {
         return [
-            'no choice' => [null, null, false],
-            'upload now' => [RefData::AD_UPLOAD_NOW, null, true],
-            'upload later' => [null, RefData::AD_UPLOAD_LATER, true],
+            'no choice' => [null, false],
+            'upload now' => [RefData::AD_UPLOAD_NOW, true],
+            'upload later' => [RefData::AD_UPLOAD_LATER, true],
         ];
     }
 }
