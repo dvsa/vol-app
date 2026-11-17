@@ -47,7 +47,7 @@ class DeclarationReviewService extends AbstractReviewService
         }
         $mainItems = [
             [
-                'markup' => $this->getDeclarationMarkup($continuationDetail)
+                'markup' => $this->getLongTextDeclarationMarkup($continuationDetail)
             ],
             [
                 'header' => 'continuations.declaration.signature-details',

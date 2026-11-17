@@ -101,9 +101,52 @@ final class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
         self::assertSame('partial wording', $this->sut->getLongTextMarkup($data));
     }
 
+    public function testGetConfigFromDataUsesTheManagedWordingWhenNotInternal(): void
+    {
+        $data = [
+            'isGoods' => false,
+            'isInternal' => false,
+            'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+            'niFlag' => 'N',
+        ];
+
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application-declaration-psv-restricted')
+            ->andReturn('managed wording');
+
+        self::assertSame(['markup' => 'managed wording'], $this->sut->getConfigFromData($data));
+    }
+
+    public function testGetConfigFromDataKeepsThePartialsWhenInternal(): void
+    {
+        $data = [
+            'isGoods' => false,
+            'isInternal' => true,
+            'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+            'niFlag' => 'N',
+        ];
+
+        $this->mockTranslator->shouldReceive('translate')
+            ->with('markup-application-declaration-psv-restricted')
+            ->andReturn('managed wording');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_PSV421-Restricted')
+            ->andReturn('partial wording [%s]');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_PSV421-declare')
+            ->andReturn('declare');
+
+        self::assertSame(['markup' => 'partial wording [declare]'], $this->sut->getConfigFromData($data));
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData(mixed $data, mixed $expected): void
     {
+        // No managed wording yet, so the long text key falls back to the partials
+        $this->mockTranslator->shouldReceive('translate')
+            ->with(m::pattern('/^markup-application-declaration-/'))
+            ->andReturnArg(0);
+
         $this->mockTranslator->shouldReceive('translate')
             ->with('markup-application_undertakings_PSV356')
             ->andReturn('PSV356-translated');
@@ -182,7 +225,8 @@ final class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
                 'isGoods' => false,
                 'licenceType' => [
                     'id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
-                ]
+                ],
+                'isInternal' => false,
             ],
             [
                 'markup' => 'PSV356-translated',

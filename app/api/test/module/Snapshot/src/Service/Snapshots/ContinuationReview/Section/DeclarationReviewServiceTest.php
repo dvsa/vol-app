@@ -44,6 +44,11 @@ final class DeclarationReviewServiceTest extends MockeryTestCase
 
         $mockTranslator = m::mock(TranslatorInterface::class)->shouldReceive('translate')->andReturnUsing(
             function ($message) {
+                // No managed wording yet, so the long text key falls back to the partials
+                if (str_starts_with((string) $message, 'markup-continuation-full-declaration-')) {
+                    return $message;
+                }
+
                 if (
                     $message == 'markup-continuation-declaration-goods-gb' ||
                     $message == 'markup-continuation-declaration-goods-ni'
@@ -280,9 +285,15 @@ final class DeclarationReviewServiceTest extends MockeryTestCase
         }
         $this->continuationDetail->getLicence()->shouldReceive('isLgv')->andReturn($isLgv);
 
+        $translator = m::mock(TranslatorInterface::class);
+        $translator->expects('translate')->with($expected)->andReturn('managed wording');
+
+        $services = m::mock(AbstractReviewServiceServices::class);
+        $services->expects('getTranslator')->withNoArgs()->andReturn($translator);
+
         self::assertSame(
-            $expected . '_translated(%s)',
-            $this->sut->getLongTextDeclarationMarkup($this->continuationDetail)
+            'managed wording',
+            (new DeclarationReviewService($services))->getLongTextDeclarationMarkup($this->continuationDetail)
         );
     }
 
@@ -349,6 +360,24 @@ final class DeclarationReviewServiceTest extends MockeryTestCase
             'partial wording',
             (new DeclarationReviewService($services))->getLongTextDeclarationMarkup($this->continuationDetail)
         );
+    }
+
+    public function testGetConfigFromDataUsesTheManagedWording(): void
+    {
+        $translator = m::mock(TranslatorInterface::class);
+        $translator->expects('translate')
+            ->with('continuations.declaration.signature-type.unknown')
+            ->andReturn('unknown');
+        $translator->expects('translate')
+            ->with('markup-continuation-full-declaration-psv-restricted')
+            ->andReturn('managed wording');
+
+        $services = m::mock(AbstractReviewServiceServices::class);
+        $services->expects('getTranslator')->withNoArgs()->andReturn($translator);
+
+        $config = (new DeclarationReviewService($services))->getConfigFromData($this->continuationDetail);
+
+        self::assertSame(['markup' => 'managed wording'], $config['mainItems'][0]);
     }
 
     public function testGetConfigFromDataNoSignature(): void

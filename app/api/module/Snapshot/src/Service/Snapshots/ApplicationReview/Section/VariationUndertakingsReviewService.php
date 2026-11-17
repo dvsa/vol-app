@@ -58,7 +58,7 @@ class VariationUndertakingsReviewService extends AbstractReviewService
     public function getConfigFromData(array $data = [])
     {
         return [
-            'markup' => $this->getMarkup($data)
+            'markup' => $this->isInternal($data) ? $this->getMarkup($data) : $this->getLongTextMarkup($data)
         ];
     }
 
