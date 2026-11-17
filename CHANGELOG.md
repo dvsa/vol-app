@@ -1,5 +1,20 @@
 # Changelog
 
+## [9.7.0](https://github.com/dvsa/vol-app/compare/v9.6.0...v9.7.0) (2026-11-17)
+
+
+### Features
+
+* sync the Doctrine encryption key into local config so digital signatures work locally ([#1919](https://github.com/dvsa/vol-app/issues/1919)) ([0315dd2](https://github.com/dvsa/vol-app/commit/0315dd286f1d27a5314e8a4bb5e78f9b1123652a))
+
+
+### Bug Fixes
+
+* adding a fee from payment processing errors after the fee is created ([3bde01c](https://github.com/dvsa/vol-app/commit/3bde01c02fced29b0eb95a38dff30cea9366992b))
+* disc printing errors when its form arrives empty ([cda7eb1](https://github.com/dvsa/vol-app/commit/cda7eb1c8dd58aef0afaab4780377de22cbb2683))
+* fee and disc printing pages erroring after the flash messenger refactor ([fb469b6](https://github.com/dvsa/vol-app/commit/fb469b689804fc2cba2cc7859f7f62b5adf910fe))
+* paying a permit application fee by card on selfserve errors before the payment page ([6420d6a](https://github.com/dvsa/vol-app/commit/6420d6a7c195d00e7f7b66456cec7099e1f722af))
+
 ## [9.6.0](https://github.com/dvsa/vol-app/compare/v9.5.4...v9.6.0) (2026-11-16)
 
 
