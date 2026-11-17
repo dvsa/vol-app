@@ -2,9 +2,11 @@
 
 namespace Common\Data\Mapper\Continuation;
 
+use Common\Data\Mapper\Lva\Addresses;
 use Common\Module;
 use Common\Service\Helper\TranslationHelperService;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 /**
  * Licence checklist mapper
@@ -122,13 +124,18 @@ class LicenceChecklist
         }
 
         if (isset($licenceData['correspondenceCd']['phoneContacts'])) {
-            foreach ($licenceData['correspondenceCd']['phoneContacts'] as $pc) {
+            foreach (Addresses::newestSmsFirst($licenceData['correspondenceCd']['phoneContacts']) as $pc) {
                 if ($pc['phoneContactType']['id'] === RefData::PHONE_TYPE_PRIMARY) {
                     $addresses['primaryNumber'] = $pc['phoneNumber'];
                 }
 
                 if ($pc['phoneContactType']['id'] === RefData::PHONE_TYPE_SECONDARY) {
                     $addresses['secondaryNumber'] = $pc['phoneNumber'];
+                }
+
+                // newest first, so keep the first SMS row seen
+                if ($pc['phoneContactType']['id'] === RefData::PHONE_TYPE_SMS && !isset($addresses['smsNumber'])) {
+                    $addresses['smsNumber'] = SmsPhoneNumber::formatForDisplay((string) $pc['phoneNumber']);
                 }
             }
         }

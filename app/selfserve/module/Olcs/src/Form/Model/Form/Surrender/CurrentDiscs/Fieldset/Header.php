@@ -6,12 +6,8 @@ use Laminas\Form\Annotation as Form;
 
 class Header
 {
-    /**
-     * @Form\Options({
-     *     "hint":"Select all options that are relevant to your discs."
-     * })
-     * @Form\Attributes({"value": "markup-licence-surrender-current-disc-form-header"})
-     * @Form\Type("Common\Form\Elements\Types\HtmlTranslated")
-     */
+    #[Form\Options(['hint' => 'Select all options that are relevant to your discs.'])]
+    #[Form\Attributes(['value' => 'markup-licence-surrender-current-disc-form-header'])]
+    #[Form\Type('Common\Form\Elements\Types\HtmlTranslated')]
     protected $header = null;
 }

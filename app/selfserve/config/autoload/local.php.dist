@@ -42,7 +42,8 @@ return [
 
     'assets' => [
         'base_url' => 'http://cdn.local.olcs.dev-dvsacloud.uk', // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
-        'cache_busting_strategy' => 'timestamp', // Options: 'none', 'release', 'timestamp'
+        // With 'none' the browser caches assets, and the local CDN still has it check for changes on every page
+        'cache_busting_strategy' => 'none', // Options: 'none', 'release', 'timestamp'
     ],
 
     'openam' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),

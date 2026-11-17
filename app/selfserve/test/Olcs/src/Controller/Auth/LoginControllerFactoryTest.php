@@ -8,8 +8,8 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FormHelperService;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
@@ -45,7 +45,7 @@ final class LoginControllerFactoryTest extends TestCase
             [SelfserveCommandAdapter::class, $this->createStub(SelfserveCommandAdapter::class)],
             [AuthenticationServiceInterface::class  , $this->createStub(AuthenticationServiceInterface::class)],
             [CurrentUser::class, $this->createStub(CurrentUser::class)],
-            [FlashMessenger::class, $this->createStub(FlashMessenger::class)],
+            [LaminasSessionFlashMessenger::class, $this->createStub(LaminasSessionFlashMessenger::class)],
             [FormHelperService::class, $this->createStub(FormHelperService::class)],
             [Redirect::class, $this->createStub(Redirect::class)],
             [Url::class, $this->createStub(Url::class)],

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Permits\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
@@ -28,6 +29,7 @@ class IrhpApplicationFeeControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
-        return new IrhpApplicationFeeController($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        return new IrhpApplicationFeeController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 }

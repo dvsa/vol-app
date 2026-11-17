@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
 use Aws\S3\S3Client;
 use Aws\Sfn\SfnClient;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -24,6 +25,7 @@ class StoreDocumentAnalysisResultFactory implements FactoryInterface
         $instance = new StoreDocumentAnalysisResult(
             $container->get(SfnClient::class),
             $container->get(S3Client::class),
+            $container->get(AnalysisResultNormaliser::class),
         );
 
         return $instance->__invoke($container, $requestedName, $options);

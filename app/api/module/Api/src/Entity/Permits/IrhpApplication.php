@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Entity\Permits;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Entity\CancelableInterface;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtApggAppSubmitted;
@@ -616,7 +617,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
 
         $criteria = Criteria::create();
         $criteria->andWhere(Criteria::expr()->lte('invoicedDate', $cutoff));
-        $criteria->orderBy(['invoicedDate' => Criteria::DESC]);
+        $criteria->orderBy(['invoicedDate' => Order::Descending]);
 
         return $this->getFees()->matching($criteria);
     }
@@ -1026,7 +1027,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     public function getLatestIssueFee()
     {
         $criteria = Criteria::create()
-            ->orderBy(['invoicedDate' => Criteria::DESC]);
+            ->orderBy(['invoicedDate' => Order::Descending]);
 
         /** @var FeeEntity $fee */
         foreach ($this->getFees()->matching($criteria) as $fee) {
@@ -1058,7 +1059,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
     private function getLatestOutstandingFeeByTypes($feeTypeIds)
     {
         $criteria = Criteria::create()
-            ->orderBy(['invoicedDate' => Criteria::DESC]);
+            ->orderBy(['invoicedDate' => Order::Descending]);
 
         /** @var FeeEntity $fee */
         foreach ($this->getFees()->matching($criteria) as $fee) {

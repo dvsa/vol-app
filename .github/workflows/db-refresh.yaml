@@ -1,0 +1,503 @@
+name: Environment Database Refresh
+
+run-name: Refresh ${{ inputs.target_group }}/${{ inputs.platform_environment }} - ${{ format('{0}-aurora-olcsdb-cluster', inputs.platform_environment) }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_group:
+        description: AWS account group that owns the target cluster
+        required: true
+        type: choice
+        options:
+          - nonprod
+          - prod
+        default: nonprod
+      platform_environment:
+        description: Use dev, int, or reg with nonprod; prod is restricted to prep
+        required: true
+        type: choice
+        options:
+          - dev
+          - int
+          - reg
+          - prep
+        default: dev
+      engine_version:
+        description: Aurora MySQL engine version
+        required: true
+        default: 8.0.mysql_aurora.3.13.0
+        type: string
+      cluster_tags:
+        description: JSON array of tags to apply to the restored cluster
+        required: true
+        default: '[]'
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: aurora-db-refresh-${{ inputs.target_group }}-${{ inputs.platform_environment }}
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: eu-west-1
+  AWS_PAGER: ""
+
+jobs:
+  refresh-cluster:
+    name: Rename and restore Aurora cluster
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Validate target environment
+        shell: bash
+        env:
+          TARGET_GROUP: ${{ inputs.target_group }}
+          PLATFORM_ENVIRONMENT: ${{ inputs.platform_environment }}
+        run: |
+          set -euo pipefail
+
+          case "${TARGET_GROUP}/${PLATFORM_ENVIRONMENT}" in
+            nonprod/dev|nonprod/int|nonprod/reg|prod/prep)
+              ;;
+            prod/*)
+              echo "Production refreshes are restricted to the prep environment." >&2
+              exit 1
+              ;;
+            nonprod/*)
+              echo "Non-production refreshes are restricted to dev, int, or reg." >&2
+              exit 1
+              ;;
+            *)
+              echo "Unsupported target group/environment: ${TARGET_GROUP}/${PLATFORM_ENVIRONMENT}." >&2
+              exit 1
+              ;;
+          esac
+
+      - name: Configure AWS credentials
+        shell: bash
+        env:
+          REFRESH_ROLE_ARN: ${{ inputs.target_group == 'prod' && vars.PROD_OIDC_ROLE || vars.NONPROD_OIDC_ROLE }}
+        run: |
+          set -euo pipefail
+          umask 077
+
+          credential_process="${RUNNER_TEMP}/db-refresh-credentials.sh"
+          config_file="${RUNNER_TEMP}/db-refresh-aws-config"
+          cat > "${credential_process}" <<'SCRIPT'
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          oidc_token="$(curl --fail --silent --show-error --get \
+            --header "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            --data-urlencode 'audience=sts.amazonaws.com' \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}" | jq -er '.value')"
+
+          AWS_CONFIG_FILE=/dev/null AWS_SHARED_CREDENTIALS_FILE=/dev/null \
+            aws sts assume-role-with-web-identity \
+              --no-sign-request \
+              --role-arn "${REFRESH_ROLE_ARN}" \
+              --role-session-name "db-refresh-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
+              --web-identity-token "${oidc_token}" \
+              --duration-seconds 3600 \
+              --region "${AWS_REGION}" --output json \
+            | jq -e '.Credentials | {Version: 1, AccessKeyId, SecretAccessKey, SessionToken, Expiration}'
+          SCRIPT
+          chmod 700 "${credential_process}"
+
+          printf '[default]\ncredential_process = "%s"\nregion = %s\n' \
+            "${credential_process}" "${AWS_REGION}" > "${config_file}"
+          {
+            echo "AWS_CONFIG_FILE=${config_file}"
+            echo "REFRESH_ROLE_ARN=${REFRESH_ROLE_ARN}"
+          } >> "${GITHUB_ENV}"
+
+          AWS_CONFIG_FILE="${config_file}" aws sts get-caller-identity >/dev/null
+
+      - name: Rename existing cluster and restore snapshot
+        shell: bash
+        env:
+          TARGET_GROUP: ${{ inputs.target_group }}
+          PLATFORM_ENVIRONMENT: ${{ inputs.platform_environment }}
+          CLUSTER_IDENTIFIER: ${{ format('{0}-aurora-olcsdb-cluster', inputs.platform_environment) }}
+          ENGINE_VERSION: ${{ inputs.engine_version }}
+          CLUSTER_TAGS: ${{ inputs.cluster_tags }}
+          SNAPSHOT_IDENTIFIER_PREFIX: olcs-db-anon-prod-
+          SNAPSHOT_SOURCE_ACCOUNT: '146997448015'
+        run: |
+          set -euo pipefail
+
+          case "${PLATFORM_ENVIRONMENT}" in
+            dev|reg) DB_SUBNET_GROUP="devapp${PLATFORM_ENVIRONMENT}-olcs-rds-devapp${PLATFORM_ENVIRONMENT}ew" ;;
+            int) DB_SUBNET_GROUP="devappqa-olcs-rds-devappqaew" ;;
+            prep) DB_SUBNET_GROUP="pppp-olcs-rds-appppew" ;;
+            *)
+              echo "Unsupported subnet environment: ${PLATFORM_ENVIRONMENT}." >&2
+              exit 1
+              ;;
+          esac
+          echo "Using DB subnet group ${DB_SUBNET_GROUP}."
+
+          case "${PLATFORM_ENVIRONMENT}" in
+            dev|int|reg)
+              RDS_SECURITY_GROUP="${PLATFORM_ENVIRONMENT}-aurora-olcsdb-cluster"
+              RDS_INSTANCE_CLASS="db.serverless"
+              RDS_MONITORING_ROLE_ARN="arn:aws:iam::054614622558:role/rds-monitoring-role"
+              ;;
+            prep)
+              RDS_SECURITY_GROUP="PREP-aurora-olcsdb-cluster"
+              RDS_INSTANCE_CLASS="db.r6g.xlarge"
+              RDS_MONITORING_ROLE_ARN="arn:aws:iam::146997448015:role/rds-monitoring-role"
+              ;;
+          esac
+          RDS_PARAMETER_GROUP="default.aurora-mysql8.0"
+          RDS_MONITORING_INTERVAL=1
+
+          case "${PLATFORM_ENVIRONMENT}" in
+            dev|reg|int) CONFIG_BUCKET="devapp-shd-pri-olcsci-build-s3" ;;
+            prep) CONFIG_BUCKET="app-shd-pri-olcsci-build-s3" ;;
+          esac
+          CONFIG_KEY="lambda/Aurora-DBRefresh-L/$(printf '%s' "${PLATFORM_ENVIRONMENT}" | tr '[:lower:]' '[:upper:]')/env.conf"
+
+          PRESERVED_CLUSTER_IDENTIFIER="${CLUSTER_IDENTIFIER}-deploy"
+
+          for identifier in "${CLUSTER_IDENTIFIER}" "${PRESERVED_CLUSTER_IDENTIFIER}"; do
+            if [[ ! "${identifier}" =~ ^[a-z][a-z0-9-]{0,62}$ || "${identifier}" == *--* || "${identifier}" == *- ]]; then
+              echo "Invalid Aurora cluster identifier '${identifier}'." >&2
+              exit 1
+            fi
+          done
+
+          if ! jq -e 'type == "array"' <<<"${CLUSTER_TAGS}" >/dev/null; then
+            echo "Cluster tags must be a valid JSON array." >&2
+            exit 1
+          fi
+
+          cluster_status() {
+            local identifier="$1"
+            local response
+            if response="$(aws rds describe-db-clusters \
+              --db-cluster-identifier "${identifier}" \
+              --region "${AWS_REGION}" --output json 2>&1)"; then
+              jq -er '.DBClusters[0].Status' <<<"${response}"
+            elif [[ "${response}" == *"(DBClusterNotFoundFault)"* ]]; then
+              printf '%s' "not-found"
+            else
+              printf '%s\n' "${response}" >&2
+              return 1
+            fi
+          }
+
+          wait_for_cluster_status() {
+            local identifier="$1"
+            local expected="$2"
+            local last_status="unknown"
+
+            for attempt in $(seq 1 300); do
+              last_status="$(cluster_status "${identifier}")" || return 1
+              echo "Cluster ${identifier}: ${last_status} (attempt ${attempt}/300)"
+
+              if [[ "${last_status}" == "${expected}" ]]; then
+                return 0
+              fi
+
+              case "${last_status}" in
+                available|creating|backtracking|modifying|renaming|upgrading|migrating|deleting|stopping|starting|not-found|\
+                backing-up|configuring-enhanced-monitoring|configuring-iam-database-auth|configuring-log-exports|failing-over|\
+                maintenance|preparing-data-migration|promoting|resetting-master-credentials|storage-optimization|update-iam-db-auth)
+                  sleep 60
+                  ;;
+                *)
+                  echo "Unexpected cluster status '${last_status}' for ${identifier}." >&2
+                  return 1
+                  ;;
+              esac
+            done
+
+            echo "Timed out waiting for ${identifier} to become ${expected}; last status was ${last_status}." >&2
+            return 1
+          }
+
+          current_status="$(cluster_status "${CLUSTER_IDENTIFIER}")" || exit 1
+          if [[ "${current_status}" != "available" ]]; then
+            echo "Target cluster must exist and be available before refresh." >&2
+            exit 1
+          fi
+
+          preserved_status="$(cluster_status "${PRESERVED_CLUSTER_IDENTIFIER}")" || exit 1
+          if [[ "${preserved_status}" != "not-found" ]]; then
+            echo "Preserved cluster identifier already exists; choose an unused identifier." >&2
+            exit 1
+          fi
+
+          snapshot="$(aws rds describe-db-cluster-snapshots \
+            --include-shared \
+            --region "${AWS_REGION}" --output json)"
+          SNAPSHOT_ARN_PREFIX="arn:aws:rds:${AWS_REGION}:${SNAPSHOT_SOURCE_ACCOUNT}:cluster-snapshot:${SNAPSHOT_IDENTIFIER_PREFIX}"
+          SNAPSHOT_IDENTIFIER="$(jq -er \
+            --arg prefix "${SNAPSHOT_IDENTIFIER_PREFIX}" \
+            --arg arn_prefix "${SNAPSHOT_ARN_PREFIX}" \
+            '[.DBClusterSnapshots[]
+              | select(.DBClusterSnapshotIdentifier | startswith($prefix))
+              | select(.DBClusterSnapshotArn | startswith($arn_prefix))
+              | select(.Status == "available" and .Engine == "aurora-mysql")]
+             | sort_by(.SnapshotCreateTime)
+             | last
+             | .DBClusterSnapshotIdentifier // empty' <<<"${snapshot}")" || {
+            echo "No available shared Aurora MySQL cluster snapshot found with prefix ${SNAPSHOT_IDENTIFIER_PREFIX} from account ${SNAPSHOT_SOURCE_ACCOUNT}." >&2
+            exit 1
+          }
+          SNAPSHOT_CREATE_TIME="$(jq -r --arg identifier "${SNAPSHOT_IDENTIFIER}" \
+            '.DBClusterSnapshots[] | select(.DBClusterSnapshotIdentifier == $identifier) | .SnapshotCreateTime' \
+            <<<"${snapshot}")"
+          echo "Selected shared snapshot ${SNAPSHOT_IDENTIFIER} created at ${SNAPSHOT_CREATE_TIME}."
+          subnet_vpc="$(aws rds describe-db-subnet-groups \
+            --db-subnet-group-name "${DB_SUBNET_GROUP}" \
+            --query 'DBSubnetGroups[0].VpcId' --output text --region "${AWS_REGION}")"
+          security_groups="$(aws ec2 describe-security-groups \
+            --filters "Name=tag:Name,Values=${RDS_SECURITY_GROUP}" "Name=vpc-id,Values=${subnet_vpc}" \
+            --region "${AWS_REGION}" --output json)"
+          if ! jq -e '.SecurityGroups | length == 1' <<<"${security_groups}" >/dev/null; then
+            echo "Expected exactly one security group tagged ${RDS_SECURITY_GROUP} in VPC ${subnet_vpc}." >&2
+            exit 1
+          fi
+          RDS_SECURITY_GROUP_ID="$(jq -r '.SecurityGroups[0].GroupId' <<<"${security_groups}")"
+          aws rds describe-db-cluster-parameter-groups \
+            --db-cluster-parameter-group-name "${RDS_PARAMETER_GROUP}" \
+            --region "${AWS_REGION}" >/dev/null
+
+          ENV_CONF_JSON="$(aws s3 cp "s3://${CONFIG_BUCKET}/${CONFIG_KEY}" - --region "${AWS_REGION}")"
+
+          decrypt_config_value() {
+            local key="$1" encrypted
+            encrypted="$(jq -r --arg key "${key}" '.[$key] // empty | select(type == "string")' <<<"${ENV_CONF_JSON}")"
+            if [[ -z "${encrypted}" ]]; then
+              echo "s3://${CONFIG_BUCKET}/${CONFIG_KEY} must contain ${key}." >&2
+              return 1
+            fi
+            aws kms decrypt \
+              --ciphertext-blob "${encrypted}" \
+              --query Plaintext --output text --region "${AWS_REGION}" \
+              | base64 -d | sed 's/[[:space:]]*$//'
+          }
+
+          MASTER_PASSWORD="$(decrypt_config_value olcsdb_master_pass)"
+          echo "::add-mask::${MASTER_PASSWORD}"
+          password_pattern='^[!-~]{8,41}$'
+          if [[ ! "${MASTER_PASSWORD}" =~ ${password_pattern} || "${MASTER_PASSWORD}" == *[/\"@]* ]]; then
+            echo "olcsdb_master_pass must decrypt to 8-41 printable characters excluding / \" @ and spaces." >&2
+            exit 1
+          fi
+
+          DB_USERS="olcsapi olcsapi_import olcsbatch olcsreports olcssanitise olcssasmi olcssearch"
+          db_password_pattern='^[ -~]+$'
+          for db_user in ${DB_USERS}; do
+            db_password="$(decrypt_config_value "${db_user}")"
+            if [[ -z "${db_password}" || ! "${db_password}" =~ ${db_password_pattern} ]]; then
+              echo "${db_user} must decrypt to a printable ASCII password." >&2
+              exit 1
+            fi
+            echo "::add-mask::${db_password}"
+            printf -v "DB_PASSWORD_${db_user}" '%s' "${db_password}"
+          done
+
+          existing_members="$(aws rds describe-db-clusters \
+            --db-cluster-identifier "${CLUSTER_IDENTIFIER}" \
+            --region "${AWS_REGION}" --output json)"
+          RDS_WRITER_IDENTIFIER="$(jq -r --arg fallback "${CLUSTER_IDENTIFIER}-writer" \
+            '[.DBClusters[0].DBClusterMembers[] | select(.IsClusterWriter) | .DBInstanceIdentifier] | .[0] // $fallback' \
+            <<<"${existing_members}")"
+          RDS_READER_IDENTIFIER="$(jq -r --arg fallback "${CLUSTER_IDENTIFIER}-reader" \
+            '[.DBClusters[0].DBClusterMembers[] | select(.IsClusterWriter == false) | .DBInstanceIdentifier] | .[0] // $fallback' \
+            <<<"${existing_members}")"
+          for identifier in "${RDS_WRITER_IDENTIFIER}" "${RDS_READER_IDENTIFIER}"; do
+            if [[ ! "${identifier}" =~ ^[a-z][a-z0-9-]{0,62}$ || "${identifier}" == *--* || "${identifier}" == *- ]]; then
+              echo "Invalid restored instance identifier '${identifier}'." >&2
+              exit 1
+            fi
+          done
+
+          echo "Renaming ${CLUSTER_IDENTIFIER} to ${PRESERVED_CLUSTER_IDENTIFIER}."
+          aws rds modify-db-cluster \
+            --db-cluster-identifier "${CLUSTER_IDENTIFIER}" \
+            --new-db-cluster-identifier "${PRESERVED_CLUSTER_IDENTIFIER}" \
+            --apply-immediately --region "${AWS_REGION}" >/dev/null
+
+          wait_for_cluster_status "${CLUSTER_IDENTIFIER}" "not-found"
+          wait_for_cluster_status "${PRESERVED_CLUSTER_IDENTIFIER}" "available"
+
+          existing_members="$(aws rds describe-db-clusters \
+            --db-cluster-identifier "${PRESERVED_CLUSTER_IDENTIFIER}" \
+            --region "${AWS_REGION}" \
+            --output json)"
+          instance_identifiers="$(jq -r \
+            '.DBClusters[0].DBClusterMembers | sort_by(.IsClusterWriter) | .[].DBInstanceIdentifier' \
+            <<<"${existing_members}")"
+
+          if [[ -z "${instance_identifiers}" ]]; then
+            echo "No existing reader or writer instances in ${PRESERVED_CLUSTER_IDENTIFIER}."
+          else
+            while IFS= read -r instance_identifier; do
+              echo "Deleting existing instance ${instance_identifier} from ${PRESERVED_CLUSTER_IDENTIFIER}."
+              aws rds delete-db-instance \
+                --db-instance-identifier "${instance_identifier}" \
+                --skip-final-snapshot \
+                --region "${AWS_REGION}" >/dev/null
+              aws rds wait db-instance-deleted \
+                --db-instance-identifier "${instance_identifier}" \
+                --region "${AWS_REGION}"
+            done <<<"${instance_identifiers}"
+          fi
+
+          echo "Restoring ${CLUSTER_IDENTIFIER} from snapshot ${SNAPSHOT_IDENTIFIER}."
+          aws rds restore-db-cluster-from-snapshot \
+            --db-cluster-identifier "${CLUSTER_IDENTIFIER}" \
+            --snapshot-identifier "${SNAPSHOT_IDENTIFIER}" \
+            --engine aurora-mysql \
+            --engine-version "${ENGINE_VERSION}" \
+            --db-subnet-group-name "${DB_SUBNET_GROUP}" \
+            --vpc-security-group-ids "${RDS_SECURITY_GROUP_ID}" \
+            --db-cluster-parameter-group-name "${RDS_PARAMETER_GROUP}" \
+            --tags "${CLUSTER_TAGS}" \
+            --region "${AWS_REGION}" >/dev/null
+
+          wait_for_cluster_status "${CLUSTER_IDENTIFIER}" "available"
+
+          echo "Applying security group ${RDS_SECURITY_GROUP}, parameter group ${RDS_PARAMETER_GROUP} and the master password from s3://${CONFIG_BUCKET}/${CONFIG_KEY}."
+          aws rds modify-db-cluster \
+            --db-cluster-identifier "${CLUSTER_IDENTIFIER}" \
+            --master-user-password "${MASTER_PASSWORD}" \
+            --vpc-security-group-ids "${RDS_SECURITY_GROUP_ID}" \
+            --db-cluster-parameter-group-name "${RDS_PARAMETER_GROUP}" \
+            --monitoring-interval "${RDS_MONITORING_INTERVAL}" \
+            --monitoring-role-arn "${RDS_MONITORING_ROLE_ARN}" \
+            --cloudwatch-logs-export-configuration '{"EnableLogTypes":["error"],"DisableLogTypes":["audit","general","slowquery"]}' \
+            --backup-retention-period 35 \
+            --serverless-v2-scaling-configuration '{"MinCapacity":0.5,"MaxCapacity":256}' \
+            --preferred-backup-window '00:00-02:00' \
+            --preferred-maintenance-window 'mon:06:15-mon:06:45' \
+            --apply-immediately --region "${AWS_REGION}" >/dev/null
+          wait_for_cluster_status "${CLUSTER_IDENTIFIER}" "available"
+
+          for instance_identifier in "${RDS_WRITER_IDENTIFIER}" "${RDS_READER_IDENTIFIER}"; do
+            instance_tags="$(jq -c --arg name "${instance_identifier}" \
+              'map(select(.Key != "Name")) + [{Key:"Name",Value:$name}]' <<<"${CLUSTER_TAGS}")"
+            echo "Creating instance ${instance_identifier} in ${CLUSTER_IDENTIFIER} (${RDS_INSTANCE_CLASS})."
+            aws rds create-db-instance \
+              --db-instance-identifier "${instance_identifier}" \
+              --db-cluster-identifier "${CLUSTER_IDENTIFIER}" \
+              --engine aurora-mysql \
+              --db-instance-class "${RDS_INSTANCE_CLASS}" \
+              --db-subnet-group-name "${DB_SUBNET_GROUP}" \
+              --monitoring-interval "${RDS_MONITORING_INTERVAL}" \
+              --monitoring-role-arn "${RDS_MONITORING_ROLE_ARN}" \
+              --no-publicly-accessible \
+              --tags "${instance_tags}" \
+              --region "${AWS_REGION}" >/dev/null
+            aws rds wait db-instance-available \
+              --db-instance-identifier "${instance_identifier}" \
+              --region "${AWS_REGION}"
+          done
+
+          wait_for_cluster_status "${CLUSTER_IDENTIFIER}" "available"
+
+          echo "Resetting application database user passwords from s3://${CONFIG_BUCKET}/${CONFIG_KEY}."
+          cluster_arn="$(aws rds describe-db-clusters \
+            --db-cluster-identifier "${CLUSTER_IDENTIFIER}" \
+            --query 'DBClusters[0].DBClusterArn' --output text --region "${AWS_REGION}")"
+          echo "Data API enabled: $(aws rds enable-http-endpoint --resource-arn "${cluster_arn}" \
+            --query HttpEndpointEnabled --output text --region "${AWS_REGION}")"
+          TEMP_SECRET_ARN="$(aws secretsmanager create-secret \
+            --name "db-refresh-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${CLUSTER_IDENTIFIER}" \
+            --secret-string "$(jq -cn --arg password "${MASTER_PASSWORD}" '{username:"master",password:$password}')" \
+            --query ARN --output text --region "${AWS_REGION}")"
+          cleanup_temp_secret() {
+            aws secretsmanager delete-secret --secret-id "${TEMP_SECRET_ARN}" \
+              --force-delete-without-recovery --region "${AWS_REGION}" >/dev/null || true
+          }
+          trap cleanup_temp_secret EXIT
+
+          data_api() {
+            local statement="$1" output error_file error attempt
+            error_file="$(mktemp)"
+            for attempt in $(seq 1 40); do
+              if output="$(aws rds-data execute-statement \
+                --resource-arn "${cluster_arn}" \
+                --secret-arn "${TEMP_SECRET_ARN}" \
+                --database mysql \
+                --sql "${statement}" \
+                --region "${AWS_REGION}" --output json 2>"${error_file}")"; then
+                rm -f "${error_file}"
+                printf '%s' "${output}"
+                return 0
+              fi
+              error="$(cat "${error_file}")"
+              if [[ "${error}" != *"(HttpEndpointNotEnabledException)"* || "${attempt}" -eq 40 ]]; then
+                rm -f "${error_file}"
+                printf '%s\n' "${error}" >&2
+                return 1
+              fi
+              echo "Data API endpoint is not ready (attempt ${attempt}/40); retrying." >&2
+              sleep 15
+            done
+          }
+
+          sql_quote() {
+            printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e "s/'/''/g"
+          }
+
+          if ! data_api "SELECT 1" >/dev/null; then
+            echo "The Data API readiness check failed on ${CLUSTER_IDENTIFIER}; the original cluster ${PRESERVED_CLUSTER_IDENTIFIER} has been kept." >&2
+            exit 1
+          fi
+
+          RESET_USERS=()
+          for db_user in ${DB_USERS}; do
+            hosts="$(data_api "SELECT Host FROM mysql.user WHERE User = '${db_user}'" | jq -r '.records[][0].stringValue')"
+            if [[ -z "${hosts}" ]]; then
+              echo "Database user ${db_user} does not exist in the restored cluster; skipping."
+              continue
+            fi
+            password_variable="DB_PASSWORD_${db_user}"
+            quoted_password="$(sql_quote "${!password_variable}")"
+            while IFS= read -r host; do
+              data_api "ALTER USER '${db_user}'@'$(sql_quote "${host}")' IDENTIFIED BY '${quoted_password}'" >/dev/null
+              echo "Reset password for ${db_user}@${host}."
+            done <<<"${hosts}"
+            RESET_USERS+=("${db_user}")
+          done
+
+          cleanup_temp_secret
+          trap - EXIT
+
+          FINAL_SNAPSHOT_IDENTIFIER="${PRESERVED_CLUSTER_IDENTIFIER}-final-$(date -u +%Y%m%d-%H%M%S)"
+          echo "Deleting ${PRESERVED_CLUSTER_IDENTIFIER}, retaining final snapshot ${FINAL_SNAPSHOT_IDENTIFIER}."
+          aws rds delete-db-cluster \
+            --db-cluster-identifier "${PRESERVED_CLUSTER_IDENTIFIER}" \
+            --no-skip-final-snapshot \
+            --final-db-snapshot-identifier "${FINAL_SNAPSHOT_IDENTIFIER}" \
+            --region "${AWS_REGION}" >/dev/null
+          wait_for_cluster_status "${PRESERVED_CLUSTER_IDENTIFIER}" "not-found"
+
+          {
+            echo "## Aurora cluster restore completed"
+            echo "- Target: \`${TARGET_GROUP}/${PLATFORM_ENVIRONMENT}\`"
+            echo "- Restored cluster: \`${CLUSTER_IDENTIFIER}\`"
+            echo "- Writer instance: \`${RDS_WRITER_IDENTIFIER}\`"
+            echo "- Reader instance: \`${RDS_READER_IDENTIFIER}\`"
+            echo "- Instance class: \`${RDS_INSTANCE_CLASS}\`"
+            echo "- Snapshot: \`${SNAPSHOT_IDENTIFIER}\`"
+            echo "- Security group Name tag: \`${RDS_SECURITY_GROUP}\`"
+            echo "- Cluster parameter group: \`${RDS_PARAMETER_GROUP}\`"
+            echo "- Master password source: \`s3://${CONFIG_BUCKET}/${CONFIG_KEY}\` (olcsdb_master_pass)"
+            echo "- Application database users reset from the same file: ${RESET_USERS[*]:-none}"
+            echo "- Deleted original cluster: \`${PRESERVED_CLUSTER_IDENTIFIER}\`"
+            echo "- Original cluster final snapshot: \`${FINAL_SNAPSHOT_IDENTIFIER}\`"
+            echo
+            echo "Existing reader and writer instances were removed from the preserved cluster before restoration."
+            echo "Writer and reader instances were recreated and reached available status before the original cluster was deleted. DNS is not updated; handle endpoint cutover separately."
+          } >> "${GITHUB_STEP_SUMMARY}"

@@ -510,8 +510,8 @@ final class FeeTest extends RepositoryTestCase
         // The bus registration filter widens to every registration sharing the route number.
         $this->assertSame(
             'SELECT br2.id FROM ' . BusRegEntity::class . ' br'
-            . ' INNER JOIN ' . BusRegEntity::class . ' br2'
-            . ' WHERE br.routeNo = br2.routeNo AND br.id = :id',
+            . ' INNER JOIN ' . BusRegEntity::class . ' br2 ON br.routeNo = br2.routeNo'
+            . ' WHERE br.id = :id',
             $busRegQb->getDQL(),
         );
         $this->assertSame(14, $busRegQb->getParameter('id')->getValue());

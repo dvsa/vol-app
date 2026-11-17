@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Entity\Letter;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Service\Letter\EditorJsText;
 
 /**
  * LetterInstanceIssue Entity
@@ -20,7 +21,7 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceTodo>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class, mappedBy: 'letterInstanceIssue', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterInstanceTodos;
 
     /**
@@ -39,6 +40,41 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
     public function getLetterInstanceTodos()
     {
         return $this->letterInstanceTodos;
+    }
+
+    /**
+     * Add a letter instance todo, keeping both sides of the association in step
+     */
+    public function addLetterInstanceTodo(LetterInstanceTodo $todo): void
+    {
+        if (!$this->letterInstanceTodos->contains($todo)) {
+            $todo->setLetterInstanceIssue($this);
+            $this->letterInstanceTodos->add($todo);
+        }
+    }
+
+    /**
+     * The caseworker's own to-dos on this issue (an Other issue), in the order they were written
+     *
+     * @return list<LetterInstanceTodo>
+     */
+    public function getCustomTodos(): array
+    {
+        $custom = array_values(array_filter(
+            $this->letterInstanceTodos->toArray(),
+            static fn(LetterInstanceTodo $todo): bool => $todo->isCustom()
+        ));
+        usort($custom, static fn(LetterInstanceTodo $a, LetterInstanceTodo $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder());
+
+        return $custom;
+    }
+
+    /**
+     * Remove a letter instance todo from this issue's collection
+     */
+    public function removeLetterInstanceTodo(LetterInstanceTodo $todo): void
+    {
+        $this->letterInstanceTodos->removeElement($todo);
     }
 
     /**
@@ -79,7 +115,94 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
      */
     public function hasBeenEdited()
     {
-        return !empty($this->editedContent);
+        return !empty($this->editedContent) || ($this->isOther() && $this->hasWrittenHeading());
+    }
+
+    /**
+     * Whether a caseworker changed what the issue says.
+     *
+     * Saving an editor stores its text whether or not anything was typed, and an editor writes
+     * the same text back in its own shape, so this compares the words with the ones the issue
+     * started with. The same words laid out another way are not a change.
+     */
+    public function hasChangedWording(): bool
+    {
+        if (empty($this->editedContent)) {
+            return false;
+        }
+
+        // edited content that can't be read comes back empty
+        $content = $this->getEffectiveContent();
+        if ($content === []) {
+            return false;
+        }
+
+        $startedWith = !empty($this->generatedContent) && is_array($this->generatedContent)
+            ? $this->generatedContent
+            : ($this->letterIssueVersion?->getDefaultBodyContentAsArray() ?: []);
+
+        return EditorJsText::plain($content) !== EditorJsText::plain($startedWith);
+    }
+
+    /**
+     * An Other issue: the caseworker writes its heading and may add their own to-dos (VOL-7735)
+     */
+    public function isOther(): bool
+    {
+        return (bool) $this->letterIssueVersion?->isOther();
+    }
+
+    /**
+     * Whether this issue still needs the caseworker before the letter can be sent.
+     *
+     * A standard issue needs input while it is flagged and unedited. An Other issue needs a
+     * heading and a body that says something other than the placeholder: the edit page's Save
+     * posts the editor even when nothing changed, so "edited" alone isn't enough (VOL-7735).
+     */
+    public function isInputPending(): bool
+    {
+        if (!$this->isOther()) {
+            return $this->requiresInput() && !$this->hasBeenEdited();
+        }
+
+        if (!$this->hasWrittenHeading() || empty($this->editedContent)) {
+            return true;
+        }
+
+        // the placeholder as written, or as the editor opened on it, with its grabs filled in
+        $placeholders = [EditorJsText::plain($this->letterIssueVersion->getDefaultBodyContentAsArray())];
+        if (is_array($this->generatedContent) && $this->generatedContent !== []) {
+            $placeholders[] = EditorJsText::plain($this->generatedContent);
+        }
+
+        $body = EditorJsText::plain($this->getEffectiveContent());
+
+        return $body === '' || in_array($body, $placeholders, true);
+    }
+
+    /**
+     * How the issue is named away from the letter (lists of what needs input, what will be lost).
+     * An Other issue with no heading yet adds its type, so two of them can be told apart.
+     */
+    public function getDisplayName(): string
+    {
+        $heading = (string) $this->getHeading();
+        if (!$this->isOther() || $this->hasWrittenHeading()) {
+            return $heading;
+        }
+
+        // the general Other issue sits in its own "Other issues" type, which says nothing extra
+        $type = $this->letterIssueVersion?->getLetterIssueType();
+        if ($type === null || $type->getCode() === LetterIssueType::CODE_OTHER || !$type->getName()) {
+            return $heading;
+        }
+
+        return $heading . ' (' . $type->getName() . ')';
+    }
+
+    private function hasWrittenHeading(): bool
+    {
+        return trim((string) $this->editedHeading) !== '';
     }
 
     /**
@@ -122,6 +245,11 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
      */
     public function getHeading()
     {
+        // an Other issue prints the caseworker's heading once they've written one (VOL-7735)
+        if ($this->isOther() && $this->hasWrittenHeading()) {
+            return trim((string) $this->editedHeading);
+        }
+
         return $this->letterIssueVersion->getHeading();
     }
 

@@ -9,6 +9,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityData;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService;
@@ -321,6 +322,73 @@ final class AttributeEmissionTest extends MockeryTestCase
         $this->assertSame('null', $sut->generateProperty($column)['defaultValue']);
     }
 
+    public function testNullableGetterAndSetterTypesAreOptInThroughFieldConfig(): void
+    {
+        $appRoot = dirname(__DIR__, 6);
+        $configuredField = (new EntityConfigService($appRoot . '/data/db/EntityConfig.php'))
+            ->getFieldConfig('application', 'knowledge_experience_evidence_uploaded');
+        $renderer = new TemplateRenderer(
+            $appRoot . '/module/Cli/src/Service/EntityGenerator/Templates',
+            new MethodGeneratorService()
+        );
+        $fields = [];
+
+        foreach (
+            [
+                'knowledgeExperienceEvidenceUploaded' => $configuredField,
+                'defaultValue' => null,
+            ] as $name => $fieldConfig
+        ) {
+            $fields[] = [
+                'annotation' => "#[ORM\\Column(name: '" . $name . "')]",
+                'fieldConfig' => $fieldConfig,
+                'property' => [
+                    'name' => $name,
+                    'type' => 'int',
+                    'docBlock' => $name,
+                    'defaultValue' => 'null',
+                    'nullable' => true,
+                    'isRelationship' => false,
+                ],
+                'isRelationship' => false,
+                'isCollection' => false,
+            ];
+        }
+
+        $content = $renderer->render('abstract-entity', [
+            'namespace' => 'Dvsa\\Olcs\\Api\\Entity\\Test',
+            'className' => 'NullableField',
+            'tableName' => 'nullable_field',
+            'fields' => $fields,
+            'indexes' => [],
+            'uniqueConstraints' => [],
+            'hasCollections' => false,
+            'hasCreatedOn' => false,
+            'createdOnNotNull' => false,
+            'hasModifiedOn' => false,
+            'softDeletable' => false,
+            'imports' => [],
+            'idProperties' => [],
+        ]);
+
+        $this->assertStringContainsString(
+            "* @return int|null\n     */\n    public function getKnowledgeExperienceEvidenceUploaded()",
+            $content
+        );
+        $this->assertStringContainsString(
+            "* @param int|null \$knowledgeExperienceEvidenceUploaded new value being set",
+            $content
+        );
+        $this->assertStringContainsString(
+            "* @return int\n     */\n    public function getDefaultValue()",
+            $content
+        );
+        $this->assertStringContainsString(
+            "* @param int \$defaultValue new value being set",
+            $content
+        );
+    }
+
     /**
      * cf. document_analysis.status - an ENUM, which the introspector maps to string and
      * which MySQL reports with length 0. Emitting that would declare VARCHAR(0).
@@ -615,7 +683,51 @@ final class AttributeEmissionTest extends MockeryTestCase
         );
     }
 
-    private function invokeGeneratorMethod(string $method, array $args): string
+    public function testExistingFieldOrderIsPreservedAndNewFieldsAreAppended(): void
+    {
+        $entityPath = sys_get_temp_dir() . '/entity-field-order-' . bin2hex(random_bytes(6));
+        mkdir($entityPath . '/Doc', 0777, true);
+        $abstractPath = $entityPath . '/Doc/AbstractDocumentAnalysis.php';
+
+        try {
+            file_put_contents($abstractPath, <<<'PHP'
+                <?php
+                abstract class AbstractDocumentAnalysis
+                {
+                    protected $id;
+                    protected $application;
+                    protected $document;
+                }
+                PHP);
+
+            $fields = [
+                ['property' => ['name' => 'document']],
+                ['property' => ['name' => 'newField']],
+                ['property' => ['name' => 'application']],
+                ['property' => ['name' => 'id']],
+            ];
+
+            $orderedFields = $this->invokeGeneratorMethod(
+                'preserveExistingFieldOrder',
+                [
+                    $fields,
+                    new EntityData('document_analysis', 'DocumentAnalysis', 'Dvsa\\Olcs\\Api\\Entity\\Doc', 'Doc'),
+                    ['sourceEntityPath' => $entityPath],
+                ]
+            );
+
+            $this->assertSame(
+                ['id', 'application', 'document', 'newField'],
+                array_column(array_column($orderedFields, 'property'), 'name')
+            );
+        } finally {
+            unlink($abstractPath);
+            rmdir($entityPath . '/Doc');
+            rmdir($entityPath);
+        }
+    }
+
+    private function invokeGeneratorMethod(string $method, array $args): mixed
     {
         $generator = (new \ReflectionClass(EntityGenerator::class))->newInstanceWithoutConstructor();
 
@@ -646,5 +758,27 @@ final class AttributeEmissionTest extends MockeryTestCase
         $introspector = (new \ReflectionClass(Doctrine3SchemaIntrospector::class))->newInstanceWithoutConstructor();
 
         return (new \ReflectionMethod(Doctrine3SchemaIntrospector::class, $method))->invoke($introspector, ...$args);
+    }
+
+    public function testInverseRelationshipProcessorOrderByUsesSortDirectionEnumsOnly(): void
+    {
+        $processor = new InverseRelationshipProcessor(
+            new EntityConfigService(dirname(__DIR__, 6) . '/data/db/EntityConfig.php'),
+            new PropertyNameResolver()
+        );
+
+        $this->assertSame(
+            "#[ORM\\OrderBy(['createdOn' => \\SortDirection::Descending])]",
+            $processor->generateOrderByAnnotation([
+                'createdOn' => \SortDirection::Descending,
+            ])
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageIsOrContains('OrderBy direction for "createdOn" must be an instance of \\SortDirection');
+
+        $processor->generateOrderByAnnotation([
+            'createdOn' => 'DESC',
+        ]);
     }
 }

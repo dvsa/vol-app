@@ -3,6 +3,22 @@
   "inputFilter": {
     "class": "Laminas\\InputFilter\\InputFilter",
     "inputs": {
+      "format": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "format"
+      },
       "limit": {
         "class": "Laminas\\InputFilter\\Input",
         "filterChain": {
@@ -41,6 +57,22 @@
           ]
         },
         "name": "limit"
+      },
+      "markupOnly": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "markupOnly"
       },
       "order": {
         "class": "Laminas\\InputFilter\\Input",

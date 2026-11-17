@@ -18,16 +18,15 @@
   ],
   "dependencies": {
     "@dvsa/cookie-manager": "^1.1.2",
-    "@editorjs/editorjs": "^2.31.0",
-    "@editorjs/header": "^2.7.0",
+    "@editorjs/editorjs": "^2.31.7",
+    "@editorjs/header": "^2.8.9",
     "@editorjs/list": "^1.8.0",
     "@editorjs/paragraph": "^2.10.0",
     "@editorjs/underline": "^1.2.1",
     "@vitriltd/editor-js-govuk-frontend": "1.0.0",
     "autoprefixer": "^10.4.20",
-    "chosen-npm": "^1.4.2",
     "govuk-frontend": "^6.5.0",
-    "jquery": "^3.7.1",
+    "jquery": "^4.0.0",
     "pace-progress": "^1.0.2"
   },
   "devDependencies": {
@@ -51,5 +50,8 @@
     "grunt-svg-sprite": "^2.0.2",
     "postcss": "^8.5.18",
     "sass": "^1.97.0"
+  },
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6"
   }
 }

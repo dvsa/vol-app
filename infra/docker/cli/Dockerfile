@@ -1,5 +1,6 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/8.4/cli:0 AS cli
+# PHP 8.4.27 build (dvsa-docker-images cfac129), pinned until it is released under :0
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.4/cli:latest@sha256:d5ce84f25fba85b76545b582388aa7c3583a1a0e9d3c19a4619e246fcff1538b AS cli
 
 # hadolint ignore=DL3002
 USER root
@@ -80,13 +81,8 @@ RUN apk update && \
   && docker-php-ext-install ldap \
   && docker-php-ext-enable ldap
 
-RUN \
-  echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
+# The development PHP settings (OPcache on, Xdebug off until it is asked for) are in
+# infra/docker/php-development.d, which compose.yaml mounts into the container so that the four PHP
+# images share one copy.
 
 USER www-data

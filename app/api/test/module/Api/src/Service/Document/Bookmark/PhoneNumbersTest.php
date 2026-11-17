@@ -137,4 +137,35 @@ final class PhoneNumbersTest extends MockeryTestCase
             $bookmark->render()
         );
     }
+
+    public function testSmsNumberExcluded(): void
+    {
+        $bookmark = m::mock(PhoneNumbers::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods()
+            ->shouldReceive('getSnippet')->with('CHECKLIST_2CELL_TABLE')->andReturn('snippet')->getMock();
+
+        $bookmark->setData([
+            'correspondenceCd' => [
+                'phoneContacts' => [
+                    ['phoneNumber' => '07700900123', 'phoneContactType' => ['id' => 'phone_t_SMS', 'description' => 'SMS']],
+                    ['phoneNumber' => '11111', 'phoneContactType' => ['id' => PhoneContact::TYPE_PRIMARY, 'description' => 'Primary']],
+                ]
+            ]
+        ]);
+
+        $seen = [];
+        $parser = m::mock(\Dvsa\Olcs\Api\Service\Document\Parser\RtfParser::class);
+        $parser->shouldReceive('replace')->andReturnUsing(function ($snippet, $tokens) use (&$seen) {
+            $seen[] = $tokens;
+            return '';
+        });
+        $bookmark->setParser($parser);
+
+        $bookmark->render();
+
+        $this->assertCount(7, $seen);
+        $this->assertSame(['BOOKMARK1' => 'Primary', 'BOOKMARK2' => '11111'], $seen[2]);
+        $this->assertNotContains('07700900123', array_column($seen, 'BOOKMARK2'));
+    }
 }

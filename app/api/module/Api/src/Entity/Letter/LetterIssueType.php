@@ -13,4 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class LetterIssueType extends AbstractLetterIssueType
 {
+    /**
+     * The "Other issues" type at the end of the issues, seeded by olcs-etl (VOL-7735)
+     */
+    public const CODE_OTHER = 'OT';
 }

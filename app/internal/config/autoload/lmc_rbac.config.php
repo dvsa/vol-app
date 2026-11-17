@@ -74,6 +74,7 @@ return [
             'admin-dashboard/admin-email-templates' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-long-text*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-editable-translations*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-sms-templates' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/content-management*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-publication*' => [RefData::PERMISSION_INTERNAL_PUBLICATIONS],
             'admin-dashboard/admin-fee-rates*' => [RefData::PERMISSION_SYSTEM_ADMIN],

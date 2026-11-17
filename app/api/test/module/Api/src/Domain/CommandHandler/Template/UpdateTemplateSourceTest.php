@@ -29,7 +29,8 @@ final class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Template', TemplateRepo::class);
 
         $this->mockedSmServices = [
-            'TemplateTwigRenderer' => m::mock(TwigRenderer::class)
+            'TemplateTwigRenderer' => m::mock(TwigRenderer::class),
+            'TemplatePlainTextTwigRenderer' => m::mock(TwigRenderer::class),
         ];
 
         parent::setUp();
@@ -144,6 +145,39 @@ final class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
             ->with($command)
             ->andReturn($template);
 
+        $this->sut->handleCommand($command);
+    }
+
+    public function testFlatTestDataIsAValidationError(): void
+    {
+        $command = Cmd::create(['id' => 7, 'source' => 'Hi {{ name }}']);
+
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(['name' => 'Example Haulage Ltd']);
+        $template->shouldReceive('getFormat')->andReturn('sms');
+        $template->shouldNotReceive('setSource');
+
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($command)->andReturn($template);
+        $this->mockedSmServices['TemplateTwigRenderer']->shouldNotReceive('renderString');
+
+        $this->expectException(ValidationException::class);
+        $this->sut->handleCommand($command);
+    }
+
+    public function testRendererErrorIsAValidationError(): void
+    {
+        $command = Cmd::create(['id' => 7, 'source' => 'Hi']);
+
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(['Default' => ['name' => 'Bob']]);
+        $template->shouldReceive('getFormat')->andReturn('sms');
+        $template->shouldNotReceive('setSource');
+
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($command)->andReturn($template);
+        $this->mockedSmServices['TemplateTwigRenderer']->shouldReceive('renderString')
+            ->andThrow(new \TypeError('bad argument'));
+
+        $this->expectException(ValidationException::class);
         $this->sut->handleCommand($command);
     }
 }

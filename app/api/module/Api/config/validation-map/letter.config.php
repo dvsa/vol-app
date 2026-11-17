@@ -63,10 +63,12 @@ return [
     QueryHandler\Letter\LetterInstance\GetList::class => IsInternalUser::class,
     QueryHandler\Letter\LetterInstance\Preview::class => IsInternalUser::class,
     QueryHandler\Letter\LetterInstance\GenerationContext::class => IsInternalUser::class,
+    QueryHandler\Letter\LetterInstance\PreviouslySent::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Create::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Generate::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\PrepareToSend::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterInstance\UpdateIssues::class => IsInternalUser::class,
 
     // Letter Instance Issue
     CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class => IsInternalUser::class,
@@ -74,6 +76,8 @@ return [
     // Letter Instance Section
     CommandHandler\Letter\LetterInstanceSection\UpdateContent::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterInstanceTodo\CreateCustom::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterInstanceTodo\DeleteCustom::class => IsInternalUser::class,
 
     // Letter Instance Appendix
     CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class => IsInternalUser::class,

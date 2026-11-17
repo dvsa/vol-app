@@ -9,9 +9,7 @@ use Laminas\Form\Annotation as Form;
  */
 class VerifyRequestDetails
 {
-    /**
-     * @Form\Attributes({"value": "undertakings_redirect_to_verify"})
-     * @Form\Type("\Common\Form\Elements\Types\HtmlTranslated")
-     */
+    #[Form\Attributes(['value' => 'undertakings_redirect_to_verify'])]
+    #[Form\Type('\Common\Form\Elements\Types\HtmlTranslated')]
     public $signature = null;
 }

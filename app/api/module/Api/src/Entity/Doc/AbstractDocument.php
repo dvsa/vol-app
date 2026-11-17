@@ -24,25 +24,25 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'document')]
-#[ORM\Index(name: 'fk_document_irhp_application_id_irhp_application_id', columns: ['irhp_application_id'])]
-#[ORM\Index(name: 'ix_document_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'ix_document_traffic_area_id', columns: ['traffic_area_id'])]
-#[ORM\Index(name: 'ix_document_surrender_id', columns: ['surrender_id'])]
-#[ORM\Index(name: 'ix_document_submission_id', columns: ['submission_id'])]
-#[ORM\Index(name: 'ix_document_sub_category_id', columns: ['sub_category_id'])]
-#[ORM\Index(name: 'ix_document_statement_id', columns: ['statement_id'])]
-#[ORM\Index(name: 'ix_document_operating_centre_id', columns: ['operating_centre_id'])]
-#[ORM\Index(name: 'ix_document_licence_id', columns: ['licence_id'])]
-#[ORM\Index(name: 'ix_document_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'ix_document_irfo_organisation_id', columns: ['irfo_organisation_id'])]
-#[ORM\Index(name: 'ix_document_created_by', columns: ['created_by'])]
-#[ORM\Index(name: 'ix_document_category_id', columns: ['category_id'])]
-#[ORM\Index(name: 'ix_document_case_id', columns: ['case_id'])]
-#[ORM\Index(name: 'ix_document_bus_reg_id', columns: ['bus_reg_id'])]
-#[ORM\Index(name: 'ix_document_application_id', columns: ['application_id'])]
-#[ORM\Index(name: 'fk_document_messaging_message_id', columns: ['messaging_message_id'])]
-#[ORM\Index(name: 'fk_document_messaging_conversation_id', columns: ['messaging_conversation_id'])]
 #[ORM\Index(name: 'fk_document_continuation_detail_id_continuation_detail_id', columns: ['continuation_detail_id'])]
+#[ORM\Index(name: 'fk_document_irhp_application_id_irhp_application_id', columns: ['irhp_application_id'])]
+#[ORM\Index(name: 'fk_document_messaging_conversation_id', columns: ['messaging_conversation_id'])]
+#[ORM\Index(name: 'fk_document_messaging_message_id', columns: ['messaging_message_id'])]
+#[ORM\Index(name: 'ix_document_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_document_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_document_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_document_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_document_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_document_irfo_organisation_id', columns: ['irfo_organisation_id'])]
+#[ORM\Index(name: 'ix_document_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_document_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_document_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_document_statement_id', columns: ['statement_id'])]
+#[ORM\Index(name: 'ix_document_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\Index(name: 'ix_document_submission_id', columns: ['submission_id'])]
+#[ORM\Index(name: 'ix_document_surrender_id', columns: ['surrender_id'])]
+#[ORM\Index(name: 'ix_document_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'ix_document_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\UniqueConstraint(name: 'uk_document_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -385,6 +385,14 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $slaTargetDate;
 
     /**
+     * DocumentAnalyses
+     *
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis>
+     */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis::class, mappedBy: 'document')]
+    protected $documentAnalyses;
+
+    /**
      * Initialise the collections
      */
     public function __construct()
@@ -399,6 +407,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     {
         $this->continuationDetails = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->documentAnalyses = new ArrayCollection();
     }
 
 
@@ -1396,6 +1405,69 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     public function getSlaTargetDate()
     {
         return $this->slaTargetDate;
+    }
+
+    /**
+     * Set the document analyses
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $documentAnalyses collection being set as the value
+     *
+     * @return static
+     */
+    public function setDocumentAnalyses($documentAnalyses)
+    {
+        $this->documentAnalyses = $documentAnalyses;
+
+        return $this;
+    }
+
+    /**
+     * Get the document analyses
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getDocumentAnalyses()
+    {
+        return $this->documentAnalyses;
+    }
+
+    /**
+     * Add a document analyses
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documentAnalyses collection being added
+     *
+     * @return static
+     */
+    public function addDocumentAnalyses($documentAnalyses)
+    {
+        if ($documentAnalyses instanceof ArrayCollection) {
+            $this->documentAnalyses = new ArrayCollection(
+                array_merge(
+                    $this->documentAnalyses->toArray(),
+                    $documentAnalyses->toArray()
+                )
+            );
+        } elseif (!$this->documentAnalyses->contains($documentAnalyses)) {
+            $this->documentAnalyses->add($documentAnalyses);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a document analyses
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $documentAnalyses collection being removed
+     *
+     * @return static
+     */
+    public function removeDocumentAnalyses($documentAnalyses)
+    {
+        if ($this->documentAnalyses->contains($documentAnalyses)) {
+            $this->documentAnalyses->removeElement($documentAnalyses);
+        }
+
+        return $this;
     }
 
     /**

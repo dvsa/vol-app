@@ -56,7 +56,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy:'documentAnalyses', fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'documentAnalyses', fetch: 'LAZY')]
     protected $document;
 
     /**
@@ -113,12 +113,20 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     protected $result;
 
     /**
-     * Provider metadata accompanying the analysis result
+     * Result normalised
      *
      * @var array|null
      */
-    #[ORM\Column(type: 'json', name: 'result_metadata', nullable: true)]
-    protected $resultMetadata;
+    #[ORM\Column(type: 'json', name: 'result_normalised', nullable: true)]
+    protected $resultNormalised;
+
+    /**
+     * Assessment status
+     *
+     * @var string|null
+     */
+    #[ORM\Column(type: 'string', name: 'assessment_status', nullable: true)]
+    protected $assessmentStatus;
 
     /**
      * Failure detail when the analysis ends in ERROR
@@ -160,6 +168,14 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
+
+    /**
+     * Provider metadata accompanying the analysis result
+     *
+     * @var array|null
+     */
+    #[ORM\Column(type: 'json', name: 'result_metadata', nullable: true)]
+    protected $resultMetadata;
 
     /**
      * Initialise the collections
@@ -370,27 +386,51 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the result metadata
+     * Set the result normalised
      *
-     * @param array $resultMetadata new value being set
+     * @param array $resultNormalised new value being set
      *
      * @return static
      */
-    public function setResultMetadata($resultMetadata)
+    public function setResultNormalised($resultNormalised)
     {
-        $this->resultMetadata = $resultMetadata;
+        $this->resultNormalised = $resultNormalised;
 
         return $this;
     }
 
     /**
-     * Get the result metadata
+     * Get the result normalised
      *
      * @return array
      */
-    public function getResultMetadata()
+    public function getResultNormalised()
     {
-        return $this->resultMetadata;
+        return $this->resultNormalised;
+    }
+
+    /**
+     * Set the assessment status
+     *
+     * @param string $assessmentStatus new value being set
+     *
+     * @return static
+     */
+    public function setAssessmentStatus($assessmentStatus)
+    {
+        $this->assessmentStatus = $assessmentStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the assessment status
+     *
+     * @return string
+     */
+    public function getAssessmentStatus()
+    {
+        return $this->assessmentStatus;
     }
 
     /**
@@ -523,6 +563,30 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the result metadata
+     *
+     * @param array|null $resultMetadata new value being set
+     *
+     * @return static
+     */
+    public function setResultMetadata($resultMetadata)
+    {
+        $this->resultMetadata = $resultMetadata;
+
+        return $this;
+    }
+
+    /**
+     * Get the result metadata
+     *
+     * @return array|null
+     */
+    public function getResultMetadata()
+    {
+        return $this->resultMetadata;
     }
 
     /**

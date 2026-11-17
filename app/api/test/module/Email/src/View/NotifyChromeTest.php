@@ -97,4 +97,23 @@ final class NotifyChromeTest extends TestCase
         $this->assertStringContainsString('<ul style=', $html);
         $this->assertStringContainsString('<li style=', $html);
     }
+
+    public function testMarkdownConverterEscapesRawHtml(): void
+    {
+        $html = NotifyChrome::renderMarkdownBody(
+            "Smith & Sons <b>bold</b>\n\n<script>alert(1)</script>",
+            NotifyChrome::markdownConverter()
+        );
+
+        $this->assertStringContainsString('Smith &amp; Sons &lt;b&gt;bold&lt;/b&gt;', $html);
+        $this->assertStringNotContainsString('<b>', $html);
+        $this->assertStringNotContainsString('<script>', $html);
+    }
+
+    public function testMarkdownConverterDropsUnsafeLinks(): void
+    {
+        $html = NotifyChrome::renderMarkdownBody('[x](javascript:alert(1))', NotifyChrome::markdownConverter());
+
+        $this->assertStringNotContainsString('javascript:', $html);
+    }
 }

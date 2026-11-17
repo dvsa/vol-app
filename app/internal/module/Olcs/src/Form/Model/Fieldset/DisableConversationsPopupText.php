@@ -12,11 +12,7 @@ use Laminas\Form\Annotation as Form;
  */
 class DisableConversationsPopupText
 {
-    /**
-     * @Form\Type(\Common\Form\Elements\Types\PlainText::class)
-     * @Form\Attributes({
-     *     "value": "Messaging will be disabled for this operator."
-     * })
-     */
+    #[Form\Type(\Common\Form\Elements\Types\PlainText::class)]
+    #[Form\Attributes(['value' => 'Messaging will be disabled for this operator.'])]
     public ?PlainText $text = null;
 }

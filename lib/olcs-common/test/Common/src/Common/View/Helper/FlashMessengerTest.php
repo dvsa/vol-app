@@ -24,21 +24,19 @@ final class FlashMessengerTest extends MockeryTestCase
 
     private $flashMessengerHelperService;
 
-    private $mockPluginManager;
+    private $flashMessengerPlugin;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockPluginManager = m::mock(\Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger::class);
+        $this->flashMessengerPlugin = m::mock(\Common\Service\FlashMessenger\FlashMessengerInterface::class);
         $this->flashMessengerHelperService = m::mock(FlashMessengerHelperService::class);
 
         $mockTranslator = m::mock(\Laminas\I18n\Translator\Translator::class);
         $mockTranslator->shouldReceive('translate')
             ->andReturnUsing(fn(string $message): string => $this->translate($message));
 
-        $this->sut = new FlashMessenger($this->flashMessengerHelperService);
-        $this->sut->setPluginFlashMessenger($this->mockPluginManager);
-        $this->sut->setTranslator($mockTranslator);
+        $this->sut = new FlashMessenger($this->flashMessengerHelperService, $this->flashMessengerPlugin, $mockTranslator);
     }
 
     /**
@@ -56,7 +54,7 @@ final class FlashMessengerTest extends MockeryTestCase
     {
         $namespace = 'foo';
 
-        $this->mockPluginManager->shouldReceive('getMessagesFromNamespace')
+        $this->flashMessengerPlugin->shouldReceive('getMessagesFromNamespace')
             ->with('foo')
             ->andReturn(['foo', 'bar']);
 
@@ -77,9 +75,9 @@ final class FlashMessengerTest extends MockeryTestCase
         $this->flashMessengerHelperService->shouldReceive('getCurrentMessages')
             ->andReturn([]);
 
-        $this->mockPluginManager->shouldReceive('getMessagesFromNamespace')
+        $this->flashMessengerPlugin->shouldReceive('getMessagesFromNamespace')
             ->andReturn([])
-            ->shouldReceive('getCurrentMessagesFromNamespace')
+            ->shouldReceive('getCurrentMessages')
             ->andReturn([]);
 
         $markup = $this->sut->render();
@@ -94,9 +92,9 @@ final class FlashMessengerTest extends MockeryTestCase
         $this->flashMessengerHelperService->shouldReceive('getCurrentMessages')
             ->andReturn([]);
 
-        $this->mockPluginManager->shouldReceive('getMessagesFromNamespace')
+        $this->flashMessengerPlugin->shouldReceive('getMessagesFromNamespace')
             ->andReturn([])
-            ->shouldReceive('getCurrentMessagesFromNamespace')
+            ->shouldReceive('getCurrentMessages')
             ->andReturn([]);
 
         $obj = $this->sut;
@@ -113,9 +111,9 @@ final class FlashMessengerTest extends MockeryTestCase
         $this->flashMessengerHelperService->shouldReceive('getCurrentMessages')
             ->andReturn(['foo']);
 
-        $this->mockPluginManager->shouldReceive('getMessagesFromNamespace')
+        $this->flashMessengerPlugin->shouldReceive('getMessagesFromNamespace')
             ->andReturn(['bar'])
-            ->shouldReceive('getCurrentMessagesFromNamespace')
+            ->shouldReceive('getCurrentMessages')
             ->andReturn(['baz']);
 
         $expected = '<div class="notice-container"><div class="notice--danger"><p role="alert">*bar*</p></div>'

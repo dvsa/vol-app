@@ -1153,6 +1153,30 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame($anyVersion, $issues->first()->getLetterIssueVersion());
     }
 
+    public function testHandleCommandIgnoresAnIssuePostedTwice(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [1, '1'],
+        ]);
+
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+
+        $version = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $version->setGoodsOrPsv(null);
+        $issue = m::mock(LetterIssueEntity::class)->makePartial();
+        $issue->shouldReceive('getCurrentVersion')->andReturn($version);
+        $this->repoMap['LetterIssue']->shouldReceive('fetchById')->once()->andReturn($issue);
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $this->sut->handleCommand($command);
+
+        $this->assertCount(1, $letterInstance->getLetterInstanceIssues());
+    }
+
     public function testHandleCommandDropsChoicesForTheOtherLicenceType(): void
     {
         $command = Cmd::create([
@@ -1342,5 +1366,246 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand(Cmd::create(['letterType' => 123, 'selectedIssues' => []]));
 
         $this->assertNull($saved->getCreatedBy());
+    }
+
+    private function paragraph(string $text): array
+    {
+        return ['blocks' => [['type' => 'paragraph', 'data' => ['text' => $text]]]];
+    }
+
+    /**
+     * A letter covering library issue 789, with that issue's wording changed by the caseworker
+     *
+     * @param array<string, int> $links what it is linked to, by the name of the link
+     */
+    private function letterCoveringIssue789(string $status, int $letterTypeId, array $links, bool $reworded = true): LetterInstanceEntity
+    {
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId($letterTypeId);
+
+        $letter = new LetterInstanceEntity();
+        $letter->setStatus(new RefData($status));
+        $letter->setLetterType($letterType);
+        foreach ($links as $link => $id) {
+            $linked = m::mock(['licence' => LicenceEntity::class, 'application' => ApplicationEntity::class][$link])->makePartial();
+            $linked->setId($id);
+            $letter->{'set' . ucfirst($link)}($linked);
+        }
+
+        $libraryIssue = m::mock(LetterIssueEntity::class)->makePartial();
+        $libraryIssue->setId(789);
+        $version = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $version->setLetterIssue($libraryIssue);
+        $version->setDefaultBodyContent($this->paragraph('Library wording'));
+
+        $issue = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+        $issue->setDisplayOrder(0);
+        // saved either way: an editor stores its text whether or not anything was typed
+        $issue->setEditedContentFromArray($this->paragraph($reworded ? 'Reworded by the caseworker' : 'Library wording'));
+        $letter->addLetterInstanceIssue($issue);
+
+        return $letter;
+    }
+
+    /**
+     * Library issue 789 as it is now, on a newer version than the sent letter used
+     */
+    private function expectIssue789(string $heading = 'No financial evidence'): void
+    {
+        $libraryIssue = m::mock(LetterIssueEntity::class)->makePartial();
+        $libraryIssue->setId(789);
+        $version = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $version->setLetterIssue($libraryIssue);
+        $version->setGoodsOrPsv(null);
+        $version->setHeading($heading);
+        $libraryIssue->shouldReceive('getCurrentVersion')->andReturn($version);
+
+        $this->repoMap['LetterIssue']->shouldReceive('fetchById')->with(789)->andReturn($libraryIssue);
+    }
+
+    public function testStartingFromASentLetterBringsOverItsChangedWording(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [789],
+            'startFromLetter' => 55,
+        ]);
+
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+        $this->expectIssue789();
+        $this->repoMap['LetterInstance']->shouldReceive('fetchById')->with(55)->once()->andReturn(
+            $this->letterCoveringIssue789(LetterInstanceEntity::STATUS_SENT, 123, ['licence' => 456])
+        );
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(
+            $this->paragraph('Reworded by the caseworker'),
+            $letterInstance->getLetterInstanceIssues()->first()->getEditedContent()
+        );
+        // copied wording has the sent letter's dates and details in it, so the answer names the
+        // issues for the caseworker to check
+        $this->assertSame(['No financial evidence'], $result->getFlag('wordingCopiedTo'));
+    }
+
+    /**
+     * Starts a letter on licence 456 from sent letter 55 and hands back the answer
+     */
+    private function startFromSentLetter(LetterInstanceEntity $sentLetter): \Dvsa\Olcs\Api\Domain\Command\Result
+    {
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+        $this->repoMap['LetterInstance']->shouldReceive('fetchById')->with(55)->once()->andReturn($sentLetter);
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        return $this->sut->handleCommand(Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [789],
+            'startFromLetter' => 55,
+        ]));
+    }
+
+    public function testNothingIsNamedWhenTheSentLetterHadNoChangedWording(): void
+    {
+        $this->expectIssue789();
+
+        $result = $this->startFromSentLetter(
+            $this->letterCoveringIssue789(LetterInstanceEntity::STATUS_SENT, 123, ['licence' => 456], false)
+        );
+
+        $this->assertNull($result->getFlag('wordingCopiedTo'));
+    }
+
+    public function testAnIssueWithNoHeadingIsStillNamed(): void
+    {
+        $this->expectIssue789('');
+
+        $result = $this->startFromSentLetter(
+            $this->letterCoveringIssue789(LetterInstanceEntity::STATUS_SENT, 123, ['licence' => 456])
+        );
+
+        $this->assertSame(['Issue'], $result->getFlag('wordingCopiedTo'));
+    }
+
+    /**
+     * The form doesn't offer a letter that isn't there, so it is refused the same way as any
+     * other letter the form didn't offer, in words the dialog can show
+     */
+    public function testALetterThatDoesNotExistCannotBeStartedFrom(): void
+    {
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+        $this->expectIssue789();
+        $this->repoMap['LetterInstance']->shouldReceive('fetchById')->with(55)->andThrow(
+            new \Dvsa\Olcs\Api\Domain\Exception\NotFoundException('Resource not found')
+        );
+        $this->repoMap['LetterInstance']->shouldReceive('save')->never();
+
+        try {
+            $this->sut->handleCommand(Cmd::create([
+                'letterType' => 123,
+                'licence' => 456,
+                'selectedIssues' => [789],
+                'startFromLetter' => 55,
+            ]));
+            $this->fail('The letter was created');
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertSame(['The letter you picked to start from cannot be used for this letter'], $e->getMessages());
+        }
+    }
+
+    /**
+     * The API's filters hand over an empty value, or one that isn't a number, as an empty
+     * string. Neither is a letter, so the new letter is made as if none was picked.
+     */
+    public function testAnEmptyLetterToStartFromIsNoLetter(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [789],
+            'startFromLetter' => '',
+        ]);
+
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+        $this->expectIssue789();
+        $this->repoMap['LetterInstance']->shouldReceive('fetchById')->never();
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertNull($letterInstance->getLetterInstanceIssues()->first()->getEditedContent());
+        $this->assertNull($result->getFlag('wordingCopiedTo'));
+    }
+
+    /**
+     * The form only offers letters of the same type that were sent for whatever the new letter
+     * is raised on. Any other id didn't come from the form, and its wording isn't handed out.
+     *
+     * @param array<string, int> $links
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lettersTheFormDoesNotOffer')]
+    public function testALetterTheFormDidNotOfferCannotBeStartedFrom(string $status, int $letterTypeId, array $links): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [789],
+            'startFromLetter' => 55,
+        ]);
+
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+        $this->expectIssue789();
+        $this->repoMap['LetterInstance']->shouldReceive('fetchById')->with(55)->andReturn(
+            $this->letterCoveringIssue789($status, $letterTypeId, $links)
+        );
+        $this->repoMap['LetterInstance']->shouldReceive('save')->never();
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+
+        $this->sut->handleCommand($command);
+    }
+
+    /**
+     * A letter linked to nothing was raised on nothing, and that isn't the same record as
+     * another letter linked to nothing
+     */
+    public function testALetterRaisedOnNothingCannotBeStartedFrom(): void
+    {
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId(123);
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->with(123)->andReturn($letterType);
+        $this->expectIssue789();
+        $this->repoMap['LetterInstance']->shouldReceive('fetchById')->with(55)->andReturn(
+            $this->letterCoveringIssue789(LetterInstanceEntity::STATUS_SENT, 123, [])
+        );
+        $this->repoMap['LetterInstance']->shouldReceive('save')->never();
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+
+        $this->sut->handleCommand(Cmd::create(['letterType' => 123, 'selectedIssues' => [789], 'startFromLetter' => 55]));
+    }
+
+    public static function lettersTheFormDoesNotOffer(): array
+    {
+        return [
+            'not sent yet' => [LetterInstanceEntity::STATUS_DRAFT, 123, ['licence' => 456]],
+            'another type of letter' => [LetterInstanceEntity::STATUS_SENT, 124, ['licence' => 456]],
+            'sent for another licence' => [LetterInstanceEntity::STATUS_SENT, 123, ['licence' => 457]],
+            // linked to the licence, but raised on one of its applications
+            'sent for an application on the licence' => [
+                LetterInstanceEntity::STATUS_SENT,
+                123,
+                ['licence' => 456, 'application' => 21],
+            ],
+        ];
     }
 }

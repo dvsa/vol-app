@@ -9,15 +9,11 @@ use Laminas\Form\Annotation as Form;
  */
 class Base
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public $id = null;
 
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public $version = null;
 }

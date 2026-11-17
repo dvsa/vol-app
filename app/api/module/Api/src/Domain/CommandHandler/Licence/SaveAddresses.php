@@ -10,12 +10,16 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\DeleteContactDetailsAndAddressTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -35,6 +39,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     private $phoneTypes = [
         'primary' => PhoneContact::TYPE_PRIMARY,
         'secondary' => PhoneContact::TYPE_SECONDARY,
+        'sms' => PhoneContact::TYPE_SMS,
     ];
 
     private EventHistoryCreator $eventHistoryCreator;
@@ -53,11 +58,15 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         /** @var Licence $licence */
         $licence = $this->getRepo()->fetchUsingId($command);
 
+        $contact = $command->getContact();
+        $smsData = $this->normaliseSms($contact);
+
         $this->result->setFlag('isDirty', false);
 
+        $previousCorrespondenceCd = $licence->getCorrespondenceCd();
         $this->saveCorrespondenceAddress($command, $licence);
 
-        $this->updateCorrespondencePhoneContacts($command, $licence);
+        $this->updateCorrespondencePhoneContacts($smsData, $licence, $previousCorrespondenceCd);
 
         $this->maybeSaveEstablishmentAddress($command, $licence);
 
@@ -67,6 +76,33 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         $this->clearLicenceCaches($licence);
 
         return $this->result;
+    }
+
+    /**
+     * Normalise phone_sms in the contact data, or throw when it is not a valid UK mobile or landline
+     *
+     * @param array|null $contact Contact data
+     *
+     * @return array
+     * @throws ValidationException
+     */
+    private function normaliseSms($contact): array
+    {
+        $contact = (array) $contact;
+
+        if (isset($contact['phone_sms']) && trim((string) $contact['phone_sms']) !== '') {
+            $normalised = SmsPhoneNumber::normalise((string) $contact['phone_sms']);
+
+            if ($normalised === null) {
+                throw new ValidationException(['phone_sms' => ['contact-number-sms-invalid']]);
+            }
+
+            $contact['phone_sms'] = $normalised;
+        } elseif (array_key_exists('phone_sms', $contact)) {
+            $contact['phone_sms'] = '';
+        }
+
+        return $contact;
     }
 
     /**
@@ -97,6 +133,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     private function saveCorrespondenceAddress(DomainCmd\Licence\SaveAddresses $command, Licence $licence)
     {
         $address = $command->getCorrespondenceAddress();
+        $this->checkAddressId($address, $licence->getCorrespondenceCd());
         $address['contactType'] = ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS;
         $result = $this->handleSideEffect(
             DomainCmd\ContactDetails\SaveAddress::create($address)
@@ -130,17 +167,20 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     /**
      * Update Corr Phone contacts
      *
-     * @param DomainCmd\Licence\SaveAddresses $command Comman
-     * @param Licence                         $licence Licence entity
+     * @param array               $contact    Contact data, phone_sms already normalised
+     * @param Licence             $licence    Licence entity
+     * @param ContactDetails|null $previousCd The correspondence contact details before this save
      *
      * @return void
      */
-    private function updateCorrespondencePhoneContacts(DomainCmd\Licence\SaveAddresses $command, Licence $licence)
+    private function updateCorrespondencePhoneContacts(array $contact, Licence $licence, ?ContactDetails $previousCd)
     {
         $this->updatePhoneContacts(
-            $command->getContact(),
+            $contact,
             $licence->getCorrespondenceCd(),
-            $licence
+            $licence,
+            true,
+            $previousCd
         );
     }
 
@@ -150,13 +190,27 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
      * @param array          $data           Phone Contact data
      * @param ContactDetails $contactDetails Contact Details entity
      * @param Licence $licence entity
+     * @param bool $includeSms Handle the SMS number too (correspondence contact only)
+     * @param ContactDetails|null $previousContactDetails The contact details this save replaced, if any
      *
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
-    private function updatePhoneContacts($data, ContactDetails $contactDetails, ?Licence $licence = null)
-    {
+    private function updatePhoneContacts(
+        $data,
+        ContactDetails $contactDetails,
+        ?Licence $licence = null,
+        bool $includeSms = false,
+        ?ContactDetails $previousContactDetails = null
+    ) {
         foreach ($this->phoneTypes as $phoneType => $phoneRefName) {
+            $isSms = $phoneType === 'sms';
+
+            // a post without the SMS key leaves any existing SMS row alone
+            if ($isSms && (!$includeSms || !array_key_exists('phone_sms', $data))) {
+                continue;
+            }
+
             $result = new Result();
             $result->setFlag('hasChanged', false);
 
@@ -172,6 +226,22 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                     Query::HYDRATE_OBJECT,
                     $version
                 );
+
+                $owner = $contact->getContactDetails();
+                if ($owner !== $contactDetails) {
+                    if ($previousContactDetails === null || $owner !== $previousContactDetails) {
+                        throw new ForbiddenException('Phone contact does not belong to this licence');
+                    }
+
+                    // this save replaced the contact details, so the number moves to the new ones
+                    $previousContactDetails->getPhoneContacts()->removeElement($contact);
+                    $contact->setContactDetails($contactDetails);
+                    $contactDetails->getPhoneContacts()->add($contact);
+                }
+            } elseif ($isSms && !empty($data['phone_sms'])) {
+                // a form loaded before the SMS row existed posts no id, so reuse the row instead of adding another
+                $contact = SmsNumber::latestContact($contactDetails);
+                $version = $contact?->getVersion();
             }
 
             $hasContact = ($contact instanceof PhoneContact);
@@ -200,6 +270,24 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                     // create Event History record
                     $this->eventHistoryCreator->create($contact, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence);
                 }
+            } elseif ($isSms) {
+                // clearing the number removes every SMS row, including any older duplicates
+                $rows = SmsNumber::smsContacts($contactDetails);
+                if ($hasContact && !in_array($contact, $rows, true)) {
+                    $rows[] = $contact;
+                }
+
+                foreach ($rows as $row) {
+                    if ($row->getId() > 0) {
+                        $contactDetails->getPhoneContacts()->removeElement($row);
+                        $this->getRepo('PhoneContact')->delete($row);
+                        $result->setFlag('hasChanged', true);
+                    }
+                }
+
+                if ($result->getFlag('hasChanged')) {
+                    $result->addMessage('Phone contact sms deleted');
+                }
             } elseif ($hasContact && $contact->getId() > 0) {
                 $contactDetails->getPhoneContacts()->removeElement($contact);
 
@@ -209,7 +297,37 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                 $result->setFlag('hasChanged', true);
             }
 
+            if ($isSms) {
+                // SMS changes are tracked apart from isDirty so they raise no Address Change task
+                foreach ($result->getMessages() as $message) {
+                    $this->result->addMessage($message);
+                }
+                if ($result->getFlag('hasChanged')) {
+                    $this->result->setFlag('smsChanged', true);
+                }
+                continue;
+            }
+
             $this->handleSideEffectResult($result);
+        }
+    }
+
+    /**
+     * An address id in the command must be the one already on this contact details
+     *
+     * @param array|null          $address        Address data
+     * @param ContactDetails|null $contactDetails The licence's contact details for this address type
+     *
+     * @throws ForbiddenException
+     */
+    private function checkAddressId($address, ?ContactDetails $contactDetails): void
+    {
+        if (empty($address['id'])) {
+            return;
+        }
+
+        if ((int) $address['id'] !== (int) $contactDetails?->getAddress()?->getId()) {
+            throw new ForbiddenException('Address does not belong to this licence');
         }
     }
 
@@ -229,6 +347,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         }
 
         $address = $command->getEstablishmentAddress();
+        $this->checkAddressId($address, $licence->getEstablishmentCd());
         $address['contactType'] = ContactDetails::CONTACT_TYPE_ESTABLISHMENT_ADDRESS;
         $result = $this->handleSideEffect(
             DomainCmd\ContactDetails\SaveAddress::create($address)
@@ -266,6 +385,8 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
 
         if ($params['add-transport-consultant'] === 'Y') {
             $address = $params['address'];
+            $previousConsultantCd = $licence->getTransportConsultantCd();
+            $this->checkAddressId($address, $previousConsultantCd);
             $address['contactType'] = ContactDetails::CONTACT_TYPE_TRANSPORT_CONSULTANT;
             $result = $this->handleSideEffect(
                 DomainCmd\ContactDetails\SaveAddress::create($address)
@@ -294,7 +415,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                 $result->addMessage('Transport consultant updated');
             }
 
-            $this->updatePhoneContacts($params['contact'], $transportConsultant);
+            $this->updatePhoneContacts($params['contact'], $transportConsultant, null, false, $previousConsultantCd);
         } elseif ($licence->getTransportConsultantCd()) {
             $this->maybeDeleteContactDetailsAndAddress($licence->getTransportConsultantCd());
             $licence->setTransportConsultantCd(null);

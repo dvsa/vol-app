@@ -258,7 +258,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $dto = DeleteChangeOfEntityCmd::create(['id' => $changeOfEntity]);
             $response = $this->handleCommand($dto);
             if ($response->isOk()) {
-                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+                $this->flashMessengerHelper->addSuccessMessage('application.change-of-entity.delete.success');
             }
             return $this->redirectToRouteAjax(
                 'lva-application/overview',
@@ -310,7 +310,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
                 $response = $this->handleCommand($dto);
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                    $this->flashMessengerHelper->addSuccessMessage('application.change-of-entity.create.success');
                 }
 
                 return $this->redirectToRouteAjax(

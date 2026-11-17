@@ -13,6 +13,7 @@ use Common\Form\FormValidator;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\BadCommandResponseException;
 use Common\Service\Cqrs\Exception\BadQueryResponseException;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Dvsa\Olcs\Application\Controller\Factory\AddVehiclesQuestionControllerFactory;
 use Dvsa\Olcs\Application\Form\AddVehiclesQuestionForm;
 use Dvsa\Olcs\Application\View\Model\JourneyProgressDescriptionViewModel;
@@ -20,7 +21,6 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateVehicles;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Router\RouteMatch;
 use Laminas\View\Model\ViewModel;
@@ -59,7 +59,7 @@ class AddVehiclesQuestionController
     protected $queryHandler;
 
     /**
-     * @var FlashMessenger
+     * @var FlashMessengerInterface
      */
     protected $flashMessenger;
 
@@ -77,7 +77,7 @@ class AddVehiclesQuestionController
         Url $urlHelper,
         Redirect $redirectHelper,
         HandleQuery $queryHandler,
-        FlashMessenger $flashMessenger,
+        FlashMessengerInterface $flashMessenger,
         FormValidator $formValidator,
         HandleCommand $commandHandler
     ) {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CommonTest\Service;
 
+use Laminas\Form\Annotation\AttributeBuilder;
 use Psr\Container\ContainerInterface;
-use Laminas\Form\Annotation\AnnotationBuilder;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Common\Service\FormAnnotationBuilderFactory;
@@ -25,8 +25,8 @@ final class FormAnnotationBuilderFactoryTest extends MockeryTestCase
 
         $sut = new FormAnnotationBuilderFactory();
         $this->assertInstanceOf(
-            AnnotationBuilder::class,
-            $sut->__invoke($mockServiceLocator, AnnotationBuilder::class)
+            AttributeBuilder::class,
+            $sut->__invoke($mockServiceLocator, AttributeBuilder::class)
         );
     }
 }

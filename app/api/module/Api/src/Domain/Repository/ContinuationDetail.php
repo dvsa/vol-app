@@ -278,7 +278,7 @@ class ContinuationDetail extends AbstractRepository
             ->with('l.licenceType', 'lt')
             ->with('l.goodsOrPsv', 'lg');
 
-        $qb->orderBy('l.licNo', 'ASC');
+        $qb->orderBy('l.licNo', \SortDirection::Ascending);
 
         if ($continuationId) {
             $qb->andWhere($qb->expr()->eq('c.id', ':continuationId'))

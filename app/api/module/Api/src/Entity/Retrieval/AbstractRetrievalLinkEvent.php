@@ -21,9 +21,9 @@ use Doctrine\Common\Collections\Collection;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'retrieval_link_event')]
+#[ORM\Index(name: 'ix_retrieval_link_event_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_retrieval_link_event_retrieval_link_id', columns: ['retrieval_link_id'])]
 #[ORM\Index(name: 'ix_retrieval_link_event_type', columns: ['event_type'])]
-#[ORM\Index(name: 'ix_retrieval_link_event_created_on', columns: ['created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -44,7 +44,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     protected $id;
 
     /**
-     * Foreign Key to retrieval_link
+     * Nulled (not deleted) when the link is purged, so the event survives
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
      */
@@ -53,7 +53,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     protected $retrievalLink;
 
     /**
-     * Source context
+     * Denormalised link source (e.g. publication:12345) so audit stays meaningful after the link is gone
      *
      * @var string|null
      */
@@ -61,7 +61,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     protected $sourceContext;
 
     /**
-     * Event type
+     * created|viewed|otp_requested|otp_failed|otp_succeeded|downloaded|denied
      *
      * @var string
      */
@@ -69,7 +69,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     protected $eventType = '';
 
     /**
-     * Member ref
+     * Set for download events
      *
      * @var string|null
      */
@@ -93,7 +93,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     protected $userAgent;
 
     /**
-     * Detail
+     * Free-text context e.g. denial reason
      *
      * @var string|null
      */
@@ -121,7 +121,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setId($id)
     {
@@ -145,7 +145,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink $retrievalLink new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setRetrievalLink($retrievalLink)
     {
@@ -169,7 +169,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param string $sourceContext new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setSourceContext($sourceContext)
     {
@@ -193,7 +193,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param string $eventType new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setEventType($eventType)
     {
@@ -217,7 +217,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param string $memberRef new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setMemberRef($memberRef)
     {
@@ -241,7 +241,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param string $ip new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setIp($ip)
     {
@@ -265,7 +265,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param string $userAgent new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setUserAgent($userAgent)
     {
@@ -289,7 +289,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @param string $detail new value being set
      *
-     * @return RetrievalLinkEvent
+     * @return static
      */
     public function setDetail($detail)
     {

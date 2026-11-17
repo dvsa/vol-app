@@ -67,7 +67,7 @@ final class EventHistoryTest extends RepositoryTestCase
             null,
         ];
         yield 'sorted and limited' => [
-            [1, null, 'eventDatetime', 'DESC', 10],
+            [1, null, 'eventDatetime', \SortDirection::Descending, 10],
             ' ORDER BY m.eventDatetime DESC',
             10,
         ];

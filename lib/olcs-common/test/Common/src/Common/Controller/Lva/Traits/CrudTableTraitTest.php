@@ -8,6 +8,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use CommonTest\Bootstrap;
 use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -183,6 +184,24 @@ final class CrudTableTraitTest extends MockeryTestCase
 
         $this->assertSame(
             $this->response,
+            $this->sut->deleteAction()
+        );
+    }
+
+    public function testDeleteActionWithPostReturnsViewModel(): void
+    {
+        $viewModel = new ViewModel();
+
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
+        $mockRequest->shouldReceive('isPost')->once()->withNoArgs()->andReturn(true);
+
+        $this->sut
+            ->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($mockRequest)
+            ->shouldReceive('delete')->once()->withNoArgs()->andReturn($viewModel)
+            ->shouldReceive('redirect')->never();
+
+        $this->assertSame(
+            $viewModel,
             $this->sut->deleteAction()
         );
     }

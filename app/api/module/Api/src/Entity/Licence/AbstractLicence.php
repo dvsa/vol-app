@@ -582,7 +582,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\PsvDisc>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\PsvDisc::class, mappedBy: 'licence')]
-    #[ORM\OrderBy(['discNo' => 'ASC'])]
+    #[ORM\OrderBy(['discNo' => \SortDirection::Ascending])]
     protected $psvDiscs;
 
     /**

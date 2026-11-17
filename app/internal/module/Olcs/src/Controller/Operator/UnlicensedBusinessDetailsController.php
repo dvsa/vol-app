@@ -44,7 +44,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
         if ($this->isButtonPressed('cancel')) {
             // user pressed cancel button in edit form
             if ($operator) {
-                $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
+                $this->flashMessengerHelper->addSuccessMessage('Your changes have been discarded');
                 return $this->redirectToRoute('operator-unlicensed/business-details', ['organisation' => $operator]);
             } else {
                 // user pressed cancel button in add form

@@ -9,27 +9,15 @@ use Laminas\Form\Annotation as Form;
  */
 class BusRegDetails extends Base
 {
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"fields[isTxcApp]"
-     * })
-     */
+    #[Form\Type('Hidden')]
+    #[Form\Attributes(['id' => 'fields[isTxcApp]'])]
     public $isTxcApp = null;
 
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"fields[isLatestVariation]"
-     * })
-     */
+    #[Form\Type('Hidden')]
+    #[Form\Attributes(['id' => 'fields[isLatestVariation]'])]
     public $isLatestVariation = null;
 
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"fields[status]"
-     * })
-     */
+    #[Form\Type('Hidden')]
+    #[Form\Attributes(['id' => 'fields[status]'])]
     public $status = null;
 }
