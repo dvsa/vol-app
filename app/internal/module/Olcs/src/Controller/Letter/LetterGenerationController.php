@@ -525,8 +525,9 @@ class LetterGenerationController extends AbstractInternalController implements L
             ];
         }
 
-        // The page follows the letter (VOL-7737): sections around the issues block as they sit
-        // in the letter, each issue followed by its own to-dos.
+        // Sections sit around the issues block as they do in the letter. Within it each issue
+        // is followed by its own to-dos (VOL-7737). The letter itself lists a group's issues
+        // and then the to-dos.
         [$groupedIssues, $groupedTodos] = $this->placeTodosUnderIssues($groupedIssues, $groupedTodos);
 
         $view = new ViewModel([
