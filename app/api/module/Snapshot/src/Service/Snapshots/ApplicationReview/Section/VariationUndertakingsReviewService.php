@@ -83,6 +83,29 @@ class VariationUndertakingsReviewService extends AbstractReviewService
         return $this->getGv81($data);
     }
 
+    /**
+     * Declaration wording managed in Long Text, falling back to the partials
+     * until the content has been added
+     */
+    public function getLongTextMarkup(array $data): string
+    {
+        $region = ValueHelper::isOn($data['niFlag']) ? 'ni' : 'gb';
+
+        $key = match (true) {
+            $this->isPsv($data) && $this->isStandard($data) => 'markup-variation-declaration-psv-standard',
+            $this->isPsv($data) => 'markup-variation-declaration-psv-restricted',
+            $this->isUpgrade($data) => 'markup-variation-declaration-goods-' . $region . '-upgrade',
+            $data['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_LGV =>
+                'markup-variation-declaration-goods-' . $region . '-lgv',
+            $this->isStandard($data) => 'markup-variation-declaration-goods-' . $region . '-standard',
+            default => 'markup-variation-declaration-goods-' . $region . '-restricted',
+        };
+
+        $markup = $this->translate($key);
+
+        return $markup === $key ? $this->getMarkup($data) : $markup;
+    }
+
     private function getGv81(array $data)
     {
         $isStandard = $this->isStandard($data);

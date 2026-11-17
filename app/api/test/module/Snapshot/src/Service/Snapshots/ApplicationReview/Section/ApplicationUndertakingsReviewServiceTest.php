@@ -38,6 +38,69 @@ final class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationUndertakingsReviewService($abstractReviewServiceServices);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerLongTextMarkup')]
+    public function testGetLongTextMarkup(array $data, string $key): void
+    {
+        $this->mockTranslator->expects('translate')->with($key)->andReturn('managed wording');
+
+        self::assertSame('managed wording', $this->sut->getLongTextMarkup($data));
+    }
+
+    public static function providerLongTextMarkup(): \Iterator
+    {
+        yield 'goods GB' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_HGV],
+                'niFlag' => 'N',
+            ],
+            'markup-application-declaration-goods-gb',
+        ];
+        yield 'goods GB LGV' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_LGV],
+                'niFlag' => 'N',
+            ],
+            'markup-application-declaration-goods-gb-lgv',
+        ];
+        yield 'goods NI restricted' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_HGV],
+                'niFlag' => 'Y',
+            ],
+            'markup-application-declaration-goods-ni-restricted',
+        ];
+        yield 'PSV special restricted' => [
+            [
+                'isGoods' => false,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            ],
+            'markup-application-declaration-psv-special-restricted',
+        ];
+    }
+
+    public function testGetLongTextMarkupFallsBackToThePartialsWhenThereIsNoContent(): void
+    {
+        $data = [
+            'isGoods' => false,
+            'licenceType' => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
+        ];
+
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application-declaration-psv-special-restricted')
+            ->andReturn('markup-application-declaration-psv-special-restricted');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_PSV356')
+            ->andReturn('partial wording');
+
+        self::assertSame('partial wording', $this->sut->getLongTextMarkup($data));
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData(mixed $data, mixed $expected): void
     {

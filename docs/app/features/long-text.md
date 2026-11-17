@@ -1,0 +1,33 @@
+---
+sidebar_position: 40
+title: Long Text
+---
+
+# Long Text
+
+Long Text lets System Admins edit longer bits of page wording from **Admin > Content Management > Long Text**. Each entry is a translation key with the `editorjs` format. The EditorJS JSON is kept in `translation_key_text.content_json` and the rendered GOV.UK HTML in `translated_text`, so pages pick it up through the normal translator.
+
+## Review and declarations pages
+
+These self-service pages use Long Text:
+
+- new application review and declarations
+- variation review and declarations
+- continuation declaration, including the printable version
+- transport manager declaration
+
+The review services still decide which wording applies (goods or PSV, licence type, GB or Northern Ireland). Each combination has its own full declaration key, for example `markup-application-declaration-goods-gb`, `markup-variation-declaration-goods-ni-upgrade` or `markup-continuation-full-declaration-psv-standard`. The transport manager declaration keeps its existing key, `markup-tma-tm_declaration`.
+
+If a full declaration key has no content, the page falls back to building the wording from the existing partials, as it did before. The transport manager declaration falls back to its partial in the usual way. A Welsh page with English content but no Welsh content shows the English. Internal snapshots still use the partials.
+
+The short "check your answers" guidance above each declaration (`markup-review-text` and similar) stays on its partial. It uses the warning style and a hidden "Important" prefix, which the editor's blocks can't hold.
+
+## Seeding the content
+
+`app/api/data/db/convert-long-text-partials.php` converts the partials into EditorJS JSON and prints the SQL that seeds the translation tables:
+
+```bash
+app/api/data/db/convert-long-text-partials.php > /tmp/VOL-7358-long-text-seed.sql
+```
+
+It stops and lists the partial if it finds something it can't convert safely. The seed is in olcs-etl as `patches/9.7.0/VOL-7358-long-text-seed.sql`.

@@ -89,6 +89,34 @@ class ApplicationUndertakingsReviewService extends AbstractReviewService
         return $this->getGv79($data);
     }
 
+    /**
+     * Declaration wording managed in Long Text, falling back to the partials
+     * until the content has been added
+     */
+    public function getLongTextMarkup(array $data): string
+    {
+        $key = match (true) {
+            $this->isPsv($data) && $data['licenceType']['id'] === Licence::LICENCE_TYPE_SPECIAL_RESTRICTED =>
+                'markup-application-declaration-psv-special-restricted',
+            $this->isPsv($data) && $this->isStandard($data) => 'markup-application-declaration-psv-standard',
+            $this->isPsv($data) => 'markup-application-declaration-psv-restricted',
+            ValueHelper::isOn($data['niFlag']) && $data['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_LGV =>
+                'markup-application-declaration-goods-ni-lgv',
+            ValueHelper::isOn($data['niFlag']) && $this->isStandard($data) =>
+                'markup-application-declaration-goods-ni-standard',
+            ValueHelper::isOn($data['niFlag']) => 'markup-application-declaration-goods-ni-restricted',
+            $this->isLgvOnly($data) => 'markup-application-declaration-goods-gb-lgv',
+            $this->isGoodsStandardInternational($data) =>
+                'markup-application-declaration-goods-gb-standard-international',
+            $this->isGoodsRestricted($data) => 'markup-application-declaration-goods-gb-restricted',
+            default => 'markup-application-declaration-goods-gb',
+        };
+
+        $markup = $this->translate($key);
+
+        return $markup === $key ? $this->getMarkup($data) : $markup;
+    }
+
     private function getGv79(array $data)
     {
         $isInternal = $this->isInternal($data);

@@ -265,6 +265,92 @@ final class DeclarationReviewServiceTest extends MockeryTestCase
         ];
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLongTextDeclarationMarkupDataProvider')]
+    public function testGetLongTextDeclarationMarkup(
+        string $expected,
+        string $goodsOrPsv,
+        string $licenceType,
+        bool $isNi,
+        bool $isLgv,
+    ): void {
+        $this->continuationDetail->getLicence()->setGoodsOrPsv(new RefData($goodsOrPsv));
+        $this->continuationDetail->getLicence()->setLicenceType(new RefData($licenceType));
+        if ($isNi) {
+            $this->continuationDetail->getLicence()->setTrafficArea(new TrafficArea()->setIsNi(true));
+        }
+        $this->continuationDetail->getLicence()->shouldReceive('isLgv')->andReturn($isLgv);
+
+        self::assertSame(
+            $expected . '_translated(%s)',
+            $this->sut->getLongTextDeclarationMarkup($this->continuationDetail)
+        );
+    }
+
+    public static function getLongTextDeclarationMarkupDataProvider(): \Iterator
+    {
+        yield 'goods GB standard' => [
+            'markup-continuation-full-declaration-goods-gb-standard',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            false,
+            false,
+        ];
+        yield 'goods GB LGV' => [
+            'markup-continuation-full-declaration-goods-gb-standard',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            false,
+            true,
+        ];
+        yield 'goods GB restricted' => [
+            'markup-continuation-full-declaration-goods-gb-restricted',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            false,
+            false,
+        ];
+        yield 'goods NI LGV' => [
+            'markup-continuation-full-declaration-goods-ni-lgv',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            true,
+            true,
+        ];
+        yield 'goods NI restricted' => [
+            'markup-continuation-full-declaration-goods-ni-restricted',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            true,
+            false,
+        ];
+        yield 'PSV special restricted' => [
+            'markup-continuation-full-declaration-psv-special-restricted',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            false,
+            false,
+        ];
+    }
+
+    public function testGetLongTextDeclarationMarkupFallsBackToThePartialsWhenThereIsNoContent(): void
+    {
+        $translator = m::mock(TranslatorInterface::class);
+        $translator->expects('translate')
+            ->with('markup-continuation-full-declaration-psv-restricted')
+            ->andReturn('markup-continuation-full-declaration-psv-restricted');
+        $translator->expects('translate')
+            ->with('markup-continuation-declaration-psv-restricted')
+            ->andReturn('partial wording');
+
+        $services = m::mock(AbstractReviewServiceServices::class);
+        $services->expects('getTranslator')->withNoArgs()->andReturn($translator);
+
+        self::assertSame(
+            'partial wording',
+            (new DeclarationReviewService($services))->getLongTextDeclarationMarkup($this->continuationDetail)
+        );
+    }
+
     public function testGetConfigFromDataNoSignature(): void
     {
         $this->continuationDetail->setSignatureType(new RefData(RefData::SIG_SIGNATURE_NOT_REQUIRED));

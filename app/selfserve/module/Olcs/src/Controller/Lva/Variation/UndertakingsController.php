@@ -93,6 +93,7 @@ class UndertakingsController extends AbstractUndertakingsController
         );
 
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
+        $fieldset->get('declaration')->setValue($applicationData['declarations']);
 
         if (!$applicationData['showPeriodOfGraceQuestion']) {
             $fieldset->remove('noTmConfirmation');

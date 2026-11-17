@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationUndertakingsReviewService;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\VariationUndertakingsReviewService;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Entity\System\SystemParameter;
@@ -34,6 +35,8 @@ class Declaration extends AbstractQueryHandler
     private $feesHelper;
 
     private ApplicationUndertakingsReviewService $reviewService;
+
+    private VariationUndertakingsReviewService $variationReviewService;
 
     /**
      * Handle query
@@ -99,11 +102,13 @@ class Declaration extends AbstractQueryHandler
      */
     protected function getDeclarations($application)
     {
-        $data = $application->serialize();
+        $data = $application->serialize(['licence' => ['licenceType']]);
         $data['isGoods'] = $application->isGoods();
         $data['isInternal'] = false;
 
-        return $this->reviewService->getMarkup($data);
+        $reviewService = $application->isVariation() ? $this->variationReviewService : $this->reviewService;
+
+        return $reviewService->getLongTextMarkup($data);
     }
 
     /**
@@ -165,6 +170,7 @@ class Declaration extends AbstractQueryHandler
         $this->sectionAccessService = $container->get('SectionAccessService');
         $this->feesHelper = $container->get('FeesHelperService');
         $this->reviewService = $container->get('Review\ApplicationUndertakings');
+        $this->variationReviewService = $container->get('Review\VariationUndertakings');
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }
