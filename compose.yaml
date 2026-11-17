@@ -230,7 +230,29 @@ services:
       retries: 3
       start_period: 60s
 
+  # Local AWS service APIs (S3, SQS, ...) over HTTPS, with telemetry off. See
+  # docs/app/local-setup/aws-emulator.md. Its state is in memory only: restarting it empties it.
+  aws-emulator:
+    build:
+      context: infra/docker/aws-emulator
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      # Host loopback only: the emulator accepts any request signed with its own keys.
+      - "127.0.0.1:9297:9297"
+    environment:
+      EMULATOR_TELEMETRY: "off"
+    volumes:
+      # Each start writes a new certificate (ca.pem) and access keys here. A Docker volume rather
+      # than a folder in the checkout, so the emulator can write to it whatever your user ID is;
+      # infra/docker/aws-emulator/aws-local fetches them for tools on your machine.
+      - aws-emulator:/home/emulator/.aws/emulator
+
 volumes:
+  aws-emulator:
   db-data:
   openldap-data:
   printpit-pdfs:

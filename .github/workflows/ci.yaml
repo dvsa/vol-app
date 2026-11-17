@@ -110,6 +110,7 @@ jobs:
             infra/docker/printpit/**
             infra/docker/gotenberg/**
             infra/docker/proxy/**
+            infra/docker/aws-emulator/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v47
         id: changed-accounts-terraform-files
