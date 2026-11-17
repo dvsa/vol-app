@@ -10,6 +10,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\ConfirmPrinting as ConfirmPrintingGoodsDto;
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\PrintDiscs as PrintDiscsGoodsDto;
 use Dvsa\Olcs\Transfer\Command\PsvDisc\ConfirmPrinting as ConfirmPrintingPsvDto;
@@ -32,6 +33,8 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
 {
     use GenericRenderView;
     use GenericMethods;
+    // the shared form code in GenericMethods reports an oversized post through this
+    use FlashMessengerTrait;
 
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;
