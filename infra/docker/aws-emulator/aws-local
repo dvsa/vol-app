@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Runs a command against the local AWS Emulator (the aws-emulator service in compose.yaml) instead
+# of real AWS. Examples:
+#   infra/docker/aws-emulator/aws-local aws sts get-caller-identity
+#   infra/docker/aws-emulator/aws-local aws s3 ls
+# Your own shell is left unchanged. Any AWS credentials and settings of yours are kept out of the
+# command, so it can only reach the emulator.
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: $0 <command> [args...], for example: $0 aws s3 ls" >&2
+  exit 1
+fi
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+dir="$root/.aws-emulator/9297"
+endpoint=https://127.0.0.1:9297
+region=eu-west-1
+
+# The emulator makes a new certificate and new access keys every time it starts, so fetch this
+# run's copies from the container each time. One call for both files; the line between them
+# cannot appear in either.
+boundary='--- aws-emulator file boundary ---'
+if ! files="$(cd "$root" && docker compose exec -T aws-emulator sh -c \
+  "cd \"\$HOME/.aws/emulator/9297\" && cat ca.pem && echo '$boundary' && cat emulator_credentials" 2>/dev/null)"; then
+  echo "The AWS Emulator is not running, or has not finished starting." >&2
+  echo "Start it with: docker compose up -d --wait aws-emulator" >&2
+  exit 1
+fi
+
+umask 077
+mkdir -p "$dir"
+printf '%s\n' "${files%%$'\n'"$boundary"*}" > "$dir/ca.pem"
+printf '%s\n' "${files#*"$boundary"$'\n'}" > "$dir/emulator_credentials"
+# Our own config file rather than yours, so no profile of yours (SSO, assumed roles) is used.
+cat > "$dir/config" <<EOF
+[default]
+region = $region
+endpoint_url = $endpoint
+ca_bundle = $dir/ca.pem
+EOF
+
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE AWS_DEFAULT_PROFILE \
+  AWS_WEB_IDENTITY_TOKEN_FILE AWS_ROLE_ARN AWS_ROLE_SESSION_NAME AWS_CONTAINER_CREDENTIALS_RELATIVE_URI \
+  AWS_CONTAINER_CREDENTIALS_FULL_URI AWS_CONTAINER_AUTHORIZATION_TOKEN
+
+export AWS_ENDPOINT_URL="$endpoint"
+export AWS_SHARED_CREDENTIALS_FILE="$dir/emulator_credentials"
+export AWS_CONFIG_FILE="$dir/config"
+export AWS_CA_BUNDLE="$dir/ca.pem"
+export NODE_EXTRA_CA_CERTS="$dir/ca.pem"
+export AWS_EC2_METADATA_DISABLED=true
+export AWS_REGION="$region"
+export AWS_DEFAULT_REGION="$region"
+export AWS_PAGER=""
+
+exec "$@"
