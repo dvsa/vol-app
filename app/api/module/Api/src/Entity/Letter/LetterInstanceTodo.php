@@ -58,6 +58,30 @@ class LetterInstanceTodo extends AbstractLetterInstanceTodo
     }
 
     /**
+     * Whether a caseworker changed what the to-do says: its words, not just how they are laid
+     * out. See LetterInstanceIssue::hasChangedWording. A to-do the caseworker wrote has no
+     * library wording behind it, so anything written in it counts.
+     */
+    public function hasChangedWording(): bool
+    {
+        if (empty($this->editedDescription)) {
+            return false;
+        }
+
+        // an edited description that can't be read comes back empty
+        $description = $this->getEffectiveDescription();
+        if ($description === []) {
+            return false;
+        }
+
+        $startedWith = !empty($this->generatedDescription) && is_array($this->generatedDescription)
+            ? $this->generatedDescription
+            : ($this->letterTodoVersion?->getDescriptionAsArray() ?? []);
+
+        return EditorJsText::plain($description) !== EditorJsText::plain($startedWith);
+    }
+
+    /**
      * A to-do the caseworker wrote on an Other issue, with no library version behind it (VOL-7735)
      */
     public function isCustom(): bool

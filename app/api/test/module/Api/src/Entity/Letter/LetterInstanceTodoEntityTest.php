@@ -164,4 +164,63 @@ final class LetterInstanceTodoEntityTest extends EntityTester
 
         $this->assertSame('Other issue (Finances): to-do 1', $todo->getCustomLabel());
     }
+
+    private function paragraph(string $text): array
+    {
+        return ['blocks' => [['type' => 'paragraph', 'data' => ['text' => $text]]]];
+    }
+
+    /**
+     * Saving an editor stores its text whether or not anything was typed
+     */
+    public function testATodoSavedAsItStartedHasNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease for [[OP_NAME_ONLY]]'));
+        $entity->setGeneratedDescription($this->paragraph('Send the lease for Smith & Sons'));
+        // as an editor hands it back: its own ids and time, and the "&" written as markup
+        $entity->setEditedDescriptionFromArray([
+            'time' => 1763100000000,
+            'blocks' => [['id' => 'a1B2', 'type' => 'paragraph', 'data' => ['text' => 'Send the lease for Smith &amp; Sons']]],
+        ]);
+
+        $this->assertTrue($entity->hasBeenEdited());
+        $this->assertFalse($entity->hasChangedWording());
+    }
+
+    public function testATodoWhoseWordsWereEditedHasChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease for [[LICENCE_NUMBER]]'));
+        $entity->setGeneratedDescription($this->paragraph('Send the lease for OB1234567'));
+        $entity->setEditedDescriptionFromArray($this->paragraph('Send the signed lease by Friday'));
+
+        $this->assertTrue($entity->hasChangedWording());
+    }
+
+    public function testATodoNeverSavedHasNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease'));
+
+        $this->assertFalse($entity->hasChangedWording());
+    }
+
+    /**
+     * A to-do the caseworker wrote has no library wording to compare with: anything written is theirs
+     */
+    public function testACustomTodoHasChangedWordingOnceSomethingIsWritten(): void
+    {
+        $empty = new Entity();
+        $written = new Entity();
+        $written->setEditedDescriptionFromArray($this->paragraph('Send the lease'));
+
+        $this->assertFalse($empty->hasChangedWording());
+        $this->assertTrue($written->hasChangedWording());
+    }
+
+    public function testAnEditedDescriptionThatCannotBeReadIsNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease'));
+        $entity->setEditedDescription('{not json');
+
+        $this->assertFalse($entity->hasChangedWording());
+    }
 }

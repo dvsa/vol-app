@@ -11,6 +11,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Common\Util\FlashMessengerTrait;
 use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -23,6 +24,8 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
     use GenericReceipt;
     use GenericRenderView;
     use GenericMethods;
+    // the fees code shared with the licence and application pages reports back through this
+    use FlashMessengerTrait;
 
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;

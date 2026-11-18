@@ -63,6 +63,7 @@ return [
     QueryHandler\Letter\LetterInstance\GetList::class => IsInternalUser::class,
     QueryHandler\Letter\LetterInstance\Preview::class => IsInternalUser::class,
     QueryHandler\Letter\LetterInstance\GenerationContext::class => IsInternalUser::class,
+    QueryHandler\Letter\LetterInstance\PreviouslySent::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Create::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Generate::class => IsInternalUser::class,
