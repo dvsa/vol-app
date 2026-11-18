@@ -132,7 +132,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
 
     protected function getListFilters(bool $includeText = false): array
     {
-        return [];
+        return ['format' => 'text'];
     }
 
     /**

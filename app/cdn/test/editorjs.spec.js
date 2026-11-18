@@ -41,7 +41,10 @@ test.beforeEach(async ({ page }) => {
   // Both editors are initialised before any test types into them.
   await expect(page.locator("#editor-section .ce-paragraph")).toHaveAttribute("contenteditable", "true");
   await expect(page.locator("#editor-variant .ce-paragraph")).toHaveAttribute("contenteditable", "true");
-  await expect(page.locator("#editor-long-text .govuk-body")).toHaveAttribute("contenteditable", "true");
+  await expect(page.locator("#editor-long-text .govuk-editor-block > .govuk-body")).toHaveAttribute(
+    "contenteditable",
+    "true",
+  );
   // And each is ready, which is when it writes what it opened on to its input. Until then a
   // flush passes it over.
   await expect
@@ -243,7 +246,7 @@ test("the hidden input tracks typing without waiting for EditorJS's debounce", a
 });
 
 test("Long Text uses the shared GOV.UK tools and their JSON vocabulary", async ({ page }) => {
-  await expect(page.locator("#editor-long-text .govuk-body")).toContainText("Important guidance");
+  await expect(page.locator("#editor-long-text .govuk-editor-block > .govuk-body")).toContainText("Important guidance");
   await expect(page.locator("#editor-long-text h2.govuk-heading-l")).toHaveText("Before you apply");
   await expect(page.locator("#editor-long-text ol.govuk-list--number li")).toHaveCount(2);
 
@@ -252,7 +255,7 @@ test("Long Text uses the shared GOV.UK tools and their JSON vocabulary", async (
     return JSON.parse(document.querySelector("input[name='longTextContent']").value).blocks;
   });
 
-  expect(blocks.map((block) => block.type)).toEqual(["paragraph", "heading", "list"]);
+  expect(blocks.map((block) => block.type)).toEqual(["paragraph", "heading", "list", "list"]);
   expect(blocks[0].data.size).toBe("body");
   expect(blocks[0].data.text).toContain("<b>Important</b>");
   expect(blocks[0].data.text).toContain("<u>underline</u>");
@@ -260,8 +263,21 @@ test("Long Text uses the shared GOV.UK tools and their JSON vocabulary", async (
   expect(blocks[2].data).toEqual({ style: "number", items: ["First step", "Second step"] });
 });
 
+test("Long Text keeps bold text, paragraphs and nested lists inside a list item when it saves", async ({ page }) => {
+  const items = await page.evaluate(async () => {
+    await window.OLCS.editorjsFlush();
+    return JSON.parse(document.querySelector("input[name='longTextContent']").value).blocks[3].data.items;
+  });
+
+  expect(items).toEqual([
+    'Events which affect: <ul class="govuk-list govuk-list--bullet govuk-list--spaced"><li><b>the</b> operator</li><li>the vehicles</li></ul>',
+    'Either: <ol type="i" class="validation-summary__list"><li>this</li><li>that</li></ol>',
+    '<strong>Change of circumstances</strong><p class="govuk-body">In the event of changes to the following;</p><ol class="govuk-list"><li>a) business address</li><li>b) operating centres</li></ol>',
+  ]);
+});
+
 test("Long Text has its own placeholder without changing the existing default", async ({ page }) => {
-  await expect(page.locator("#editor-long-text .govuk-body")).toHaveAttribute(
+  await expect(page.locator("#editor-long-text .govuk-editor-block > .govuk-body")).toHaveAttribute(
     "data-placeholder",
     "Enter Long Text content...",
   );

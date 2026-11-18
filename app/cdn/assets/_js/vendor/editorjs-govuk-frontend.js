@@ -31,6 +31,25 @@ class LongTextParagraph extends govukEditor.GovukParagraph {
   }
 }
 
+// The library's list only keeps <br> in an item, so a save strips anything else.
+// Seeded Long Text items also use <strong>, <p> and nested lists, so keep those.
+// EditorJS still adds the inline tools' tags (bold, italic, link, underline) on top.
+class LongTextList extends govukEditor.GovukList {
+  static get sanitize() {
+    return {
+      items: {
+        br: true,
+        strong: {},
+        p: { class: true },
+        ul: { class: true },
+        ol: { type: true, class: true },
+        li: {},
+      },
+    };
+  }
+}
+
 govukEditor.LongTextParagraph = LongTextParagraph;
+govukEditor.LongTextList = LongTextList;
 
 module.exports = govukEditor;

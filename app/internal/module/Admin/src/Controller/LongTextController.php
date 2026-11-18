@@ -19,7 +19,7 @@ final class LongTextController extends EditableTranslationsController
     protected function getListFilters(bool $includeText = false): array
     {
         return $includeText
-            ? ['markupOnly' => true]
+            ? ['markupOnly' => true, 'format' => 'text']
             : ['format' => 'editorjs'];
     }
 
