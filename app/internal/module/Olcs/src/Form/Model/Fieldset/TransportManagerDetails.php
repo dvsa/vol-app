@@ -28,22 +28,22 @@ class TransportManagerDetails
     #[Form\Type('DynamicSelect')]
     #[Form\Attributes(['id' => '', 'placeholder' => ''])]
     #[Form\Options(['empty_option' => 'Please Select', 'label' => 'transport-manager-details-title', 'category' => 'person_title', 'disable_inarray_validator' => true])]
-    #[Form\Filter(['name' => 'Common\Filter\NullToArray'])]
+    #[Form\Filter('Common\Filter\NullToArray')]
     public $title = null;
 
     #[Form\Attributes(['class' => 'medium'])]
     #[Form\Options(['label' => 'transport-manager-details-first-name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => '\Laminas\Validator\NotEmpty'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $firstName = null;
 
     #[Form\Attributes(['class' => 'medium'])]
     #[Form\Options(['label' => 'transport-manager-details-last-name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => '\Laminas\Validator\NotEmpty'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $lastName = null;
 
@@ -51,7 +51,7 @@ class TransportManagerDetails
     #[Form\Options(['label' => 'transport-manager-details-email'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\EmailAddress')]
     public $emailAddress = null;
 
@@ -59,16 +59,16 @@ class TransportManagerDetails
     #[Form\Attributes(['id' => 'dob', 'required' => false])]
     #[Form\Options(['label' => 'transport-manager-details-dob', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $birthDate = null;
 
     #[Form\Attributes(['id' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'transport-manager-details-place-of-birth'])]
-    #[Form\Validator(['name' => '\Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Type('Text')]
     public $birthPlace = null;
 

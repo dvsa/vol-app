@@ -978,10 +978,10 @@ recorded by class but not built the way production builds it.
 
 ## Form specification snapshot
 
-The frontends' forms and fieldsets are declared with annotations on model
+The frontends' forms and fieldsets are declared with PHP attributes on model
 classes, mostly under `Form/Model/Form` and `Form/Model/Fieldset`, in four
 places: olcs-auth, olcs-common, internal and selfserve. Laminas reads those
-annotations into a form _specification_, a plain array that its form factory
+attributes into a form _specification_, a plain array that its form factory
 then builds the form from. Each of the four has a
 `FormSpecificationSnapshotTest` that reads every such class through the builder
 behind the `FormAnnotationBuilder` service (the one
@@ -1101,11 +1101,6 @@ Laminas' array objects written as plain arrays:
 - keys within `attributes` and `options` are recorded in the order the builder
   set them. A diff that only reorders them is harmless, except in option lists
   such as `value_options`, where key order is the order the options are shown in
-
-Many forms still pass an annotation's arguments as a single array
-(`@Form\Filter({"name": "…"})`). Laminas deprecates that syntax but reads it
-into the same specification as separate arguments. The test ignores that one
-deprecation and fails on any other.
 
 ### What it does not cover
 

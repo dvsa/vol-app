@@ -15,6 +15,6 @@ class SubmissionSectionEditComment extends Base
     #[Form\Options(['label' => '', 'label_attributes' => ['class' => '']])]
     #[Form\Type('EditorJs')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $comment = null;
 }

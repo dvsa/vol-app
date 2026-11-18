@@ -10,9 +10,9 @@ class ForgotPasswordForm
 {
     #[Form\Options(['label' => 'auth.forgot-password.username', 'short-label' => 'auth.forgot-password.username'])]
     #[Form\Attributes(['id' => 'auth.forgot-password.username'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Filter(['name' => 'Common\Filter\StripSpaces'])]
-    #[Form\Validator(['name' => 'Dvsa\Olcs\Transfer\Validators\Username'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Filter('Common\Filter\StripSpaces')]
+    #[Form\Validator('Dvsa\Olcs\Transfer\Validators\Username')]
     #[Form\Type('Text')]
     public $username;
 

@@ -21,13 +21,13 @@ class SubmissionRecommendation extends Base
     #[Form\Options(['label' => 'Legislation', 'service_name' => 'Olcs\Service\Data\SubmissionLegislation', 'disable_inarray_validator' => false, 'use_groups' => true])]
     #[Form\Filter('Common\Filter\NullToArray')]
     #[Form\Validator('NotEmpty', options: ['array'])]
-    #[Form\Validator(['name' => 'ValidateIfMultiple', 'options' => ['context_field' => 'actionTypes', 'context_values' => ['sub_st_rec_pi', 'sub_st_rec_ptr'], 'allow_empty' => false, 'validators' => [['name' => '\Laminas\Validator\NotEmpty']]]])]
+    #[Form\Validator('ValidateIfMultiple', options: ['context_field' => 'actionTypes', 'context_values' => ['sub_st_rec_pi', 'sub_st_rec_ptr'], 'allow_empty' => false, 'validators' => [['name' => '\Laminas\Validator\NotEmpty']]])]
     public $reasons = null;
 
     #[Form\Attributes(['id' => '', 'class' => 'extra-long', 'name' => 'comment', 'required' => true])]
     #[Form\Options(['label' => 'Recommendation reason', 'label_attributes' => ['class' => '']])]
     #[Form\Type('EditorJs')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $comment = null;
 
     #[Form\Attributes(['value' => 'N'])]

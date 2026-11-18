@@ -13,8 +13,8 @@ class LicenceOverviewDetails
     #[Form\Type('DateSelect')]
     #[Form\Options(['label' => 'Continuation date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+10'])]
     #[Form\Attributes(['required' => false])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $continuationDate = null;
 
@@ -22,8 +22,8 @@ class LicenceOverviewDetails
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Review Date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+10'])]
     #[Form\Attributes(['required' => false])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $reviewDate = null;
 
