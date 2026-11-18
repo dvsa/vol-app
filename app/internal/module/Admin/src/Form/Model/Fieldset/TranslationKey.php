@@ -16,8 +16,12 @@ class TranslationKey
     #[Form\Type('Hidden')]
     public $id = null;
 
+    #[Form\Type('Hidden')]
+    #[Form\Attributes(['id' => 'format', 'value' => 'text'])]
+    public $format = null;
+
     #[Form\Name('translationKey')]
-    #[Form\Attributes(['id' => 'translationKey', 'data-container-class' => 'translationKeyContainer js-hidden'])]
+    #[Form\Attributes(['id' => 'translationKey', 'data-container-class' => 'newTranslationKeyContainer js-hidden'])]
     #[Form\Options(['label' => 'New Translation Key'])]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 512])]
     #[Form\Type('Text')]
@@ -25,7 +29,7 @@ class TranslationKey
     public $translationKey = null;
 
     #[Form\Name('description')]
-    #[Form\Attributes(['id' => 'description', 'data-container-class' => 'translationKeyContainer js-hidden'])]
+    #[Form\Attributes(['id' => 'description', 'data-container-class' => 'translationDescriptionContainer js-hidden'])]
     #[Form\Options(['label' => 'Description'])]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 512])]
     #[Form\Type('Text')]

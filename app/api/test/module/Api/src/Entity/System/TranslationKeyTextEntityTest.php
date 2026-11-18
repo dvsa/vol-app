@@ -24,6 +24,15 @@ final class TranslationKeyTextEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
+    #[\Override]
+    public function getGettersAndSetters(): mixed
+    {
+        return array_values(array_filter(
+            parent::getGettersAndSetters(),
+            static fn (array $case): bool => $case[0] !== 'ContentJson',
+        ));
+    }
+
     public function testCreateUpdate(): void
     {
         $translationKey = m::mock(TranslationKey::class);
@@ -41,5 +50,17 @@ final class TranslationKeyTextEntityTest extends EntityTester
         $this->assertEquals($updatedTranslatedText, $entity->getTranslatedText());
         $this->assertEquals($translationKey, $entity->getTranslationKey());
         $this->assertEquals($language, $entity->getLanguage());
+    }
+
+    public function testRichSourceCanBeStoredAlongsideRenderedHtml(): void
+    {
+        $entity = Entity::create(m::mock(Language::class), m::mock(TranslationKey::class), '<p>Before</p>');
+        $json = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'After']]]];
+
+        $this->assertTrue(method_exists($entity, 'getContentJson'));
+        $entity->update('<p>After</p>', $json);
+
+        $this->assertSame('<p>After</p>', $entity->getTranslatedText());
+        $this->assertSame($json, $entity->getContentJson());
     }
 }

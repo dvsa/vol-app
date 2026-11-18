@@ -11,6 +11,9 @@ class VariationDeclarationsAndUndertakings
     #[Form\Type('\Common\Form\Elements\Types\HtmlTranslated')]
     public $review;
 
+    #[Form\Type('Common\Form\Elements\Types\GuidanceTranslated')]
+    public $declaration;
+
     #[Form\Type('\Common\Form\Elements\Types\Html')]
     public $summaryDownload;
 

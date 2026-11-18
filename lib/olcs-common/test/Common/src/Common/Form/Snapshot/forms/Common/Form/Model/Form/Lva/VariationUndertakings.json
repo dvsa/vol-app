@@ -24,6 +24,13 @@
           {
             "flags": [],
             "spec": {
+              "name": "declaration",
+              "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
               "name": "summaryDownload",
               "type": "\\Common\\Form\\Elements\\Types\\Html"
             }

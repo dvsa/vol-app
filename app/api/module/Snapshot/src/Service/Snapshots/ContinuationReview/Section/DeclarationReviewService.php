@@ -47,7 +47,7 @@ class DeclarationReviewService extends AbstractReviewService
         }
         $mainItems = [
             [
-                'markup' => $this->getDeclarationMarkup($continuationDetail)
+                'markup' => $this->getLongTextDeclarationMarkup($continuationDetail)
             ],
             [
                 'header' => 'continuations.declaration.signature-details',
@@ -146,6 +146,32 @@ class DeclarationReviewService extends AbstractReviewService
         $markup = $this->translateReplace($markupKey, $additional);
 
         return $markup;
+    }
+
+    /**
+     * Declaration wording managed in Long Text, falling back to the partials
+     * until the content has been added
+     */
+    public function getLongTextDeclarationMarkup(ContinuationDetail $continuationDetail): string
+    {
+        $licence = $continuationDetail->getLicence();
+        $isStandard = $licence->isStandardNational() || $licence->isStandardInternational();
+
+        $type = match (true) {
+            !$licence->isGoods() && $licence->isSpecialRestricted() => 'psv-special-restricted',
+            !$licence->isGoods() && $licence->isRestricted() => 'psv-restricted',
+            !$licence->isGoods() => 'psv-standard',
+            $licence->isNi() && $licence->isLgv() => 'goods-ni-lgv',
+            $licence->isNi() && $isStandard => 'goods-ni-standard',
+            $licence->isNi() => 'goods-ni-restricted',
+            $isStandard => 'goods-gb-standard',
+            default => 'goods-gb-restricted',
+        };
+
+        $key = 'markup-continuation-full-declaration-' . $type;
+        $markup = $this->translate($key);
+
+        return $markup === $key ? $this->getDeclarationMarkup($continuationDetail) : $markup;
     }
 
     /**

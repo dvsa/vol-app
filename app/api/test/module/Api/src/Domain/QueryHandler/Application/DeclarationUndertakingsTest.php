@@ -13,6 +13,8 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 use Dvsa\Olcs\Api\Domain\QueryHandler\Application\DeclarationUndertakings;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationUndertakingsReviewService;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\VariationUndertakingsReviewService;
 use Dvsa\Olcs\Transfer\Query\Application\DeclarationUndertakings as Qry;
 use Mockery as m;
 
@@ -28,17 +30,20 @@ final class DeclarationUndertakingsTest extends QueryHandlerTestCase
         $this->sut = new DeclarationUndertakings();
         $this->mockRepo('Application', ApplicationRepo::class);
 
-        $this->mockedSmServices['Review\ApplicationUndertakings'] = m::mock();
+        $this->mockedSmServices['Review\ApplicationUndertakings'] = m::mock(ApplicationUndertakingsReviewService::class);
+        $this->mockedSmServices['Review\VariationUndertakings'] = m::mock(VariationUndertakingsReviewService::class);
 
         parent::setUp();
     }
 
-    public function testHandleQuery(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideReviewService')]
+    public function testHandleQuery(bool $isVariation, string $reviewService): void
     {
         $query = Qry::create(['id' => 111]);
 
         $mockApplication = m::mock(\Dvsa\Olcs\Api\Entity\Application\Application::class);
-        $mockApplication->shouldReceive('isGoods')->andReturn(true);
+        $mockApplication->expects('isGoods')->withNoArgs()->andReturn(true);
+        $mockApplication->expects('isVariation')->withNoArgs()->andReturn($isVariation);
 
         $data = [
             'foo' => 'bar',
@@ -46,14 +51,18 @@ final class DeclarationUndertakingsTest extends QueryHandlerTestCase
             'isInternal' => false
         ];
 
-        $this->mockedSmServices['Review\ApplicationUndertakings']->shouldReceive('getMarkup')
-            ->once()->with($data)->andReturn('markup');
+        $this->mockedSmServices[$reviewService]->expects('getLongTextMarkup')->with($data)->andReturn('markup');
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')
             ->with($query)
             ->andReturn($mockApplication);
 
-        $mockApplication->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
+        $mockApplication->expects('serialize')
+            ->with(['licence' => ['organisation' => ['type']]])
+            ->andReturn(['foo' => 'bar']);
+        $mockApplication->expects('serialize')
+            ->with(['licence' => ['licenceType']])
+            ->andReturn(['foo' => 'bar']);
 
         $expected = [
             'foo' => 'bar',
@@ -61,5 +70,11 @@ final class DeclarationUndertakingsTest extends QueryHandlerTestCase
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
+    }
+
+    public static function provideReviewService(): \Iterator
+    {
+        yield 'new application' => [false, 'Review\ApplicationUndertakings'];
+        yield 'variation' => [true, 'Review\VariationUndertakings'];
     }
 }
