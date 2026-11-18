@@ -54,6 +54,20 @@ class BusRegStop extends BusRegDetails
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $notFixedStopDetail = null;
 
+    #[Form\Attributes(['id' => 'trafficAreas', 'placeholder' => '', 'multiple' => 'multiple', 'class' => 'chosen-select-large'])]
+    #[Form\Options(['label' => 'TAOs providing subsidies', 'disable_inarray_validator' => false, 'service_name' => 'Common\Service\Data\TrafficArea', 'use_groups' => 'false'])]
+    #[Form\Type('DynamicSelect')]
+    #[Form\Required(false)]
+    #[Form\Filter('Common\Filter\NullToArray')]
+    public $subsidyTrafficAreas = null;
+
+    #[Form\Attributes(['id' => 'localAuthoritys', 'placeholder' => '', 'multiple' => 'multiple', 'class' => 'chosen-select-large'])]
+    #[Form\Options(['label' => 'Local authorities providing subsidies', 'disable_inarray_validator' => false, 'service_name' => 'Common\Service\Data\LocalAuthority', 'use_groups' => 'true'])]
+    #[Form\Type('DynamicSelect')]
+    #[Form\Required(false)]
+    #[Form\Filter('Common\Filter\NullToArray')]
+    public $subsidyLocalAuthorities = null;
+
     #[Form\Attributes(['id' => 'subsidised', 'placeholder' => '', 'class' => 'small', 'value' => 'bs_no'])]
     #[Form\Options(['label' => 'Supported by subsidies', 'disable_inarray_validator' => false, 'category' => 'bus_subsidy'])]
     #[Form\Type('DynamicSelect')]
@@ -64,6 +78,6 @@ class BusRegStop extends BusRegDetails
     #[Form\Required(false)]
     #[Form\Type('TextArea')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
-    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 1000])]
     public $subsidyDetail = null;
 }

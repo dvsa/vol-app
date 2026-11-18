@@ -735,8 +735,22 @@ final class BusRegEntityTest extends EntityTester
         $this->entity->setOlbsKey(123);
         $this->entity->setVariationNo($variationNo);
 
+        $subsidyArea = new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea();
+        $subsidyAuthority = new \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority();
+        $this->entity->setSubsidyTrafficAreas(new ArrayCollection([$subsidyArea]));
+        $this->entity->setSubsidyLocalAuthorities(new ArrayCollection([$subsidyAuthority]));
+        $this->entity->setSubsidyDetail('Historical comments');
+
         /** @var Entity $busReg */
         $busReg = $this->entity->createVariation($status, $revertStatus);
+
+        $this->assertSame('Historical comments', $busReg->getSubsidyDetail());
+        $this->assertSame([$subsidyArea], $busReg->getSubsidyTrafficAreas()->toArray());
+        $this->assertSame([$subsidyAuthority], $busReg->getSubsidyLocalAuthorities()->toArray());
+        $busReg->getSubsidyTrafficAreas()->clear();
+        $busReg->getSubsidyLocalAuthorities()->clear();
+        $this->assertCount(1, $this->entity->getSubsidyTrafficAreas());
+        $this->assertCount(1, $this->entity->getSubsidyLocalAuthorities());
 
         // test some values from $defaultAll
         $this->assertEquals('N', $busReg->getIsShortNotice());
