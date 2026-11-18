@@ -1,0 +1,49 @@
+<?php
+$form = $this->form;
+$header = $form->get('headerSection')->get('header');
+$hasGroupError = $header->getMessages() !== [];
+$describedBy = 'surrender-discs-hint';
+if ($hasGroupError) {
+    $describedBy .= ' ' . $this->formElementErrors()->getErrorId($header);
+}
+$checkboxHelper = $this->formCheckbox();
+$options = [
+    'possessionSection' => 'inPossession',
+    'lostSection' => 'lost',
+    'stolenSection' => 'stolen',
+];
+?>
+<?= $this->form()->openTag($form) ?>
+<div class="govuk-form-group<?= $hasGroupError ? ' govuk-form-group--error' : '' ?>">
+    <fieldset class="govuk-fieldset" id="<?= $this->escapeHtmlAttr($header->getAttribute('id') ?: $header->getName()) ?>"
+              aria-describedby="<?= $this->escapeHtmlAttr($describedBy) ?>" tabindex="-1">
+        <?= $this->formElement($header) ?>
+        <?= $this->formElementErrors($header) ?>
+        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <?php foreach ($options as $sectionName => $optionName) : ?>
+                <?php
+                $section = $form->get($sectionName);
+                $checkbox = $section->get($optionName);
+                $info = $section->get('info');
+                $infoId = $info->getAttribute('id');
+                $checkboxHelper->prepareElement($checkbox);
+                $checkbox->setAttribute('data-aria-controls', $infoId);
+                ?>
+                <div class="govuk-checkboxes__item">
+                    <?= $checkboxHelper->renderInput($checkbox) ?>
+                    <?= $this->formLabel($checkbox, $this->translate($checkbox->getLabel())) ?>
+                </div>
+                <div class="govuk-checkboxes__conditional<?= $checkbox->isChecked() ? '' : ' govuk-checkboxes__conditional--hidden' ?>"
+                     id="<?= $this->escapeHtmlAttr($infoId) ?>">
+                    <?php foreach ($info->getElements() as $element) : ?>
+                        <?= $this->formRow($element) ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </fieldset>
+</div>
+<?php foreach ($form->getElements() as $element) : ?>
+    <?= $this->formRow($element) ?>
+<?php endforeach; ?>
+<?= $this->form()->closeTag() ?>

@@ -8,7 +8,6 @@ use Common\RefData;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 use Permits\Data\Mapper\MapperManager;
@@ -34,8 +33,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
-        protected ScriptFactory $scriptFactory
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
@@ -49,7 +47,6 @@ class CurrentDiscsController extends AbstractSurrenderController
         $this->form->setData($formData);
 
         $params = $this->getViewVariables();
-        $this->scriptFactory->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
     }
@@ -79,11 +76,10 @@ class CurrentDiscsController extends AbstractSurrenderController
                 }
                 return $this->nextStep($nextStep);
             }
+            $this->flashMessengerHelper->addCurrentUnknownError();
         }
 
-        $this->flashMessengerHelper->addUnknownError();
         $params = $this->getViewVariables();
-        $this->scriptFactory->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
     }
@@ -129,6 +125,7 @@ class CurrentDiscsController extends AbstractSurrenderController
                 [$numberOfDiscs]
             ),
             'form' => $this->form,
+            'formPartial' => 'partials/surrender/current-discs',
             'backLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
             'bottomText' => 'common.link.back.label',
             'bottomLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
