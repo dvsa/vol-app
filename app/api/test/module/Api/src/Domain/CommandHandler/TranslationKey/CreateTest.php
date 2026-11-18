@@ -143,6 +143,31 @@ final class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    public function testRichCreateWithOneBlankLanguageStillCreatesKey(): void
+    {
+        $json = base64_encode('{"blocks":[{"type":"paragraph","data":{"text":"Valid content"}}]}');
+        $blank = base64_encode('{"blocks":[{"type":"paragraph","data":{"text":""}}]}');
+        $command = CreateCmd::create([
+            'translationKey' => 'markup-one-blank',
+            'description' => 'One blank',
+            'format' => 'editorjs',
+            'translationsArray' => ['en_GB' => $json, 'en_NI' => $blank],
+        ]);
+        $this->repoMap['TranslationKey']->shouldReceive('save')->once()->andReturnUsing(
+            function (TranslationKeyEntity $key): void {
+                $key->setId(21);
+            },
+        );
+        $this->expectedSideEffect(UpdateCmd::class, [
+            'id' => 21,
+            'translationsArray' => ['en_GB' => $json, 'en_NI' => $blank],
+            'description' => 'One blank',
+            'format' => 'editorjs',
+        ], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
     public function testRichCreateWithoutMeaningfulLanguageDoesNotSaveKey(): void
     {
         $command = CreateCmd::create([

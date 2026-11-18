@@ -59,7 +59,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
             foreach ($translationKey->getTranslationKeyTexts() as $existingText) {
                 $locale = $existingText->getLanguage()->getIsoCode();
-                if (!array_key_exists($locale, $command->getTranslationsArray())) {
+                if (!in_array(Language::SUPPORTED_LANGUAGES[$locale]['id'] ?? null, array_column($translations, 0), true)) {
                     throw new ValidationException(['translationsArray' => 'Every existing language must be converted before promotion']);
                 }
             }
@@ -121,7 +121,8 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
                     }
                     $visible = html_entity_decode(strip_tags($translatedText), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     if (preg_replace('/[\s\x{00A0}]+/u', '', $visible) === '') {
-                        throw new ValidationException(['translationsArray' => 'EditorJS content cannot be blank']);
+                        // blank language: nothing saved, existing text kept
+                        continue;
                     }
                 }
                 $prepared[] = [Language::SUPPORTED_LANGUAGES[$isoCode]['id'], $translatedText, $contentJson];

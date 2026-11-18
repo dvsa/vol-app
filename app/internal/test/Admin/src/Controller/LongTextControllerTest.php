@@ -18,6 +18,14 @@ final class LongTextControllerTest extends TestCase
         $filters = new \ReflectionMethod(LongTextController::class, 'getListFilters');
 
         self::assertSame(['format' => 'editorjs'], $filters->invoke($controller, false));
-        self::assertSame(['markupOnly' => true], $filters->invoke($controller, true));
+        self::assertSame(['markupOnly' => true, 'format' => 'text'], $filters->invoke($controller, true));
+    }
+
+    public function testEditableTranslationsListOnlyShowsPlainTextKeys(): void
+    {
+        $controller = (new \ReflectionClass(EditableTranslationsController::class))->newInstanceWithoutConstructor();
+        $filters = new \ReflectionMethod(EditableTranslationsController::class, 'getListFilters');
+
+        self::assertSame(['format' => 'text'], $filters->invoke($controller, false));
     }
 }

@@ -208,7 +208,7 @@ OLCS.editorjs = (function (document, $, undefined) {
           },
         },
         list: {
-          class: VolEditorJsGovuk.GovukList,
+          class: VolEditorJsGovuk.LongTextList,
           inlineToolbar: true,
         },
       };

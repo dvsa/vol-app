@@ -217,6 +217,82 @@ final class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    public function testBlankRichLanguageIsSkippedAndRealOneSaved(): void
+    {
+        $json = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Hello']]]], JSON_THROW_ON_ERROR);
+        $blank = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => '']]]], JSON_THROW_ON_ERROR);
+        $command = UpdateCmd::create(['id' => 12, 'format' => 'editorjs', 'translationsArray' => [
+            'en_GB' => base64_encode($json),
+            'en_NI' => base64_encode($blank),
+        ]]);
+
+        $entity = m::mock(TranslationKeyEntity::class);
+        $entity->shouldReceive('getId')->andReturn(12);
+        $entity->shouldReceive('getFormat')->andReturn('editorjs');
+        $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
+        $this->repoMap['TranslationKeyText']->shouldReceive('fetchByParentLanguage')->with(12, 1)->once()->andReturnNull();
+        $this->expectedSideEffect(Create::class, [
+            'translationKey' => 12,
+            'language' => 1,
+            'translatedText' => '<p class="govuk-body">Hello</p>',
+            'contentJson' => ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Hello']]]],
+        ], new Result());
+        $this->expectedSideEffect(GenerateCache::class, [], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testAllBlankRichSaveChangesNothingLikePlainText(): void
+    {
+        $blank = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => '']]]], JSON_THROW_ON_ERROR);
+        $command = UpdateCmd::create(['id' => 12, 'format' => 'editorjs', 'translationsArray' => ['en_GB' => base64_encode($blank)]]);
+
+        $entity = m::mock(TranslationKeyEntity::class);
+        $entity->shouldReceive('getId')->andReturn(12);
+        $entity->shouldReceive('getFormat')->andReturn('editorjs');
+        $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
+        $this->repoMap['TranslationKeyText']->shouldNotReceive('fetchByParentLanguage');
+        $this->expectedSideEffect(GenerateCache::class, [], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testPromotionStillRejectsBlankExistingLocale(): void
+    {
+        $blank = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => '']]]], JSON_THROW_ON_ERROR);
+        $json = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Hello']]]], JSON_THROW_ON_ERROR);
+        $command = UpdateCmd::create(['id' => 12, 'format' => 'editorjs', 'translationsArray' => [
+            'en_GB' => base64_encode($json),
+            'cy_GB' => base64_encode($blank),
+        ]]);
+        $language = m::mock(LanguageEntity::class);
+        $language->shouldReceive('getIsoCode')->andReturn('cy_GB');
+        $existing = m::mock(TranslationKeyTextEntity::class);
+        $existing->shouldReceive('getLanguage')->andReturn($language);
+        $entity = m::mock(TranslationKeyEntity::class);
+        $entity->shouldReceive('getFormat')->andReturn('text');
+        $entity->shouldReceive('getTranslationKeyTexts')->andReturn(new ArrayCollection([$existing]));
+        $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
+        $this->repoMap['TranslationKey']->shouldNotReceive('save');
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('Every existing language must be converted before promotion');
+        $this->sut->handleCommand($command);
+    }
+
+    public function testPlainTextSaveCannotOverwriteRichKey(): void
+    {
+        $command = UpdateCmd::create(['id' => 12, 'format' => 'text', 'translationsArray' => ['en_GB' => base64_encode('<p>Hello</p>')]]);
+        $entity = m::mock(TranslationKeyEntity::class);
+        $entity->shouldReceive('getFormat')->andReturn('editorjs');
+        $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
+        $this->repoMap['TranslationKey']->shouldNotReceive('save');
+        $this->repoMap['TranslationKeyText']->shouldNotReceive('fetchByParentLanguage');
+
+        $this->expectException(ValidationException::class);
+        $this->sut->handleCommand($command);
+    }
+
     public function testInvalidPromotionDoesNotSaveFormatOrTranslations(): void
     {
         $command = UpdateCmd::create([
