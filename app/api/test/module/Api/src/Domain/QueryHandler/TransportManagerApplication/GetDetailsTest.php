@@ -6,7 +6,6 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\TransportManagerApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Entity\Tm\TmQualification;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManager;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails as Query;
@@ -42,36 +41,8 @@ final class GetDetailsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public static function dpHandleQuery(): array
+    public function testHandleQuery(): void
     {
-        $lgvArQualification = static function () {
-            $lgvArQualification = m::mock(TmQualification::class);
-            $lgvArQualification->shouldReceive('getSerialNo')
-                ->withNoArgs()
-                ->andReturn('ABC1234');
-
-            return $lgvArQualification;
-        };
-
-        return [
-            'with LGV AR qualification' => [
-                'createLgvArQualification' => $lgvArQualification,
-                'expectedLgvAcquiredRightsReferenceNumber' => 'ABC1234',
-            ],
-            'without LGV AR qualification' => [
-                'createLgvArQualification' => static fn () => null,
-                'expectedLgvAcquiredRightsReferenceNumber' => '',
-            ],
-        ];
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
-    public function testHandleQuery(
-        \Closure $createLgvArQualification,
-        mixed $expectedLgvAcquiredRightsReferenceNumber
-    ): void {
-        $lgvArQualification = $createLgvArQualification();
-
         $query = Query::create(['id' => 32]);
 
         $licence = new \Dvsa\Olcs\Api\Entity\Licence\Licence(
@@ -88,10 +59,6 @@ final class GetDetailsTest extends QueryHandlerTestCase
 
         $tm = m::mock(TransportManager::class)->makePartial();
         $tm->setId(213);
-        $tm->shouldReceive('getLgvAcquiredRightsQualification')
-            ->withNoArgs()
-            ->once()
-            ->andReturn($lgvArQualification);
 
         $tmaOl = new \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence();
 
@@ -132,7 +99,6 @@ final class GetDetailsTest extends QueryHandlerTestCase
             'foo' => 'bar',
             'isTmLoggedInUser' => true,
             'disableSignatures' => 'disable gds verify signatures value',
-            'lgvAcquiredRightsReferenceNumber' => $expectedLgvAcquiredRightsReferenceNumber,
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
