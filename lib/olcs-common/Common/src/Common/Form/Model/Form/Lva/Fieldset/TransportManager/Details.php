@@ -39,30 +39,11 @@ class Details
     #[Form\Flags(['priority' => -40])]
     public $birthPlace;
 
-    #[Form\Attributes(['value' => 'markup-lva-tm-details-details-certificateHtml'])]
-    #[Form\Type('\Common\Form\Elements\Types\HtmlTranslated')]
-    #[Form\Flags(['priority' => -50])]
-    public $certificateHtml;
-
     #[Form\Attributes(['id' => 'certificate', 'class' => 'file-upload'])]
     #[Form\ComposedObject('\Common\Form\Model\Fieldset\MultipleFileUpload')]
     #[Form\Options(['label' => 'lva-tm-details-details-certificate', 'hint' => 'markup-professional-competence-certificates-obtained-abroad.phtml', 'hint-position' => 'above', 'label_attributes' => ['class' => 'legend']])]
     #[Form\Flags(['priority' => -60])]
     public $certificate;
-
-    #[Form\Attributes(['value' => 'markup-lva-tm-details-details-lgvAcquiredRightsHtml'])]
-    #[Form\Type('\Common\Form\Elements\Types\HtmlTranslated')]
-    #[Form\Flags(['priority' => -70])]
-    public $lgvAcquiredRightsHtml;
-
-    #[Form\Required(false)]
-    #[Form\Type('Text')]
-    #[Form\Attributes(['id' => 'lgv-acquired-rights-ref-number', 'class' => 'medium'])]
-    #[Form\Options(['label' => 'lva-tm-details-details-lgvAcquiredRightsReferenceNumber', 'label_attributes' => ['class' => 'legend'], 'hint' => 'lva-tm-details-details-lgvAcquiredRightsReferenceNumber-hint'])]
-    #[Form\Filter('Laminas\Filter\StringTrim')]
-    #[Form\Validator('\Laminas\Validator\StringLength', options: ['min' => 7, 'max' => 7, 'messages' => [\Laminas\Validator\StringLength::INVALID => 'lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length', \Laminas\Validator\StringLength::TOO_SHORT => 'lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length', \Laminas\Validator\StringLength::TOO_LONG => 'lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length']])]
-    #[Form\Flags(['priority' => -80])]
-    public $lgvAcquiredRightsReferenceNumber;
 
     #[Form\Options(['label' => 'tm-review-responsibility-training-undertaken', 'value_options' => ['Y' => 'Yes', 'N' => 'No'], 'label_attributes' => ['class' => 'form-control form-control--radio form-control--inline'], 'hint' => 'tm-hint-responsibility-training-undertaken', 'hint-position' => 'below', 'hint-class' => 'govuk-radios__conditional govuk-body hint hint__below hint__black hintNoTraining'])]
     #[Form\Type('Radio')]
