@@ -174,6 +174,7 @@ return [
             \Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture::class => \Dvsa\Olcs\Api\Service\Sms\SmsNumberCaptureFactory::class,
             \Dvsa\Olcs\Api\Service\Sms\SmsTransportInterface::class => \Dvsa\Olcs\Api\Service\Sms\SmsTransportFactory::class,
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
+            \Dvsa\Olcs\Api\Service\EditorJs\LongTextConverterService::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
             'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertToPdfFactory::class,
             'FileUploader' => \Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader::class,

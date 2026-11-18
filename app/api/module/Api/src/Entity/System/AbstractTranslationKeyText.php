@@ -94,6 +94,20 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     #[ORM\Column(type: 'text', name: 'translated_text', length: 65535, nullable: true)]
     protected $translatedText;
 
+    #[ORM\Column(type: 'json', name: 'content_json', nullable: true)]
+    protected ?array $contentJson = null;
+
+    public function getContentJson(): ?array
+    {
+        return $this->contentJson;
+    }
+
+    public function setContentJson(?array $contentJson): static
+    {
+        $this->contentJson = $contentJson;
+        return $this;
+    }
+
     /**
      * Version
      *

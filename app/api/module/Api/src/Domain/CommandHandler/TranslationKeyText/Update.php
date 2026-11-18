@@ -37,7 +37,7 @@ final class Update extends AbstractCommandHandler
         $translationKeyTextRepo = $this->getRepo('TranslationKeyText');
         $translationKeyText = $translationKeyTextRepo->fetchById($command->getId());
 
-        $translationKeyText->update($command->getTranslatedText());
+        $translationKeyText->update($command->getTranslatedText(), $command->getContentJson());
         $translationKeyTextRepo->save($translationKeyText);
 
         $this->result->addId('TranslationKeyText', $translationKeyText->getId());
