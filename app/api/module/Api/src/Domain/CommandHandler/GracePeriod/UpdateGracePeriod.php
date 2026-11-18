@@ -32,6 +32,7 @@ final class UpdateGracePeriod extends AbstractCommandHandler
                 $command->getVersion()
             );
 
+        $gracePeriod->setGracePeriodType($this->getRepo()->fetchType($command->getGracePeriodType()));
         $gracePeriod->setStartDate(new \DateTime($command->getStartDate()));
         $gracePeriod->setEndDate(new \DateTime($command->getEndDate()));
         $gracePeriod->setDescription($command->getDescription());

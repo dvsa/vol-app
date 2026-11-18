@@ -296,6 +296,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
         foreach ($gracePeriods['results'] as $gracePeriod) {
             $tableData[] = [
                 'id' => $gracePeriod['id'],
+                'gracePeriodType' => $gracePeriod['gracePeriodType']['description'] ?? 'Not set',
                 'startDate' => $gracePeriod['startDate'],
                 'endDate' => $gracePeriod['endDate'],
                 'description' => $gracePeriod['description'],
