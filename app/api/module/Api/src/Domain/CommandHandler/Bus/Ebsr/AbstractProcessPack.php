@@ -550,7 +550,8 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
     }
 
     /**
-     * Match displayed names exactly, independently of database collation and TXC codes.
+     * Match each name exactly (case-sensitive) against a local authority's description or TXC name.
+     * A name is only used if it matches a single authority and that authority has a traffic area.
      *
      * @param string[] $names
      * @return ArrayCollection
@@ -568,11 +569,13 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         );
         $byName = [];
         foreach ($authorities as $authority) {
-            $byName[$authority->getDescription()][] = $authority;
+            foreach (array_unique(array_filter([$authority->getDescription(), $authority->getTxcName()])) as $key) {
+                $byName[$key][] = $authority;
+            }
         }
         foreach (array_unique($names) as $name) {
             $matches = $byName[$name] ?? [];
-            if (count($matches) === 1 && $matches[0]->getTrafficArea() !== null) {
+            if (count($matches) === 1 && $matches[0]->getTrafficArea() !== null && !$collection->contains($matches[0])) {
                 $collection->add($matches[0]);
             }
         }

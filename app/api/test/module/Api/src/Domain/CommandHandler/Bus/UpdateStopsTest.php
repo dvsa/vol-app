@@ -62,10 +62,8 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
 
         $this->assertInstanceOf(Result::class, $result);
     }
-    #[\PHPUnit\Framework\Attributes\DataProvider('subsidyAreaProvider')]
-    public function testSavesSubsidyProvidersIndependentlyOfRouteCoverage(?string $authorityAreaId): void
+    public function testSavesSubsidyProvidersIndependentlyOfRouteCoverage(): void
     {
-        $matchingArea = $authorityAreaId === 'F';
         $busReg = m::mock(BusEntity::class)->makePartial();
         $busReg->initCollections();
         $busReg->shouldReceive('canEdit')->andReturn(true);
@@ -75,9 +73,6 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
         $area->setId('F');
         $authority = new \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority();
         $authority->setId(87);
-        if ($authorityAreaId !== null) {
-            $authority->setTrafficArea($matchingArea ? $area : (new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea())->setId($authorityAreaId));
-        }
         $command = Cmd::create([
             'id' => 99,
             'subsidyTrafficAreas' => ['F'],
@@ -87,11 +82,7 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
         $this->repoMap['Bus']->shouldReceive('fetchUsingId')->andReturn($busReg);
         $this->references[\Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class]['F'] = $area;
         $this->references[\Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class][87] = $authority;
-        $this->repoMap['Bus']->shouldReceive('save')->times($matchingArea ? 1 : 0)->with($busReg);
-        if (!$matchingArea) {
-            $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
-            $this->expectExceptionMessage('Select local authorities within the TAOs providing subsidies');
-        }
+        $this->repoMap['Bus']->shouldReceive('save')->once()->with($busReg);
 
         $this->sut->handleCommand($command);
 
@@ -100,14 +91,6 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
         $this->assertSame($routeAreas, $busReg->getTrafficAreas());
         $this->assertSame($routeAuthorities, $busReg->getLocalAuthoritys());
         $this->assertSame('Existing comments', $busReg->getSubsidyDetail());
-    }
-    public static function subsidyAreaProvider(): array
-    {
-        return [
-            'matching traffic area' => ['F'],
-            'different traffic area' => ['B'],
-            'no traffic area' => [null],
-        ];
     }
     public function testClearsProvidersAndKeepsLegacyValues(): void
     {

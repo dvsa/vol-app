@@ -593,10 +593,12 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
         $subsidyAuthority = new LocalAuthorityEntity();
         $subsidyAuthority->setId(87);
         $subsidyAuthority->setDescription('Milton Keynes Council');
+        $subsidyAuthority->setTxcName('MiltonKeynes');
         $subsidyAuthority->setTrafficArea($subsidyArea);
         $secondArea = (new TrafficAreaEntity())->setId('B');
         $secondAuthority = (new LocalAuthorityEntity())->setId(88);
         $secondAuthority->setDescription('Second Council');
+        $secondAuthority->setTxcName('Second Council');
         $secondAuthority->setTrafficArea($secondArea);
         $unassignedAuthority = (new LocalAuthorityEntity())->setId(89);
         $unassignedAuthority->setDescription('Unassigned Council');
@@ -1552,6 +1554,10 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
     {
         return [
             'exact' => [['Milton Keynes Council'], [87], ['F']],
+            'txc name' => [['MiltonKeynes'], [87], ['F']],
+            'description and txc name' => [['MiltonKeynes', 'Milton Keynes Council'], [87], ['F']],
+            'same description and txc name' => [['Second Council'], [88], ['B']],
+            'txc name case mismatch' => [['miltonkeynes'], [], []],
             'mismatch' => [['CPCA'], [], []],
             'mixed' => [['Milton Keynes Council', 'CPCA'], [87], ['F']],
             'multiple TAOs' => [['Milton Keynes Council', 'Second Council'], [87, 88], ['F', 'B']],

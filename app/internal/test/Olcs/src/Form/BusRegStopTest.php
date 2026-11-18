@@ -8,7 +8,7 @@ use Common\Form\Element\DynamicSelect;
 use Common\Form\Element\DynamicSelectFactory;
 use Common\Service\Data\Interfaces\ListData;
 use Common\Service\Data\PluginManager;
-use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Factory;
 use Laminas\Form\FormElementManager;
 use Laminas\Form\View\Helper\FormSelect;
@@ -75,7 +75,7 @@ final class BusRegStopTest extends MockeryTestCase
             'factories' => [DynamicSelect::class => DynamicSelectFactory::class],
             'aliases' => ['DynamicSelect' => DynamicSelect::class, 'TextArea' => \Laminas\Form\Element\Textarea::class],
         ]);
-        $builder = new AnnotationBuilder();
+        $builder = new AttributeBuilder();
         $builder->setFormFactory(new Factory($elements));
         return $builder->createForm(BusRegStop::class);
     }
