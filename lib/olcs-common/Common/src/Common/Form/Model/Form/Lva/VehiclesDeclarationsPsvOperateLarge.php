@@ -19,7 +19,7 @@ class VehiclesDeclarationsPsvOperateLarge
     public $psvNoSmallVhlConfirmationLabel;
 
     #[Form\Attributes(['id' => '', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.nineOrMore.details', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'use_hidden_element' => false])]
+    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.nineOrMore.details', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'use_hidden_element' => false])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $psvNoSmallVhlConfirmation;
 

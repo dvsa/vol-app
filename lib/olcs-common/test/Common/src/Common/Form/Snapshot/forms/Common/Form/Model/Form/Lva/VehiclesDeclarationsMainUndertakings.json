@@ -31,7 +31,7 @@
         "options": {
           "label": "form.checkbox-comply-requirements",
           "label_attributes": {
-            "class": "govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "checked_value": "Y",
           "unchecked_value": "N",
@@ -58,7 +58,7 @@
         "options": {
           "label": "form.checkbox-comply-requirements",
           "label_attributes": {
-            "class": "govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "checked_value": "Y",
           "unchecked_value": "N",

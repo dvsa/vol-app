@@ -134,7 +134,7 @@
         "options": {
           "label": "translate-to-welsh",
           "label_attributes": {
-            "class": "form-control form-control--checkbox form-control--confirm"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "checked_value": "Y",
           "unchecked_value": "N"

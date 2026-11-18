@@ -35,7 +35,7 @@ class CheckboxFieldsetPopulator implements FieldsetPopulatorInterface
             ]
         );
         $checkbox->setLabel($label);
-        $checkbox->setLabelAttributes(['class' => 'form-control form-control--checkbox form-control--advanced']);
+        $checkbox->setLabelAttributes(['class' => 'govuk-label govuk-checkboxes__label']);
 
         $checkbox->setOptions(
             [

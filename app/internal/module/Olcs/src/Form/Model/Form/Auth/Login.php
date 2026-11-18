@@ -23,7 +23,7 @@ class Login
     public $password = null;
 
     #[Form\Attributes(['id' => 'declarationRead', 'class' => ''])]
-    #[Form\Options(['label' => 'auth.login.declaration-read.label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--confirm full-width'], 'use_hidden_element' => false, 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'error-message' => 'auth.login.declaration-read.error'])]
+    #[Form\Options(['label' => 'auth.login.declaration-read.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label full-width'], 'use_hidden_element' => false, 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'error-message' => 'auth.login.declaration-read.error'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $declarationRead = null;
 

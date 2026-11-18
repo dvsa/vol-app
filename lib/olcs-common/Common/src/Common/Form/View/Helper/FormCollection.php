@@ -39,7 +39,7 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
      */
     protected $classMap = [
         RadioHorizontal::class => 'formRadioHorizontal',
-        CheckboxAdvanced::class => 'formCheckboxAdvanced',
+        CheckboxAdvanced::class => 'formRow',
         RadioVertical::class => 'formRadioVertical',
         AbstractInputSearch::class => FormInputSearch::class,
     ];

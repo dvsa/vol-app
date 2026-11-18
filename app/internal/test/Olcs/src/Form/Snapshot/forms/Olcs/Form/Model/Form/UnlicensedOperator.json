@@ -18,7 +18,7 @@
           "unchecked_value": "N",
           "label": "This is an Exemption approved by the Traffic Commissioner",
           "label_attributes": {
-            "class": "form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           }
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"

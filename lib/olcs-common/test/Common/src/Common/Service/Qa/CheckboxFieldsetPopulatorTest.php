@@ -68,7 +68,7 @@ final class CheckboxFieldsetPopulatorTest extends MockeryTestCase
             ->with($translatedLabel)
             ->once();
         $checkbox->shouldReceive('setLabelAttributes')
-            ->with(['class' => 'form-control form-control--checkbox form-control--advanced'])
+            ->with(['class' => 'govuk-label govuk-checkboxes__label'])
             ->once();
         $checkbox->shouldReceive('setOptions')
             ->with($expectedCheckboxOptions)

@@ -63,7 +63,7 @@ class NewTmUserDetails
     public $emailConfirm = null;
 
     #[Form\Attributes(['id' => 'translateToWelsh', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'translate-to-welsh', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--confirm'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
+    #[Form\Options(['label' => 'translate-to-welsh', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
     #[Form\Type('Common\Form\Elements\Custom\OlcsCheckbox')]
     public $translateToWelsh = null;
 

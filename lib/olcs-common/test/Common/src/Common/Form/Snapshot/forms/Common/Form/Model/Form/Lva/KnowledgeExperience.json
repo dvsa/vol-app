@@ -42,7 +42,7 @@
         "options": {
           "label": "knowledge-experience-olat.label",
           "label_attributes": {
-            "class": "form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "checked_value": "Y",
           "unchecked_value": "N",

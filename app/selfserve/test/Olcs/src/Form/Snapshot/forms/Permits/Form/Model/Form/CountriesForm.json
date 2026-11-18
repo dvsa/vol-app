@@ -17,11 +17,11 @@
               "name": "countries",
               "attributes": {
                 "id": "countries",
-                "class": "govuk-checkboxes__item"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm govuk-!-padding-bottom-2"
+                  "class": "govuk-label govuk-checkboxes__label govuk-!-padding-bottom-2"
                 }
               },
               "type": "DynamicMultiCheckbox"

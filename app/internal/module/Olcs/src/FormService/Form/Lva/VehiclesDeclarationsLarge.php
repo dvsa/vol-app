@@ -27,7 +27,7 @@ class VehiclesDeclarationsLarge extends VehiclesDeclarationsPsvOperateLarge
          * @var SingleCheckbox $checkbox
          */
         $checkbox = $form->get('psvNoSmallVhlConfirmation');
-        $checkbox->setLabelAttributes(['class' => 'form-control form-control--checkbox form-control--advanced']);
+        $checkbox->setLabelAttributes(['class' => 'govuk-label govuk-checkboxes__label']);
 
         return $form;
     }

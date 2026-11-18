@@ -53,12 +53,12 @@ class RegisterConsultantAccount
     public $emailConfirm = null;
 
     #[Form\Attributes(['id' => 'translateToWelsh', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'translate-to-welsh', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--confirm'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
+    #[Form\Options(['label' => 'translate-to-welsh', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
     #[Form\Type('OlcsCheckbox')]
     public $translateToWelsh = null;
 
     #[Form\Attributes(['id' => 'termsAgreed', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'user-registration.field.termsAgreed.label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--confirm'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y'])]
+    #[Form\Options(['label' => 'user-registration.field.termsAgreed.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $termsAgreed = null;
 }

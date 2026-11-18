@@ -315,7 +315,7 @@
                 "unchecked_value": "N",
                 "label": "application_previous-history_financial-history.insolvencyConfirmation.title",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced",
+                  "class": "govuk-label govuk-checkboxes__label",
                   "id": "insolvency"
                 },
                 "must_be_value": "Y"

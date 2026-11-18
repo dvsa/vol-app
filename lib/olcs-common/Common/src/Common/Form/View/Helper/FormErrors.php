@@ -6,6 +6,8 @@ use Common\Form\Elements\Types\PostcodeSearch;
 use Common\Form\Elements\Types\Radio;
 use Common\Form\Elements\Validators\Messages\FormElementMessageFormatter;
 use Laminas\Form\Element\DateSelect;
+use Laminas\Form\Element\MultiCheckbox;
+use Laminas\Form\Element\Radio as LaminasRadio;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\View\Helper\AbstractHelper;
 use Laminas\Form\FormInterface;
@@ -200,6 +202,13 @@ class FormErrors extends AbstractHelper
             if (!empty($radioId)) {
                 return $radioId;
             }
+        }
+
+        if ($element instanceof MultiCheckbox && !($element instanceof LaminasRadio)) {
+            $options = $element->getValueOptions();
+            $firstOption = reset($options);
+            return (is_array($firstOption) ? ($firstOption['attributes']['id'] ?? null) : null)
+                ?? ($element->getAttribute('id') ?: ($fallbackName ?? $element->getName()));
         }
 
         $fieldsetAttributes = $element->getOption('fieldset-attributes');

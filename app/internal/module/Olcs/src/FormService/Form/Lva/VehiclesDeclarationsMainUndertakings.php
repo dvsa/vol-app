@@ -28,9 +28,9 @@ class VehiclesDeclarationsMainUndertakings extends CommonVehiclesDeclarationsMai
          * @var SingleCheckbox $incomeRecordsCheckbox
          */
         $occupationRecordsCheckbox = $form->get('psvOccupationRecordsConfirmation');
-        $occupationRecordsCheckbox->setLabelAttributes(['class' => 'form-control form-control--checkbox form-control--advanced']);
+        $occupationRecordsCheckbox->setLabelAttributes(['class' => 'govuk-label govuk-checkboxes__label']);
         $incomeRecordsCheckbox = $form->get('psvIncomeRecordsConfirmation');
-        $incomeRecordsCheckbox->setLabelAttributes(['class' => 'form-control form-control--checkbox form-control--advanced']);
+        $incomeRecordsCheckbox->setLabelAttributes(['class' => 'govuk-label govuk-checkboxes__label']);
 
         return $form;
     }
