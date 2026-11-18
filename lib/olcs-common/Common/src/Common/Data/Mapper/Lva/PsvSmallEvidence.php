@@ -7,4 +7,10 @@ namespace Common\Data\Mapper\Lva;
 class PsvSmallEvidence extends AbstractEvidenceMapper
 {
     protected const EVIDENCE_FIELD = 'smallVehicleEvidenceUploaded';
+
+    #[\Override]
+    public static function mapFromPost(array $data): array
+    {
+        return self::mapFromPostAsSingleChoice($data);
+    }
 }
