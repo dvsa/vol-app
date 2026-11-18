@@ -37,8 +37,7 @@ class TemplateRendererFactory implements FactoryInterface
             $dsn = $config['mail']['dsn'] ?? null;
             $templateRenderer->setNotifyMode(is_string($dsn) && str_starts_with($dsn, 'govuknotify'));
 
-            $uuids = $config['email']['notify']['passthrough_templates'] ?? [];
-            $templateRenderer->setPassthroughTemplateUuids(is_array($uuids) ? $uuids : []);
+            $templateRenderer->setPassthroughTemplateUuids(NotifyConfig::passthroughTemplates($config));
         }
 
         return $templateRenderer;

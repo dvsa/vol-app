@@ -153,6 +153,59 @@ final class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCas
         $this->assertEquals($expected, $result->toArray());
     }
 
+    public function testCorrespondenceContextPassed(): void
+    {
+        $command = Cmd::create(['licence' => 111, 'document' => 222, 'type' => 'standard']);
+
+        $user = m::mock(User::class)->makePartial();
+        $user->setId(77);
+        $contactDetails = m::mock(ContactDetails::class)->makePartial();
+        $contactDetails->setEmailAddress('foo1@bar.com');
+        $user->setContactDetails($contactDetails);
+
+        $orgUser = m::mock(OrganisationUser::class)->makePartial();
+        $orgUser->setUser($user);
+
+        $organisation = m::mock(Organisation::class)->makePartial();
+        $organisation->setId(55);
+        $organisation->shouldReceive('getAdminOrganisationUsers')->andReturn([$orgUser]);
+        $organisation->shouldReceive('getName')->andReturn('org');
+
+        $licence = $this->references[Licence::class][111];
+        $licence->setOrganisation($organisation);
+        $licence->setLicNo('AB12345678');
+        $licence->setId(111);
+        $this->references[Document::class][222]->setId(222);
+
+        $this->repoMap['CorrespondenceInbox']->shouldReceive('save')
+            ->andReturnUsing(fn (CorrespondenceInbox $record) => $record->setId(123));
+
+        $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')
+            ->with(
+                m::on(function (Message $message): bool {
+                    $this->assertSame(
+                        [
+                            'organisation' => 55,
+                            'licence' => 111,
+                            'document' => 222,
+                            'correspondenceInbox' => 123,
+                            'user' => 77,
+                            'templateName' => 'licensing-information-standard',
+                        ],
+                        $message->getNotifyContext()
+                    );
+                    return true;
+                }),
+                'licensing-information-standard',
+                m::type('array'),
+                'default'
+            );
+
+        $this->expectedSideEffect(SendEmail::class, ['to' => 'foo1@bar.com'], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
     public static function usersProvider(): \Iterator
     {
         yield ['foo1@bar.com', 'foo2@bar.com', 2];

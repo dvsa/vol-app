@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Email\View;
 
 use League\CommonMark\ConverterInterface;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 /**
  * Shared GOV.UK-alike chrome wrapper + Notify Markdown emulation for email previews.
@@ -36,6 +37,18 @@ final class NotifyChrome
         'li'         => 'Margin:5px 0 5px; padding:0 0 0 5px; font-size:19px; line-height:25px; color:#0B0C0C;',
         'blockquote' => 'Margin:0 0 20px 0; border-left:10px solid #B1B4B6; padding:15px 0 0.1px 15px;',
     ];
+
+    /**
+     * Converter for local previews. Raw HTML is escaped, as Notify does, so text from template
+     * variables can never become markup in a preview.
+     */
+    public static function markdownConverter(): GithubFlavoredMarkdownConverter
+    {
+        return new GithubFlavoredMarkdownConverter([
+            'html_input' => 'escape',
+            'allow_unsafe_links' => false,
+        ]);
+    }
 
     /**
      * Render a Markdown body the way GOV.UK Notify does, so local previews match delivery.

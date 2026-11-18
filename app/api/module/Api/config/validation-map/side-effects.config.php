@@ -38,6 +38,7 @@ return [
     CommandHandler\Bus\Ebsr\CreateSubmission::class                                   => IsSideEffect::class,
     CommandHandler\Bus\Ebsr\DeleteSubmission::class                                   => IsSideEffect::class,
     CommandHandler\Document\DispatchDocument::class                                   => IsSideEffect::class,
+    CommandHandler\Sms\QueueLetterSms::class                                          => IsSideEffect::class,
     CommandHandler\Licence\VoidAllCommunityLicences::class                            => IsSideEffect::class,
     CommandHandler\Licence\ReturnAllCommunityLicences::class                          => IsSideEffect::class,
     CommandHandler\Licence\ExpireAllCommunityLicences::class                          => IsSideEffect::class,

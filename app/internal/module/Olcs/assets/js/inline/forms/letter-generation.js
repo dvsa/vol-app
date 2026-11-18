@@ -1,24 +1,118 @@
 OLCS.ready(function () {
   "use strict";
 
+  // Open or close one group of issues
+  function setSectionOpen($section, open) {
+    $section.find(".letter-section__content").toggle(open);
+    // Only the words change: writing to the whole toggle would replace the arrow
+    // beside them, which never came back.
+    $section.find(".letter-section__show-hide").text(open ? "Hide" : "Show");
+    $section.toggleClass("letter-section--expanded", open);
+  }
+
+  // The link above the groups opens them all, or closes them all once every one is open. Its
+  // words follow what is open, however the groups got that way.
+  function updateToggleAllLabel() {
+    var $allContent = $(".letter-section__content");
+    var allOpen =
+      $allContent.length > 0 &&
+      $allContent.filter(":visible").length === $allContent.length;
+
+    $("#toggle-all-sections").text(
+      allOpen ? "Hide All Sections" : "Show All Sections",
+    );
+  }
+
   // Handle individual section toggles
   $("body").on("click", ".letter-section__header", function (e) {
     e.preventDefault();
     var $section = $(this).closest(".letter-section");
-    var $content = $section.find(".letter-section__content");
-    // Only the words change: writing to the whole toggle would replace the arrow
-    // beside them, which never came back.
-    var $button = $(this).find(".letter-section__show-hide");
 
-    if ($content.is(":visible")) {
-      $content.hide();
-      $button.text("Show");
-      $section.removeClass("letter-section--expanded");
-    } else {
-      $content.show();
-      $button.text("Hide");
-      $section.addClass("letter-section--expanded");
+    setSectionOpen(
+      $section,
+      !$section.find(".letter-section__content").is(":visible"),
+    );
+    updateToggleAllLabel();
+  });
+
+  // The issues ticked in the form, as one string to compare
+  function tickedIssues($form) {
+    return $form
+      .find('input[name="letterIssues[]"]:checked')
+      .map(function () {
+        return this.value;
+      })
+      .get()
+      .join(",");
+  }
+
+  // Start from a letter already sent: tick the issues it covered, in place of whatever is
+  // ticked now, and open the groups they are in so the caseworker can see what was picked.
+  // Going back to no letter leaves the ticks as they are. The letter picked is posted with
+  // the form, and the wording changed on it is brought over when the new letter is created.
+  $("body").on("change", "#previous-letter", function () {
+    var $picker = $(this);
+    var $letter = $picker.find("option:selected");
+    var $note = $("#previous-letter-note");
+    var $form = $("#letter-create-form");
+
+    if (!$letter.val()) {
+      $picker.data("picked", "");
+      $note.hide();
+      return;
     }
+
+    // Ticks made by hand would be lost, so ask first. The picker's own ticks from an earlier
+    // pick are just replaced. Both are kept on the picker, so a form shown afresh starts clean.
+    var ticked = tickedIssues($form);
+    if (
+      ticked !== "" &&
+      ticked !== $picker.data("ticked") &&
+      !window.confirm(
+        "This replaces the issues you have ticked with the ones on that letter. Continue?",
+      )
+    ) {
+      $picker.val($picker.data("picked") || "");
+      return;
+    }
+    $note.hide();
+
+    // attr, not data: jQuery would turn a lone id into a number
+    var issueIds = String($letter.attr("data-issue-ids") || "")
+      .split(",")
+      .filter(Boolean);
+    var $issues = $form.find('input[name="letterIssues[]"]');
+
+    $issues.each(function () {
+      this.checked = issueIds.indexOf(this.value) !== -1;
+    });
+    $form.find(".letter-section").each(function () {
+      var $section = $(this);
+      setSectionOpen(
+        $section,
+        $section.find('input[name="letterIssues[]"]:checked').length > 0,
+      );
+    });
+    updateToggleAllLabel();
+
+    // An issue switched off since that letter was sent isn't in the form to tick. Say so,
+    // or the new letter would quietly cover less than the one it started from.
+    var missing = issueIds.length - $issues.filter(":checked").length;
+    if (missing > 0) {
+      $note
+        .text(
+          missing === 1
+            ? "1 issue on that letter is no longer offered, so it is not ticked."
+            : missing +
+                " issues on that letter are no longer offered, so they are not ticked.",
+        )
+        .show();
+    }
+
+    $picker.data("ticked", tickedIssues($form)).data("picked", $letter.val());
+
+    // the ticks changed without a click, so do what a click on one would have done
+    $issues.first().trigger("change");
   });
 
   // Handle "Show All Sections" / "Hide All Sections" toggle
@@ -55,6 +149,19 @@ OLCS.ready(function () {
     }
   }
 
+  // Show a message above the create form. Only the words change: the "Error:" before them is
+  // read out by screen readers and stays as it is.
+  function showCreateError(message) {
+    var $error = $("#validation-error");
+    if (!$error.length) {
+      return;
+    }
+
+    $("#validation-error-text").text(message);
+    $error.show();
+    $error[0].scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
   // Clear a radio group's error once the caseworker picks an option
   $("body").on(
     "change",
@@ -80,8 +187,7 @@ OLCS.ready(function () {
 
     // Validate at least one issue or appendix is selected
     if ($issueCheckboxes.length === 0 && $appendixCheckboxes.length === 0) {
-      $errorDiv.show();
-      $errorDiv[0].scrollIntoView({ behavior: "smooth", block: "nearest" });
+      showCreateError("Please choose at least one issue or appendix");
       return false;
     }
 
@@ -135,6 +241,23 @@ OLCS.ready(function () {
           $("#preview-subcategory").text(subCategory.subCategoryName || "-");
           $("#preview-template").text(letterType.name || "Letter Template");
 
+          // Wording copied from the letter this one was started from comes over as it was
+          // sent, with that letter's dates and details in it. Name the issues it reached, so
+          // the caseworker checks them. (Added before the warnings, which go above it.)
+          if (response.wordingCopiedTo && response.wordingCopiedTo.length > 0) {
+            var copiedHtml =
+              '<div class="govuk-inset-text letter-wording-copied">' +
+              "Wording from the letter you picked was copied to these issues or their to-dos:" +
+              '<ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">';
+            response.wordingCopiedTo.forEach(function (name) {
+              copiedHtml += "<li>" + $("<span>").text(name).html() + "</li>";
+            });
+            copiedHtml +=
+              "</ul>It is copied as it was sent. Check it is still right for this letter, " +
+              "including any dates.</div>";
+            $("#letter-preview-modal").prepend(copiedHtml);
+          }
+
           // Show warnings for missing required sections
           if (response.warnings && response.warnings.length > 0) {
             var warningHtml =
@@ -164,6 +287,11 @@ OLCS.ready(function () {
           ) {
             OLCS.modal.updateBody(newContent);
 
+            // This is a new step, so show it from its top. updateBody keeps the dialog scrolled
+            // to where Create letter was, at the foot of the form, which can leave a warning
+            // or the note about copied wording off the top of the screen.
+            $(".modal__wrapper").scrollTop(0);
+
             // Update modal title
             $(".modal__title").text("Preview or edit letter");
 
@@ -183,11 +311,7 @@ OLCS.ready(function () {
             $previewModal.show();
           }
         } else {
-          // Show error message
-          $errorDiv
-            .find("span:last")
-            .text(response.message || "Failed to create letter");
-          $errorDiv.show();
+          showCreateError(response.message || "Failed to create letter");
           $button.prop("disabled", false).text("Create letter");
         }
       },
@@ -203,8 +327,7 @@ OLCS.ready(function () {
           // Use default error message
         }
 
-        $errorDiv.find("span:last").text(errorMessage);
-        $errorDiv.show();
+        showCreateError(errorMessage);
         $button.prop("disabled", false).text("Create letter");
       },
     });
@@ -255,8 +378,34 @@ OLCS.ready(function () {
    */
   var prepareStep = null;
 
+  // the letter being prepared, and then its send form on the way into the modal
+  var pendingSend = null;
+
+  /**
+   * Whether the modal a step was copied from is still the one on the page. Closing a modal takes
+   * it off the page, and the next one opened is a new element.
+   *
+   * This is checked instead of listening for "hide:modal", because that listener can be skipped:
+   * the event emitter loses its place when an earlier listener removes itself as it runs, and
+   * modalForm's does.
+   */
+  function modalIsStillOpen(step) {
+    return !step || step.modal.isConnected;
+  }
+
+  // Whether an answer should still be acted on: it's for the send in hand, and the modal that
+  // send was started in hasn't been closed since. A late answer is dropped, instead of landing
+  // in whatever is open by then.
+  function isStillWanted(send) {
+    return pendingSend === send && modalIsStillOpen(send.step);
+  }
+
   function offerPrepareAgain() {
     if (!prepareStep) {
+      return;
+    }
+    if (!modalIsStillOpen(prepareStep)) {
+      prepareStep = null;
       return;
     }
 
@@ -279,9 +428,6 @@ OLCS.ready(function () {
   // the send form is redrawn each time it's submitted, so add the link again on every render
   if (typeof OLCS !== "undefined" && OLCS.eventEmitter) {
     OLCS.eventEmitter.on("render", offerPrepareAgain);
-    OLCS.eventEmitter.on("hide:modal", function () {
-      prepareStep = null;
-    });
   }
 
   $("body").on("click", "#prepare-again", function (e) {
@@ -296,6 +442,53 @@ OLCS.ready(function () {
     $(".modal__title").text(step.title);
   });
 
+  /**
+   * Once the letter is prepared the send form goes in the modal. If it doesn't load, the modal
+   * says so and offers to try again, instead of staying on "Loading..." with nothing to press.
+   * Only the load is tried again: the PDF is already made, and preparing the letter again would
+   * leave a second one on the record.
+   */
+  function loadSendForm() {
+    var loading = pendingSend;
+    if (!loading || !loading.printUrl) {
+      return;
+    }
+
+    OLCS.modal.updateBody("<p>Loading...</p>");
+
+    $.get(loading.printUrl)
+      .done(function (html) {
+        if (!isStillWanted(loading)) {
+          return;
+        }
+        pendingSend = null;
+
+        if (loading.step) {
+          loading.step.printUrl = loading.printUrl;
+          prepareStep = loading.step;
+        }
+        OLCS.modal.updateBody(html);
+        $(".modal__title").text("Send letter");
+      })
+      .fail(function () {
+        if (!isStillWanted(loading)) {
+          return;
+        }
+
+        OLCS.modal.updateBody(
+          '<p class="govuk-error-message" role="alert">The letter was prepared, but the send options didn\'t load.</p>' +
+            '<p class="govuk-body"><a href="#" id="load-send-form-again" class="govuk-link">Try again</a></p>',
+        );
+        // the button that was pressed has gone, so put the keyboard on the way forward
+        $("#load-send-form-again").trigger("focus");
+      });
+  }
+
+  $("body").on("click", "#load-send-form-again", function (e) {
+    e.preventDefault();
+    loadSendForm();
+  });
+
   // Prepare to send button - converts letter to PDF and loads send modal
   $("body").on("click", "#prepare-to-send-btn", function (e) {
     e.preventDefault();
@@ -305,7 +498,11 @@ OLCS.ready(function () {
     // copy this step before the button changes, so we can come back to it
     var $step = $btn.closest(".modal__content");
     var step = $step.length
-      ? { body: $step.html(), title: $(".modal__title").text() }
+      ? {
+          body: $step.html(),
+          title: $(".modal__title").text(),
+          modal: $step[0],
+        }
       : null;
 
     $btn.prop("disabled", true).text("Preparing...");
@@ -323,6 +520,9 @@ OLCS.ready(function () {
       return;
     }
 
+    var preparing = { step: step };
+    pendingSend = preparing;
+
     $.ajax({
       url: "/letter/prepare-to-send",
       type: "POST",
@@ -332,34 +532,24 @@ OLCS.ready(function () {
         docTemplate: docTemplateId,
       }),
       success: function (response) {
+        if (!isStillWanted(preparing)) {
+          return;
+        }
+
         if (response.success && response.printUrl) {
-          // Load the existing printAction into the modal
-          if (
-            typeof OLCS !== "undefined" &&
-            OLCS.modal &&
-            OLCS.modal.updateBody
-          ) {
-            OLCS.modal.updateBody("<p>Loading...</p>");
-          }
-          $.get(response.printUrl, function (html) {
-            if (
-              typeof OLCS !== "undefined" &&
-              OLCS.modal &&
-              OLCS.modal.updateBody
-            ) {
-              if (step) {
-                step.printUrl = response.printUrl;
-                prepareStep = step;
-              }
-              OLCS.modal.updateBody(html);
-              $(".modal__title").text("Send letter");
-            }
-          });
+          preparing.printUrl = response.printUrl;
+          loadSendForm();
         } else {
+          pendingSend = null;
           $btn.prop("disabled", false).text("Prepare to send");
         }
       },
       error: function (xhr) {
+        if (!isStillWanted(preparing)) {
+          return;
+        }
+        pendingSend = null;
+
         // Surface the server's reason (e.g. VOL-7402 "requires input" block)
         // instead of silently resetting the button.
         var message = "Something went wrong preparing the letter. Try again.";

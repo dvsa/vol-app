@@ -217,6 +217,18 @@ class LicenceChecklist extends AbstractHelper
             ];
         }
 
+        if (isset($data['smsNumber'])) {
+            $addressesData[] = [
+                [
+                    'value' => $this->translator->__invoke('continuations.addresses.sms-number.table.name'),
+                    'header' => true
+                ],
+                [
+                    'value' => $data['smsNumber']
+                ]
+            ];
+        }
+
         if (isset($data['correspondenceEmail'])) {
             $addressesData[] = [
                 [

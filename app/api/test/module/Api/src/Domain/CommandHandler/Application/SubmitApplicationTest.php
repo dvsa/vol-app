@@ -24,7 +24,10 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot;
@@ -55,6 +58,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
     private $mockApp;
 
     private OrganisationEntity $organisation;
+
+    private m\MockInterface $toggleService;
 
     /** @var  m\MockInterface */
     private $mockTmaRepo;
@@ -88,8 +93,15 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ->setLicence($this->mockLic)
             ->setOperatingCentres(new \Doctrine\Common\Collections\ArrayCollection());
 
+        $this->toggleService = m::mock(ToggleService::class);
+        $this->toggleService->shouldReceive('isEnabled')
+            ->with(FeatureToggle::SMS_NUMBER_CAPTURE)
+            ->andReturn(true)
+            ->byDefault();
+
         $this->mockedSmServices = [
             \LmcRbacMvc\Service\AuthorizationService::class => m::mock(\LmcRbacMvc\Service\AuthorizationService::class),
+            SmsNumberCapture::class => new SmsNumberCapture($this->toggleService),
             SlaCalculatorInterface::class => m::mock(SlaCalculator::class),
             CacheEncryption::class => m::mock(CacheEncryption::class),
         ];
@@ -143,6 +155,10 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
     public function testHandleCommand(mixed $isVariation, mixed $expected, mixed $isInternalUser, mixed $goodOrPsv, mixed $hasS4): void
     {
         $this->setupIsInternalUser($isInternalUser);
+        $this->mockLic->setCorrespondenceCd($this->smsContact());
+        if (!$isVariation) {
+            $this->setupIsExternalUser(!$isInternalUser);
+        }
 
         $now           = new DateTime();
 
@@ -500,6 +516,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
     public function testHandleCommandSpecialRestricted(): void
     {
         $this->setupIsInternalUser(false);
+        $this->setupIsExternalUser(true);
+        $this->mockLic->setCorrespondenceCd($this->smsContact());
 
         $now           = new DateTime();
 
@@ -857,6 +875,78 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             array_merge($expectedTaskData, ['urgent' => 'Y']),
             'GV80A'
         ];
+    }
+
+    private function smsContact(): Entity\ContactDetails\ContactDetails
+    {
+        $pc = new Entity\ContactDetails\PhoneContact(new RefData(Entity\ContactDetails\PhoneContact::TYPE_SMS));
+        $pc->setPhoneNumber('07700900123');
+        $cd = new Entity\ContactDetails\ContactDetails(new RefData());
+        $cd->setPhoneContacts(new \Doctrine\Common\Collections\ArrayCollection([$pc]));
+        return $cd;
+    }
+
+    private function submitCommand(): Cmd
+    {
+        $command = Cmd::create(['id' => self::APP_ID, 'version' => self::VERSION]);
+        $this->repoMap['Application']
+            ->shouldReceive('fetchUsingId')
+            ->with($command, Query::HYDRATE_OBJECT, self::VERSION)
+            ->andReturn($this->mockApp);
+        return $command;
+    }
+
+    public function testExternalSubmitWithoutSmsThrows(): void
+    {
+        $this->setupIsExternalUser(true);
+        $this->mockApp->setIsVariation(false);
+        $command = $this->submitCommand();
+
+        try {
+            $this->sut->handleCommand($command);
+            $this->fail('Expected ValidationException');
+        } catch (ValidationException $e) {
+            $this->assertSame(['application.submit.sms-number-required'], $e->getMessages());
+        }
+    }
+
+    public function testExternalSubmitWithoutSmsAllowedWhenCaptureOff(): void
+    {
+        $this->toggleService->shouldReceive('isEnabled')->with(FeatureToggle::SMS_NUMBER_CAPTURE)->andReturn(false);
+        $this->setupIsExternalUser(true);
+        $this->mockApp->setIsVariation(false);
+        $command = $this->submitCommand();
+
+        // the first side effect after the guard proves it was passed
+        $this->commandHandler->shouldReceive('handleCommand')->andThrow(new \RuntimeException('after-guard'));
+
+        $this->expectExceptionMessage('after-guard');
+        $this->sut->handleCommand($command);
+    }
+
+    public function testInternalSubmitWithoutSmsAllowed(): void
+    {
+        $this->setupIsExternalUser(false);
+        $this->mockApp->setIsVariation(false);
+        $command = $this->submitCommand();
+
+        // the first side effect after the guard proves it was passed
+        $this->commandHandler->shouldReceive('handleCommand')->andThrow(new \RuntimeException('after-guard'));
+
+        $this->expectExceptionMessage('after-guard');
+        $this->sut->handleCommand($command);
+    }
+
+    public function testVariationSubmitWithoutSmsAllowed(): void
+    {
+        $this->mockApp->setIsVariation(true);
+        $command = $this->submitCommand();
+
+        // the first side effect after the guard proves it was passed
+        $this->commandHandler->shouldReceive('handleCommand')->andThrow(new \RuntimeException('after-guard'));
+
+        $this->expectExceptionMessage('after-guard');
+        $this->sut->handleCommand($command);
     }
 
     public function testHandleInvalidStatus(): void

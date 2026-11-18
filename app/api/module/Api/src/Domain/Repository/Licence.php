@@ -8,7 +8,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use Dvsa\Olcs\Api\Domain\Exception;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact as PhoneContactEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as Entity;
 use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
@@ -90,16 +89,10 @@ class Licence extends AbstractRepository
 
         $this->buildDefaultQuery($qb, $licenceId)
             ->withContactDetails('correspondenceCd', 'c')
-            ->with('c.phoneContacts', 'c_p')
-            ->with('c_p.phoneContactType', 'c_p_pct')
-            ->withRefdata(PhoneContactEntity::class, 'c_p')
             ->with('organisation', 'o')
             ->withContactDetails('o.contactDetails', 'o_cd')
             ->withContactDetails('establishmentCd', 'e')
-            ->withContactDetails('transportConsultantCd', 't')
-            ->with('t.phoneContacts', 't_p')
-            ->with('t_p.phoneContactType', 't_p_pct')
-            ->withRefdata(PhoneContactEntity::class, 't_p');
+            ->withContactDetails('transportConsultantCd', 't');
 
         return $qb->getQuery()->getSingleResult();
     }

@@ -22,6 +22,7 @@ use Dvsa\Olcs\Api\Service\Letter\Resolution\SectionResolution;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\UnresolvedSection;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
+use Dvsa\Olcs\Api\Entity\Letter\LetterIssue;
 
 /**
  * LetterInstanceComposer
@@ -189,8 +190,8 @@ class LetterInstanceComposerTest extends TestCase
     }
 
     /**
-     * A deduplicated to-do hangs off the first issue that brought it, which is what gives the
-     * renderer "appears under the first issue type it relates to" without the renderer knowing.
+     * A deduplicated to-do's row belongs to the first issue that brought it. Where it is shown is
+     * worked out separately (LetterInstance::getPlacementIssue).
      */
     public function testADeduplicatedTodoAttachesToTheFirstIssueThatBroughtIt(): void
     {
@@ -570,6 +571,427 @@ class LetterInstanceComposerTest extends TestCase
         $this->assertSame(
             [0, 1, 2, 3],
             [$library->getDisplayOrder(), $custom->getDisplayOrder(), $later->getDisplayOrder(), $loose->getDisplayOrder()]
+        );
+    }
+
+    private function paragraph(string $text): array
+    {
+        return ['blocks' => [['type' => 'paragraph', 'data' => ['text' => $text]]]];
+    }
+
+    /**
+     * An issue on a letter, by the id of the library issue it came from. Every call makes its own
+     * version, as a letter made later can be on a newer version of the same issue.
+     *
+     * @param LetterTodoVersion[] $todoVersions
+     */
+    private function issueFromLibrary(
+        LetterInstance $letterInstance,
+        int $issueId,
+        int $displayOrder,
+        array $todoVersions = [],
+        bool $isOther = false
+    ): LetterInstanceIssue {
+        $libraryIssue = m::mock(LetterIssue::class)->makePartial();
+        $libraryIssue->setId($issueId);
+
+        $version = $this->issueVersionWithTodos($todoVersions);
+        $version->setLetterIssue($libraryIssue);
+        $version->setDefaultBodyContent($this->paragraph('Library wording'));
+        $version->setIsOther($isOther);
+
+        $instanceIssue = new LetterInstanceIssue();
+        $instanceIssue->setLetterIssueVersion($version);
+        $instanceIssue->setDisplayOrder($displayOrder);
+        $instanceIssue->setGeneratedContent($this->paragraph('Library wording'));
+        $letterInstance->addLetterInstanceIssue($instanceIssue);
+
+        return $instanceIssue;
+    }
+
+    /**
+     * The library issues behind some of a letter's issues. These are compared, not the issues
+     * themselves: when a comparison of entities fails, PHPUnit writes out everything they link
+     * to, mocks and all, and the run doesn't come back.
+     *
+     * @param list<LetterInstanceIssue> $instanceIssues
+     * @return list<int>
+     */
+    private function libraryIssueIds(array $instanceIssues): array
+    {
+        return array_map(
+            static fn(LetterInstanceIssue $issue): int => (int) $issue->getLetterIssueVersion()->getLetterIssue()->getId(),
+            $instanceIssues
+        );
+    }
+
+    /**
+     * What an editor saves when nothing was typed in it: the same words, with its own time and ids
+     */
+    private function savedUntouched(string $text): array
+    {
+        return ['time' => 1763100000000, 'blocks' => [['id' => 'a1B2', 'type' => 'paragraph', 'data' => ['text' => $text]]]];
+    }
+
+    public function testStartingFromASentLetterBringsOverTheWordingChangedOnAnIssue(): void
+    {
+        $sentLetter = new LetterInstance();
+        $this->issueFromLibrary($sentLetter, 7, 0)
+            ->setEditedContentFromArray($this->paragraph('Reworded by the caseworker'));
+
+        $letterInstance = new LetterInstance();
+        $issue = $this->issueFromLibrary($letterInstance, 7, 0);
+
+        $broughtOver = $this->sut->bringOverWording($letterInstance, $sentLetter);
+
+        $this->assertSame($this->paragraph('Reworded by the caseworker'), $issue->getEditedContent());
+        // the issues it changed are handed back, so the caseworker can be told to check them
+        $this->assertSame([7], $this->libraryIssueIds($broughtOver));
+        // what it was generated with stays, so the edit can still be told from it
+        $this->assertSame($this->paragraph('Library wording'), $issue->getGeneratedContent());
+    }
+
+    /**
+     * An issue nobody reworded has to stay as generated: the new letter then follows the library
+     * as it is now and carries today's details, not the sent letter's
+     */
+    public function testAnIssueSavedButNotRewordedStaysAsGenerated(): void
+    {
+        $sentLetter = new LetterInstance();
+        $this->issueFromLibrary($sentLetter, 7, 0)->setEditedContentFromArray($this->savedUntouched('Library wording'));
+
+        $letterInstance = new LetterInstance();
+        $issue = $this->issueFromLibrary($letterInstance, 7, 0);
+
+        $broughtOver = $this->sut->bringOverWording($letterInstance, $sentLetter);
+
+        $this->assertNull($issue->getEditedContent());
+        $this->assertSame([], $this->libraryIssueIds($broughtOver));
+    }
+
+    public function testOnlyAnIssueOnBothLettersGetsWording(): void
+    {
+        $sentLetter = new LetterInstance();
+        $this->issueFromLibrary($sentLetter, 7, 0)->setEditedContentFromArray($this->paragraph('Seven, reworded'));
+        $this->issueFromLibrary($sentLetter, 9, 1)->setEditedContentFromArray($this->paragraph('Nine, reworded'));
+
+        $letterInstance = new LetterInstance();
+        $added = $this->issueFromLibrary($letterInstance, 8, 0);
+        $kept = $this->issueFromLibrary($letterInstance, 9, 1);
+
+        $this->sut->bringOverWording($letterInstance, $sentLetter);
+
+        $this->assertNull($added->getEditedContent());
+        $this->assertSame($this->paragraph('Nine, reworded'), $kept->getEditedContent());
+    }
+
+    private function customTodo(LetterInstance $letterInstance, LetterInstanceIssue $issue, int $displayOrder, ?array $description): LetterInstanceTodo
+    {
+        $todo = new LetterInstanceTodo();
+        $todo->setDisplayOrder($displayOrder);
+        $todo->setEditedDescription($description);
+        $issue->addLetterInstanceTodo($todo);
+        $letterInstance->addLetterInstanceTodo($todo);
+
+        return $todo;
+    }
+
+    /**
+     * An Other issue is all the caseworker's own: its heading, its body and the to-dos they wrote
+     */
+    public function testAnOtherIssueBringsItsHeadingAndTheCaseworkersOwnTodos(): void
+    {
+        $sentLetter = new LetterInstance();
+        $sentOther = $this->issueFromLibrary($sentLetter, 9, 0, [], true);
+        $sentOther->setEditedHeading('Missing lease');
+        $sentOther->setEditedContentFromArray($this->paragraph('We have not had the lease'));
+        $written = $this->customTodo($sentLetter, $sentOther, 0, $this->paragraph('Send the lease'));
+        $blank = $this->customTodo($sentLetter, $sentOther, 1, null);
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 4, 0, [$this->todoVersion(1)]);
+        $other = $this->issueFromLibrary($letterInstance, 9, 1, [], true);
+        $this->sut->composeTodos($letterInstance);
+
+        $broughtOver = $this->sut->bringOverWording($letterInstance, $sentLetter);
+
+        $this->assertSame([9], $this->libraryIssueIds($broughtOver), 'once, however much of it came over');
+        $this->assertSame('Missing lease', $other->getHeading());
+        $this->assertSame($this->paragraph('We have not had the lease'), $other->getEditedContent());
+
+        $custom = $other->getCustomTodos();
+        $this->assertCount(1, $custom, 'a to-do with nothing written in it is left behind');
+        $this->assertSame($this->paragraph('Send the lease'), $custom[0]->getEffectiveDescription());
+        $this->assertTrue($letterInstance->getLetterInstanceTodos()->contains($custom[0]));
+        // numbered in letter order, after the first issue's to-do
+        $this->assertSame(1, $custom[0]->getDisplayOrder());
+
+        // the sent letter keeps its own rows: moving one would delete it from that letter
+        $this->assertNotSame($written, $custom[0]);
+        $this->assertTrue([$written, $blank] === $sentOther->getCustomTodos());
+        $this->assertCount(2, $sentLetter->getLetterInstanceTodos());
+    }
+
+    public function testAToDoRewordedOnTheSentLetterBringsItsWording(): void
+    {
+        $todo = $this->todoWithCurrentVersion(3, 31);
+
+        $sentLetter = new LetterInstance();
+        $sentIssue = $this->issueFromLibrary($sentLetter, 7, 0);
+        // sent on an older version of the to-do than the library has now
+        $reworded = $this->existingTodo($sentLetter, $sentIssue, $this->todoVersionOf($todo, 30));
+        $reworded->setGeneratedDescription($this->paragraph('Send the lease'));
+        $reworded->setEditedDescriptionFromArray($this->paragraph('Send the signed lease by Friday'));
+        $untouched = $this->existingTodo($sentLetter, $sentIssue, $this->todoVersion(40));
+        $untouched->setGeneratedDescription($this->paragraph('Pay the fee'));
+        $untouched->setEditedDescriptionFromArray($this->savedUntouched('Pay the fee'));
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 7, 0, [$todo->getCurrentVersion(), $this->todoVersion(40)]);
+        $this->sut->composeTodos($letterInstance);
+
+        // a to-do is reported as the issue it sits under
+        $this->assertSame([7], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+
+        [$first, $second] = array_values($letterInstance->getLetterInstanceTodos()->toArray());
+        $this->assertSame(31, $first->getLetterTodoVersion()->getId());
+        $this->assertSame($this->paragraph('Send the signed lease by Friday'), $first->getEditedDescription());
+        $this->assertNull($second->getEditedDescription());
+    }
+
+    /**
+     * A to-do's wording was written for the issues it sat under. A to-do that only reaches the
+     * new letter through an issue the sent letter didn't have starts as the library has it.
+     */
+    public function testAToDoOnlyBringsItsWordingThroughAnIssueOnBothLetters(): void
+    {
+        $todo = $this->todoWithCurrentVersion(3, 31);
+
+        $sentLetter = new LetterInstance();
+        $sentIssue = $this->issueFromLibrary($sentLetter, 7, 0);
+        $reworded = $this->existingTodo($sentLetter, $sentIssue, $todo->getCurrentVersion());
+        $reworded->setGeneratedDescription($this->paragraph('Send the lease'));
+        $reworded->setEditedDescriptionFromArray($this->paragraph('Send the lease for the yard in the issue above'));
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 8, 0, [$todo->getCurrentVersion()]);
+        $this->sut->composeTodos($letterInstance);
+
+        $this->assertSame([], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        $this->assertNull($letterInstance->getLetterInstanceTodos()->first()->getEditedDescription());
+    }
+
+    /**
+     * A shared to-do belongs to the first issue that brings it, which need not be the issue the
+     * two letters have in common. It is reported as the issue the edit page shows it after.
+     */
+    public function testAToDoSharedWithAnIssueOnBothLettersBringsItsWordingWhicheverIssueItBelongsTo(): void
+    {
+        $todo = $this->todoWithCurrentVersion(3, 31);
+
+        $sentLetter = new LetterInstance();
+        $sentIssue = $this->issueFromLibrary($sentLetter, 7, 0);
+        $reworded = $this->existingTodo($sentLetter, $sentIssue, $todo->getCurrentVersion());
+        $reworded->setGeneratedDescription($this->paragraph('Send the lease'));
+        $reworded->setEditedDescriptionFromArray($this->paragraph('Send the signed lease by Friday'));
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 8, 0, [$todo->getCurrentVersion()]);
+        $this->issueFromLibrary($letterInstance, 7, 1, [$todo->getCurrentVersion()]);
+        $this->sut->composeTodos($letterInstance);
+
+        // the row belongs to issue 8, the first to bring it; the edit page shows it after issue 7
+        $this->assertSame([7], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        $this->assertSame(
+            $this->paragraph('Send the signed lease by Friday'),
+            $letterInstance->getLetterInstanceTodos()->first()->getEditedDescription()
+        );
+    }
+
+    /**
+     * Each part of an Other issue that comes over is enough on its own for the issue to be
+     * named: its heading, or a to-do the caseworker wrote, with the body left as it started
+     */
+    public function testAnOtherIssueIsNamedWhenOnlyItsHeadingOrItsOwnTodosCameOver(): void
+    {
+        $headingOnly = new LetterInstance();
+        $this->issueFromLibrary($headingOnly, 9, 0, [], true)->setEditedHeading('Missing lease');
+
+        $todoOnly = new LetterInstance();
+        $this->customTodo($todoOnly, $this->issueFromLibrary($todoOnly, 9, 0, [], true), 0, $this->paragraph('Send the lease'));
+
+        foreach ([$headingOnly, $todoOnly] as $sentLetter) {
+            $letterInstance = new LetterInstance();
+            $other = $this->issueFromLibrary($letterInstance, 9, 0, [], true);
+
+            $this->assertSame([9], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+            $this->assertNull($other->getEditedContent());
+        }
+    }
+
+    private function rewordedTodo(LetterInstance $letter, LetterInstanceIssue $under, LetterTodoVersion $version, string $text): LetterInstanceTodo
+    {
+        $todo = $this->existingTodo($letter, $under, $version);
+        $todo->setGeneratedDescription($this->paragraph('Send the lease'));
+        $todo->setEditedDescriptionFromArray($this->paragraph($text));
+
+        return $todo;
+    }
+
+    /**
+     * The to-do has to have come with that issue on the sent letter too. An issue can gain a
+     * to-do in a new version between the two letters, and wording written under another issue
+     * isn't its to bring. (A to-do added to the same version can't be told apart: see
+     * LetterInstanceComposer::todosBroughtBy.)
+     */
+    public function testAToDoAnIssueGainedInANewVersionDoesNotBringWordingWrittenUnderAnotherIssue(): void
+    {
+        $todo = $this->todoWithCurrentVersion(3, 31);
+
+        $sentLetter = new LetterInstance();
+        $this->issueFromLibrary($sentLetter, 7, 0);
+        $sentEight = $this->issueFromLibrary($sentLetter, 8, 1, [$todo->getCurrentVersion()]);
+        $this->rewordedTodo($sentLetter, $sentEight, $todo->getCurrentVersion(), 'Send the lease for the yard in issue 8');
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 7, 0, [$todo->getCurrentVersion()]);
+        $this->sut->composeTodos($letterInstance);
+
+        $this->assertSame([], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        $this->assertNull($letterInstance->getLetterInstanceTodos()->first()->getEditedDescription());
+    }
+
+    /**
+     * Letters made before VOL-7408 hold a row for each issue that brought a to-do. The row that
+     * sat under an issue is the one that speaks for it, reworded or not.
+     */
+    public function testWhereTheSentLetterHasARowForEachIssueTheIssuesOwnRowIsTheOneUsed(): void
+    {
+        $todo = $this->todoWithCurrentVersion(3, 31);
+        $version = $todo->getCurrentVersion();
+
+        $bothReworded = new LetterInstance();
+        $seven = $this->issueFromLibrary($bothReworded, 7, 0, [$version]);
+        $eight = $this->issueFromLibrary($bothReworded, 8, 1, [$version]);
+        $this->rewordedTodo($bothReworded, $seven, $version, 'Reworded under 7');
+        $this->rewordedTodo($bothReworded, $eight, $version, 'Reworded under 8');
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 8, 0, [$version]);
+        $this->sut->composeTodos($letterInstance);
+        $this->sut->bringOverWording($letterInstance, $bothReworded);
+
+        $this->assertSame(
+            $this->paragraph('Reworded under 8'),
+            $letterInstance->getLetterInstanceTodos()->first()->getEditedDescription()
+        );
+
+        // and where this issue's own row was left alone, another issue's rewording isn't borrowed
+        $otherReworded = new LetterInstance();
+        $seven = $this->issueFromLibrary($otherReworded, 7, 0, [$version]);
+        $eight = $this->issueFromLibrary($otherReworded, 8, 1, [$version]);
+        $this->existingTodo($otherReworded, $seven, $version)->setGeneratedDescription($this->paragraph('Send the lease'));
+        $this->rewordedTodo($otherReworded, $eight, $version, 'Reworded under 8');
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 7, 0, [$version]);
+        $this->sut->composeTodos($letterInstance);
+
+        $this->assertSame([], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $otherReworded)));
+        $this->assertNull($letterInstance->getLetterInstanceTodos()->first()->getEditedDescription());
+    }
+
+    /**
+     * With a row for each issue on the sent letter and one row on the new one, the wording is
+     * the first issue's, the one the new letter's row belongs to
+     */
+    public function testWhereSeveralIssuesHadTheirOwnRowTheFirstIssuesWordingIsUsed(): void
+    {
+        $version = $this->todoWithCurrentVersion(3, 31)->getCurrentVersion();
+
+        $sentLetter = new LetterInstance();
+        $this->rewordedTodo($sentLetter, $this->issueFromLibrary($sentLetter, 7, 0, [$version]), $version, 'Reworded under 7');
+        $this->rewordedTodo($sentLetter, $this->issueFromLibrary($sentLetter, 8, 1, [$version]), $version, 'Reworded under 8');
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 7, 0, [$version]);
+        $this->issueFromLibrary($letterInstance, 8, 1, [$version]);
+        $this->sut->composeTodos($letterInstance);
+
+        // reported as issue 8, which the edit page shows it after
+        $this->assertSame([8], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        $this->assertCount(1, $letterInstance->getLetterInstanceTodos());
+        $this->assertSame(
+            $this->paragraph('Reworded under 7'),
+            $letterInstance->getLetterInstanceTodos()->first()->getEditedDescription()
+        );
+    }
+
+    /**
+     * The issue has to bring the to-do on the new letter as well. If the library has taken the
+     * to-do off it since, the to-do is only there for another issue, and starts fresh.
+     */
+    public function testAToDoAnIssueNoLongerBringsDoesNotComeOverThroughAnotherIssue(): void
+    {
+        $version = $this->todoWithCurrentVersion(3, 31)->getCurrentVersion();
+
+        $sentLetter = new LetterInstance();
+        $this->rewordedTodo($sentLetter, $this->issueFromLibrary($sentLetter, 7, 0, [$version]), $version, 'Reworded under 7');
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 7, 0);
+        $this->issueFromLibrary($letterInstance, 8, 1, [$version]);
+        $this->sut->composeTodos($letterInstance);
+
+        $this->assertSame([], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        $this->assertNull($letterInstance->getLetterInstanceTodos()->first()->getEditedDescription());
+    }
+
+    /**
+     * The usual case: two issues share a to-do, so the sent letter has one row for it, under
+     * the first. A new letter with only the second issue still gets the wording.
+     */
+    public function testAToDoSharedByTwoIssuesComesOverWhenOnlyTheSecondIsOnTheNewLetter(): void
+    {
+        $version = $this->todoWithCurrentVersion(3, 31)->getCurrentVersion();
+
+        $sentLetter = new LetterInstance();
+        $first = $this->issueFromLibrary($sentLetter, 7, 0, [$version]);
+        $this->issueFromLibrary($sentLetter, 8, 1, [$version]);
+        $this->rewordedTodo($sentLetter, $first, $version, 'Send the signed lease by Friday');
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 8, 0, [$version]);
+        $this->sut->composeTodos($letterInstance);
+
+        $this->assertSame([8], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        $this->assertSame(
+            $this->paragraph('Send the signed lease by Friday'),
+            $letterInstance->getLetterInstanceTodos()->first()->getEditedDescription()
+        );
+    }
+
+    /**
+     * An old letter can hold more than one row for a to-do under the same issue. The one that
+     * was reworded is the one to copy, wherever it comes among them.
+     */
+    public function testOfSeveralRowsUnderOneIssueTheRewordedOneIsUsed(): void
+    {
+        $version = $this->todoWithCurrentVersion(3, 31)->getCurrentVersion();
+
+        $sentLetter = new LetterInstance();
+        $sentIssue = $this->issueFromLibrary($sentLetter, 7, 0, [$version]);
+        $this->existingTodo($sentLetter, $sentIssue, $version)->setGeneratedDescription($this->paragraph('Send the lease'));
+        $this->rewordedTodo($sentLetter, $sentIssue, $version, 'Send the signed lease by Friday');
+
+        $letterInstance = new LetterInstance();
+        $this->issueFromLibrary($letterInstance, 7, 0, [$version]);
+        $this->sut->composeTodos($letterInstance);
+        $this->sut->bringOverWording($letterInstance, $sentLetter);
+
+        $this->assertSame(
+            $this->paragraph('Send the signed lease by Friday'),
+            $letterInstance->getLetterInstanceTodos()->first()->getEditedDescription()
         );
     }
 }

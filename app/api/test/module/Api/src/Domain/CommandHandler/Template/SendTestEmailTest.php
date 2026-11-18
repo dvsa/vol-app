@@ -24,13 +24,16 @@ final class SendTestEmailTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Template', TemplateRepo::class);
 
         $this->mockedSmServices = [
-            'TemplateTwigRenderer' => m::mock(TwigRenderer::class),
+            // Notify takes markdown and escapes HTML itself, so no Twig HTML escaping here.
+            'TemplatePlainTextTwigRenderer' => m::mock(TwigRenderer::class),
             NotifyTestMailer::class => m::mock(NotifyTestMailer::class),
             'config' => [
                 'email' => [
                     'from_email' => 'no-reply@example.com',
                     'from_name' => 'OLCS',
-                    'notify' => [
+                ],
+                'notify' => [
+                    'email' => [
                         'passthrough_templates' => [
                             'en_GB' => 'uuid-en',
                             'cy_GB' => 'uuid-cy',
@@ -112,7 +115,7 @@ final class SendTestEmailTest extends AbstractCommandHandlerTestCase
         $this->repoMap['Template']
             ->shouldReceive('fetchUsingId')->andReturn($template);
 
-        $this->mockedSmServices['TemplateTwigRenderer']
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']
             ->shouldReceive('renderString')->with('Hi {{ name }}', ['name' => 'Andy'])
             ->andReturn('Hi Andy');
 
