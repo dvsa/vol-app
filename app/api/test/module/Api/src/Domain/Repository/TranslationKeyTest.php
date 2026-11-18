@@ -81,10 +81,17 @@ final class TranslationKeyTest extends RepositoryTestCase
 
         $this->sut->applyListFilters($qb, $query);
 
-        $this->assertStringContainsString('m.format = :format', $qb->getDQL());
-        $this->assertStringContainsString('m.translationKey LIKE :markupPrefix', $qb->getDQL());
+        // The search ORs sit in their own brackets so the format and markup filters still apply to every match
+        $this->assertSame(
+            self::SELECT . ' LEFT JOIN m.translationKeyTexts tkt'
+            . ' WHERE m.format = :format AND m.translationKey LIKE :markupPrefix'
+            . ' AND (m.id LIKE :translationSearch'
+            . ' OR m.description LIKE :translationSearch'
+            . ' OR m.translationKey LIKE :translationSearch'
+            . ' OR tkt.translatedText LIKE :translationSearch)',
+            $qb->getDQL(),
+        );
         $this->assertSame('editorjs', $qb->getParameter('format')->getValue());
         $this->assertSame('markup-%', $qb->getParameter('markupPrefix')->getValue());
-        $this->assertStringContainsString('AND', $qb->getDQL());
     }
 }

@@ -177,6 +177,38 @@ final class LongTextConverterServiceTest extends TestCase
         self::assertSame('<p class="govuk-body">Kept.</p>', $html);
     }
 
+    public function testImagesAndStylesAreStrippedButGovukMarkupSurvives(): void
+    {
+        $html = (new LongTextConverterService())->convertJsonToHtml(
+            self::document(
+                ['id' => 'a', 'type' => 'heading', 'data' => ['text' => 'Title', 'level' => 2]],
+                ['id' => 'b', 'type' => 'paragraph', 'data' => ['text' => 'Read <a href="https://www.gov.uk" class="govuk-link">this</a><img src="https://example.com/x.png"> <b style="color:red">now</b>']],
+                ['id' => 'c', 'type' => 'list', 'data' => ['style' => 'bullet', 'items' => ['One']]],
+            ),
+        );
+
+        self::assertSame(
+            '<h2 class="govuk-heading-l">Title</h2>'
+            . '<p class="govuk-body">Read <a href="https://www.gov.uk" class="govuk-link">this</a> <b>now</b></p>'
+            . '<ul class="govuk-list govuk-list--bullet"><li>One</li></ul>',
+            $html,
+        );
+    }
+
+    public function testNestedOrderedListKeepsItsTypeAndClass(): void
+    {
+        $html = (new LongTextConverterService())->convertJsonToHtml(
+            self::document(
+                ['id' => 'a', 'type' => 'list', 'data' => ['style' => 'bullet', 'items' => [
+                    '<u class="cdx-underline">Intro</u> <ol type="i" class="validation-summary__list"><li>One</li></ol>',
+                ]]],
+            ),
+        );
+
+        self::assertStringContainsString('<u class="cdx-underline">Intro</u>', $html);
+        self::assertStringContainsString('<ol type="i" class="validation-summary__list"><li>One</li></ol>', $html);
+    }
+
     private static function document(array ...$blocks): string
     {
         return json_encode([

@@ -60,6 +60,23 @@ final class LongTextConverterService
         // The URI scheme registry is a process-global singleton.
         $config->set('URI.OverrideAllowedSchemes', false);
 
+        // Only what the GOV.UK tools produce: the three blocks and the bold, italic, underline and link inline tools, plus the list classes in the seeded declarations
+        $config->set('HTML.Allowed', 'p[class],h1[class],h2[class],h3[class],h4[class],h5[class],h6[class],ul[class],ol[type|class],li,a[href|class],b,strong,i,em,u[class],br');
+        $config->set('Attr.AllowedClasses', [
+            'govuk-body',
+            'govuk-heading-xl',
+            'govuk-heading-l',
+            'govuk-heading-m',
+            'govuk-heading-s',
+            'govuk-list',
+            'govuk-list--bullet',
+            'govuk-list--number',
+            'govuk-link',
+            'govuk-list--spaced',
+            'validation-summary__list',
+            'cdx-underline',
+        ]);
+
         $clean = (new \HTMLPurifier($config))->purify($html);
 
         // An empty block renders as a blank gap; the letter converter drops

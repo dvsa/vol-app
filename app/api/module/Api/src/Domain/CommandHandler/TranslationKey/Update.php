@@ -70,7 +70,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
             $repo->save($translationKey);
         }
 
-        if ($command->getDescription() !== null) {
+        if ($command->getDescription() !== null && $command->getDescription() !== (string) $translationKey->getDescription()) {
             $translationKey->setDescription($command->getDescription());
             $repo->save($translationKey);
         }

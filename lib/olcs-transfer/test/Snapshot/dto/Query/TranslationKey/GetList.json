@@ -5,6 +5,7 @@
     "inputs": {
       "format": {
         "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
         "filterChain": {
           "class": "Laminas\\Filter\\FilterChain",
           "filters": [
@@ -13,9 +14,21 @@
             }
           ]
         },
+        "required": false,
         "validatorChain": {
           "class": "Laminas\\Validator\\ValidatorChain",
-          "validators": []
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "text",
+                  "editorjs"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
         },
         "name": "format"
       },
@@ -60,6 +73,7 @@
       },
       "markupOnly": {
         "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
         "filterChain": {
           "class": "Laminas\\Filter\\FilterChain",
           "filters": [
@@ -68,6 +82,7 @@
             }
           ]
         },
+        "required": false,
         "validatorChain": {
           "class": "Laminas\\Validator\\ValidatorChain",
           "validators": []
