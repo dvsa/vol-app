@@ -357,6 +357,7 @@ class RetrieveController extends AbstractController
                 'form' => $form,
                 'otpRequested' => (bool) ($flags['otpRequested'] ?? false),
                 'otpError' => (bool) ($flags['otpError'] ?? false),
+                'pageHasErrors' => (bool) ($flags['otpError'] ?? false),
                 'attemptsRemaining' => $flags['attemptsRemaining'] ?? null,
                 'requestOtpUrl' => $this->url()->fromRoute('retrieve/request-otp', ['token' => $token]),
             ]

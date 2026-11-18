@@ -226,14 +226,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         if (isset($this->data['browserTitle'])) {
             $prepend = '';
-            if ($this->form instanceof Form) {
-                if ($this->form->hasValidated()) {
-                    if (!$this->formIsValid()) {
-                        $prepend = $this->translationHelper->translate('permits.application.browser.title.error') . ': ';
-                    }
-                }
-            }
-
             $tVarConfig = $this->configsForAction('templateVarsConfig');
 
             if (array_key_exists('prependTitleDataKey', $tVarConfig) && isset($this->data[$tVarConfig['prependTitleDataKey']])) {

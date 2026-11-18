@@ -218,6 +218,7 @@ final class LoginControllerTest extends MockeryTestCase
         // Assert
         $this->assertArrayHasKey('failureReason', $result->getVariables());
         $this->assertEquals('unit test failure reason', $result->getVariable('failureReason'));
+        $this->assertTrue($result->getVariable('pageHasErrors'));
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

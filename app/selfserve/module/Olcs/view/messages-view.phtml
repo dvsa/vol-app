@@ -1,14 +1,20 @@
+<div class="js-body">
 <?php
+$formErrors = '';
+if ($this->canReply) {
+    $formErrors = '<div class="row"><div class="two-thirds">' . $this->formErrors($this->form) . '</div></div>';
+}
 echo $this->partial(
   'partials/page-header-simple',
   [
     'pageTitle' => $this->translate('dashboard.messages.view.title'),
+    'formErrors' => $formErrors,
   ],
 );
 ?>
 
 <div class="row">
-  <div class="dashboard two-thirds js-body">
+  <div class="dashboard two-thirds">
     <?php
     echo $this->flashMessengerAll();
 
@@ -37,7 +43,6 @@ echo $this->partial(
         </summary>
         <div class="govuk-details__text" id="details-content-operating-centre">
           <?php
-          echo $this->formErrors($this->form);
           echo $this->form($this->form);
           ?>
         </div>
@@ -49,4 +54,5 @@ echo $this->partial(
   </div>
 
   <?php echo $this->partial('partials/conversations-right-column'); ?>
+</div>
 </div>

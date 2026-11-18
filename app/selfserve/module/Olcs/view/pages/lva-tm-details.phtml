@@ -13,6 +13,7 @@
               'pageTitle' => $this->translate($this->title),
               'pageHeaderText' => $this->translate($this->subTitle),
               'pageHeaderTextEscape' => false,
+              'formErrors' => $this->formErrors($form),
               'backUrl' => [
                   'url' => ($backPage !== null ? $backPage->getHref() : null),
               ],
@@ -38,7 +39,6 @@
 
       echo $this->flashMessengerAll();
 
-      echo $this->formErrors($form);
       echo $this->form()->render($form, false);
       ?>
     </div>

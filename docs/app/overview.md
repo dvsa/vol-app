@@ -27,6 +27,15 @@ Previously published as standalone `dvsa/olcs-*` packages, these libraries have 
 
 `olcs-xmltools` was also absorbed, but — being API-only — it is fully inlined as an API module at `app/api/module/XmlTools/` rather than a path-repository library.
 
+## Form error-summary anchors
+
+When a nested input has no explicit ID, the shared input renderer uses its
+prepared name, for example `form-actions[inputs][reply]`, as its ID. The error
+summary tracks the same fieldset path so its links match even when it renders
+before the form is prepared. Validator message keys are not part of this path.
+Explicit IDs and special targets for radio, date and postcode controls take
+precedence. This does not change submitted names or rendered input IDs.
+
 ## External dependencies
 
 These are still consumed as published Composer packages.

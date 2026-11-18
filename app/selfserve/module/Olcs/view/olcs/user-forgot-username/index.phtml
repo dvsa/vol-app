@@ -1,8 +1,15 @@
 <?php
+$formErrors = $this->formErrors($form);
+if ($formErrors !== '') {
+    $formErrors = '<div class="row"><div class="two-thirds">'
+        . $formErrors . '</div></div>';
+}
+
 echo $this->partial(
     'partials/page-header-simple',
     [
         'pageTitle' => $this->pageTitle(),
+        'formErrors' => $formErrors,
         'backUrl' => [
             'url' => $this->url('auth/login/GET'),
         ],
@@ -15,7 +22,6 @@ echo $this->partial(
   <div class="two-thirds">
     <?php echo $this->flashMessengerAll(); ?>
     <?php
-      echo $this->formErrors($form);
       echo $this->form($form);
     ?>
       <p><?php echo $this->translate('user-forgot-username.form.text.for-la-partner') ?></p>
