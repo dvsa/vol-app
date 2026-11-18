@@ -7,12 +7,12 @@ namespace CommonTest\Common\Controller\Lva\Adapters;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 use Common\Service\Cqrs\Response;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Table\TableBuilder;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Form;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 final class AbstractPeopleAdapterTest extends MockeryTestCase
 {
@@ -216,12 +216,7 @@ final class AbstractPeopleAdapterTest extends MockeryTestCase
 
     public function testStatusesAreAddedToPeopleFromFlashMessenger(): void
     {
-        $mockFM = m::mock(FlashMessenger::class);
-
-        $this->sut
-            ->shouldReceive('getController->plugin')
-            ->with('FlashMessenger')
-            ->andReturn($mockFM);
+        $mockFM = m::mock(LaminasSessionFlashMessenger::class);
 
         $mockTableBuilder = m::mock(TableBuilder::class);
 
@@ -230,14 +225,10 @@ final class AbstractPeopleAdapterTest extends MockeryTestCase
             ->with('Table')
             ->andReturn($mockTableBuilder);
 
-        $mockControllerPluginManager = m::mock();
-
         $this->container
             ->shouldReceive('get')
-            ->with('ControllerPluginManager')
-            ->andReturn($mockControllerPluginManager);
-
-        $mockControllerPluginManager->shouldReceive('get')->andReturn($mockFM);
+            ->with(LaminasSessionFlashMessenger::class)
+            ->andReturn($mockFM);
 
         $mockFM
             ->shouldReceive('getMessages')

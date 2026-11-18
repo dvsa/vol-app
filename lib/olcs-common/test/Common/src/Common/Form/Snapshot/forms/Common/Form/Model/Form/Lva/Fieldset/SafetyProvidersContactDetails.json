@@ -11,10 +11,7 @@
           "id": ""
         },
         "options": {
-          "label": "application_vehicle-safety_safety-sub-action.data.fao",
-          "label_attributes": {
-            "aria-label": "Enter the name of the contractor or employee"
-          }
+          "label": "application_vehicle-safety_safety-sub-action.data.fao"
         },
         "type": "Text"
       }

@@ -264,7 +264,7 @@ class Organisation extends AbstractRepository
         ];
 
         $qb->select($this->alias . '.companyOrLlpNo')->distinct()
-            ->innerJoin(LicenceEntity::class, 'l', Query\Expr\Join::WITH, $qb->expr()->eq('l.organisation', $this->alias . '.id'))
+            ->innerJoin(LicenceEntity::class, 'l', Query\Expr\Join::ON, $qb->expr()->eq('l.organisation', $this->alias . '.id'))
             ->where($qb->expr()->in('l.status', ':licenceStatuses'))
             ->andWhere($qb->expr()->isNotNull($this->alias . '.companyOrLlpNo'))
             ->andWhere($qb->expr()->in($this->alias . '.type', ':orgTypes'))

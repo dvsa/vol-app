@@ -1,54 +1,37 @@
 <form method="post" id="letter-create-form" data-generate-url="/letter/generate?<?= http_build_query($queryParams) ?>">
 <input type="hidden" name="letterType" value="<?= $this->escapeHtmlAttr($templateId) ?>">
+<?php // posted back as "security", see Common\Module::validateCsrfToken ?>
+<input type="hidden" name="security" value="<?= $this->escapeHtmlAttr($csrfToken) ?>">
 <h2 class="govuk-heading-m">Select content options</h2>
 <p class="govuk-body">Use the checkboxes in the sections below to choose what to include in your letter. You can also add attachments.</p>
 
 <div id="validation-error" class="govuk-error-message" style="display: none; margin-bottom: 1rem;">
-    <span class="govuk-visually-hidden">Error:</span> Please choose at least one issue or appendix
+    <span class="govuk-visually-hidden">Error:</span> <span id="validation-error-text"></span>
 </div>
 
-<p class="govuk-body">
-    <a href="#" class="govuk-link" id="toggle-all-sections">Show All Sections</a>
-</p>
-
-<div class="letter-sections">
-    <?php foreach ($accordionData as $section): ?>
-        <?php if (empty($section['issues'])): continue; endif; ?>
-        <div class="letter-section">
-            <div class="letter-section__header">
-                <h3 class="letter-section__title govuk-heading-s">
-                    <?= $this->escapeHtml($section['issueType']['name']) ?>
-                </h3>
-                <span class="letter-section__toggle govuk-link">
-                    <span class="letter-section__show-hide">Show</span>
-                    <span class="letter-section__icon"></span>
-                </span>
-            </div>
-            <div class="letter-section__content" style="display: none;">
-                <?php if (!empty($section['issues'])): ?>
-                    <div class="govuk-checkboxes govuk-checkboxes--small">
-                        <?php foreach ($section['issues'] as $issue): ?>
-                            <div class="govuk-checkboxes__item">
-                                <input
-                                    class="govuk-checkboxes__input"
-                                    id="letter-issue-<?= $issue['id'] ?>"
-                                    name="letterIssues[]"
-                                    type="checkbox"
-                                    value="<?= $issue['id'] ?>"
-                                >
-                                <label class="govuk-label govuk-checkboxes__label govuk-label--s" for="letter-issue-<?= $issue['id'] ?>">
-                                    <?= $this->escapeHtml(($issue['currentVersion']['modalLabel'] ?? null) ?: ($issue['currentVersion']['heading'] ?? $issue['issueKey'])) ?>
-                                </label>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <p class="govuk-body-s">No issues available for this category.</p>
-                <?php endif; ?>
-            </div>
-        </div>
-    <?php endforeach; ?>
+<?php if (!empty($previousLetters)): ?>
+<?php // Picking a letter ticks the issues it covered (letter-generation.js). The letter is
+      // posted too, so the API can bring over the wording that was changed on it. ?>
+<div class="govuk-form-group">
+    <label class="govuk-label govuk-label--s" for="previous-letter">Start from a letter already sent</label>
+    <div class="govuk-hint" id="previous-letter-hint">
+        This ticks the issues that letter covered. You can change them before you create the letter.
+        Any wording that was changed on those issues or their to-dos is copied from the letter selected here.
+    </div>
+    <select class="govuk-select" id="previous-letter" name="startFromLetter" aria-describedby="previous-letter-hint">
+        <option value="">Select a letter</option>
+        <?php foreach ($previousLetters as $previousLetter): ?>
+        <option value="<?= $this->escapeHtmlAttr($previousLetter['id']) ?>"
+                data-issue-ids="<?= $this->escapeHtmlAttr(implode(',', $previousLetter['issueIds'])) ?>">
+            <?= $this->escapeHtml($previousLetter['label']) ?>
+        </option>
+        <?php endforeach; ?>
+    </select>
+    <p class="govuk-body-s" id="previous-letter-note" role="status" style="display: none; margin: 10px 0 0;"></p>
 </div>
+<?php endif; ?>
+
+<?= $this->partial('pages/letter/partials/issue-accordion', ['accordionData' => $accordionData, 'selectedIssueIds' => []]) ?>
 
 <?php if (!empty($appendicesData)): ?>
 <div class="letter-appendices letter-group">

@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Factory\Ebsr;
 
 use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Psr\Container\ContainerInterface;
@@ -25,12 +26,14 @@ class UploadsControllerFactory implements FactoryInterface
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new UploadsController(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
-            $uploadHelper
+            $uploadHelper,
+            $flashMessengerHelper
         );
     }
 }

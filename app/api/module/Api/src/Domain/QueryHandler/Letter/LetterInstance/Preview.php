@@ -134,7 +134,7 @@ class Preview extends AbstractQueryHandler
                 // VOL-7402: flag types still carrying unedited "requires input"
                 // content so the sidebar can highlight them; sending is blocked
                 // server-side until they are edited.
-                if ($issue->requiresInput() && !$issue->hasBeenEdited()) {
+                if ($issue->isInputPending()) {
                     $issueTypeMap[$typeId]['inputPending'] = true;
                 }
             }

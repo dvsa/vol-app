@@ -8,7 +8,7 @@
 
 namespace Common\Service\Helper;
 
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 
 /**
  * Flash Messenger Helper Service
@@ -27,17 +27,12 @@ class FlashMessengerHelperService
         'info' => []
     ];
 
-    /** @var FlashMessenger */
+    /** @var FlashMessengerInterface */
     protected $flashMessenger;
 
-    /**
-     * Create service instance
-     *
-     *
-     * @return FlashMessengerHelperService
-     */
+
     public function __construct(
-        FlashMessenger $flashMessenger
+        FlashMessengerInterface $flashMessenger
     ) {
         $this->flashMessenger = $flashMessenger;
     }
@@ -88,32 +83,32 @@ class FlashMessengerHelperService
      * Add a success message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addSuccessMessage($message)
     {
-        return $this->getFlashMessenger()->addSuccessMessage($message);
+        return $this->flashMessenger->addSuccessMessage($message);
     }
 
     /**
      * Add a error message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addErrorMessage($message)
     {
-        return $this->getFlashMessenger()->addErrorMessage($message);
+        return $this->flashMessenger->addErrorMessage($message);
     }
 
     public function addProminentErrorMessage($message): static
     {
-        $namespace = $this->getFlashMessenger()->getNamespace();
+        $namespace = $this->flashMessenger->getNamespace();
 
-        $this->getFlashMessenger()->setNamespace(self::NAMESPACE_PROMINENT_ERROR);
-        $this->getFlashMessenger()->addMessage($message);
+        $this->flashMessenger->setNamespace(self::NAMESPACE_PROMINENT_ERROR);
+        $this->flashMessenger->addMessage($message);
 
-        $this->getFlashMessenger()->setNamespace($namespace);
+        $this->flashMessenger->setNamespace($namespace);
 
         return $this;
     }
@@ -122,11 +117,11 @@ class FlashMessengerHelperService
      * Add a warning message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addWarningMessage($message)
     {
-        return $this->getFlashMessenger()->addWarningMessage($message);
+        return $this->flashMessenger->addWarningMessage($message);
     }
 
 
@@ -134,21 +129,11 @@ class FlashMessengerHelperService
      * Add a info message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addInfoMessage($message)
     {
-        return $this->getFlashMessenger()->addInfoMessage($message);
-    }
-
-    /**
-     * Get the flash messenger
-     *
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
-     */
-    protected function getFlashMessenger()
-    {
-        return $this->flashMessenger;
+        return $this->flashMessenger->addInfoMessage($message);
     }
 
     public function addUnknownError()
@@ -164,5 +149,15 @@ class FlashMessengerHelperService
     public function addCurrentUnknownError(): void
     {
         $this->addCurrentErrorMessage('unknown-error');
+    }
+
+    public function clearCurrentMessagesFromContainer(): void
+    {
+        $this->flashMessenger->clearCurrentMessagesFromContainer();
+    }
+
+    public function offsetSet(string $key, mixed $value): void
+    {
+        $this->flashMessenger->getContainer()->offsetSet($key, $value);
     }
 }

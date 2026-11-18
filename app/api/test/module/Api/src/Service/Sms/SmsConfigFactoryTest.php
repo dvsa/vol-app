@@ -1,0 +1,177 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Dvsa\OlcsTest\Api\Service\Sms;
+
+use Dvsa\Olcs\Api\Service\Sms\SmsConfig;
+use Dvsa\Olcs\Api\Service\Sms\SmsConfigFactory;
+use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+final class SmsConfigFactoryTest extends TestCase
+{
+    private function build(array $config): SmsConfig
+    {
+        $sm = new ServiceManager();
+        $sm->setService('config', $config);
+
+        return (new SmsConfigFactory())($sm, SmsConfig::class);
+    }
+
+    public function testLiveDsnYieldsApiKey(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'govuknotify://KEY@default'],
+            'notify' => ['sms' => ['template_id' => 'tpl']],
+        ]);
+
+        $this->assertSame('KEY', $c->apiKey);
+        $this->assertFalse($c->mailpit);
+        $this->assertSame('tpl', $c->templateId);
+    }
+
+    public function testKeylessDsnUsesTheNotifyApiKey(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'govuknotify://default'],
+            'notify' => ['api_key' => 'CONFIGURED'],
+        ]);
+
+        $this->assertSame('CONFIGURED', $c->apiKey);
+        $this->assertTrue($c->hasNotifyTransport());
+    }
+
+    public function testKeyInTheDsnWinsOverTheNotifyApiKey(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'govuknotify://IN-DSN@default'],
+            'notify' => ['api_key' => 'CONFIGURED'],
+        ]);
+
+        $this->assertSame('IN-DSN', $c->apiKey);
+    }
+
+    /** SMS still goes live with the email cutover: a key alone, with email on SMTP, sends nothing. */
+    public function testNotifyApiKeyAloneDoesNotTurnSmsOnWhileMailIsSmtp(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'smtp://mailpit:1025'],
+            'notify' => ['api_key' => 'CONFIGURED'],
+        ]);
+
+        $this->assertNull($c->apiKey);
+        $this->assertFalse($c->hasNotifyTransport());
+    }
+
+    #[DataProvider('blankValues')]
+    public function testBlankNotifyApiKeyIsNoKey(mixed $value): void
+    {
+        $c = $this->build(['mail' => ['dsn' => 'govuknotify://default'], 'notify' => ['api_key' => $value]]);
+
+        $this->assertNull($c->apiKey);
+        $this->assertFalse($c->hasNotifyTransport());
+    }
+
+    public static function blankValues(): array
+    {
+        return [[null], [''], [' '], ['null'], ['%olcs_notify_api_key%']];
+    }
+
+    /** Older local.php files set these under email.sms. */
+    public function testSettingsUnderEmailSmsStillWork(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'govuknotify://KEY@default'],
+            'email' => ['sms' => ['template_id' => 'old-tpl']],
+            'notify' => ['sms' => ['template_id' => null]],
+        ]);
+
+        $this->assertSame('old-tpl', $c->templateId);
+    }
+
+    public function testPasswordTakesPrecedenceOverUser(): void
+    {
+        $c = $this->build(['mail' => ['dsn' => 'govuknotify://user:PASS@default']]);
+        $this->assertSame('PASS', $c->apiKey);
+    }
+
+    public function testPercentEncodedKeyStillCounts(): void
+    {
+        $c = $this->build(['mail' => ['dsn' => ' govuknotify://user:ab%2Bcd@default ']]);
+
+        $this->assertSame('ab+cd', $c->apiKey);
+        $this->assertTrue($c->hasNotifyTransport());
+    }
+
+    #[DataProvider('environments')]
+    public function testEnvironmentComesFromEnvironmentName(string|false $value, string $expected): void
+    {
+        $previous = getenv('ENVIRONMENT_NAME');
+        $value === false ? putenv('ENVIRONMENT_NAME') : putenv('ENVIRONMENT_NAME=' . $value);
+
+        try {
+            $c = $this->build([]);
+        } finally {
+            $previous === false ? putenv('ENVIRONMENT_NAME') : putenv('ENVIRONMENT_NAME=' . $previous);
+        }
+
+        $this->assertSame($expected, $c->environment);
+        $this->assertSame($expected . '-sms-42', $c->smsReference(42));
+    }
+
+    public static function environments(): array
+    {
+        return [
+            'set' => ['DEV', 'dev'],
+            'padded' => [' Int ', 'int'],
+            'blank' => ['', 'local'],
+            'unset' => [false, 'local'],
+        ];
+    }
+
+    public function testMailpitDsn(): void
+    {
+        $c = $this->build(['mail' => ['dsn' => 'govuknotify+mailpit://mailpit:1026']]);
+
+        $this->assertNull($c->apiKey);
+        $this->assertTrue($c->mailpit);
+        $this->assertSame('mailpit', $c->mailpitHost);
+        $this->assertSame(1026, $c->mailpitPort);
+    }
+
+    #[DataProvider('offDsns')]
+    public function testOtherDsnsAreOff(mixed $dsn): void
+    {
+        $c = $this->build(['mail' => ['dsn' => $dsn]]);
+
+        $this->assertNull($c->apiKey);
+        $this->assertFalse($c->mailpit);
+        $this->assertFalse($c->hasNotifyTransport());
+    }
+
+    public static function offDsns(): array
+    {
+        return [
+            'smtp' => ['smtp://host:25'],
+            'empty' => [''],
+            'blank' => [' '],
+            'unresolved' => ['%olcs_mail_dsn%'],
+            'missing' => [null],
+        ];
+    }
+
+    #[DataProvider('unsetValues')]
+    public function testSentinelsBecomeNull(string $value): void
+    {
+        $c = $this->build(['notify' => ['sms' => ['template_id' => $value]]]);
+
+        $this->assertNull($c->templateId);
+    }
+
+    public static function unsetValues(): array
+    {
+        return [[' '], [''], ['null'], [' NULL '], ['%olcs_notify_sms_template%']];
+    }
+}

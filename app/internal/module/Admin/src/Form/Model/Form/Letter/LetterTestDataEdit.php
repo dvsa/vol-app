@@ -6,23 +6,17 @@ namespace Admin\Form\Model\Form\Letter;
 
 use Laminas\Form\Annotation as Form;
 
-/**
- * @Form\Name("letter-test-data")
- * @Form\Attributes({"method": "post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label": "Edit Test Data"})
- */
+#[Form\Name('letter-test-data')]
+#[Form\Attributes(['method' => 'post'])]
+#[Form\Type('Common\Form\Form')]
+#[Form\Options(['prefer_form_input_filter' => true, 'label' => 'Edit Test Data'])]
 class LetterTestDataEdit
 {
-    /**
-     * @Form\Name("letterTestData")
-     * @Form\ComposedObject("Admin\Form\Model\Fieldset\Letter\LetterTestData")
-     */
+    #[Form\Name('letterTestData')]
+    #[Form\ComposedObject('Admin\Form\Model\Fieldset\Letter\LetterTestData')]
     public $letterTestData = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
-     */
+    #[Form\Name('form-actions')]
+    #[Form\ComposedObject('Common\Form\Model\Fieldset\CancelFormActions')]
     public $formActions = null;
 }

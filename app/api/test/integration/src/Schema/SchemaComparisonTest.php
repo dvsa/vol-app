@@ -78,6 +78,68 @@ final class SchemaComparisonTest extends TestCase
         $this->assertSame($expected, SchemaComparison::classify($statement, ['licence', 'address']));
     }
 
+    public function testEnumColumnMappedAsStringIsInexpressible(): void
+    {
+        $databaseSchema = new Schema();
+        $databaseTable = $databaseSchema->createTable('document_analysis');
+        $databaseTable->addColumn('status', 'enum', ['values' => ['PENDING', 'COMPLETE']]);
+        $databaseTable->addColumn('assessment_status', 'enum', ['values' => ['APPROVED', 'REJECTED']]);
+
+        $entitySchema = new Schema();
+        $entityTable = $entitySchema->createTable('document_analysis');
+        $entityTable->addColumn('status', 'string');
+        $entityTable->addColumn('assessment_status', 'string');
+
+        $enumStringColumns = SchemaComparison::enumColumnsMappedAsStrings($databaseSchema, $entitySchema);
+
+        $this->assertSame(['document_analysis' => ['status', 'assessment_status']], $enumStringColumns);
+        $this->assertSame(
+            SchemaComparison::INEXPRESSIBLE,
+            SchemaComparison::classify(
+                "ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL, "
+                    . 'CHANGE assessment_status assessment_status VARCHAR(255) DEFAULT NULL',
+                ['document_analysis'],
+                $enumStringColumns,
+            )
+        );
+    }
+
+    public function testCompoundEnumAndOtherChangesRemainActionable(): void
+    {
+        $this->assertSame(
+            SchemaComparison::ACTIONABLE,
+            SchemaComparison::classify(
+                'ALTER TABLE document_analysis CHANGE status status VARCHAR(255) NOT NULL, '
+                    . 'CHANGE result result JSON DEFAULT NULL',
+                ['document_analysis'],
+                ['document_analysis' => ['status']],
+            )
+        );
+    }
+
+    public function testEnumColumnWithANonStringMappingIsNotExempted(): void
+    {
+        $databaseSchema = new Schema();
+        $databaseTable = $databaseSchema->createTable('probe');
+        $databaseTable->addColumn('status', 'enum', ['values' => ['1', '2']]);
+
+        $entitySchema = new Schema();
+        $entityTable = $entitySchema->createTable('probe');
+        $entityTable->addColumn('status', 'integer');
+
+        $enumStringColumns = SchemaComparison::enumColumnsMappedAsStrings($databaseSchema, $entitySchema);
+
+        $this->assertSame([], $enumStringColumns);
+        $this->assertSame(
+            SchemaComparison::ACTIONABLE,
+            SchemaComparison::classify(
+                'ALTER TABLE probe CHANGE status status INT NOT NULL',
+                ['probe'],
+                $enumStringColumns,
+            )
+        );
+    }
+
     /** @return array<string, array{string, string}> */
     public static function dpClassify(): array
     {
@@ -145,13 +207,21 @@ final class SchemaComparisonTest extends TestCase
         $rendered = SchemaComparison::renderBaseline(
             [
                 'ALTER TABLE address CHANGE country_code country_code VARCHAR(2) DEFAULT NULL',
+                "ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL, "
+                    . 'CHANGE assessment_status assessment_status VARCHAR(255) DEFAULT NULL',
                 'ALTER TABLE bus_reg_local_auth DROP olbs_key',
             ],
-            ['address'],
+            ['address', 'document_analysis'],
+            ['document_analysis' => ['status', 'assessment_status']],
         );
 
         $this->assertStringContainsString('# ---- actionable (1) ----', $rendered);
-        $this->assertStringContainsString('# ---- inexpressible from mapping (1) ----', $rendered);
+        $this->assertStringContainsString('# ---- inexpressible from mapping (2) ----', $rendered);
+        $this->assertStringContainsString(
+            "ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL, "
+                . 'CHANGE assessment_status assessment_status VARCHAR(255) DEFAULT NULL',
+            $rendered,
+        );
     }
 
     /** @return array{Schema, Schema} */

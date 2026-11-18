@@ -7,6 +7,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtShortTermAppSubmitted as SendEcmtShortTermAppSubmittedCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEcmtShortTermAppSubmitted as SendEcmtShortTermAppSubmittedHandler;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\Olcs\Email\Data\Message;
 use Dvsa\Olcs\Email\Domain\Command\SendEmail;
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
@@ -41,7 +42,7 @@ final class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTestCase
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 
@@ -88,7 +89,7 @@ final class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTestCase
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 

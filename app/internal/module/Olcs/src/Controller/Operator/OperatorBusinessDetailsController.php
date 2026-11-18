@@ -112,7 +112,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         if ($this->isButtonPressed('cancel')) {
             // user pressed cancel button in edit form
             if ($operator) {
-                $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
+                $this->flashMessengerHelper->addSuccessMessage('Your changes have been discarded');
                 return $this->redirectToRoute('operator/business-details', ['organisation' => $operator]);
             } else {
                 // user pressed cancel button in add form
@@ -297,7 +297,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         $response = $this->handleCommand($dto);
 
         if ($response->isOk()) {
-            $this->flashMessenger()->addSuccessMessage($message);
+            $this->flashMessengerHelper->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
             return $this->redirectToBusinessDetails($orgId, $routePrefix);
         }

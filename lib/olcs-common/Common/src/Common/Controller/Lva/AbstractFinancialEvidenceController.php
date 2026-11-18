@@ -105,6 +105,7 @@ abstract class AbstractFinancialEvidenceController extends AbstractController
             [
                 'applicationReference' => $lvaData['applicationReference'],
                 'sendToAddress' => ReturnToAddress::getAddress($this->isNi($lvaData), '</br>'),
+                'location' => $this->location,
             ];
 
         return $this->render('financial_evidence', $form, $variables);

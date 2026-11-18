@@ -127,7 +127,7 @@ class PreviewRecordSuggester
             ->join('a.status', 's')
             ->andWhere('IDENTITY(a.status) NOT IN (:excludedStatuses)')
             ->setParameter('excludedStatuses', self::EXCLUDED_STATUSES)
-            ->orderBy('a.id', 'DESC')
+            ->orderBy('a.id', \SortDirection::Descending)
             ->setMaxResults(1);
 
         if (isset($combination['goodsOrPsv'])) {

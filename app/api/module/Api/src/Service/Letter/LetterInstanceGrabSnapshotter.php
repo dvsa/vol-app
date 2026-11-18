@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Service\Letter;
 
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 
 /**
  * Resolves [[GRABS]] in a freshly composed letter and stores the result on each child.
@@ -33,24 +35,56 @@ class LetterInstanceGrabSnapshotter
             }
         }
 
-        foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
-            $resolved = $this->resolve($issue->getLetterIssueVersion()?->getDefaultBodyContentAsArray(), $context);
-            if ($resolved !== null) {
-                $issue->setGeneratedContent($resolved);
-            }
-        }
-
-        foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
-            $resolved = $this->resolve($todo->getLetterTodoVersion()?->getDescriptionAsArray(), $context);
-            if ($resolved !== null) {
-                $todo->setGeneratedDescription($resolved);
-            }
-        }
+        $this->snapshotIssues($letterInstance->getLetterInstanceIssues(), $context);
+        $this->snapshotTodos($letterInstance->getLetterInstanceTodos(), $context);
 
         foreach ($letterInstance->getLetterInstanceAppendices() as $appendix) {
             $resolved = $this->resolve($appendix->getLetterAppendixVersion()?->getDefaultContentAsArray(), $context);
             if ($resolved !== null) {
                 $appendix->setGeneratedContent($resolved);
+            }
+        }
+    }
+
+    /**
+     * Snapshot only the given rows, for rows added to a letter after it was generated (VOL-7734).
+     * Everything else on the letter keeps what was frozen when it was generated.
+     *
+     * @param iterable<LetterInstanceIssue> $issues
+     * @param iterable<LetterInstanceTodo> $todos
+     */
+    public function snapshotRows(LetterInstance $letterInstance, iterable $issues, iterable $todos): void
+    {
+        $context = $this->contextBuilder->build($letterInstance);
+
+        $this->snapshotIssues($issues, $context);
+        $this->snapshotTodos($todos, $context);
+    }
+
+    /**
+     * @param iterable<LetterInstanceIssue> $issues
+     * @param array<string, mixed> $context
+     */
+    private function snapshotIssues(iterable $issues, array $context): void
+    {
+        foreach ($issues as $issue) {
+            $resolved = $this->resolve($issue->getLetterIssueVersion()?->getDefaultBodyContentAsArray(), $context);
+            if ($resolved !== null) {
+                $issue->setGeneratedContent($resolved);
+            }
+        }
+    }
+
+    /**
+     * @param iterable<LetterInstanceTodo> $todos
+     * @param array<string, mixed> $context
+     */
+    private function snapshotTodos(iterable $todos, array $context): void
+    {
+        foreach ($todos as $todo) {
+            $resolved = $this->resolve($todo->getLetterTodoVersion()?->getDescriptionAsArray(), $context);
+            if ($resolved !== null) {
+                $todo->setGeneratedDescription($resolved);
             }
         }
     }

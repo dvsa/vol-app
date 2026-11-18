@@ -69,8 +69,8 @@ final class SubCategoryTest extends RepositoryTestCase
             ],
             'SELECT DISTINCT m' . $from
             . ' INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct'
-            . ' WITH dct.category = m.category AND dct.subCategory = m.id'
-            . ' INNER JOIN ' . Entity\Doc\Document::class . ' dc WITH dc.id = dct.document'
+            . ' ON dct.category = m.category AND dct.subCategory = m.id'
+            . ' INNER JOIN ' . Entity\Doc\Document::class . ' dc ON dc.id = dct.document'
             . $allFour . $order,
         ];
     }

@@ -10,7 +10,8 @@
   "indent": 2,
   "noempty": true,
   "nonew": true,
-  "quotmark": true,
+  "quotmark": false,
+  "esversion": 8,
   "browser": true,
   "globals": {
     "describe": true,

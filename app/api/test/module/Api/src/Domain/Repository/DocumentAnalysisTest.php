@@ -8,8 +8,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as Repo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
+use Dvsa\Olcs\Api\Entity\User\User;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\OlcsTest\Support\TestQueryBuilder;
+use Mockery as m;
 use Symfony\Component\Uid\UuidV7;
 
 final class DocumentAnalysisTest extends RepositoryTestCase
@@ -161,20 +164,38 @@ final class DocumentAnalysisTest extends RepositoryTestCase
     {
         yield 'success' => [
             'recordSuccess',
-            [5, ['checks' => ['passed' => true]], ['bucket' => 'b', 'key' => 'k']],
+            [5, ['analysis' => ['core_checks' => []]], ['version' => 1, 'rows' => []]],
             'UPDATE ' . Entity::class . ' da'
             . ' SET da.status = :success, da.result = :result,'
-            . ' da.resultMetadata = :metadata, da.completedAt = :now'
+            . ' da.resultNormalised = :resultNormalised, da.completedAt = :now'
             . self::PENDING_GUARD,
             [
                 'success' => Entity::STATUS_SUCCESS,
-                'result' => ['checks' => ['passed' => true]],
-                'metadata' => ['bucket' => 'b', 'key' => 'k'],
+                'result' => ['analysis' => ['core_checks' => []]],
+                'resultNormalised' => ['version' => 1, 'rows' => []],
                 'id' => 5,
                 'pending' => Entity::STATUS_PENDING,
             ],
             // The payloads are columns of JSON, not associations to be walked.
-            ['result' => Types::JSON, 'metadata' => Types::JSON],
+            ['result' => Types::JSON, 'resultNormalised' => Types::JSON],
+        ];
+        // A result the normaliser could not read is still a stored success, with nothing to show.
+        yield 'success without a normalised result' => [
+            'recordSuccess',
+            [6, ['unexpected' => 'shape'], null],
+            'UPDATE ' . Entity::class . ' da'
+            . ' SET da.status = :success, da.result = :result,'
+            . ' da.resultNormalised = :resultNormalised, da.completedAt = :now'
+            . self::PENDING_GUARD,
+            [
+                'success' => Entity::STATUS_SUCCESS,
+                'result' => ['unexpected' => 'shape'],
+                'resultNormalised' => null,
+                'id' => 6,
+                'pending' => Entity::STATUS_PENDING,
+            ],
+            // Typed as JSON so null binds as SQL NULL, not as the JSON literal "null".
+            ['result' => Types::JSON, 'resultNormalised' => Types::JSON],
         ];
         yield 'error' => [
             'recordError',
@@ -209,6 +230,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         yield 'sweep' => ['sweepStalePending', [new \DateTimeImmutable('2026-01-01')]];
     }
 
+
     /**
      * The sweep is the one transition not keyed on a single row: it resolves everything still
      * pending past the threshold.
@@ -230,6 +252,105 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         );
         $this->assertSame(Entity::STATUS_TIMEOUT, $qb->getParameter('timeout')->getValue());
         $this->assertSame($threshold, $qb->getParameter('threshold')->getValue());
+    }
+
+    /**
+     * A review is one conditional UPDATE guarded on SUCCESS, and sets the audit columns itself
+     * because a bulk UPDATE skips the Blameable listener.
+     */
+    public function testRecordAssessmentStatus(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
+
+        $this->assertSame(1, $this->sut->recordAssessmentStatus(5, AssessmentStatus::APPROVED, $user));
+
+        $this->assertSame(
+            'UPDATE ' . Entity::class . ' da'
+            . ' SET da.assessmentStatus = :assessmentStatus, da.lastModifiedOn = :now,'
+            . ' da.lastModifiedBy = :lastModifiedBy'
+            . ' WHERE da.id = :id AND da.status = :success',
+            $qb->getDQL(),
+        );
+        $this->assertSame('APPROVED', $qb->getParameter('assessmentStatus')->getValue());
+        $this->assertSame(99, $qb->getParameter('lastModifiedBy')->getValue());
+        $this->assertSame(5, $qb->getParameter('id')->getValue());
+        $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('success')->getValue());
+        $this->assertInstanceOf(\DateTime::class, $qb->getParameter('now')->getValue());
+    }
+
+    /** A row that is not a successful analysis (or does not exist) is left untouched. */
+    public function testRecordAssessmentStatusReturnsZeroWhenNoSuccessfulAnalysisMatches(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(0);
+
+        $this->assertSame(0, $this->sut->recordAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
+    }
+
+    /**
+     * A first review is the same guarded UPDATE as recordAssessmentStatus(), with an extra
+     * condition that the row is not already decided (APPROVED or REJECTED), so it cannot
+     * overwrite a decision already made (including one made concurrently, between the handler's
+     * read and this write). NULL and PENDING both count as undecided.
+     */
+    public function testRecordInitialAssessmentStatus(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
+
+        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::APPROVED, $user));
+
+        $this->assertSame(
+            'UPDATE ' . Entity::class . ' da'
+            . ' SET da.assessmentStatus = :assessmentStatus, da.lastModifiedOn = :now,'
+            . ' da.lastModifiedBy = :lastModifiedBy'
+            . ' WHERE da.id = :id AND da.status = :success'
+            . ' AND (da.assessmentStatus IS NULL OR da.assessmentStatus NOT IN(:decided))',
+            $qb->getDQL(),
+        );
+        $this->assertSame('APPROVED', $qb->getParameter('assessmentStatus')->getValue());
+        $this->assertSame(99, $qb->getParameter('lastModifiedBy')->getValue());
+        $this->assertSame(5, $qb->getParameter('id')->getValue());
+        $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('success')->getValue());
+        $this->assertSame([AssessmentStatus::APPROVED->value, AssessmentStatus::REJECTED->value], $qb->getParameter('decided')->getValue());
+        $this->assertInstanceOf(\DateTime::class, $qb->getParameter('now')->getValue());
+    }
+
+    /**
+     * A row already reverted to PENDING by a deliberate change (UpdateDocumentAnalysisAssessmentStatus)
+     * is undecided again, so a first review can still record it, exactly as an unreviewed row can.
+     */
+    public function testRecordInitialAssessmentStatusMatchesAPendingRow(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
+
+        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
+    }
+
+    /** A row not successful, not found, or already decided (even by a concurrent accept) is left untouched. */
+    public function testRecordInitialAssessmentStatusReturnsZeroWhenNoSuccessfulUndecidedAnalysisMatches(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(0);
+
+        $this->assertSame(0, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
     }
 
     private function expectEntityManagerQb(): TestQueryBuilder

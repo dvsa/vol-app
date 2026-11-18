@@ -48,6 +48,9 @@ class SendEmail extends AbstractCommand
 
     protected ?string $markdownBody = null;
 
+    /** @var array<string, mixed> */
+    protected array $notifyContext = [];
+
     public function getFromName()
     {
         return $this->fromName;
@@ -119,6 +122,14 @@ class SendEmail extends AbstractCommand
     public function getPersonalisation(): array
     {
         return $this->personalisation;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getNotifyContext(): array
+    {
+        return $this->notifyContext;
     }
 
     public function getMarkdownBody(): ?string

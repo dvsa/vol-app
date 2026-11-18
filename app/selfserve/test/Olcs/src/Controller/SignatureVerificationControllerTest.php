@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OlcsTest\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\ProcessAuthResponse;
 use Laminas\Http\Response;
 use Mockery as m;
@@ -28,6 +29,8 @@ final class SignatureVerificationControllerTest extends MockeryTestCase
 
     private $store;
 
+    private $flashMessengerHelper;
+
     private $logger;
 
     #[\Override]
@@ -35,8 +38,10 @@ final class SignatureVerificationControllerTest extends MockeryTestCase
     {
         $this->sut = m::mock(Sut::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $this->store = m::mock(CallbackReplayStore::class);
+        $this->flashMessengerHelper = m::mock(FlashMessengerHelperService::class);
 
         (new ReflectionClass(Sut::class))->getProperty('replayStore')->setValue($this->sut, $this->store);
+        (new ReflectionClass(Sut::class))->getProperty('flashMessengerHelper')->setValue($this->sut, $this->flashMessengerHelper);
 
         $this->logger = m::mock(LoggerInterface::class)->shouldIgnoreMissing();
         Logger::setLogger($this->logger);
@@ -109,11 +114,7 @@ final class SignatureVerificationControllerTest extends MockeryTestCase
             'error' => 'Code 400 : Request returned non-200 status code',
         ]);
 
-        $container = m::mock();
-        $container->shouldReceive('offsetSet')->once()->with('govUkAccountError', true);
-        $flash = m::mock();
-        $flash->shouldReceive('getContainer')->andReturn($container);
-        $this->sut->shouldReceive('flashMessenger')->andReturn($flash);
+        $this->flashMessengerHelper->shouldReceive('offsetSet')->once()->with('govUkAccountError', true);
 
         // Must never overwrite the real owner's stored destination.
         $this->store->shouldNotReceive('recordOutcome');
@@ -148,11 +149,7 @@ final class SignatureVerificationControllerTest extends MockeryTestCase
             'error' => 'Code 400 : Request returned non-200 status code',
         ]);
 
-        $container = m::mock();
-        $container->shouldReceive('offsetSet')->once()->with('govUkAccountError', true);
-        $flash = m::mock();
-        $flash->shouldReceive('getContainer')->andReturn($container);
-        $this->sut->shouldReceive('flashMessenger')->andReturn($flash);
+        $this->flashMessengerHelper->shouldReceive('offsetSet')->once()->with('govUkAccountError', true);
 
         $this->store->shouldReceive('recordOutcome')->once()->with(self::CODE, self::USER, self::FAILURE);
         $this->expectRedirectTo(self::FAILURE);
@@ -169,7 +166,7 @@ final class SignatureVerificationControllerTest extends MockeryTestCase
             'redirect_url_on_error' => self::FAILURE,
             'error' => 'Code 400 : Request returned non-200 status code',
         ]);
-        $this->sut->shouldNotReceive('flashMessenger');
+        $this->flashMessengerHelper->shouldNotReceive('offsetSet');
         $this->store->shouldNotReceive('recordOutcome');
         $this->expectRedirectTo(self::SUCCESS);
 

@@ -55,7 +55,7 @@
       "spec": {
         "name": "printer",
         "attributes": {
-          "id": "printer",
+          "id": "printerUser",
           "placeholder": "",
           "required": "required"
         },

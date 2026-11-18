@@ -61,15 +61,15 @@ Mappings are defined in `packages/local-refresh/src/actions/SyncAwsSecretsAndPar
 
 Dynamic values resolved at runtime (note, cannot use them directly, they must be defined in the placeholder):
 
--   `${environment}` - Selected environment ("dev", "int")
--   `${environment.toUpperCase()}` - Uppercase environment ("DEV", "INT")
--   `${service}` - Service name from config
--   `${service.toUpperCase()}` - Uppercase service name
+- `${environment}` - Selected environment ("dev", "int")
+- `${environment.toUpperCase()}` - Uppercase environment ("DEV", "INT")
+- `${service}` - Service name from config
+- `${service.toUpperCase()}` - Uppercase service name
 
 #### Supported Transformations
 
--   toUpperCase()
--   toLowerCase()
+- toUpperCase()
+- toLowerCase()
 
 ### Mapping Fields
 

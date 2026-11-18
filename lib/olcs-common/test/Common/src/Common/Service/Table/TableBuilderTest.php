@@ -1962,7 +1962,7 @@ final class TableBuilderTest extends MockeryTestCase
             'sort' => 'foo',
             'scope' => 'col',
             'class' => TableBuilder::CLASS_TABLE_HEADER . ' sortable ascending',
-            'aria' => '_TRSLTD_sort-in-descending-order',
+            'ariaSort' => ' aria-sort="ascending"',
             'order' => 'DESC',
             'link' => 'LINK'
         ];
@@ -1980,8 +1980,8 @@ final class TableBuilderTest extends MockeryTestCase
                     'sort' => 'foo',
                     'scope' => 'col',
                     'class' => TableBuilder::CLASS_TABLE_HEADER . ' sortable ascending',
+                    'ariaSort' => ' aria-sort="ascending"',
                     'order' => 'DESC',
-                    'aria' => '_TRSLTD_sort-in-descending-order',
                     'link' => 'LINK',
                     'title' => '[generatedSortColumn]'
                 ]
@@ -2026,8 +2026,8 @@ final class TableBuilderTest extends MockeryTestCase
             'sort' => 'foo',
             'scope' => 'col',
             'class' => TableBuilder::CLASS_TABLE_HEADER . ' sortable descending',
+            'ariaSort' => ' aria-sort="descending"',
             'order' => 'ASC',
-            'aria' => '_TRSLTD_sort-in-ascending-order',
             'link' => 'LINK'
         ];
 
@@ -2044,8 +2044,8 @@ final class TableBuilderTest extends MockeryTestCase
                     'sort' => 'foo',
                     'scope' => 'col',
                     'class' => TableBuilder::CLASS_TABLE_HEADER . ' sortable descending',
+                    'ariaSort' => ' aria-sort="descending"',
                     'order' => 'ASC',
-                    'aria' => '_TRSLTD_sort-in-ascending-order',
                     'link' => 'LINK',
                     'title' => '[generatedSortColumn]',
                 ]
@@ -2091,7 +2091,6 @@ final class TableBuilderTest extends MockeryTestCase
             'scope' => 'col',
             'class' => TableBuilder::CLASS_TABLE_HEADER . ' sortable',
             'order' => 'ASC',
-            'aria' => '_TRSLTD_sort-in-ascending-order',
             'link' => 'LINK'
         ];
 
@@ -2109,7 +2108,6 @@ final class TableBuilderTest extends MockeryTestCase
                     'scope' => 'col',
                     'class' => TableBuilder::CLASS_TABLE_HEADER . ' sortable',
                     'order' => 'ASC',
-                    'aria' => '_TRSLTD_sort-in-ascending-order',
                     'link' => 'LINK',
                     'title' => '[generatedSortColumn]',
                 ]
@@ -2236,7 +2234,6 @@ final class TableBuilderTest extends MockeryTestCase
             'sort' => 'foo',
             'scope' => 'col',
             'order' => 'ASC',
-            'aria' => '_TRSLTD_sort-in-ascending-order',
             'link' => 'LINK',
         ];
 
@@ -2254,7 +2251,6 @@ final class TableBuilderTest extends MockeryTestCase
                     'scope' => 'col',
                     'class' => TableBuilder::CLASS_TABLE_HEADER . ' right sortable',
                     'order' => 'ASC',
-                    'aria' => '_TRSLTD_sort-in-ascending-order',
                     'link' => 'LINK',
                     'title' => '[generatedSortColumn]',
                 ]

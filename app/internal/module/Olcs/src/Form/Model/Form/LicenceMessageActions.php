@@ -10,28 +10,22 @@ use Olcs\Form\Model\Fieldset\LicenceMessageActions as LicenceMessageActionsField
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Name("licence_message_actions")
- * @Form\Attributes({"method": "post", "class": "table__form"})
- * @Form\Type(\Common\Form\Form::class)
- * @Form\Options({"prefer_form_input_filter": true})
  */
+#[Form\Name('licence_message_actions')]
+#[Form\Attributes(['method' => 'post', 'class' => 'table__form'])]
+#[Form\Type(\Common\Form\Form::class)]
+#[Form\Options(['prefer_form_input_filter' => true])]
 class LicenceMessageActions
 {
-    /**
-     * @Form\Attributes({"value": ""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public ?Hidden $id = null;
 
-    /**
-     * @Form\Attributes({"value": "end and archive conversation"})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => 'end and archive conversation'])]
+    #[Form\Type('Hidden')]
     public ?Hidden $action = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject(\Olcs\Form\Model\Fieldset\LicenceMessageActions::class)
-     */
+    #[Form\Name('form-actions')]
+    #[Form\ComposedObject(\Olcs\Form\Model\Fieldset\LicenceMessageActions::class)]
     public ?LicenceMessageActionsFieldset $formActions = null;
 }

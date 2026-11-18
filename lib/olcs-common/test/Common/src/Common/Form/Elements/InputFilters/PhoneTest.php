@@ -17,7 +17,7 @@ final class PhoneTest extends MockeryTestCase
 
         $sut->init();
 
-        $this->assertSame('\d(\+|-|\(|\))*', $sut->getAttribute('pattern'));
+        $this->assertSame('[0-9 \(\)\+\-]{5,45}', $sut->getAttribute('pattern'));
         $this->assertSame('contact-number-optional', $sut->getLabel());
     }
 

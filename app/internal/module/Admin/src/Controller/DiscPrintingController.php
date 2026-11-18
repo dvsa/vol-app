@@ -33,6 +33,7 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
 {
     use GenericRenderView;
     use GenericMethods;
+    // the shared form code in GenericMethods reports an oversized post through this
     use FlashMessengerTrait;
 
     protected ScriptFactory $scriptFactory;
@@ -146,7 +147,7 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
             }
         }
         if ($response->isServerError()) {
-            $this->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
         if ($response->isOk()) {
             $form->get('queueId')->setValue($response->getResult()['id']['queue']);
@@ -388,7 +389,7 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
             }
         }
         if ($response->isServerError()) {
-            $this->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
         if (!$response->isOk()) {
             $retv['status'] = 500;

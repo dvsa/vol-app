@@ -38,7 +38,7 @@ echo $this->partial(
   <?php if (isset($filterForm)): ?>
 
   <div class="one-quarter sidebar--plain">
-    <h4>Filter by:</h4>
+    <h2 class="h4">Filter by:</h2>
     <?php echo $this->form($filterForm); ?>
     <?php
     $statusTranslated = $this->translate($this->status);
@@ -71,7 +71,7 @@ echo $this->partial(
     <div class="js-body">
 
         <?php if (isset($warningText)): ?>
-          <p class="important">
+          <p class="important"><?php echo $this->importantPrefix(); ?>
               <strong>
                   <?php echo $this->translate($warningText); ?>
               </strong>

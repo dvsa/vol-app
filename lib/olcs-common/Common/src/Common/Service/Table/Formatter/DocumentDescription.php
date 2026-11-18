@@ -4,6 +4,7 @@ namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
 use Common\Util\Escape;
+use Common\View\Helper\LinkNewWindow;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 
 /**
@@ -40,15 +41,17 @@ class DocumentDescription implements FormatterPluginManagerInterface
         );
 
         $attr = '';
+        $newTabText = '';
 
         if (preg_match('/\.html$/', $data['documentStoreIdentifier'])) {
             $attr = 'target="_blank"';
+            $newTabText = ' ' . Escape::html($this->translator->translate(LinkNewWindow::NEW_TAB_MESSAGE));
         }
 
         // $url is assembled by the router, which percent-encodes its parameters, so no quote can
         // reach here. Escaping it again would only render every document link as &#x2F;-noise.
         return '<a class="govuk-link" href="' . $url . '" ' . $attr . '>'
-            . $this->getAnchor($data, $this->translator) . '</a>';
+            . $this->getAnchor($data, $this->translator) . $newTabText . '</a>';
     }
 
     /**

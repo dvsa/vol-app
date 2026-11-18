@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Task;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Exception\ORMException;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
@@ -257,7 +258,7 @@ final class CreateTask extends AbstractCommandHandler
             case Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP:
                 $organisationPersons = $organisation->getOrganisationPersons();
                 $criteria = Criteria::create();
-                $criteria->orderBy(['id' => Criteria::ASC]);
+                $criteria->orderBy(['id' => Order::Ascending]);
                 // get first person
                 $organisationPerson = $organisationPersons->matching($criteria)->first();
                 // if first person exists

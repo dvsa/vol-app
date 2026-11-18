@@ -12,11 +12,7 @@ use Laminas\Form\Annotation as Form;
  */
 class DisableFileUploadPopupText
 {
-    /**
-     * @Form\Type(\Common\Form\Elements\Types\PlainText::class)
-     * @Form\Attributes({
-     *     "value": "Are you sure you want to disable file uploads?"
-     * })
-     */
+    #[Form\Type(\Common\Form\Elements\Types\PlainText::class)]
+    #[Form\Attributes(['value' => 'Are you sure you want to disable file uploads?'])]
     public ?PlainText $text = null;
 }

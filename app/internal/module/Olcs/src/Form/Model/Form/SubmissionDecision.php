@@ -6,25 +6,21 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("submission-decision")
- * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
  */
+#[Form\Name('submission-decision')]
+#[Form\Attributes(['method' => 'post'])]
+#[Form\Type('Common\Form\Form')]
+#[Form\Options(['prefer_form_input_filter' => true])]
 class SubmissionDecision
 {
-    /**
-     * @Form\Name("fields")
-     * @Form\Options({"label":""})
-     * @Form\Attributes({"class":"govuk-button-group"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SubmissionDecision")
-     */
+    #[Form\Name('fields')]
+    #[Form\Options(['label' => ''])]
+    #[Form\Attributes(['class' => 'govuk-button-group'])]
+    #[Form\ComposedObject('Olcs\Form\Model\Fieldset\SubmissionDecision')]
     public $fields = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"govuk-button-group"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
-     */
+    #[Form\Name('form-actions')]
+    #[Form\Attributes(['class' => 'govuk-button-group'])]
+    #[Form\ComposedObject('Common\Form\Model\Fieldset\CancelFormActions')]
     public $formActions = null;
 }

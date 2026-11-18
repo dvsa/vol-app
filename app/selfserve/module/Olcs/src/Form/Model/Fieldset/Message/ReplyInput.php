@@ -12,33 +12,12 @@ use Laminas\Validator\NotEmpty;
 
 class ReplyInput
 {
-    /**
-     * @Form\Attributes({
-     *     "class": "extra-long",
-     * })
-     * @Form\Options({
-     *     "label": "",
-     *     "hint": "You can enter up to 1000 characters"
-     * })
-     * @Form\Required(true)
-     * @Form\Type(Textarea::class)
-     * @Form\Filter(StringTrim::class)
-     * @Form\Validator(NotEmpty::class,
-     *     options={
-     *         "messages":{NotEmpty::IS_EMPTY: "messaging.form.message.content.empty.error_message"},
-     *     },
-     *     breakChainOnFailure=true
-     *  )
-     * @Form\Validator(StringLength::class,
-     *     options={
-     *         "min": 5,
-     *         "max": 1000,
-     *         "messages": {
-     *              StringLength::TOO_SHORT: "messaging.form.message.content.too_short.error_message",
-     *              StringLength::TOO_LONG: "messaging.form.message.content.too_long.error_message",
-     *          }
-     *     }
-     * )
-     */
+    #[Form\Attributes(['class' => 'extra-long'])]
+    #[Form\Options(['label' => '', 'hint' => 'You can enter up to 1000 characters'])]
+    #[Form\Required(true)]
+    #[Form\Type(Textarea::class)]
+    #[Form\Filter(StringTrim::class)]
+    #[Form\Validator(NotEmpty::class, options: ['messages' => [NotEmpty::IS_EMPTY => 'messaging.form.message.content.empty.error_message']], breakChainOnFailure: true)]
+    #[Form\Validator(StringLength::class, options: ['min' => 5, 'max' => 1000, 'messages' => [StringLength::TOO_SHORT => 'messaging.form.message.content.too_short.error_message', StringLength::TOO_LONG => 'messaging.form.message.content.too_long.error_message']])]
     public ?TextArea $reply = null;
 }

@@ -60,6 +60,14 @@ final class Update extends AbstractCommand
     protected $requiresInput;
 
     /**
+     * Other issue: the caseworker writes the heading and may add to-dos (VOL-7735)
+     *
+     * @var bool
+     */
+    #[Transfer\Optional]
+    protected $isOther;
+
+    /**
      * @var int
      */
     #[Transfer\Optional]
@@ -161,6 +169,14 @@ final class Update extends AbstractCommand
     public function getRequiresInput()
     {
         return $this->requiresInput;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsOther()
+    {
+        return $this->isOther;
     }
 
     /**

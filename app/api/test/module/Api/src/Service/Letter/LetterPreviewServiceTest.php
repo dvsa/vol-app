@@ -9,6 +9,10 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
+use Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo;
+use Dvsa\Olcs\Api\Entity\Letter\LetterTodo;
+use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueType;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection;
@@ -103,6 +107,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
@@ -150,6 +155,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('VOL/LET/12345');
         $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
@@ -670,6 +676,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue1, $mockIssue2, $mockIssue3]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue1, $mockIssue2, $mockIssue3]);
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
         $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
@@ -915,6 +922,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getLicence')
             ->andReturn($mockLicence);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -1455,14 +1463,193 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = $this->createMinimalLetterInstance();
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')
             ->andReturn(new ArrayCollection([$mockTodo]));
+        $mockLetterInstance->shouldReceive('getPlacementIssuesByTodo')->andReturn([spl_object_id($mockTodo) => $mockIssue]);
 
         $result = $this->sut->renderPreview($mockLetterInstance, null);
 
         $this->assertStringContainsString('<div class="todo-list">', $result);
         $this->assertStringNotContainsString('<ul class="todo-list">', $result);
         $this->assertStringContainsString('What you need to do', $result);
+    }
+
+    private function realTodoVersion(int $id, string $name): LetterTodoVersion
+    {
+        $todo = new LetterTodo();
+        $todo->setId($id);
+
+        $version = new LetterTodoVersion();
+        $version->setId($id * 10);
+        $version->setName($name);
+        $version->setLetterTodo($todo);
+
+        return $version;
+    }
+
+    /**
+     * @param LetterTodoVersion[] $todoVersions
+     */
+    private function realIssue(
+        LetterInstance $letter,
+        ?LetterIssueType $type,
+        string $heading,
+        int $displayOrder,
+        array $todoVersions
+    ): LetterInstanceIssue {
+        $issueVersion = new LetterIssueVersion();
+        $issueVersion->setHeading($heading);
+        if ($type !== null) {
+            $issueVersion->setLetterIssueType($type);
+        }
+        foreach ($todoVersions as $todoVersion) {
+            $issueTodo = new LetterIssueTodo();
+            $issueTodo->setLetterTodoVersion($todoVersion);
+            $issueVersion->addLetterIssueTodo($issueTodo);
+        }
+
+        $issue = new LetterInstanceIssue();
+        $issue->setId($displayOrder + 100);
+        $issue->setDisplayOrder($displayOrder);
+        $issue->setLetterIssueVersion($issueVersion);
+        $letter->addLetterInstanceIssue($issue);
+
+        return $issue;
+    }
+
+    private function realTodo(LetterInstance $letter, LetterInstanceIssue $owner, LetterTodoVersion $version, int $displayOrder): void
+    {
+        $todo = new LetterInstanceTodo();
+        $todo->setLetterTodoVersion($version);
+        $todo->setDisplayOrder($displayOrder);
+        $owner->addLetterInstanceTodo($todo);
+        $letter->addLetterInstanceTodo($todo);
+    }
+
+    private function realIssueType(int $id, string $name): LetterIssueType
+    {
+        $type = new LetterIssueType();
+        $type->setId($id);
+        $type->setName($name);
+        $type->setDescription($name);
+
+        return $type;
+    }
+
+    private function stubIssueAndTodoRenderers(): void
+    {
+        $issueRenderer = m::mock(SectionRendererInterface::class);
+        $issueRenderer->shouldReceive('render')
+            ->andReturnUsing(fn(LetterInstanceIssue $issue) => '[issue:' . $issue->getLetterIssueVersion()->getHeading() . ']');
+        $todoRenderer = m::mock(SectionRendererInterface::class);
+        $todoRenderer->shouldReceive('render')
+            // a to-do the caseworker wrote has no library to-do behind it
+            ->andReturnUsing(fn(LetterInstanceTodo $todo) => '[todo:' . ($todo->getLetterTodoVersion()?->getName() ?? 'own') . ']');
+
+        $this->mockRendererManager->shouldReceive('get')->with('issue')->andReturn($issueRenderer);
+        $this->mockRendererManager->shouldReceive('get')->with('todo')->andReturn($todoRenderer);
+        $this->mockRendererManager->shouldReceive('get')->with('content-section')->andReturn($issueRenderer)->byDefault();
+    }
+
+    /**
+     * The letter lists a group's issues and then what the operator needs to do about them, in
+     * one "What you need to do" block for the group. (VOL-7737 put each issue's to-dos straight
+     * after it; that was only wanted on the edit page, and the letter went back to this.)
+     * A to-do shared by several issues shows once, after all of them. A group with nothing to
+     * do gets no heading.
+     */
+    public function testEachGroupOfIssuesIsFollowedByItsTodos(): void
+    {
+        $this->stubIssueAndTodoRenderers();
+
+        $finances = $this->realIssueType(1, 'Finances');
+        $centre = $this->realIssueType(2, 'Operating centre');
+        $statements = $this->realTodoVersion(1, 'Statements');
+        $shared = $this->realTodoVersion(2, 'Shared');
+        $lease = $this->realTodoVersion(3, 'Lease');
+
+        $letter = new LetterInstance();
+        $a = $this->realIssue($letter, $finances, 'A', 0, [$statements, $shared]);
+        $b = $this->realIssue($letter, $finances, 'B', 1, [$shared, $lease]);
+        $this->realIssue($letter, $centre, 'C', 2, []);
+        $this->realTodo($letter, $a, $statements, 0);
+        $this->realTodo($letter, $a, $shared, 1);
+        $this->realTodo($letter, $b, $lease, 2);
+
+        $result = $this->sut->renderPreview($letter, null);
+        $plain = preg_replace('/<[^>]+>/', '', $result);
+
+        $this->assertSame(
+            'Finances[issue:A][issue:B]What you need to do[todo:Statements][todo:Shared][todo:Lease]'
+            . 'Operating centre[issue:C]',
+            $plain
+        );
+    }
+
+    /**
+     * A to-do shared by issues in different groups goes with the last of them, so it still
+     * comes after every issue it is for
+     */
+    public function testATodoSharedAcrossGroupsIsListedWithTheLastOfItsIssues(): void
+    {
+        $this->stubIssueAndTodoRenderers();
+
+        $finances = $this->realIssueType(1, 'Finances');
+        $centre = $this->realIssueType(2, 'Operating centre');
+        $statements = $this->realTodoVersion(1, 'Statements');
+        $shared = $this->realTodoVersion(2, 'Shared');
+        $lease = $this->realTodoVersion(3, 'Lease');
+
+        $letter = new LetterInstance();
+        $a = $this->realIssue($letter, $finances, 'A', 0, [$statements, $shared]);
+        $b = $this->realIssue($letter, $centre, 'B', 1, [$lease, $shared]);
+        $this->realTodo($letter, $a, $statements, 0);
+        $this->realTodo($letter, $a, $shared, 1);
+        $this->realTodo($letter, $b, $lease, 2);
+
+        $result = $this->sut->renderPreview($letter, null);
+        $plain = preg_replace('/<[^>]+>/', '', $result);
+
+        $this->assertSame(
+            'Finances[issue:A]What you need to do[todo:Statements]'
+            . 'Operating centre[issue:B]What you need to do[todo:Shared][todo:Lease]',
+            $plain
+        );
+    }
+
+    /**
+     * A to-do the caseworker wrote on an Other issue is listed with its own issue's group, after
+     * the group's library to-dos. An issue with no type goes under "Other Issues", and its
+     * to-dos with it.
+     */
+    public function testACaseworkersOwnTodoAndAnUntypedIssuesTodosAreListedWithTheirGroup(): void
+    {
+        $this->stubIssueAndTodoRenderers();
+
+        $finances = $this->realIssueType(1, 'Finances');
+        $statements = $this->realTodoVersion(1, 'Statements');
+        $evidence = $this->realTodoVersion(2, 'Evidence');
+
+        $letter = new LetterInstance();
+        $a = $this->realIssue($letter, $finances, 'A', 0, [$statements]);
+        $other = $this->realIssue($letter, $finances, 'Other', 1, []);
+        $untyped = $this->realIssue($letter, null, 'U', 2, [$evidence]);
+        $this->realTodo($letter, $a, $statements, 0);
+        $own = new LetterInstanceTodo();
+        $own->setDisplayOrder(1);
+        $other->addLetterInstanceTodo($own);
+        $letter->addLetterInstanceTodo($own);
+        $this->realTodo($letter, $untyped, $evidence, 2);
+
+        $result = $this->sut->renderPreview($letter, null);
+        $plain = preg_replace('/<[^>]+>/', '', $result);
+
+        $this->assertSame(
+            'Finances[issue:A][issue:Other]What you need to do[todo:Statements][todo:own]'
+            . 'Other Issues[issue:U]What you need to do[todo:Evidence]',
+            $plain
+        );
     }
 
     private function createMockIssue(string $typeName, string $typeDescription, int $typeId): m\MockInterface

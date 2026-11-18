@@ -21,7 +21,7 @@ class LetterSection extends AbstractLetterSection
      * @var \Doctrine\Common\Collections\Collection<int, LetterSectionVariant>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, mappedBy: 'letterSection', cascade: ['persist'], orphanRemoval: false)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $variants;
 
     /**
@@ -325,6 +325,21 @@ class LetterSection extends AbstractLetterSection
             }
         }
         return null;
+    }
+
+    /**
+     * Whether the wording depends on the letter: as well as its catch-all, the section has
+     * wording kept for a particular licence type, kind of application or letter choice
+     */
+    public function hasConditionalWording(): bool
+    {
+        foreach ($this->variants as $variant) {
+            if (!$variant->isDeleted() && !$variant->isDefault()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

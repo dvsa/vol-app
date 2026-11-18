@@ -6,8 +6,8 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("main")
  */
+#[Form\Name('main')]
 class QA extends \Olcs\Form\Model\Fieldset\Base
 {
 }

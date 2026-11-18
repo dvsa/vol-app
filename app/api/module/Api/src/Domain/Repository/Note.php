@@ -62,8 +62,8 @@ class Note extends AbstractRepository
             $qb->andWhere($this->alias . '.noteType = :noteTypeId');
             $qb->setParameter('noteTypeId', $query->getNoteType());
         }
-        $qb->orderBy($this->alias . '.priority', 'DESC');
-        $qb->addOrderBy($this->alias . '.createdOn', 'DESC');
+        $qb->orderBy($this->alias . '.priority', \SortDirection::Descending);
+        $qb->addOrderBy($this->alias . '.createdOn', \SortDirection::Descending);
 
         $this->getQueryBuilder()->modifyQuery($qb)
             ->withCreatedBy()
@@ -141,8 +141,8 @@ class Note extends AbstractRepository
             $qb->setParameter('noteTypeId', $noteType);
         }
 
-        $qb->orderBy($this->alias . '.priority', 'DESC');
-        $qb->addOrderBy($this->alias . '.createdOn', 'DESC');
+        $qb->orderBy($this->alias . '.priority', \SortDirection::Descending);
+        $qb->addOrderBy($this->alias . '.createdOn', \SortDirection::Descending);
         $qb->setMaxResults(1);
 
         $res = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
