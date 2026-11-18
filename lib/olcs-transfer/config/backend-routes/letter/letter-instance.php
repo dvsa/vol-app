@@ -57,6 +57,18 @@ return [
                     'GET' => QueryConfig::getConfig(Query\Letter\LetterInstance\GenerationContext::class),
                 ]
             ],
+            'previously-sent' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => 'previously-sent',
+                    'defaults' => [
+                        'controller' => 'Api\Generic'
+                    ]
+                ],
+                'child_routes' => [
+                    'GET' => QueryConfig::getConfig(Query\Letter\LetterInstance\PreviouslySent::class),
+                ]
+            ],
             'prepare-to-send' => [
                 'type' => 'Segment',
                 'options' => [

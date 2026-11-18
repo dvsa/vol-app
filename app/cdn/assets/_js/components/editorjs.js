@@ -20,6 +20,19 @@ OLCS.editorjs = (function (document, $, undefined) {
   var holders = {};
 
   /**
+   * Note a problem in the console, where the application's logger is loaded.
+   *
+   * OLCS.logger is a set of methods (warn, error and so on), not a function. Calling it as
+   * one throws, and thrown from inside a promise's catch that turns a handled failure into
+   * a rejection: a flush that never resolves leaves a save button disabled for good.
+   */
+  function log(message) {
+    if (OLCS.logger && typeof OLCS.logger.warn === "function") {
+      OLCS.logger.warn(message);
+    }
+  }
+
+  /**
    * Has the content actually changed, ignoring the timestamp EditorJS re-stamps on
    * every save?
    *
@@ -39,7 +52,54 @@ OLCS.editorjs = (function (document, $, undefined) {
   }
 
   /**
-   * Bring every editor's hidden input up to date with what is currently on screen.
+   * Tell the page that an editor could not be read.
+   *
+   * Its hidden input keeps the last content that could be read, so nothing there shows
+   * that the editor may now hold something else. A page that tracks unsaved edits by
+   * watching the input (letter-edit.js) listens for this event on the input instead.
+   *
+   * @param {HTMLInputElement} hiddenInput the editor's hidden input
+   */
+  function signalUnread(hiddenInput) {
+    hiddenInput.dispatchEvent(new CustomEvent("editorjs:unread", { bubbles: true }));
+  }
+
+  /**
+   * Read an editor's content and hand it to `keep`, which puts it in the hidden input.
+   *
+   * When EditorJS can't read an editor (a block tool throws while saving, say) it logs
+   * that itself and resolves with nothing. Writing that to the hidden input would replace
+   * the last content that could be read with the word "undefined". So the input is left
+   * alone, and the page is told instead.
+   *
+   * @param {object}           editor      the EditorJS instance
+   * @param {HTMLInputElement} hiddenInput its hidden input
+   * @param {function(object)} keep        given the content, when there is some
+   * @returns {Promise<boolean>} whether the editor could be read; never rejects
+   */
+  function readEditor(editor, hiddenInput, keep) {
+    return editor
+      .save()
+      .then(function (outputData) {
+        if (!outputData || !Array.isArray(outputData.blocks)) {
+          throw new Error("nothing came back");
+        }
+
+        keep(outputData);
+
+        return true;
+      })
+      .catch(function (error) {
+        log("EditorJS could not read " + hiddenInput.name + ": " + error.message);
+        signalUnread(hiddenInput);
+
+        return false;
+      });
+  }
+
+  /**
+   * Bring every editor's hidden input up to date with what is currently on screen, or
+   * just one editor's when its input name is given.
    *
    * The onChange handler below is the normal path, but it is debounced by EditorJS and
    * completes asynchronously. Anything that reads the hidden input in direct response to
@@ -48,46 +108,50 @@ OLCS.editorjs = (function (document, $, undefined) {
    *
    * Always resolves: a failure to serialise one editor must not strand a save handler
    * waiting on a promise that never settles, leaving a disabled button and no message.
+   * It resolves with the input names of the editors that could not be read. Their inputs
+   * are left as they were, so they may be missing what was typed last: a caller that is
+   * about to save should not send those, or report them as saved.
    *
-   * @returns {Promise} resolved once every editor's hidden input has been refreshed
+   * @param {string} [only] the input name of the one editor to bring up to date. A save
+   *                        of one editor has no need to read all the others first.
+   * @returns {Promise<string[]>} resolved once every editor's hidden input has been
+   *                              refreshed, with the names of those that could not be
    */
-  function flushEditors() {
+  function flushEditors(only) {
     var pending = Object.keys(editorInstances)
       .filter(function (name) {
-        return !name.endsWith("_observer") && hiddenInputs[name];
+        return !name.endsWith("_observer") && hiddenInputs[name] && (typeof only !== "string" || name === only);
       })
       .map(function (name) {
         var editor = editorInstances[name];
+        var hiddenInput = hiddenInputs[name];
 
         if (!editor || typeof editor.save !== "function") {
           return null;
         }
 
-        return editor
-          .save()
-          .then(function (outputData) {
-            // Only write on a real change. Callers flush speculatively — before a
-            // click that may not be a save at all — and letter-edit.js watches this
-            // input to decide whether there are unsaved edits. A needless write marks
-            // clean content dirty, which raises "Unsaved changes" over content the
-            // caseworker has just saved.
-            //
-            // Compare the blocks rather than the whole payload: EditorJS stamps a fresh
-            // `time` on every save(), so the serialised output never matches itself and
-            // a plain string comparison would think everything had changed.
-            if (blocksChanged(hiddenInputs[name].value, outputData)) {
-              hiddenInputs[name].value = JSON.stringify(outputData);
-            }
-          })
-          .catch(function (error) {
-            if (typeof OLCS.logger !== "undefined") {
-              OLCS.logger("EditorJS flush failed for " + name + ": " + error.message);
-            }
-          });
+        return readEditor(editor, hiddenInput, function (outputData) {
+          // Only write on a real change. Callers flush speculatively — before a
+          // click that may not be a save at all — and letter-edit.js watches this
+          // input to decide whether there are unsaved edits. A needless write marks
+          // clean content dirty, which raises "Unsaved changes" over content the
+          // caseworker has just saved.
+          //
+          // Compare the blocks rather than the whole payload: EditorJS stamps a fresh
+          // `time` on every save(), so the serialised output never matches itself and
+          // a plain string comparison would think everything had changed.
+          if (blocksChanged(hiddenInput.value, outputData)) {
+            hiddenInput.value = JSON.stringify(outputData);
+          }
+        }).then(function (wasRead) {
+          return wasRead ? null : name;
+        });
       })
       .filter(Boolean);
 
-    return Promise.all(pending);
+    return Promise.all(pending).then(function (unread) {
+      return unread.filter(Boolean);
+    });
   }
 
   /**
@@ -99,9 +163,7 @@ OLCS.editorjs = (function (document, $, undefined) {
   function initializeEditorJs(editorId, inputName, initialValue) {
     // Check if EditorJS is available
     if (typeof EditorJS === "undefined") {
-      if (typeof OLCS.logger !== "undefined") {
-        OLCS.logger("EditorJS library not available");
-      }
+      log("EditorJS library not available");
       return;
     }
 
@@ -110,9 +172,7 @@ OLCS.editorjs = (function (document, $, undefined) {
     var hiddenInput = document.querySelector("input[name='" + inputName + "']");
 
     if (!editorContainer || !hiddenInput) {
-      if (typeof OLCS.logger !== "undefined") {
-        OLCS.logger("EditorJS DOM elements not found: " + editorId + ", " + inputName);
-      }
+      log("EditorJS DOM elements not found: " + editorId + ", " + inputName);
       return;
     }
 
@@ -168,12 +228,14 @@ OLCS.editorjs = (function (document, $, undefined) {
       try {
         initialData = JSON.parse(initialValue);
       } catch (e) {
-        if (typeof OLCS.logger !== "undefined") {
-          OLCS.logger("Failed to parse initial EditorJS data: " + e.message);
-        }
+        log("Failed to parse initial EditorJS data: " + e.message);
         // Continue with empty data rather than failing
       }
     }
+
+    var writeToInput = function (outputData) {
+      hiddenInput.value = JSON.stringify(outputData);
+    };
 
     try {
       // Initialize EditorJS
@@ -185,16 +247,7 @@ OLCS.editorjs = (function (document, $, undefined) {
         data: initialData,
         onChange: function () {
           // Save editor content to hidden input on change
-          editor
-            .save()
-            .then(function (outputData) {
-              hiddenInput.value = JSON.stringify(outputData);
-            })
-            .catch(function (error) {
-              if (typeof OLCS.logger !== "undefined") {
-                OLCS.logger("EditorJS save failed: " + error.message);
-              }
-            });
+          readEditor(editor, hiddenInput, writeToInput);
         },
       });
 
@@ -202,9 +255,7 @@ OLCS.editorjs = (function (document, $, undefined) {
       editor.isReady
         .then(function () {
           // Save initial state to hidden input
-          editor.save().then(function (outputData) {
-            hiddenInput.value = JSON.stringify(outputData);
-          });
+          readEditor(editor, hiddenInput, writeToInput);
 
           // Enable spellcheck on all contenteditable elements
           var editableElements = editorContainer.querySelectorAll("[contenteditable=true]");
@@ -243,9 +294,7 @@ OLCS.editorjs = (function (document, $, undefined) {
           editorInstances[inputName + "_observer"] = observer;
         })
         .catch(function (error) {
-          if (typeof OLCS.logger !== "undefined") {
-            OLCS.logger("EditorJS initialization failed: " + error.message);
-          }
+          log("EditorJS initialization failed: " + error.message);
         });
 
       // Store editor instance for cleanup, and its input so it can be flushed on demand
@@ -253,9 +302,7 @@ OLCS.editorjs = (function (document, $, undefined) {
       hiddenInputs[inputName] = hiddenInput;
       holders[inputName] = editorContainer;
     } catch (error) {
-      if (typeof OLCS.logger !== "undefined") {
-        OLCS.logger("EditorJS creation failed: " + error.message);
-      }
+      log("EditorJS creation failed: " + error.message);
     }
   }
 
@@ -370,9 +417,7 @@ OLCS.editorjs = (function (document, $, undefined) {
             editor.destroy();
           }
         } catch (e) {
-          if (typeof OLCS.logger !== "undefined") {
-            OLCS.logger("Error destroying instance: " + name + " - " + e.message);
-          }
+          log("Error destroying instance: " + name + " - " + e.message);
         }
 
         delete editorInstances[name + "_observer"];

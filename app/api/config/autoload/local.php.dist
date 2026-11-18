@@ -286,6 +286,7 @@ return [
     ]
   ],
   'olcs-doctrine' => [
+    // Filled in by the AWS sync step of `npm run refresh`. Left null, encrypted columns can't be read or written.
     'encryption_key' => null
   ],
   'cache-encryption' => [

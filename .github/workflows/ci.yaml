@@ -107,6 +107,7 @@ jobs:
             infra/docker/liquibase/**
             infra/docker/printpit/**
             infra/docker/gotenberg/**
+            infra/docker/proxy/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v47
         id: changed-accounts-terraform-files
