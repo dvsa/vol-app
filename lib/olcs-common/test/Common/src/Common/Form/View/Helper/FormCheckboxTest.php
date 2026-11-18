@@ -96,7 +96,7 @@ final class FormCheckboxTest extends TestCase
         );
         self::assertSame('govuk-label govuk-checkboxes__label', $xpath->evaluate('string(//label/@class)'));
         self::assertSame(
-            $element instanceof SingleCheckbox || $element instanceof CheckboxAdvanced ? 1 : 0,
+            $element instanceof SingleCheckbox ? 1 : 0,
             $xpath->query('//div[contains(@class, "govuk-checkboxes--small")]')->length
         );
     }

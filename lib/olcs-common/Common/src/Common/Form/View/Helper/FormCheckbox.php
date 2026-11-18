@@ -3,7 +3,6 @@
 namespace Common\Form\View\Helper;
 
 use Common\Form\Elements\InputFilters\SingleCheckbox;
-use Common\Form\Elements\Types\CheckboxAdvanced;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\ElementInterface;
 use Laminas\View\Renderer\PhpRenderer;
@@ -28,7 +27,7 @@ class FormCheckbox extends \Laminas\Form\View\Helper\FormCheckbox
             [
                 'element' => $element,
                 'input' => $this->renderInput($element),
-                'small' => $element instanceof SingleCheckbox || $element instanceof CheckboxAdvanced,
+                'small' => $element instanceof SingleCheckbox,
                 'content' => $element->getOption('content'),
                 'data' => isset($view->data) ? $view->data : null,
             ]
