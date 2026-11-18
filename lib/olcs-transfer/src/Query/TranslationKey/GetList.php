@@ -25,7 +25,7 @@ class GetList extends AbstractQuery implements OrderedQueryInterface, PagedQuery
     use TranslationSearchOptional;
     use TranslationFormatOptional;
 
-    /** @Transfer\Optional */
+    #[Transfer\Optional]
     protected $markupOnly;
 
     public function getMarkupOnly(): bool

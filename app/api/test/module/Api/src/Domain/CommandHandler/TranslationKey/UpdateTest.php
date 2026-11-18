@@ -265,16 +265,88 @@ final class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testRichDescriptionCanChangeWithoutLanguageEdits(): void
+    public function testDescriptionCanChangeAlongsideLanguageEdits(): void
     {
-        $command = UpdateCmd::create(['id' => 12, 'description' => 'New page name', 'translationsArray' => []]);
+        $command = UpdateCmd::create(['id' => 12, 'description' => 'New page name', 'translationsArray' => ['en_GB' => base64_encode('Hello')]]);
         $entity = m::mock(TranslationKeyEntity::class);
-        $entity->shouldReceive('getFormat')->andReturn('editorjs');
+        $entity->shouldReceive('getFormat')->andReturn('text');
+        $entity->shouldReceive('getDescription')->andReturn('Old page name');
         $entity->shouldReceive('setDescription')->with('New page name')->once();
         $entity->shouldReceive('getId')->andReturn(12);
         $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
         $this->repoMap['TranslationKey']->shouldReceive('save')->with($entity)->once();
-        $this->repoMap['TranslationKeyText']->shouldNotReceive('fetchByParentLanguage');
+        $this->repoMap['TranslationKeyText']->shouldReceive('fetchByParentLanguage')->with(12, 1)->andReturnNull();
+        $this->expectedSideEffect(Create::class, [
+            'translationKey' => 12,
+            'language' => 1,
+            'translatedText' => 'Hello',
+        ], new Result());
+        $this->expectedSideEffect(GenerateCache::class, [], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testUnchangedLongDescriptionIsLeftAlone(): void
+    {
+        $description = str_repeat('a', 370);
+        $command = UpdateCmd::create(['id' => 12, 'description' => $description, 'translationsArray' => ['en_GB' => base64_encode('Hello')]]);
+        $entity = m::mock(TranslationKeyEntity::class);
+        $entity->shouldReceive('getFormat')->andReturn('text');
+        $entity->shouldReceive('getDescription')->andReturn($description);
+        $entity->shouldNotReceive('setDescription');
+        $entity->shouldReceive('getId')->andReturn(12);
+        $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
+        $this->repoMap['TranslationKey']->shouldNotReceive('save');
+        $this->repoMap['TranslationKeyText']->shouldReceive('fetchByParentLanguage')->with(12, 1)->andReturnNull();
+        $this->expectedSideEffect(Create::class, [
+            'translationKey' => 12,
+            'language' => 1,
+            'translatedText' => 'Hello',
+        ], new Result());
+        $this->expectedSideEffect(GenerateCache::class, [], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testEmptyDescriptionDoesNotTurnNullIntoBlank(): void
+    {
+        $command = UpdateCmd::create(['id' => 12, 'description' => '', 'translationsArray' => ['en_GB' => base64_encode('Hello')]]);
+        $entity = m::mock(TranslationKeyEntity::class);
+        $entity->shouldReceive('getFormat')->andReturn('text');
+        $entity->shouldReceive('getDescription')->andReturnNull();
+        $entity->shouldNotReceive('setDescription');
+        $entity->shouldReceive('getId')->andReturn(12);
+        $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
+        $this->repoMap['TranslationKey']->shouldNotReceive('save');
+        $this->repoMap['TranslationKeyText']->shouldReceive('fetchByParentLanguage')->with(12, 1)->andReturnNull();
+        $this->expectedSideEffect(Create::class, [
+            'translationKey' => 12,
+            'language' => 1,
+            'translatedText' => 'Hello',
+        ], new Result());
+        $this->expectedSideEffect(GenerateCache::class, [], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testRichDescriptionCanChangeAlongsideLanguageEdits(): void
+    {
+        $json = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Hello']]]], JSON_THROW_ON_ERROR);
+        $command = UpdateCmd::create(['id' => 12, 'description' => 'New page name', 'translationsArray' => ['en_GB' => base64_encode($json)]]);
+        $entity = m::mock(TranslationKeyEntity::class);
+        $entity->shouldReceive('getFormat')->andReturn('editorjs');
+        $entity->shouldReceive('getDescription')->andReturn('Old page name');
+        $entity->shouldReceive('setDescription')->with('New page name')->once();
+        $entity->shouldReceive('getId')->andReturn(12);
+        $this->repoMap['TranslationKey']->shouldReceive('fetchById')->with(12)->andReturn($entity);
+        $this->repoMap['TranslationKey']->shouldReceive('save')->with($entity)->once();
+        $this->repoMap['TranslationKeyText']->shouldReceive('fetchByParentLanguage')->with(12, 1)->andReturnNull();
+        $this->expectedSideEffect(Create::class, [
+            'translationKey' => 12,
+            'language' => 1,
+            'translatedText' => '<p class="govuk-body">Hello</p>',
+            'contentJson' => ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Hello']]]],
+        ], new Result());
         $this->expectedSideEffect(GenerateCache::class, [], new Result());
 
         $this->sut->handleCommand($command);

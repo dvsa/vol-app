@@ -17,7 +17,7 @@ class ById extends AbstractQuery
 {
     use Identity;
 
-    /** @Transfer\Optional */
+    #[Transfer\Optional]
     protected $previewEditorJs;
 
     public function getPreviewEditorJs(): bool

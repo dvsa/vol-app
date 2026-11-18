@@ -41,7 +41,7 @@ final class ById extends AbstractQueryByIdHandler
             }
 
             $html = (string) $text->getTranslatedText();
-            if (str_contains($html, '<?') || preg_match('/<\/?(?!p\b|h[1-6]\b|ul\b|ol\b|li\b|strong\b|b\b|em\b|i\b|a\b|span\b|u\b|br\b|abbr\b|div\b)[a-z][a-z0-9]*\b/i', $html)) {
+            if (str_contains($html, '<?') || preg_match('/<\/?(?!p\b|h[1-6]\b|ul\b|ol\b|li\b|strong\b|b\b|em\b|i\b|a\b|u\b|br\b|div\b)[a-z][a-z0-9]*\b/i', $html)) {
                 throw new ValidationException(['previewEditorJs' => 'This translation contains content the editor cannot convert']);
             }
 
@@ -52,7 +52,7 @@ final class ById extends AbstractQueryByIdHandler
                 throw new ValidationException(['previewEditorJs' => 'This translation cannot be converted: ' . $exception->getMessage()]);
             }
 
-            $plain = static fn (string $value): string => trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+            $plain = static fn (string $value): string => (string) preg_replace('/\s+/u', '', html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
             if ($plain($html) !== $plain($rendered)) {
                 throw new ValidationException(['previewEditorJs' => 'Conversion would change this translation']);
             }
