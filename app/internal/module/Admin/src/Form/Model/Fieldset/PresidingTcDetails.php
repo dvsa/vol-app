@@ -19,7 +19,7 @@ class PresidingTcDetails
     #[Form\Attributes(['placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'Name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 70])]
     public $name = null;
 

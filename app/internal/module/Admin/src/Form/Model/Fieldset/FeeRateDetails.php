@@ -30,14 +30,14 @@ class FeeRateDetails
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => 'Dvsa\Olcs\Transfer\Validators\DateInFuture', 'options' => ['include_today' => true, 'use_time' => false]])]
+    #[Form\Validator('Dvsa\Olcs\Transfer\Validators\DateInFuture', options: ['include_today' => true, 'use_time' => false])]
     public $effectiveFrom = null;
 
     #[Form\Name('fixedValue')]
     #[Form\Attributes(['required' => true, 'min' => 0, 'step' => 1])]
     #[Form\Options(['label' => 'Fixed Value'])]
     #[Form\Type('Laminas\Form\Element\Number')]
-    #[Form\Validator(['name' => 'Laminas\Validator\Between', 'options' => ['min' => '0', 'max' => '9999']])]
+    #[Form\Validator('Laminas\Validator\Between', options: ['min' => '0', 'max' => '9999'])]
     public $fixedValue = null;
 
     #[Form\Name('annualValue')]
@@ -45,7 +45,7 @@ class FeeRateDetails
     #[Form\Options(['label' => 'Annual Value'])]
     #[Form\Validator('Laminas\Validator\Digits')]
     #[Form\Type('Laminas\Form\Element\Number')]
-    #[Form\Validator(['name' => 'Laminas\Validator\Between', 'options' => ['min' => '0', 'max' => '9999']])]
+    #[Form\Validator('Laminas\Validator\Between', options: ['min' => '0', 'max' => '9999'])]
     public $annualValue = null;
 
     #[Form\Name('fiveYearValue')]
@@ -53,6 +53,6 @@ class FeeRateDetails
     #[Form\Options(['label' => 'Five Year Value'])]
     #[Form\Validator('Laminas\Validator\Digits')]
     #[Form\Type('Laminas\Form\Element\Number')]
-    #[Form\Validator(['name' => 'Laminas\Validator\Between', 'options' => ['min' => '0', 'max' => '9999']])]
+    #[Form\Validator('Laminas\Validator\Between', options: ['min' => '0', 'max' => '9999'])]
     public $fiveYearValue = null;
 }

@@ -21,7 +21,7 @@ class UnlicensedOperatorDetails
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
     #[Form\Options(['label' => 'internal-operator-profile-name', 'short-label' => 'internal-operator-profile-name'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     #[Form\Name('name')]
     #[Form\Type('Text')]
     public $name = null;

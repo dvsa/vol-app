@@ -20,15 +20,15 @@ class TmEmploymentDetails
     #[Form\Options(['label' => 'transport-manager.employment.form.position'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 45]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 45])]
     public $position = null;
 
     #[Form\Attributes(['class' => 'long', 'id' => 'hoursPerWeek'])]
     #[Form\Options(['label' => 'transport-manager.employment.form.hoursPerWeek'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 100]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 100])]
     public $hoursPerWeek = null;
 }

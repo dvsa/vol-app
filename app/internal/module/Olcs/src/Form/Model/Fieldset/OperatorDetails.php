@@ -25,14 +25,14 @@ class OperatorDetails
 
     #[Form\Attributes(['class' => 'extra-long', 'id' => ''])]
     #[Form\Options(['label' => 'internal-operator-profile-name'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     #[Form\Name('name')]
     #[Form\Type('Text')]
     public $name = null;
 
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Nature of Business'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     public $natureOfBusiness = null;
 
     #[Form\Type('Common\Form\Elements\Types\Html')]
@@ -46,7 +46,7 @@ class OperatorDetails
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
     #[Form\Options(['label' => 'internal-operator-profile-last-name'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     #[Form\Type('Text')]
     public $lastName = null;
 

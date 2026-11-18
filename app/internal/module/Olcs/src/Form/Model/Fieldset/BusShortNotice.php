@@ -24,8 +24,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Unforeseen circumstances comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $unforseenDetail;
 
     #[Form\Type('Radio')]
@@ -37,8 +37,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Timetable change (< 10 minutes +/- originally registered service) comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $timetableDetail;
 
     #[Form\Type('Radio')]
@@ -50,8 +50,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Service to replace substantially similar service run by another operator comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $replacementDetail;
 
     #[Form\Type('Radio')]
@@ -63,8 +63,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Service not available to/used by general public comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $notAvailableDetail;
 
     #[Form\Type('Radio')]
@@ -76,8 +76,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Cater for additional demands for special occasions / events comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $specialOccasionDetail;
 
     #[Form\Type('Radio')]
@@ -89,8 +89,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Change to match changed connecting rail/ferry/air service comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $connectionDetail;
 
     #[Form\Type('Radio')]
@@ -102,8 +102,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Change <= 14 days to match local public holiday or widely observed local holiday comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $holidayDetail;
 
     #[Form\Type('Radio')]
@@ -115,8 +115,8 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'To comply with TRC comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $trcDetail;
 
     #[Form\Type('Radio')]
@@ -128,7 +128,7 @@ class BusShortNotice extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Police / Traffic Authority requires change for road safety reasons comments', 'label_attributes' => ['class' => 'extra-long']])]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $policeDetail;
 }

@@ -15,8 +15,8 @@ class DelayItem
     #[Form\Type('DateSelect')]
     #[Form\Attributes(['id' => 'nextReviewDate', 'data-container-class' => 'nextReviewDate'])]
     #[Form\Options(['label' => 'Next review date:', 'create_empty_option' => true])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $nextReviewDate = null;
 }
