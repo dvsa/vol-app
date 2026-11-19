@@ -18,9 +18,14 @@
 ?>
 <a class="govuk-back-link" href="<?php echo $this->escapeHtmlAttr($backUrl); ?>">Back</a>
 
-<h2 class="govuk-heading-s govuk-!-margin-bottom-2">Finance evidence document overview</h2>
+<?php // The passed-checks view is its own page in the VOL-7338 design: "Finance evidence review". ?>
+<h2 class="govuk-heading-s govuk-!-margin-bottom-2">
+  <?php echo $showPassOverride ? 'Finance evidence review' : 'Finance evidence document overview'; ?>
+</h2>
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
+<?php // Shown on both views. The VOL-7338 design leaves it off the passed-checks page, but without ?>
+<?php // it nothing there says which document the checks belong to, so it is kept deliberately. ?>
 <h3 class="govuk-heading-m">Bank Statements</h3>
 
 <?php if ($document !== null) : ?>
