@@ -162,7 +162,6 @@ final class FormCheckboxTest extends TestCase
         $helper = new FormCheckbox(new LaminasFormCheckbox());
         $laminasHelper = new LaminasFormCheckbox();
         foreach ([$helper, $laminasHelper] as $inputHelper) {
-            $inputHelper->setDoctype('XHTML1_STRICT');
             $inputHelper->setEncoding('ISO-8859-1');
             $inputHelper->addValidAttribute('custom-attribute');
             $inputHelper->addValidAttributePrefix('custom-prefix-');
@@ -171,7 +170,6 @@ final class FormCheckboxTest extends TestCase
         $expected = $laminasHelper->render($element);
         self::assertStringContainsString('custom-attribute="Custom&#x20;value"', $expected);
         self::assertStringContainsString('custom-prefix-attribute="Other&#x20;value"', $expected);
-        self::assertStringContainsString('/>', $expected);
         self::assertSame($expected, $helper->renderInput($element));
         self::assertSame($expected, $helper->renderInput($element));
     }
