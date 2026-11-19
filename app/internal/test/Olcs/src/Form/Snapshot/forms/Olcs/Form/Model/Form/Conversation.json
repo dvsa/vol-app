@@ -3,7 +3,18 @@
   "attributes": {
     "method": "post"
   },
-  "elements": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "correlationId",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
   "fieldsets": [
     {
       "flags": [],
@@ -43,6 +54,79 @@
           }
         ],
         "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "attributes": {
+          "class": "file-uploader"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "fileCount",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "js-visually-hidden"
+              },
+              "options": {
+                "value": "common.file-upload.browse.title",
+                "hint": "common.file-upload.browse.hint"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "__messages__",
+              "attributes": [],
+              "options": [],
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "inline-upload govuk-button js-upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "list",
+              "attributes": {
+                "class": "js-upload-list"
+              },
+              "options": {
+                "preview_images": "true"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+            }
+          }
+        ],
         "type": "Laminas\\Form\\Fieldset",
         "options": []
       }
@@ -124,6 +208,27 @@
                 "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
                 "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
               }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "file": {
+      "fileCount": {
+        "name": "fileCount",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Common\\Validator\\FileUploadCountV2",
+            "options": {
+              "min": 1
             }
           }
         ]

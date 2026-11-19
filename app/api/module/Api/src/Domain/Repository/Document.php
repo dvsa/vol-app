@@ -35,11 +35,18 @@ class Document extends AbstractRepository
         return $this->fetchListForApplicationOrLicence($tmId, $licenceId, 'licence');
     }
 
-    public function fetchUnassignedListForUser(int $createdBy): array
+    public function fetchUnassignedByIdsForUser(array $ids, int $createdBy): array
     {
+        if ($ids === []) {
+            return [];
+        }
+
         $qb = $this->createQueryBuilder();
-        $qb->andWhere($qb->expr()->isNull($this->alias . '.messagingMessage'))
-           ->andWhere($qb->expr()->eq($this->alias . '.createdBy', $createdBy))
+        $qb->andWhere($qb->expr()->in($this->alias . '.id', ':ids'))
+           ->andWhere($qb->expr()->isNull($this->alias . '.messagingMessage'))
+           ->andWhere($qb->expr()->eq($this->alias . '.createdBy', ':createdBy'))
+           ->setParameter('ids', $ids)
+           ->setParameter('createdBy', $createdBy)
            ->orderBy($this->alias . '.id', \SortDirection::Descending);
 
         return $qb->getQuery()->execute();
