@@ -95,7 +95,7 @@ jobs:
 
   test:
     name: Test
-    if: ${{ !inputs.push }}
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -104,8 +104,6 @@ jobs:
         working-directory: app/cdn
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.ref || inputs.branch || null }}
 
       - uses: actions/setup-node@v6
         with:
