@@ -16,7 +16,10 @@ use Common\Form\View\Helper\FormErrors;
 use Common\Form\View\Helper\FormRow;
 use Laminas\Form\Element\Checkbox as LaminasCheckbox;
 use Laminas\Form\Element\MultiCheckbox;
+use Laminas\Form\Exception\InvalidArgumentException;
+use Laminas\Form\View\Helper\FormCheckbox as LaminasFormCheckbox;
 use Laminas\I18n\Translator\Translator;
+use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Renderer\PhpRenderer;
 use Laminas\View\Resolver\TemplatePathStack;
@@ -37,6 +40,9 @@ final class FormCheckboxTest extends TestCase
         $helpers->configure([
             'invokables' => $config['view_helpers']['invokables'],
             'aliases' => $config['view_helpers']['aliases'],
+            'factories' => [
+                FormCheckbox::class => $config['view_helpers']['factories'][FormCheckbox::class],
+            ],
         ]);
         $translator = new Translator();
         $translate = new Translate();
@@ -144,6 +150,64 @@ final class FormCheckboxTest extends TestCase
     public function testHelperCanBeRetrievedWithoutAnElement(): void
     {
         self::assertInstanceOf(FormCheckbox::class, $this->renderer()->formCheckbox());
+    }
+
+    public function testInputRenderingPreservesHelperConfiguration(): void
+    {
+        $element = new LaminasCheckbox('confirmation');
+        $element->setAttribute('custom-attribute', 'Custom value');
+        $element->setAttribute('custom-prefix-attribute', 'Other value');
+        $element->setChecked(true);
+
+        $helper = new FormCheckbox(new LaminasFormCheckbox());
+        $laminasHelper = new LaminasFormCheckbox();
+        foreach ([$helper, $laminasHelper] as $inputHelper) {
+            $inputHelper->setDoctype('XHTML1_STRICT');
+            $inputHelper->setEncoding('ISO-8859-1');
+            $inputHelper->addValidAttribute('custom-attribute');
+            $inputHelper->addValidAttributePrefix('custom-prefix-');
+        }
+
+        $expected = $laminasHelper->render($element);
+        self::assertStringContainsString('custom-attribute="Custom&#x20;value"', $expected);
+        self::assertStringContainsString('custom-prefix-attribute="Other&#x20;value"', $expected);
+        self::assertStringContainsString('/>', $expected);
+        self::assertSame($expected, $helper->renderInput($element));
+        self::assertSame($expected, $helper->renderInput($element));
+    }
+
+    public function testInputRenderingRejectsNonCheckboxElements(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        (new FormCheckbox(new LaminasFormCheckbox()))->renderInput(new \Laminas\Form\Element('confirmation'));
+    }
+
+    public function testInputRenderingUsesInjectedHelper(): void
+    {
+        $inputHelper = new LaminasFormCheckbox();
+        $inputHelper->addValidAttribute('injected-attribute');
+        $helper = new FormCheckbox($inputHelper);
+        $element = new LaminasCheckbox('confirmation');
+        $element->setAttribute('injected-attribute', 'present');
+
+        self::assertStringContainsString('injected-attribute="present"', $helper->renderInput($element));
+    }
+
+    public function testInputRenderingUsesConfiguredTranslator(): void
+    {
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->expects(self::once())
+            ->method('translate')
+            ->with('Original', 'checkbox-domain')
+            ->willReturn('Translated');
+        $helper = new FormCheckbox(new LaminasFormCheckbox());
+        $helper->setTranslator($translator, 'checkbox-domain');
+        $helper->addValidAttribute('custom-attribute');
+        $helper->addTranslatableAttribute('custom-attribute');
+        $element = new LaminasCheckbox('confirmation');
+        $element->setAttribute('custom-attribute', 'Original');
+
+        self::assertStringContainsString('custom-attribute="Translated"', $helper->renderInput($element));
     }
 
     public function testAdvancedCheckboxLinksConditionalContentAndRestoresCheckedState(): void

@@ -505,7 +505,6 @@ return [
 
             'formButton'              => \Laminas\Form\View\Helper\FormButton::class,
             'formCaptcha'             => \Laminas\Form\View\Helper\FormCaptcha::class,
-            \Common\Form\View\Helper\FormCheckbox::class => \Common\Form\View\Helper\FormCheckbox::class,
             'formColor'               => \Laminas\Form\View\Helper\FormColor::class,
             'formDate'                => \Laminas\Form\View\Helper\FormDate::class,
             'formDatetime'            => \Laminas\Form\View\Helper\FormDateTime::class,
@@ -545,6 +544,7 @@ return [
             'licenceChecklist' => \Common\View\Helper\LicenceChecklistFactory::class,
             \Common\View\Helper\Date::class => \Common\View\Helper\DateFactory::class,
             \Common\Form\View\Helper\FormRow::class => \Common\Form\View\Helper\FormRowFactory::class,
+            \Common\Form\View\Helper\FormCheckbox::class => \Common\Form\View\Helper\FormCheckboxFactory::class,
             \Common\View\Helper\LanguageNavigation::class => \Common\View\Helper\LanguageNavigationFactory::class,
             \Common\View\Helper\ImportantPrefix::class => \Common\View\Helper\ImportantPrefixFactory::class,
             'currentUser' => \Common\View\Helper\CurrentUserFactory::class,

@@ -5,10 +5,16 @@ namespace Common\Form\View\Helper;
 use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\ElementInterface;
+use Laminas\Form\View\Helper\FormCheckbox as LaminasFormCheckbox;
+use Laminas\Form\View\Helper\FormInput;
 use Laminas\View\Renderer\PhpRenderer;
 
-class FormCheckbox extends \Laminas\Form\View\Helper\FormCheckbox
+class FormCheckbox extends FormInput
 {
+    public function __construct(private LaminasFormCheckbox $checkboxHelper)
+    {
+    }
+
     #[\Override]
     public function render(ElementInterface $element): string
     {
@@ -61,6 +67,30 @@ class FormCheckbox extends \Laminas\Form\View\Helper\FormCheckbox
 
     public function renderInput(ElementInterface $element): string
     {
-        return parent::render($element);
+        $helper = $this->checkboxHelper;
+        if ($this->getView() !== null) {
+            $helper->setView($this->getView());
+        } else {
+            $helper->setDoctype($this->getDoctype());
+            if ($helper->getEncoding() !== $this->getEncoding()) {
+                $helper->setEncoding($this->getEncoding());
+            }
+        }
+        $helper->setTranslator($this->getTranslator(), $this->getTranslatorTextDomain());
+
+        foreach (array_keys($this->validTagAttributes) as $attribute) {
+            $helper->addValidAttribute($attribute);
+        }
+        foreach ($this->validTagAttributePrefixes as $prefix) {
+            $helper->addValidAttributePrefix($prefix);
+        }
+        foreach (array_keys($this->translatableAttributes) as $attribute) {
+            $helper->addTranslatableAttribute($attribute);
+        }
+        foreach ($this->translatableAttributePrefixes as $prefix) {
+            $helper->addTranslatableAttributePrefix($prefix);
+        }
+
+        return $helper->render($element);
     }
 }
