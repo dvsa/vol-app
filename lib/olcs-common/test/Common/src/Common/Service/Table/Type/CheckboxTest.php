@@ -128,4 +128,22 @@ final class CheckboxTest extends MockeryTestCase
             $response
         );
     }
+
+    public function testRenderWithRowSpecificLabel(): void
+    {
+        $this->table->shouldReceive('getFieldset')->andReturn(null);
+
+        $response = $this->sut->render(
+            ['id' => 7, 'printerName' => 'Office & <Warehouse>'],
+            ['label-callback' => static fn($row) => 'Select printer ' . $row['printerName']]
+        );
+
+        $this->assertStringContainsString('name="id[]" value="7"', $response);
+        $this->assertStringContainsString('id="[id][7]"', $response);
+        $this->assertStringContainsString('for="&#x5B;id&#x5D;&#x5B;7&#x5D;"', $response);
+        $this->assertStringContainsString(
+            '<span class="govuk-visually-hidden">Select printer Office &amp; &lt;Warehouse&gt;</span>',
+            $response
+        );
+    }
 }
