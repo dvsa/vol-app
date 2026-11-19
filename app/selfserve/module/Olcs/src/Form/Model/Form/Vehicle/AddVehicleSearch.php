@@ -6,7 +6,7 @@ namespace Olcs\Form\Model\Form\Vehicle;
 
 use Laminas\Form\Annotation as Form;
 
-#[Form\Attributes(['method' => 'post', 'id' => 'vehicle-add'])]
+#[Form\Attributes(['method' => 'post', 'id' => 'vehicle-add-search'])]
 #[Form\Type('Common\Form\Form')]
 class AddVehicleSearch
 {
