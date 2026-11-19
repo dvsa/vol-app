@@ -38,9 +38,9 @@ class FinancialEvidencePassOverride
     #[Annotation\Type('Radio')]
     // Yes and No sit side by side, as the VOL-7338 design draws them. The label is the radio
     // group's legend, shown in bold as the question; the view must not print the question again.
+    // No default: neither is selected until the caseworker chooses, as the design shows.
     #[Annotation\Attributes([
         'radios_wrapper_attributes' => ['class' => 'govuk-radios--standard govuk-radios--inline'],
-        'value' => 'Y',
     ])]
     #[Annotation\Options([
         'label' => 'Do you want to change the outcome of this issue?',
@@ -50,6 +50,10 @@ class FinancialEvidencePassOverride
     ])]
     public $changeRecommendation = null;
 
+    // Not required by the form: an input with no Required attribute is required by default,
+    // which would fail an empty box as an unknown error. Whether text is needed depends on the
+    // answer, so the controller decides and says what is missing.
+    #[Annotation\Required(false)]
     #[Annotation\Type('TextArea')]
     #[Annotation\Options(['label' => 'Can you provide more detail?'])]
     #[Annotation\Attributes(['class' => 'extra-long'])]

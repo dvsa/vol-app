@@ -185,11 +185,14 @@
       <?php
       // One pass-override form serves every pass; only the row differs. The comment is pre-filled
       // with whatever is already saved against this row (a prior note), so a reload never looks
-      // like it was lost; ids are made unique per pass. Defaults to "Yes", unlike the issues'
-      // disclosure, since this form is always visible.
+      // like it was lost; ids are made unique per pass.
       $passOverrideForm->get('analysisId')->setValue((string)$analysisId);
       $passOverrideForm->get('row')->setValue($pass['key']);
-      $passOverrideForm->get('changeRecommendation')->setValue('Y')->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
+      // Nothing selected on a pass nobody has answered; "No" where a note was left (a note is
+      // saved by answering "No"), so the saved answer shows with its text.
+      $passOverrideForm->get('changeRecommendation')
+          ->setValue($pass['kept'] ? 'N' : null)
+          ->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
       $passOverrideForm->get('comment')->setValue($pass['comment'] ?? '')->setAttribute('id', 'pass-comment-' . $pass['key']);
       ?>
       <?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>

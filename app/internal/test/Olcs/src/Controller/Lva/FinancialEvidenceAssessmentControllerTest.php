@@ -869,6 +869,32 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->passOverride($sut, $post, true);
     }
 
+    /**
+     * Neither Yes nor No is selected until the caseworker chooses (the VOL-7338 design), so a
+     * save can arrive with no answer. It is asked for by name rather than read as an unknown
+     * error, and nothing is sent.
+     */
+    #[DataProvider('passOverrideNoSelectionProvider')]
+    public function testPassOverrideWithNeitherYesNorNoSelectedAsksForOne(array $post): void
+    {
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('Select yes or no');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        // The form is invalid without the radio; the missing answer is still what is reported.
+        $this->passOverride($sut, $post, false);
+    }
+
+    public static function passOverrideNoSelectionProvider(): \Iterator
+    {
+        yield 'not posted' => [['analysisId' => '9', 'row' => 'largeDeposit', 'comment' => 'x']];
+        yield 'empty' => [['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => '', 'comment' => 'x']];
+    }
+
     public function testPassOverrideWithAnInvalidFormThatIsNotMissingDetailReadsAsUnknownError(): void
     {
         $post = ['analysisId' => 'x', 'row' => 'largeDeposit', 'changeRecommendation' => 'N'];

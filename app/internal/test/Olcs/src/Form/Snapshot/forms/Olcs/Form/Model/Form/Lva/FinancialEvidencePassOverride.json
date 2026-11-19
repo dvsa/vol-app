@@ -32,8 +32,7 @@
           "required": "required",
           "radios_wrapper_attributes": {
             "class": "govuk-radios--standard govuk-radios--inline"
-          },
-          "value": "Y"
+          }
         },
         "type": "Radio",
         "options": {
@@ -122,6 +121,7 @@
     },
     "comment": {
       "name": "comment",
+      "required": false,
       "filters": [
         {
           "name": "Laminas\\Filter\\StringTrim"

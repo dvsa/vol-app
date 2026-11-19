@@ -440,6 +440,15 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $post = $this->getRequest()->getPost();
         $form->setData($post);
 
+        // Neither radio is selected until the caseworker chooses (the VOL-7338 design), so a save
+        // can arrive without an answer. That leaves the form invalid, but it is the caseworker's
+        // to put right, so it is asked for by name rather than reported as an unknown error.
+        if (!in_array($post->get('changeRecommendation'), ['Y', 'N'], true)) {
+            $this->flashMessengerHelper->addErrorMessage('Select yes or no');
+
+            return $this->redirectBackToChangeReview();
+        }
+
         if (!$form->isValid()) {
             $this->flashMessengerHelper->addUnknownError();
 
