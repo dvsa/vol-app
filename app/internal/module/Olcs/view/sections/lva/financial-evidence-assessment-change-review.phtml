@@ -228,14 +228,27 @@
   <?php endif; ?>
 <?php endif; ?>
 
-<form method="post" novalidate class="govuk-!-margin-top-6">
-  <?php echo $this->formElement($decisionForm->get('security')); ?>
-  <?php echo $this->formElement($decisionForm->get('analysisId')); ?>
-  <div class="govuk-form-group">
-    <?php echo $this->formRow($decisionForm->get('decision')); ?>
-  </div>  <div class="govuk-button-group">
-    <?php echo $this->formElement($decisionForm->get('saveDecision')); ?>
-  </div>
-</form>
-
-
+<?php if ($showPassOverride) : ?>
+  <?php
+  // The passed-checks page ends with the way back to the overview (VOL-7338 AC3), where the
+  // decision on the evidence is made. Each check is saved by its own "Save and continue", so
+  // nothing is left to save here: this is a link, not a submit. The original design asked "Do
+  // you want to save the changes you have made?" with Yes and No above the button; UX agreed to
+  // drop the radios (they were made for another purpose) and label the button "Continue".
+  ?>
+  <a href="<?php echo $this->escapeHtmlAttr($this->url(null, [], [], true)); ?>"
+     class="govuk-button govuk-!-margin-top-6" data-module="govuk-button" role="button" draggable="false">
+    Continue
+  </a>
+<?php else : ?>
+  <form method="post" novalidate class="govuk-!-margin-top-6">
+    <?php echo $this->formElement($decisionForm->get('security')); ?>
+    <?php echo $this->formElement($decisionForm->get('analysisId')); ?>
+    <div class="govuk-form-group">
+      <?php echo $this->formRow($decisionForm->get('decision')); ?>
+    </div>
+    <div class="govuk-button-group">
+      <?php echo $this->formElement($decisionForm->get('saveDecision')); ?>
+    </div>
+  </form>
+<?php endif; ?>
