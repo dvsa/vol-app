@@ -92,3 +92,30 @@ jobs:
         if: ${{ inputs.push }}
         run: |
           echo "Assets uploaded to: s3://${{ env.ACCOUNT_NUMBER }}-${{ env.ASSET_BUCKET }}/${{ env.S3_PATH }}/" >> $GITHUB_STEP_SUMMARY
+
+  test:
+    name: Test
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: app/cdn
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 26
+          cache: "npm"
+          cache-dependency-path: app/cdn/package.json
+
+      - run: npm install --prefer-offline
+        shell: bash
+
+      - run: npx playwright install --with-deps --only-shell chromium
+        shell: bash
+
+      - run: npm test
+        shell: bash
