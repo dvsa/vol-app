@@ -68,6 +68,7 @@ return [
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select fee ' . $row['id'],
         ],
     ]
 ];

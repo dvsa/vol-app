@@ -79,7 +79,9 @@ return [
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select permit range ' . $row['prefix'] . $row['fromNo']
+                . ' to ' . $row['prefix'] . $row['toNo'],
         ],
     ]
 ];

@@ -118,6 +118,7 @@ class Vehicle extends InternalSearchAbstract
                 'width' => 'checkbox',
                 'type' => 'Checkbox',
                 'idIndex' => 'vehId',
+                'label-callback' => static fn($row) => 'Select vehicle ' . $row['vrm'] . ', licence ' . $row['licNo'],
             ],
         ];
     }

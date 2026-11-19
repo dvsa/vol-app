@@ -81,7 +81,8 @@ return [
         [
             'title' => 'markup-table-th-action', //this is a translation key
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select case ' . $row['id'],
         ],
     ]
 ];

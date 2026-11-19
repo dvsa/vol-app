@@ -36,6 +36,8 @@ class TaskCheckbox implements FormatterPluginManagerInterface
             return '';
         }
 
-        return $this->tableBuilder->replaceContent('{{[elements/checkbox]}}', $data);
+        $data['selectionLabel'] = 'Select task ' . $data['description'];
+        $data['selectionId'] = $column['selectionId'] ?? 'table-checkbox-' . $data['id'];
+        return $this->tableBuilder->replaceContentEscapingValues('{{[elements/checkbox]}}', $data);
     }
 }

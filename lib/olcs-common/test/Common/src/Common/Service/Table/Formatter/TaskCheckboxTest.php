@@ -38,8 +38,12 @@ final class TaskCheckboxTest extends MockeryTestCase
     {
         $column = [];
 
-        $this->tableBuilder->shouldReceive('replaceContent')
-            ->with('{{[elements/checkbox]}}', $data)
+        $data['description'] = 'Review application';
+        $this->tableBuilder->shouldReceive('replaceContentEscapingValues')
+            ->with('{{[elements/checkbox]}}', array_merge($data, [
+                'selectionLabel' => 'Select task Review application',
+                'selectionId' => 'table-checkbox-69',
+            ]))
             ->andReturn('checkbox markup');
 
         $this->assertEquals('checkbox markup', $this->sut->format($data, $column));

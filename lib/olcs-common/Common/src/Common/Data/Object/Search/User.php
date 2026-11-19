@@ -135,6 +135,7 @@ class User extends InternalSearchAbstract
                 'width' => 'checkbox',
                 'data-field' => 'userId',
                 'type' => 'CustomSelector',
+                'label-callback' => static fn($row) => 'Select user ' . $row['loginId'],
             ]
          ];
     }

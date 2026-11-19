@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\FeeAmount;
 use Common\Service\Table\Formatter\FeeAmountSum;
 use Common\Service\Table\Formatter\FeeUrlExternal;
+use Common\Service\Table\Formatter\Money;
 use Common\Service\Table\Formatter\Translate;
 
 return [
@@ -45,6 +46,12 @@ return [
             'type' => 'Checkbox',
             'width' => 'checkbox',
             'name' => 'checkbox',
+            'label-callback' => static fn($row) => sprintf(
+                'Select fee %s, %s, %s outstanding',
+                $row['description'],
+                $row['licence']['licNo'],
+                (new Money())->format($row, ['name' => 'outstanding'])
+            ),
             'disabled-callback' => fn($row) => $row['isExpiredForLicence']
         ]
     ],

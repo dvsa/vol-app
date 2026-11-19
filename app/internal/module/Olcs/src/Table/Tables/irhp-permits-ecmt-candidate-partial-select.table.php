@@ -36,10 +36,13 @@ return [
         [
             'title' => 'Deselect unwanted permits',
             'width' => 'checkbox',
-            'formatter' => function ($data) {
+            'formatter' => function ($data, $column = []) {
                 $checked = $data['wanted'] ? 'checked' : '';
-                return '<input type="checkbox" name="id[]" value="'
-                    . \Common\Util\Escape::html($data['id']) . '" ' . $checked . '>';
+                $id = $column['selectionId'] ?? 'candidate-permit-' . $data['id'];
+                return '<input type="checkbox" id="' . \Common\Util\Escape::htmlAttr($id)
+                    . '" name="id[]" value="' . \Common\Util\Escape::htmlAttr($data['id']) . '" ' . $checked . '>'
+                    . '<label class="govuk-visually-hidden" for="' . \Common\Util\Escape::htmlAttr($id)
+                    . '">Select permit ' . \Common\Util\Escape::html($data['permitNumber']) . '</label>';
             },
         ],
     ],

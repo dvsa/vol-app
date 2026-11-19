@@ -52,7 +52,10 @@ return [
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select financial standing rate '
+                . ($row['goodsOrPsv']['description'] ?? '') . ', ' . ($row['licenceType']['description'] ?? '')
+                . ', ' . ($row['vehicleType']['description'] ?? '') . ', reference ' . $row['id'],
         ],
     ]
 ];

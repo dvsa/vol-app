@@ -27,7 +27,6 @@ final class HideIfClosedRadioTest extends MockeryTestCase
     /**
      * @return \Iterator<(int | string), array<(array<(int | string)> | string)>>
      *
-     * @psalm-return list{list{array{closedDate: '2015-03-24', id: 1}, ''}, list{array{closedDate: '', id: 1}, '<input type="radio" value="1" name="id">'}, list{array{id: 1}, '<input type="radio" value="1" name="id">'}}
      */
     public static function formatProvider(): \Iterator
     {
@@ -43,13 +42,13 @@ final class HideIfClosedRadioTest extends MockeryTestCase
                 'closedDate' => '',
                 'id' => 1
             ],
-            '<input type="radio" value="1" name="id">'
+            '<input type="radio" id="submission-1" value="1" name="id"><label class="govuk-visually-hidden" for="submission-1">Select submission 1</label>'
         ];
         yield [
             [
                 'id' => 1
             ],
-            '<input type="radio" value="1" name="id">'
+            '<input type="radio" id="submission-1" value="1" name="id"><label class="govuk-visually-hidden" for="submission-1">Select submission 1</label>'
         ];
     }
 }
