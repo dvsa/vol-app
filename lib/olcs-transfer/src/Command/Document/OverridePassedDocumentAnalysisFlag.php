@@ -13,14 +13,14 @@ use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
  * reason in a comment. The reverse of OverrideDocumentAnalysisFlag.
  *
  * Only the row, the comment and the choice travel: the API records who made the change and when,
- * and refuses anything that cannot be changed (an analysis that is not successful or is already
- * decided, or a row that is not currently a pass). Deciding the review itself is
- * UpdateDocumentAnalysisAssessmentStatus.
+ * and refuses anything that cannot be changed (an analysis that is not successful, or a row the
+ * analyser did not pass). Deciding the review itself is UpdateDocumentAnalysisAssessmentStatus.
  *
- * changeRecommendation is "Y" to change the row to a fail, or "N" to leave it as it is; either
- * way the comment, if given, is kept as the caseworker's note. The comment is not required here:
- * every row this command can target is a genuine pass, so changing it always needs a reason,
- * which the caller enforces.
+ * The answer on a check stands and can be sent again. changeRecommendation "Y" changes the row
+ * to a fail, or keeps it one and replaces the comment. "N" leaves it as the analyser had it,
+ * which changes a row already failed back to a pass. Either way the comment, if given, is kept
+ * against the row. The comment is not required here: every row this command can target is a
+ * genuine pass, so changing its outcome always needs a reason, which the caller enforces.
  */
 #[Transfer\RouteName('backend/document/document_analysis/single/override-pass-flag')]
 #[Transfer\Method('PUT')]
@@ -81,5 +81,3 @@ final class OverridePassedDocumentAnalysisFlag extends AbstractCommand
         return $this->changeRecommendation;
     }
 }
-
-

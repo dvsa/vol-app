@@ -187,37 +187,37 @@
       </div>
     </dl>
 
-    <?php if (!$pass['changed']) : ?>
-      <?php
-      // One pass-override form serves every pass; only the row differs. The comment is pre-filled
-      // with whatever is already saved against this row (a prior note), so a reload never looks
-      // like it was lost; ids are made unique per pass.
-      $passOverrideForm->get('analysisId')->setValue((string)$analysisId);
-      $passOverrideForm->get('row')->setValue($pass['key']);
-      // Nothing selected on a pass nobody has answered; "No" where a note was left (a note is
-      // saved by answering "No"), so the saved answer shows with its text.
-      $passOverrideForm->get('changeRecommendation')
-          ->setValue($pass['kept'] ? 'N' : null)
-          ->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
-      $passOverrideForm->get('comment')->setValue($pass['comment'] ?? '')->setAttribute('id', 'pass-comment-' . $pass['key']);
-      ?>
-      <?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>
-      <form method="post" novalidate>
-        <?php echo $this->formElement($passOverrideForm->get('security')); ?>
-        <?php echo $this->formElement($passOverrideForm->get('analysisId')); ?>
-        <?php echo $this->formElement($passOverrideForm->get('row')); ?>
-        <?php // Each field in its own GOV.UK form group, which gives the spacing between them the design shows. ?>
-        <div class="govuk-form-group">
-          <?php echo $this->formRow($passOverrideForm->get('changeRecommendation')); ?>
-        </div>
-        <div class="govuk-form-group">
-          <?php echo $this->formRow($passOverrideForm->get('comment')); ?>
-        </div>
-        <div class="govuk-button-group">
-          <?php echo $this->formElement($passOverrideForm->get('savePassOverride')); ?>
-        </div>
-      </form>
-    <?php endif; ?>
+    <?php
+    // One pass-override form serves every pass; only the row differs. It is always shown, with
+    // the caseworker's saved answer on this check, so a typo can be fixed, the comment edited or
+    // the change undone (agreed with UX): "Yes" and their text on a check they changed to a fail,
+    // "No" and their note where one was left (a note is saved by answering "No"), and nothing
+    // selected on a check nobody has answered. "No" means the analyser's outcome stands: saving
+    // it on a changed check changes it back to a pass, and saving it with the box emptied removes
+    // the caseworker's entry altogether. Ids are made unique per pass.
+    $passOverrideForm->get('analysisId')->setValue((string)$analysisId);
+    $passOverrideForm->get('row')->setValue($pass['key']);
+    $passOverrideForm->get('changeRecommendation')
+        ->setValue($pass['changed'] ? 'Y' : ($pass['kept'] ? 'N' : null))
+        ->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
+    $passOverrideForm->get('comment')->setValue($pass['comment'] ?? '')->setAttribute('id', 'pass-comment-' . $pass['key']);
+    ?>
+    <?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>
+    <form method="post" novalidate>
+      <?php echo $this->formElement($passOverrideForm->get('security')); ?>
+      <?php echo $this->formElement($passOverrideForm->get('analysisId')); ?>
+      <?php echo $this->formElement($passOverrideForm->get('row')); ?>
+      <?php // Each field in its own GOV.UK form group, which gives the spacing between them the design shows. ?>
+      <div class="govuk-form-group">
+        <?php echo $this->formRow($passOverrideForm->get('changeRecommendation')); ?>
+      </div>
+      <div class="govuk-form-group">
+        <?php echo $this->formRow($passOverrideForm->get('comment')); ?>
+      </div>
+      <div class="govuk-button-group">
+        <?php echo $this->formElement($passOverrideForm->get('savePassOverride')); ?>
+      </div>
+    </form>
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
   <?php endforeach; ?>

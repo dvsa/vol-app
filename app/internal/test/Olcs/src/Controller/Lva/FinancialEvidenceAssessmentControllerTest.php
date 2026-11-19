@@ -924,6 +924,92 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->passOverride($sut, $post, true);
     }
 
+    /**
+     * The answer on a passed check can be revisited (agreed with UX): the form stays on a check
+     * already changed to a fail, so "Yes" again is sent and replaces the comment.
+     */
+    public function testPassOverrideOnACheckAlreadyChangedUpdatesTheComment(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'Y', 'comment' => 'A better reason'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('The recommendation has been changed to a fail');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && $c->getRow() === 'name' && $c->getChangeRecommendation() === 'Y'
+                && $c->getComment() === 'A better reason'))
+            ->andReturn($this->commandResponse(true, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true, $this->analysisWithNameChangedToAFail());
+    }
+
+    /** "No" on a check that was changed to a fail changes it back to a pass. */
+    public function testPassOverrideChoosingNoOnAChangedCheckChangesItBack(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'N', 'comment' => 'Changed in error'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('The recommendation has been changed back to a pass');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && $c->getRow() === 'name' && $c->getChangeRecommendation() === 'N'
+                && $c->getComment() === 'Changed in error'))
+            ->andReturn($this->commandResponse(true, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true, $this->analysisWithNameChangedToAFail());
+    }
+
+    /**
+     * "No" means the analyser's outcome stands. With nothing typed on a check the caseworker has
+     * already answered, that is sent, and the API deletes their entry: a change to a fail is
+     * undone, a note is removed.
+     */
+    #[DataProvider('answeredCheckProvider')]
+    public function testPassOverrideChoosingNoWithNothingTypedClearsAnAnsweredCheck(string $flag, string $message): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'N', 'comment' => '  '];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with($message);
+
+        $analysis = $this->analysisWithNameChangedToAFail();
+        $analysis['resultNormalised']['rows']['name']['flag'] = $flag;
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && $c->getRow() === 'name' && $c->getChangeRecommendation() === 'N' && $c->getComment() === ''))
+            ->andReturn($this->commandResponse(true, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true, $analysis);
+    }
+
+    public static function answeredCheckProvider(): \Iterator
+    {
+        yield 'changed to a fail' => ['fail', 'The recommendation has been changed back to a pass'];
+        // The same override with the flag left as a pass is a note.
+        yield 'a note' => ['pass', 'Your comment has been removed'];
+    }
+
+    /** Every flagged check passed by the analyser, with "name" since changed to a fail by a caseworker. */
+    private function analysisWithNameChangedToAFail(): array
+    {
+        $analysis = $this->assessedAnalysis(9, 'pass');
+        $analysis['resultNormalised']['rows']['name'] = [
+            'flag' => 'fail', 'remark' => null, 'value' => null, 'checks' => [],
+            'override' => ['originalFlag' => 'pass', 'comment' => 'First reason', 'changedBy' => 'Jo', 'changedOn' => null],
+        ];
+
+        return $analysis;
+    }
+
     public static function unchangeablePassRowProvider(): \Iterator
     {
         yield 'not a pass' => ['statementDate'];

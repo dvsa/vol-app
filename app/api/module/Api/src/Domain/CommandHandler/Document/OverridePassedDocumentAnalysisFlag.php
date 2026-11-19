@@ -21,9 +21,12 @@ use Dvsa\Olcs\Transfer\Command\Document\OverridePassedDocumentAnalysisFlag as Cm
  * A caseworker changes one passed check of a successful analysis to a fail. The reverse of
  * OverrideDocumentAnalysisFlag.
  *
- * The change is recorded as an annotation; the analyser's result is left as it was. The row must
- * currently read as a pass once earlier annotations are laid over it, and the analysis may be
- * changed whether or not it has been decided. The caseworker's name is captured now, so the
+ * The change is recorded as an annotation; the analyser's result is left as it was. The check
+ * must be one the analyser passed. The caseworker's answer on it stands and can be revisited: "Y"
+ * makes it a fail (or keeps it one and replaces the comment). "N" means the analyser's outcome
+ * stands, which changes a check already failed back to a pass: with a comment the comment is kept
+ * as a note, and with none the caseworker's entry for the check is deleted altogether. The analysis may be changed
+ * whether or not it has been decided. The caseworker's name is captured now, so the
  * change reads the same however the user record changes later.
  *
  * An analysis that does not exist is a 404 (fetchUsingId). One that exists but cannot take the
@@ -71,32 +74,57 @@ final class OverridePassedDocumentAnalysisFlag extends AbstractCommandHandler im
         }
 
         $annotations = $analysis->getAnnotations();
-        $currentFlag = $this->overlay->apply($normalised, $annotations)->rows()[$rowKey]['flag'] ?? null;
 
-        if (!in_array($currentFlag, AnalysisAnnotationOverlay::OVERRIDABLE_TO_FAIL_FLAGS, true)) {
-            throw new BadRequestException(
-                sprintf('Check %s of document analysis %d is not a pass, so cannot be changed', $rowKey, $analysisId)
-            );
+        // Which checks can be answered here is asked of the analyser's own flag, not of the check
+        // as it reads now: the caseworker's answer stands and can be revisited, so a pass they
+        // have already changed to a fail is still theirs to edit or change back.
+        $analyserFlag = $normalised->rows()[$rowKey]['flag'] ?? null;
+
+        if (!in_array($analyserFlag, AnalysisAnnotationOverlay::OVERRIDABLE_TO_FAIL_FLAGS, true)) {
+            throw new BadRequestException(sprintf(
+                'Check %s of document analysis %d was not assessed as a pass, so cannot be changed to a fail',
+                $rowKey,
+                $analysisId
+            ));
         }
+
+        $currentFlag = $this->overlay->apply($normalised, $annotations)->rows()[$rowKey]['flag'];
 
         /** @var UserEntity $user */
         $user = $this->getCurrentUser();
 
-        // "Y" changes the row to a fail; "N" with a comment leaves the flag as it is and only
-        // records the comment as a note (withOverride still needs a target flag to store).
+        // "Y" makes the check a fail, or keeps it one and replaces the comment. "N" means the
+        // analyser's outcome stands: a check already changed goes back to a pass.
         $changeToFail = (string)$command->getChangeRecommendation() === 'Y';
-        $toFlag = $changeToFail ? NormalisedResult::FLAG_FAIL : $currentFlag;
+        $comment = (string)$command->getComment();
+        $changedBack = !$changeToFail && $currentFlag !== $analyserFlag;
 
-        $updated = $this->overlay->withOverride(
-            $annotations,
-            $rowKey,
-            $toFlag,
-            $currentFlag,
-            (string)$command->getComment(),
-            (int)$user->getId(),
-            $this->userName($user),
-            new \DateTimeImmutable()
-        );
+        // "N" with nothing to say leaves no caseworker entry at all, so the check reads exactly
+        // as the analyser left it. "N" with a comment keeps the comment as a note against the
+        // analyser's own flag.
+        $clears = !$changeToFail && $comment === '';
+
+        $this->result->addId('documentAnalysis', $analysisId);
+
+        if ($clears && !$this->overlay->hasRow($annotations, $rowKey)) {
+            // Nothing there to take away either, so nothing is written and the version is not bumped.
+            $this->result->addMessage(sprintf('Document analysis %d check %s left as it is', $analysisId, $rowKey));
+
+            return $this->result;
+        }
+
+        $updated = $clears
+            ? $this->overlay->withoutRow($annotations, $rowKey)
+            : $this->overlay->withOverride(
+                $annotations,
+                $rowKey,
+                $changeToFail ? NormalisedResult::FLAG_FAIL : $analyserFlag,
+                $analyserFlag,
+                $comment,
+                (int)$user->getId(),
+                $this->userName($user),
+                new \DateTimeImmutable()
+            );
 
         if ($repo->recordAnnotations($analysisId, $updated, (int)$analysis->getVersion(), $user) === 0) {
             throw new BadRequestException(
@@ -104,12 +132,17 @@ final class OverridePassedDocumentAnalysisFlag extends AbstractCommandHandler im
             );
         }
 
-        $this->result->addId('documentAnalysis', $analysisId);
-        $this->result->addMessage(
-            $changeToFail
-                ? sprintf('Document analysis %d check %s changed to fail', $analysisId, $rowKey)
-                : sprintf('Document analysis %d check %s comment saved', $analysisId, $rowKey)
-        );
+        $this->result->addMessage(sprintf(
+            'Document analysis %d check %s %s',
+            $analysisId,
+            $rowKey,
+            match (true) {
+                $changeToFail => 'changed to fail',
+                $changedBack => 'changed back to pass',
+                $clears => 'comment removed',
+                default => 'comment saved',
+            }
+        ));
 
         return $this->result;
     }
@@ -122,5 +155,3 @@ final class OverridePassedDocumentAnalysisFlag extends AbstractCommandHandler im
         return is_string($name) && $name !== '' ? $name : (string)$user->getLoginId();
     }
 }
-
-

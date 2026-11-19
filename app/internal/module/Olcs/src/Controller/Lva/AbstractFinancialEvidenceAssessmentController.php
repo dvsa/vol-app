@@ -429,11 +429,16 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * Change one passed check to a fail, or leave a note on it without changing its flag.
+     * Record the caseworker's answer on one passed check: change it to a fail, or leave a note on
+     * it without changing its flag.
      *
-     * Every row here is a genuine pass, so "Yes" always needs a reason. "No" with nothing to say
-     * changes nothing; "No" with a reason is saved as a note, the flag left as it is. The API
-     * refuses a row that is not currently a pass, or an analysis already decided.
+     * The answer stands and can be revisited, so a check already changed is handled like any
+     * other. "Yes" makes it a fail (or keeps it one and replaces the comment); every row here is
+     * a genuine pass, so that always needs a reason. "No" means the analyser's outcome stands,
+     * which changes a check already failed back to a pass: with text, the text is kept as a
+     * note; with none, the caseworker's entry for the check is deleted. "No" with nothing typed
+     * on a check nobody has answered is nothing to send. The API refuses a row the analyser did
+     * not pass.
      */
     protected function processPassOverride(FormInterface $form, int $analysisId, array $page)
     {
@@ -474,15 +479,21 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $comment = trim((string)$data['comment']);
         $changeToFail = $data['changeRecommendation'] === 'Y';
 
-        // Every row here is a genuine pass, so changing it always needs a reason.
+        // "No" means the analyser's outcome stands. On a check already changed to a fail that
+        // changes it back to a pass; with nothing typed, the API deletes the caseworker's entry
+        // for the check altogether (a change is undone, a note removed).
+        $changeBack = !$changeToFail && $pass['changed'];
+        $answered = $pass['changed'] || $pass['kept'];
+
+        // Every row here is a genuine pass, so changing it to a fail always needs a reason.
         if ($changeToFail && $comment === '') {
             $this->flashMessengerHelper->addErrorMessage('You must provide explanatory text.');
 
             return $this->redirectBackToChangeReview();
         }
 
-        if (!$changeToFail && $comment === '') {
-            // Nothing to change and nothing to say.
+        if (!$changeToFail && $comment === '' && !$answered) {
+            // Nothing to change, nothing to remove and nothing to say.
             return $this->redirectBackToChangeReview();
         }
 
@@ -497,7 +508,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         if ($response->isOk()) {
             $this->flashMessengerHelper->addSuccessMessage(
-                $changeToFail ? 'The recommendation has been changed to a fail' : 'Your comment has been saved'
+                match (true) {
+                    $changeToFail => 'The recommendation has been changed to a fail',
+                    $changeBack => 'The recommendation has been changed back to a pass',
+                    $comment === '' => 'Your comment has been removed',
+                    default => 'Your comment has been saved',
+                }
             );
         } else {
             $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');

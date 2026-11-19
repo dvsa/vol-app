@@ -132,4 +132,35 @@ class AnalysisAnnotationOverlay
 
         return $annotations;
     }
+
+    /**
+     * Whether a row carries a caseworker's entry (a change or a note).
+     *
+     * @param array<mixed>|null $annotations as stored
+     */
+    public function hasRow(?array $annotations, string $row): bool
+    {
+        return is_array($annotations[self::KEY_ROWS][$row] ?? null);
+    }
+
+    /**
+     * The annotations with one row's entry taken away, which puts that row back exactly as the
+     * analyser left it: no change and no note. What was there before stays in
+     * document_analysis_hist, as every earlier state of the row does.
+     *
+     * @param array<mixed>|null $annotations as stored
+     *
+     * @return array{rows: array<string, array>}
+     */
+    public function withoutRow(?array $annotations, string $row): array
+    {
+        $annotations = is_array($annotations) ? $annotations : [];
+        $rows = is_array($annotations[self::KEY_ROWS] ?? null) ? $annotations[self::KEY_ROWS] : [];
+
+        unset($rows[$row]);
+
+        $annotations[self::KEY_ROWS] = $rows;
+
+        return $annotations;
+    }
 }
