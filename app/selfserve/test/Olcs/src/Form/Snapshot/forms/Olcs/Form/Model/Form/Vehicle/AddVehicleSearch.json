@@ -2,7 +2,7 @@
   "name": "AddVehicleSearch",
   "attributes": {
     "method": "post",
-    "id": "vehicle-add"
+    "id": "vehicle-add-search"
   },
   "elements": [],
   "fieldsets": [
