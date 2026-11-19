@@ -21,6 +21,7 @@ class SwitchBoard
     public const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED = 'view-removed';
 
     #[Form\Name('optionsFieldset')]
+    #[Form\Options(['label' => 'licence.vehicle.switchboard.header', 'label_attributes' => ['class' => 'govuk-fieldset__legend govuk-fieldset__legend--l'], 'legend-as-page-heading' => true])]
     #[Form\ComposedObject('Olcs\Form\Model\Form\Vehicle\Fieldset\SwitchBoard')]
     public $optionsFieldset = null;
 

@@ -108,6 +108,24 @@ final class FormCollectionTest extends MockeryTestCase
         );
     }
 
+    public function testRenderLegendAsPageHeading(): void
+    {
+        $element = new Fieldset('question');
+        $element->setLabel('Question');
+        $element->setLabelAttributes(['class' => 'govuk-fieldset__legend govuk-fieldset__legend--l']);
+        $element->setOption('legend-as-page-heading', true);
+        $element->setOption('shouldWrap', true);
+
+        $viewHelper = $this->prepareViewHelper();
+        $markup = $viewHelper($element, true);
+        $markup = html_entity_decode($markup, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $this->assertStringContainsString(
+            '<legend class="govuk-fieldset__legend govuk-fieldset__legend--l"><h1 class="govuk-fieldset__heading">Question</h1></legend>',
+            $markup
+        );
+    }
+
     /**
      * @outputBuffering disabled
      */

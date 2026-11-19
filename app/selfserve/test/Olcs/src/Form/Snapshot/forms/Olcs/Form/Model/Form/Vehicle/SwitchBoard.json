@@ -92,7 +92,13 @@
         ],
         "fieldsets": [],
         "type": "Laminas\\Form\\Fieldset",
-        "options": []
+        "options": {
+          "label": "licence.vehicle.switchboard.header",
+          "label_attributes": {
+            "class": "govuk-fieldset__legend govuk-fieldset__legend--l"
+          },
+          "legend-as-page-heading": true
+        }
       }
     }
   ],

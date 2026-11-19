@@ -223,6 +223,10 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
                     $label = $escapeHtmlHelper($label);
                 }
 
+                if ($element->getOption('legend-as-page-heading') === true) {
+                    $label = sprintf('<h1 class="govuk-fieldset__heading">%s</h1>', $label);
+                }
+
                 $legendAttributesString = $this->createAttributesString($element->getLabelAttributes());
 
                 if ($legendAttributesString !== '' && $legendAttributesString !== '0') {
