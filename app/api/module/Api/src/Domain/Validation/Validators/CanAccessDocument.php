@@ -66,7 +66,7 @@ class CanAccessDocument extends AbstractCanAccessEntity
     /**
      * @throws NotFoundException
      */
-    private function canExternalUserAccessDocument(string $documentId): bool
+    protected function canExternalUserAccessDocument(string $documentId): bool
     {
         return $this->checkDocumentWasExternallyUploaded($documentId)
             || $this->checkDocumentInCorrespondence($documentId)

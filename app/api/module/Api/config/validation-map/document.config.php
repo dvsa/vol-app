@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentsWithIds;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanDeleteDocumentWithId;
+use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanDownloadDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanOverwriteDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
@@ -40,7 +41,7 @@ return [
     CommandHandler\Email\SendInternationalGoods::class => CanAccessDocumentWithId::class,
 
     //  queries
-    QueryHandler\Document\Download::class => CanAccessDocumentWithId::class,
+    QueryHandler\Document\Download::class => CanDownloadDocumentWithId::class,
     QueryHandler\Document\DownloadGuide::class => NoValidationRequired::class,
     QueryHandler\Document\PrintLetter::class => CanAccessDocumentWithId::class,
 

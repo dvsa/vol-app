@@ -75,20 +75,26 @@ final class DocumentTest extends RepositoryTestCase
         yield 'licence' => ['fetchListForTmLicence', 'licence'];
     }
 
-    public function testFetchUnassignedListForUser(): void
+    public function testFetchUnassignedByIdsForUser(): void
     {
         $qb = $this->createRealQb();
         $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(['RESULTS']);
 
-        $this->assertSame(['RESULTS'], $this->sut->fetchUnassignedListForUser(7));
+        $this->assertSame(['RESULTS'], $this->sut->fetchUnassignedByIdsForUser([11, 12], 7));
 
-        // The created-by id is inlined rather than bound.
         $this->assertSame(
             'SELECT m' . self::FROM
-            . ' WHERE m.messagingMessage IS NULL AND m.createdBy = 7'
+            . ' WHERE m.id IN(:ids) AND m.messagingMessage IS NULL AND m.createdBy = :createdBy'
             . ' ORDER BY m.id DESC',
             $qb->getDQL(),
         );
+        $this->assertSame([11, 12], $qb->getParameter('ids')->getValue());
+        $this->assertSame(7, $qb->getParameter('createdBy')->getValue());
+    }
+
+    public function testFetchUnassignedByIdsForUserWithNoIdsDoesNotQuery(): void
+    {
+        $this->assertSame([], $this->sut->fetchUnassignedByIdsForUser([], 7));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('singleFilterProvider')]

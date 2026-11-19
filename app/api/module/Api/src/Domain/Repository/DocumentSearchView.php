@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\View\DocumentSearchView as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
@@ -65,6 +66,8 @@ class DocumentSearchView extends AbstractReadonlyRepository
     #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
+        $this->excludeAttachmentsCaseworkersSent($qb);
+
         //sometimes we want only the records which aren't linked to a particular licence, case, bus reg etc.
         if ($query->getOnlyUnlinked() === 'Y') {
             $qb->andWhere(
@@ -198,5 +201,16 @@ class DocumentSearchView extends AbstractReadonlyRepository
                 \Dvsa\Olcs\Api\Entity\Application\Application::APPLICATION_STATUS_CANCELLED,
             ]);
         }
+    }
+
+    private function excludeAttachmentsCaseworkersSent(QueryBuilder $qb): void
+    {
+        $qb->leftJoin(DocumentEntity::class, 'document', \Doctrine\ORM\Query\Expr\Join::ON, 'document.id = m.id');
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull('document.messagingMessage'),
+                $qb->expr()->eq('document.isExternal', 1)
+            )
+        );
     }
 }

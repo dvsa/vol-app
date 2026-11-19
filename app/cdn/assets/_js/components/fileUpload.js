@@ -4,40 +4,43 @@ var OLCS = OLCS || {};
  * File upload
  */
 
-OLCS.fileUpload = (function(document, $, undefined) {
-
+OLCS.fileUpload = (function (document, $, undefined) {
   "use strict";
 
   return function init(options) {
-
     var F = OLCS.formHelper;
-    var asyncUploads          = true;
-    var containerSelector     = ".file-uploader";
-    var removeSelector        = ".file__remove";
-    var mainBodySelector      = ".js-body";
-    var submitSelector        = ".js-upload";
-    var inputSelector         = ".attach-action__input";
-    var attachButtonSelector  = ".attach-action__label";
-    var numUploaded           = 0;
-    var totalUploads          = 0;
-    var MULTI_UPLOAD_DELAY    = 1000;
-    var uploadInProgress      = false;
+    var asyncUploads = true;
+    var containerSelector = ".file-uploader";
+    var removeSelector = ".file__remove";
+    var mainBodySelector = ".js-body";
+    var submitSelector = ".js-upload";
+    var inputSelector = ".attach-action__input";
+    var attachButtonSelector = ".attach-action__label";
+    var numUploaded = 0;
+    var totalUploads = 0;
+    var MULTI_UPLOAD_DELAY = 1000;
+    var uploadInProgress = false;
+    var heldBackSubmits = $();
+    var uploadsInFlight = 0;
 
     if (window.FormData === undefined) {
       OLCS.logger.warn("XHR form uploads not supported in this browser", "fileUpload");
       asyncUploads = false;
     }
 
-    function disableElements() {
+    function disableElements(form) {
       uploadInProgress = true;
       $(removeSelector).addClass("disabled");
       var pageActions = $(".govuk-main-wrapper").last().children();
       $(attachButtonSelector).addClass("disabled");
       $(pageActions, inputSelector).attr({
-        "disabled"    : true,
-        "aria-hidden" : true
+        disabled: true,
+        "aria-hidden": true,
       });
 
+      var submits = form.find(":submit:enabled").not(form.find(containerSelector).find(":submit"));
+      submits.prop("disabled", true);
+      heldBackSubmits = heldBackSubmits.add(submits);
     }
 
     function enableElements() {
@@ -45,15 +48,23 @@ OLCS.fileUpload = (function(document, $, undefined) {
       uploadInProgress = false;
       $(attachButtonSelector).removeClass("disabled");
       $(".govuk-main-wrapper").last().children().removeAttr("disabled", "aria-hidden");
+      heldBackSubmits.prop("disabled", false);
+      heldBackSubmits = $();
     }
 
     function handleResponse(response, index) {
-      var originalUploader = ".file-uploader:eq("+index+")";
-      var updatedUploader  = $(response).find(originalUploader);
+      var originalUploader = ".file-uploader:eq(" + index + ")";
+      var updatedUploader = $(response).find(originalUploader);
+
+      if (!updatedUploader.length || updatedUploader.data("group") !== $(originalUploader).data("group")) {
+        return false;
+      }
+
       F.render(originalUploader, updatedUploader[0].innerHTML);
+      return true;
     }
 
-    var deleteResponse = OLCS.normaliseResponse(function(response) {
+    var deleteResponse = OLCS.normaliseResponse(function (response) {
       if (OLCS.modal.isVisible(true)) {
         OLCS.modal.updateBody(response.body);
       } else {
@@ -61,55 +72,59 @@ OLCS.fileUpload = (function(document, $, undefined) {
       }
     });
 
-    function addFileList(container){
-      if($(container).find(".js-upload-list").length > 0){
+    function addFileList(container) {
+      if ($(container).find(".js-upload-list").length > 0) {
         return;
       }
-      var newHtml = ["<div class=\"help__text\">",
-        "<h3 class=\"file__heading\"></h3>",
-        "<ul class=\"js-upload-list\"></ul>" ,
-        "</div>"].join("\n");
+      var newHtml = [
+        '<div class="help__text">',
+        '<h3 class="file__heading"></h3>',
+        '<ul class="js-upload-list"></ul>',
+        "</div>",
+      ].join("\n");
 
       $(container).append(newHtml);
     }
 
     function upload(form, container, index, file) {
-      var fd             = new FormData();
-      var xhr            = new XMLHttpRequest();
-      var kbSize         = Math.round(file.size / 1024);
-      var name           = $(container).data("group");
+      var fd = new FormData();
+      var xhr = new XMLHttpRequest();
+      var kbSize = Math.round(file.size / 1024);
+      var name = $(container).data("group");
       var containerIndex = $(container).index(containerSelector);
-      var sectionIdVal   = form.find("[name='sectionId']").val();
-      var correlationId  = form.find("[name='correlationId']").val();
-      var security       = document.getElementById("security");
-      var url            = form.attr("action") ? form.attr("action") : window.location.pathname;
+      var sectionIdVal = form.find("[name='sectionId']").val();
+      var correlationId = form.find("[name='correlationId']").val();
+      var security = document.getElementById("security");
+      var url = form.attr("action") ? form.attr("action") : window.location.pathname;
       uploadInProgress = true;
 
       OLCS.logger.debug("Uploading file " + file.name + " (" + file.type + ")", "fileUpload");
 
-
-      disableElements();
+      uploadsInFlight++;
+      disableElements(form);
       addFileList(container);
-      $(container).find(".js-upload-list").append([
-        "<li class=file data-upload-index=" + index + ">",
-          "<span class=file__preloader></span>",
-          "<a href=#>",
+      $(container)
+        .find(".js-upload-list")
+        .append(
+          [
+            "<li class=file data-upload-index=" + index + ">",
+            "<span class=file__preloader></span>",
+            "<a href=#>",
             file.name,
-          "</a>",
-          "<span>",
+            "</a>",
+            "<span>",
             kbSize + "KB",
-          "</span>",
-          "<span class='uploading'>Uploading &hellip;</span>",
-        "</li>"
-      ].join("\n"));
+            "</span>",
+            "<span class='uploading'>Uploading &hellip;</span>",
+            "</li>",
+          ].join("\n"),
+        );
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-          numUploaded ++;
-          OLCS.logger.debug(
-            "File " + numUploaded + "/" + totalUploads + " complete",
-            "fileUpload"
-          );
+          numUploaded++;
+          uploadsInFlight--;
+          OLCS.logger.debug("File " + numUploaded + "/" + totalUploads + " complete", "fileUpload");
 
           $("[data-upload-index=" + index + "]")
             .find(".file__preloader")
@@ -117,17 +132,21 @@ OLCS.fileUpload = (function(document, $, undefined) {
             .find(".uploading")
             .replaceWith("<a href=# class=file__remove>Remove</a>");
 
-          if (numUploaded === totalUploads) {
-            OLCS.logger.debug( "All files uploaded", "fileUpload");
-            handleResponse(xhr.responseText, containerIndex);
-            enableElements();
+          if (uploadsInFlight === 0) {
+            OLCS.logger.debug("All files uploaded", "fileUpload");
+            try {
+              if (!handleResponse(xhr.responseText, containerIndex)) {
+                $(container).find("[data-upload-index]").remove();
+              }
+            } finally {
+              enableElements();
+            }
           }
-
         }
       };
 
       if (sectionIdVal) {
-        fd.append("sectionId",sectionIdVal);
+        fd.append("sectionId", sectionIdVal);
       }
 
       if (correlationId) {
@@ -142,7 +161,7 @@ OLCS.fileUpload = (function(document, $, undefined) {
         form.attr("method"),
         url,
         // third param is async yes/no
-        true
+        true,
       );
 
       // we don't yet listen out for this header server
@@ -152,7 +171,7 @@ OLCS.fileUpload = (function(document, $, undefined) {
       xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
       // off we go...
-      setTimeout(function() {
+      setTimeout(function () {
         xhr.send(fd);
       }, index * MULTI_UPLOAD_DELAY);
     }
@@ -162,13 +181,13 @@ OLCS.fileUpload = (function(document, $, undefined) {
       $(inputSelector).attr("multiple", options.multiple);
     }
 
-    $(document).on("click", removeSelector, function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        if(!uploadInProgress){
+    $(document).on("click", removeSelector, function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      if (!uploadInProgress) {
         var button = $(this);
-        var form   = $(this).parents("form");
+        var form = $(this).parents("form");
 
         F.pressButton(form, button);
 
@@ -176,25 +195,25 @@ OLCS.fileUpload = (function(document, $, undefined) {
 
         OLCS.submitForm({
           form: form,
-          success: deleteResponse
+          success: deleteResponse,
         });
       }
     });
 
     if (asyncUploads) {
-      $(document).on("change", inputSelector, function(e) {
+      $(document).on("change", inputSelector, function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        var form       = $(this).parents("form");
-        var container  = $(this).parents(containerSelector);
-        var files      = e.target.files;
-        numUploaded    = 0;
-        totalUploads   = files.length;
+        var form = $(this).parents("form");
+        var container = $(this).parents(containerSelector);
+        var files = e.target.files;
+        numUploaded = 0;
+        totalUploads = files.length;
 
         OLCS.logger.debug("Uploading " + files.length + " file(s)", "fileUpload");
 
-        $.each(files, function(index, file) {
+        $.each(files, function (index, file) {
           upload(form, container, index, file);
         });
       });
@@ -202,5 +221,4 @@ OLCS.fileUpload = (function(document, $, undefined) {
       OLCS.eventEmitter.on("render", setup);
     }
   };
-
-}(document, window.jQuery));
+})(document, window.jQuery);
