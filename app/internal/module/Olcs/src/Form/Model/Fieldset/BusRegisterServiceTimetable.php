@@ -24,7 +24,7 @@ class BusRegisterServiceTimetable
     #[Form\Options(['label' => 'Route description'])]
     #[Form\Required(false)]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 1000])]
     public $routeDescription = null;
 }

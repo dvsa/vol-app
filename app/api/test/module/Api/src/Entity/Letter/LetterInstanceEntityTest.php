@@ -13,6 +13,10 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
+use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\Cases\Cases;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Mockery as m;
 
 /**
  * LetterInstance Entity Unit Tests
@@ -105,10 +109,26 @@ final class LetterInstanceEntityTest extends EntityTester
     }
 
     /**
-     * VOL-7737: a to-do shared by several issues sits under the first of them in letter order,
-     * whatever order the issues were added in.
+     * VOL-7737: a to-do shared by several issues goes with the last of them in letter order,
+     * whatever order the issues were added in and whichever of them the row belongs to.
      */
-    public function testSharedTodoIsPlacedUnderTheFirstIssueInLetterOrder(): void
+    public function testSharedTodoGoesWithTheLastIssueInLetterOrder(): void
+    {
+        $todo = new LetterTodo();
+        $todo->setId(5);
+        $shared = $this->todoVersion(32, $todo);
+
+        $last = $this->issueAt(20, 1, [$shared]);
+        $first = $this->issueAt(10, 0, [$shared]);
+        $entity = new Entity();
+        $entity->addLetterInstanceIssue($last);
+        $entity->addLetterInstanceIssue($first);
+        $instanceTodo = $this->todoOwnedBy($first, $shared);
+
+        $this->assertSame($last, $entity->getPlacementIssue($instanceTodo));
+    }
+
+    public function testSharedTodoCanGoWithTheFirstIssue(): void
     {
         $todo = new LetterTodo();
         $todo->setId(5);
@@ -121,23 +141,7 @@ final class LetterInstanceEntityTest extends EntityTester
         $entity->addLetterInstanceIssue($first);
         $instanceTodo = $this->todoOwnedBy($second, $shared);
 
-        $this->assertSame($first, $entity->getPlacementIssue($instanceTodo));
-    }
-
-    public function testSharedTodoCanBePlacedUnderTheLastIssue(): void
-    {
-        $todo = new LetterTodo();
-        $todo->setId(5);
-        $shared = $this->todoVersion(32, $todo);
-
-        $first = $this->issueAt(10, 0, [$shared]);
-        $last = $this->issueAt(20, 1, [$shared]);
-        $entity = new Entity();
-        $entity->addLetterInstanceIssue($first);
-        $entity->addLetterInstanceIssue($last);
-        $instanceTodo = $this->todoOwnedBy($first, $shared);
-
-        $this->assertSame($last, $entity->getPlacementIssue($instanceTodo, Entity::SHARED_TODO_UNDER_LAST_ISSUE));
+        $this->assertSame($first, $entity->getPlacementIssue($instanceTodo, Entity::SHARED_TODO_UNDER_FIRST_ISSUE));
     }
 
     public function testTodoNoIssueBringsStaysUnderItsOwnIssue(): void
@@ -150,9 +154,13 @@ final class LetterInstanceEntityTest extends EntityTester
         $this->assertSame($owner, $entity->getPlacementIssue($instanceTodo));
     }
 
-    public function testSharedTodosDefaultToTheFirstIssue(): void
+    /**
+     * The business asked for a to-do to come after all of the issues it is for, in the letter
+     * and on the edit page alike
+     */
+    public function testSharedTodosGoWithTheLastOfTheirIssues(): void
     {
-        $this->assertSame(Entity::SHARED_TODO_UNDER_FIRST_ISSUE, Entity::SHARED_TODO_PLACEMENT);
+        $this->assertSame(Entity::SHARED_TODO_UNDER_LAST_ISSUE, Entity::SHARED_TODO_PLACEMENT);
     }
 
     private function issueType(int $id): LetterIssueType
@@ -164,8 +172,8 @@ final class LetterInstanceEntityTest extends EntityTester
     }
 
     /**
-     * The letter draws issues grouped by type, so "first" means first as printed, not just the
-     * lowest display order.
+     * The letter draws issues grouped by type, so "last" means last as printed, not just the
+     * highest display order (and "first" the same).
      */
     public function testLetterOrderGroupsIssuesByType(): void
     {
@@ -183,7 +191,8 @@ final class LetterInstanceEntityTest extends EntityTester
         $instanceTodo = $this->todoOwnedBy($y1, $shared);
 
         $this->assertSame([$x1, $x2, $y1], $entity->getIssuesInLetterOrder());
-        $this->assertSame($x2, $entity->getPlacementIssue($instanceTodo));
+        $this->assertSame($y1, $entity->getPlacementIssue($instanceTodo));
+        $this->assertSame($x2, $entity->getPlacementIssue($instanceTodo, Entity::SHARED_TODO_UNDER_FIRST_ISSUE));
     }
 
     public function testPlacementFollowsAReorderMadeAfterItWasFirstWorkedOut(): void
@@ -196,12 +205,12 @@ final class LetterInstanceEntityTest extends EntityTester
         $entity->addLetterInstanceIssue($b);
         $instanceTodo = $this->todoOwnedBy($a, $shared);
 
-        $this->assertSame($a, $entity->getPlacementIssue($instanceTodo));
+        $this->assertSame($b, $entity->getPlacementIssue($instanceTodo));
 
         $a->setDisplayOrder(1);
         $b->setDisplayOrder(0);
 
-        $this->assertSame($b, $entity->getPlacementIssue($instanceTodo));
+        $this->assertSame($a, $entity->getPlacementIssue($instanceTodo));
     }
 
     public function testEachTodoListsTheIssuesItCanSitUnderById(): void
@@ -221,8 +230,9 @@ final class LetterInstanceEntityTest extends EntityTester
         $stray->setId(2);
         $entity->addLetterInstanceTodo($stray);
 
-        $this->assertSame([1 => [10, 20], 2 => [30]], $entity->getTodoPlacementIssueIds());
-        $this->assertSame([1 => [20, 10], 2 => [30]], $entity->getTodoPlacementIssueIds(Entity::SHARED_TODO_UNDER_LAST_ISSUE));
+        // preferred first: the last issue, then the one before it
+        $this->assertSame([1 => [20, 10], 2 => [30]], $entity->getTodoPlacementIssueIds());
+        $this->assertSame([1 => [10, 20], 2 => [30]], $entity->getTodoPlacementIssueIds(Entity::SHARED_TODO_UNDER_FIRST_ISSUE));
     }
 
     /**
@@ -244,8 +254,44 @@ final class LetterInstanceEntityTest extends EntityTester
 
         $placements = $entity->getPlacementIssuesByTodo();
 
-        $this->assertSame($a, $placements[spl_object_id($sharedTodo)]);
+        $this->assertSame($b, $placements[spl_object_id($sharedTodo)]);
         $this->assertSame($b, $placements[spl_object_id($ownTodo)]);
-        $this->assertSame($b, $entity->getPlacementIssuesByTodo(Entity::SHARED_TODO_UNDER_LAST_ISSUE)[spl_object_id($sharedTodo)]);
+        $this->assertSame($a, $entity->getPlacementIssuesByTodo(Entity::SHARED_TODO_UNDER_FIRST_ISSUE)[spl_object_id($sharedTodo)]);
+    }
+
+    private function linked(string $class, int $id): object
+    {
+        $linked = m::mock($class)->makePartial();
+        $linked->setId($id);
+
+        return $linked;
+    }
+
+    /**
+     * A letter raised on a case is given the case's application and licence too, so it was
+     * raised on the first of its links in Entity::RAISED_ON
+     */
+    public function testALetterWasRaisedOnTheMostSpecificThingItIsLinkedTo(): void
+    {
+        $onCase = new Entity();
+        $onCase->setLicence($this->linked(Licence::class, 7));
+        $onCase->setApplication($this->linked(Application::class, 21));
+        $onCase->setCase($this->linked(Cases::class, 3));
+
+        $onApplication = new Entity();
+        $onApplication->setLicence($this->linked(Licence::class, 7));
+        $onApplication->setApplication($this->linked(Application::class, 21));
+
+        $onLicence = new Entity();
+        $onLicence->setLicence($this->linked(Licence::class, 7));
+
+        $this->assertSame(['case', 3], $onCase->getRaisedOn());
+        $this->assertSame(['application', 21], $onApplication->getRaisedOn());
+        $this->assertSame(['licence', 7], $onLicence->getRaisedOn());
+    }
+
+    public function testALetterLinkedToNothingWasRaisedOnNothing(): void
+    {
+        $this->assertNull((new Entity())->getRaisedOn());
     }
 }

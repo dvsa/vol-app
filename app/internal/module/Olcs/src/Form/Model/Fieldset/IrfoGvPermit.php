@@ -25,7 +25,7 @@ class IrfoGvPermit extends OrganisationBase
     #[Form\Options(['label' => 'In force date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+1', 'min_year_delta' => '-40'])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $inForceDate;
 
@@ -33,7 +33,7 @@ class IrfoGvPermit extends OrganisationBase
     #[Form\Options(['label' => 'Expiry date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+2', 'min_year_delta' => '-40', 'hint' => 'The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>'])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'expiryDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'inForceDate', 'compare_to_label' => 'In force date', 'operator' => 'gte']]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'expiryDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'inForceDate', 'compare_to_label' => 'In force date', 'operator' => 'gte']]]])]
     public $expiryDate;
 
     #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'Fee exempt'])]
@@ -46,7 +46,7 @@ class IrfoGvPermit extends OrganisationBase
     #[Form\Attributes(['class' => 'extra-long', 'id' => 'exemptionDetails', 'required' => false])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'isFeeExempt', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'Laminas\Validator\NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'isFeeExempt', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'Laminas\Validator\NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]]]])]
     public $exemptionDetails;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'small'])]

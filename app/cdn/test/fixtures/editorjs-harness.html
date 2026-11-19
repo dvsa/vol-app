@@ -44,9 +44,6 @@
     <script>
       // The component expects these OLCS globals; the application supplies them.
       window.OLCS = {
-        logger: function (message) {
-          (window.__olcsLog = window.__olcsLog || []).push(message);
-        },
         eventEmitter: {
           handlers: {},
           on: function (name, fn) {
@@ -75,6 +72,8 @@
         window.__submittedValue = document.querySelector("input[name='variantContent']").value;
       });
     </script>
+    <!-- the application's own logger, so the component logs here the way it does there -->
+    <script src="../../assets/_js/components/logger.js"></script>
     <script src="../../assets/_js/components/editorjs.js"></script>
     <script>
       // The module returns its init function, which the application calls on ready.

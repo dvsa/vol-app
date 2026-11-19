@@ -81,6 +81,7 @@ module "parameters" {
     olcs_natreg_repute                           = "https://outbound-int.inr.dev-dvsacloud.uk"
     olcs_natreg_token_url                        = "https://login.microsoftonline.com/6c448d90-4ca1-4caf-ab59-0a2aa67d7801/oauth2/v2.0/token"
     olcs_natreg_uri                              = "https://outbound-int.inr.dev-dvsacloud.uk"
+    olcs_notify_sms_template                     = "bc12a068-54ad-4897-a0f6-a617de9e1c2b"
     olcs_notify_template_cy_gb                   = "ea6aacab-5c9f-4363-bfce-8ae466c7eeab"
     olcs_notify_template_en_gb                   = "ea6aacab-5c9f-4363-bfce-8ae466c7eeab"
     olcs_notify_test_dsn                         = "govuknotify+mailpit://selenium-mail.olcs.dev-dvsacloud.uk:1025"

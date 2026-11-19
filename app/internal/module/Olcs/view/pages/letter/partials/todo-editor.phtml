@@ -2,7 +2,7 @@
 /**
  * One to-do editor on the letter edit page.
  *
- * @var array $todo id, name, content, version, requiringIssueCount
+ * @var array $todo id, name, content, version, requiringIssueCount, isCustom
  * @var string|null $headingTag h3 by default; h5 when nested under an issue
  */
 $headingTag = in_array($headingTag ?? 'h3', ['h3', 'h4', 'h5'], true) ? ($headingTag ?? 'h3') : 'h3';
@@ -35,6 +35,15 @@ $headingTag = in_array($headingTag ?? 'h3', ['h3', 'h4', 'h5'], true) ? ($headin
                 data-version="<?= $this->escapeHtmlAttr($todo['version']) ?>">
             Save changes
         </button>
+        <?php if (!empty($todo['isCustom'])): ?>
+            <?php // written by the caseworker on this letter, so they can remove it (VOL-7735) ?>
+            <button type="button"
+                    class="govuk-button govuk-button--warning delete-custom-todo-btn"
+                    data-todo-id="<?= $this->escapeHtmlAttr($todo['id']) ?>"
+                    style="margin-left: 10px;">
+                Delete to-do
+            </button>
+        <?php endif; ?>
         <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
             Saved
         </span>

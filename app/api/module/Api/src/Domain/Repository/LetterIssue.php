@@ -123,6 +123,7 @@ class LetterIssue extends AbstractVersionedRepository
             'minLength',
             'maxLength',
             'requiresInput',
+            'isOther',
             'isNi',
             'goodsOrPsv',
             'letterIssueType'

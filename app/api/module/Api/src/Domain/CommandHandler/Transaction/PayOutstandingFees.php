@@ -24,6 +24,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Transaction as TransactionEntity;
 use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Service\CpmsResponseException;
 use Dvsa\Olcs\Api\Service\Exception as ServiceException;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
 use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
@@ -59,9 +60,11 @@ final class PayOutstandingFees extends AbstractCommandHandler implements
      */
     protected $feesHelper;
 
+    private SmsNumberCapture $smsNumberCapture;
+
     protected $repoServiceName = 'Transaction';
 
-    protected $extraRepos = ['Fee', 'FeeType', 'SystemParameter', 'Task'];
+    protected $extraRepos = ['Application', 'Fee', 'FeeType', 'SystemParameter', 'Task'];
 
     /**
      * There are three valid use cases for this command
@@ -94,6 +97,7 @@ final class PayOutstandingFees extends AbstractCommandHandler implements
         if (!empty($command->getOrganisationId())) {
             $fees = $this->getOutstandingFeesForOrganisation($command);
         } elseif (!empty($command->getApplicationId())) {
+            $this->guardSmsNumber($command->getApplicationId());
             $fees = $this->feesHelper->getOutstandingFeesForApplication($command->getApplicationId());
         } elseif (!empty($command->getIrhpApplication())) {
             $fees = $this->feesHelper->getOutstandingFeesForIrhpApplication($command->getIrhpApplication());
@@ -144,6 +148,20 @@ final class PayOutstandingFees extends AbstractCommandHandler implements
                 \Laminas\Http\Response::STATUS_CODE_500,
                 $e
             );
+        }
+    }
+
+    /**
+     * Refuse before any CPMS call, so the user is never charged for an application that can't be submitted.
+     *
+     * @throws ValidationException
+     */
+    private function guardSmsNumber(int|string $applicationId): void
+    {
+        $application = $this->getRepo('Application')->fetchById($applicationId);
+
+        if ($this->smsNumberCapture->blocksApplication($application, $this->isExternalUser(...))) {
+            throw new ValidationException(['application.submit.sms-number-required']);
         }
     }
 
@@ -645,6 +663,7 @@ final class PayOutstandingFees extends AbstractCommandHandler implements
         $fullContainer = $container;
 
         $this->feesHelper = $container->get('FeesHelperService');
+        $this->smsNumberCapture = $container->get(SmsNumberCapture::class);
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }

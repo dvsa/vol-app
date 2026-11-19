@@ -214,4 +214,31 @@ class IssueChangePlannerTest extends TestCase
         $this->assertTrue($plan->hasChanges());
         $this->assertSame([$nineRow, $eleven->getCurrentVersion(), $sevenRow], $plan->finalIssues);
     }
+
+    public function testLostEditsListTheOtherHeadingAndWrittenCustomTodos(): void
+    {
+        $keep = $this->issue(9);
+        $otherParent = $this->issue(30);
+        $otherParent->getCurrentVersion()->setIsOther(true);
+        $letterInstance = new LetterInstance();
+        $other = $this->onLetter($letterInstance, $otherParent->getCurrentVersion(), 0);
+        $other->setEditedHeading('Vehicle storage');
+        $this->onLetter($letterInstance, $keep->getCurrentVersion(), 1);
+
+        $written = new LetterInstanceTodo();
+        $written->setDisplayOrder(1);
+        $written->setEditedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Send the lease']]]]);
+        $empty = new LetterInstanceTodo();
+        $empty->setDisplayOrder(2);
+        foreach ([$written, $empty] as $todo) {
+            $other->addLetterInstanceTodo($todo);
+            $letterInstance->addLetterInstanceTodo($todo);
+        }
+
+        $plan = $this->sut->plan($letterInstance, [$keep]);
+
+        $this->assertSame([$other], $plan->removedIssues);
+        $this->assertSame([$written, $empty], $plan->lostTodos);
+        $this->assertSame(['Vehicle storage', 'Vehicle storage: to-do 1'], $plan->lostEdits());
+    }
 }

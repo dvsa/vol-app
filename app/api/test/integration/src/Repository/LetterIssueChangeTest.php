@@ -123,6 +123,49 @@ final class LetterIssueChangeTest extends IntegrationTestCase
         $this->assertEditedTodoOwnedBy($instanceId, $versionC);
     }
 
+    /**
+     * VOL-7735: removing an Other issue takes the caseworker's own to-dos with it.
+     */
+    public function testRemovingAnOtherIssueWithCustomTodosSaves(): void
+    {
+        [, [$otherVersion]] = $this->issue(true);
+        [$issueB, [$versionB]] = $this->issue();
+
+        $instanceId = $this->letterInstance();
+        $otherRow = $this->instanceIssue($instanceId, $otherVersion, 0);
+        $this->instanceIssue($instanceId, $versionB, 1);
+        $customRow = $this->instanceTodo($instanceId, $otherRow, null, self::EDIT);
+
+        $this->change($instanceId, [$issueB]);
+
+        $this->assertSame(0, $this->rows('letter_instance_todo', 'id', $customRow));
+        $this->assertSame(0, $this->rows('letter_instance_issue', 'id', $otherRow));
+    }
+
+    /**
+     * VOL-7735: adding issues leaves an Other issue's own to-dos where they are, edits intact.
+     */
+    public function testAddingIssuesKeepsCustomTodos(): void
+    {
+        [$otherIssue, [$otherVersion]] = $this->issue(true);
+        [$issueC, [$versionC]] = $this->issue();
+        [, [$todoVersion]] = $this->todo();
+        $this->linkToDo($versionC, $todoVersion);
+
+        $instanceId = $this->letterInstance();
+        $otherRow = $this->instanceIssue($instanceId, $otherVersion, 0);
+        $customRow = $this->instanceTodo($instanceId, $otherRow, null, self::EDIT);
+
+        $this->change($instanceId, [$issueC, $otherIssue]);
+
+        $row = $this->conn()->fetchAssociative('SELECT * FROM letter_instance_todo WHERE id = ?', [$customRow]);
+        $this->assertIsArray($row, "the Other issue's own to-do must still be there");
+        $this->assertSame($otherRow, (int) $row['letter_instance_issue_id']);
+        $this->assertNull($row['letter_todo_version_id']);
+        $this->assertEquals(json_decode(self::EDIT, true), json_decode((string) $row['edited_description'], true));
+        $this->assertSame(2, $this->rows('letter_instance_todo', 'letter_instance_id', $instanceId));
+    }
+
     private function assertEditedTodoOwnedBy(int $instanceId, int $issueVersionId): void
     {
         $rows = $this->conn()->fetchAllAssociative(
@@ -196,11 +239,15 @@ final class LetterIssueChangeTest extends IntegrationTestCase
         return [$id, [$versionId]];
     }
 
-    private function issue(): array
+    private function issue(bool $isOther = false): array
     {
         $categoryId = $this->conn()->fetchOne('SELECT MIN(id) FROM category');
 
-        return $this->versioned('letter_issue', ['issue_key' => $this->key()], ['heading' => 'Issue', 'category_id' => $categoryId]);
+        return $this->versioned(
+            'letter_issue',
+            ['issue_key' => $this->key()],
+            ['heading' => $isOther ? 'Other issue' : 'Issue', 'category_id' => $categoryId, 'is_other' => (int) $isOther]
+        );
     }
 
     private function todo(): array
@@ -242,7 +289,7 @@ final class LetterIssueChangeTest extends IntegrationTestCase
         ]);
     }
 
-    private function instanceTodo(int $instanceId, int $instanceIssueId, int $todoVersionId, ?string $edited): int
+    private function instanceTodo(int $instanceId, int $instanceIssueId, ?int $todoVersionId, ?string $edited): int
     {
         return $this->create('letter_instance_todo', [
             'letter_instance_id' => $instanceId,

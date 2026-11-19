@@ -36,6 +36,7 @@ class LetterIssue extends AbstractLetterIssue
     private $minLength;
     private $maxLength;
     private $requiresInput;
+    private $isOther;
     private $isNi;
     private $goodsOrPsv;
     private $letterIssueType;
@@ -282,6 +283,31 @@ class LetterIssue extends AbstractLetterIssue
     }
 
     /**
+     * Proxy getter for isOther (VOL-7735)
+     *
+     * @return bool
+     */
+    public function getIsOther()
+    {
+        if ($this->isOther !== null) {
+            return $this->isOther;
+        }
+        return $this->currentVersion ? $this->currentVersion->getIsOther() : false;
+    }
+
+    /**
+     * Proxy setter for isOther
+     *
+     * @param bool $isOther
+     * @return self
+     */
+    public function setIsOther($isOther)
+    {
+        $this->isOther = $isOther;
+        return $this;
+    }
+
+    /**
      * Proxy getter for isNi
      *
      * @return bool
@@ -419,6 +445,7 @@ class LetterIssue extends AbstractLetterIssue
         $newVersion->setMaxLength($currentVersion->getMaxLength());
         $newVersion->setIsLocked(false);
         $newVersion->setRequiresInput($currentVersion->getRequiresInput());
+        $newVersion->setIsOther($currentVersion->getIsOther());
         $newVersion->setIsNi($currentVersion->getIsNi());
         $newVersion->setGoodsOrPsv($currentVersion->getGoodsOrPsv());
         $newVersion->setLetterIssueType($currentVersion->getLetterIssueType());

@@ -38,11 +38,19 @@ final readonly class IssueChangePlan
 
         foreach ($this->removedIssues as $instanceIssue) {
             if ($instanceIssue->hasBeenEdited()) {
-                $names[] = (string) $instanceIssue->getHeading();
+                $names[] = $instanceIssue->getDisplayName();
             }
         }
 
         foreach ($this->lostTodos as $instanceTodo) {
+            if ($instanceTodo->isCustom()) {
+                // listed once something is written in it (VOL-7735)
+                if (!$instanceTodo->isInputPending()) {
+                    $names[] = (string) $instanceTodo->getCustomLabel();
+                }
+                continue;
+            }
+
             if ($instanceTodo->hasBeenEdited()) {
                 $todoVersion = $instanceTodo->getLetterTodoVersion();
                 $name = trim((string) $todoVersion?->getName());

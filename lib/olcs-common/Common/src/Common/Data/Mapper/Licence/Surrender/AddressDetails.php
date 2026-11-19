@@ -2,13 +2,16 @@
 
 namespace Common\Data\Mapper\Licence\Surrender;
 
+use Common\Data\Mapper\Lva\Addresses;
 use Common\Data\Mapper\MapperInterface;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 class AddressDetails implements MapperInterface
 {
     private static $typeMap = [
         'phone_t_primary' => 'phone_primary',
         'phone_t_secondary' => 'phone_secondary',
+        'phone_t_SMS' => 'phone_sms',
     ];
 
     /**
@@ -45,11 +48,17 @@ class AddressDetails implements MapperInterface
     {
         $contacts = [];
 
-        foreach ($data["correspondenceCd"]["phoneContacts"] as $phoneContact) {
+        foreach (Addresses::newestSmsFirst($data["correspondenceCd"]["phoneContacts"]) as $phoneContact) {
             $phoneType = self::$typeMap[$phoneContact['phoneContactType']['id']] ?? '';
 
+            $number = $phoneContact['phoneNumber'];
+            if ($phoneType === 'phone_sms') {
+                // stored as E.164, shown as people write it
+                $number = SmsPhoneNumber::formatForDisplay((string) $number);
+            }
+
             $contacts += [
-                $phoneType => $phoneContact['phoneNumber'],
+                $phoneType => $number,
                 $phoneType . '_id' => $phoneContact['id'],
                 $phoneType . '_version' => $phoneContact['version'],
             ];

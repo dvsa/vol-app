@@ -132,9 +132,9 @@ class DocumentList extends AbstractQuery implements
     }
 
     /**
-     * Get hideUnsubmittedApplicationDocs (only retrieve external records linked to applications that have been submitted)
+     * Get hideUnsubmittedApplicationDocs (hide documents the operator uploaded to applications that haven't been submitted)
      *
-     * @return string
+     * @return string|null
      */
     public function getHideUnsubmittedApplicationDocs()
     {

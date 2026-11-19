@@ -66,15 +66,16 @@ class IssueChangePlanner
         return new IssueChangePlan(
             $finalIssues,
             $removedIssues,
-            $this->lostTodos($letterInstance, $finalIssues),
+            $this->lostTodos($letterInstance, $finalIssues, $removedIssues),
         );
     }
 
     /**
      * @param list<LetterInstanceIssue|LetterIssueVersion> $finalIssues
+     * @param list<LetterInstanceIssue> $removedIssues
      * @return list<\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo>
      */
-    private function lostTodos(LetterInstance $letterInstance, array $finalIssues): array
+    private function lostTodos(LetterInstance $letterInstance, array $finalIssues, array $removedIssues): array
     {
         $brought = [];
         foreach ($finalIssues as $finalIssue) {
@@ -89,6 +90,14 @@ class IssueChangePlanner
 
         $lost = [];
         foreach ($letterInstance->getLetterInstanceTodos() as $instanceTodo) {
+            if ($instanceTodo->isCustom()) {
+                // a caseworker-written to-do goes with its Other issue (VOL-7735)
+                if (in_array($instanceTodo->getLetterInstanceIssue(), $removedIssues, true)) {
+                    $lost[] = $instanceTodo;
+                }
+                continue;
+            }
+
             $key = $instanceTodo->getLetterTodoVersion()?->getDedupeKey();
             if ($key !== null && !isset($brought[$key])) {
                 $lost[] = $instanceTodo;

@@ -27,8 +27,8 @@
     You can format text using bold, italics, underline and bullets.
 </p>
 
-<?php // The page follows the letter (VOL-7737): sections in letter order around the issues,
-      // each issue followed by its own to-dos. ?>
+<?php // Sections in letter order around the issues, each issue followed by its own to-dos
+      // (VOL-7737). The letter itself lists a group's issues and then the to-dos. ?>
 <?php foreach ($layout as $block): ?>
     <?php if (isset($block['section'])): ?>
         <?php $section = $block['section']; ?>
@@ -67,6 +67,17 @@
                 <div class="govuk-form-group issue-editor-group" data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>">
                     <h3 class="govuk-heading-s"><?= $this->escapeHtml($issue['heading']) ?></h3>
 
+                    <?php if (!empty($issue['isOther'])): ?>
+                        <?php // an Other issue: the caseworker writes the heading the letter prints (VOL-7735) ?>
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-label--s" for="issue-heading-<?= $this->escapeHtmlAttr($issue['id']) ?>">Heading</label>
+                            <input class="govuk-input other-issue-heading" type="text" maxlength="255"
+                                   data-default-heading="<?= $this->escapeHtmlAttr($issue['defaultHeading']) ?>"
+                                   id="issue-heading-<?= $this->escapeHtmlAttr($issue['id']) ?>"
+                                   value="<?= $this->escapeHtmlAttr($issue['editedHeading']) ?>">
+                        </div>
+                    <?php endif; ?>
+
                     <div class="editorjs-container" data-element-name="issue-<?= $this->escapeHtmlAttr($issue['id']) ?>">
                         <div id="editor-<?= $this->escapeHtmlAttr($issue['id']) ?>" class="editorjs-editor"></div>
                         <input type="hidden"
@@ -95,6 +106,13 @@
                     <?php foreach ($issue['todos'] as $todo): ?>
                         <?= $this->partial('pages/letter/partials/todo-editor', ['todo' => $todo, 'headingTag' => 'h5']) ?>
                     <?php endforeach; ?>
+                <?php endif; ?>
+
+                <?php if (!empty($issue['isOther'])): ?>
+                    <button type="button" class="govuk-button govuk-button--secondary add-custom-todo-btn"
+                            data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>">
+                        Add a to-do
+                    </button>
                 <?php endif; ?>
             <?php endforeach; ?>
         <?php endforeach; ?>
@@ -140,8 +158,16 @@
     <?php endforeach; ?>
 <?php endif; ?>
 
+<?php // Saves every editor above that has unsaved changes, in one go (letter-edit.js) ?>
 <div style="margin-top: 30px;">
-    <?php if (in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr_sts_ready'], true)): ?>
+    <button type="button" id="save-all-btn" class="govuk-button">Save all changes</button>
+    <span id="save-all-indicator" class="govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
+        All changes saved
+    </span>
+</div>
+
+<div>
+    <?php if (!empty($letterInstance['isOpenForChanges'])): ?>
     <button
         type="button"
         id="change-issues-btn"

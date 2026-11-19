@@ -151,6 +151,14 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
     }
 
     /**
+     * An Other issue: the caseworker writes the heading and may add their own to-dos (VOL-7735)
+     */
+    public function isOther(): bool
+    {
+        return (bool) $this->isOther;
+    }
+
+    /**
      * Get default body content as array (for EditorJS)
      *
      * Handles both properly stored arrays and double-encoded JSON strings

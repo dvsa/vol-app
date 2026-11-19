@@ -71,6 +71,7 @@ use Common\FormService\Form\Lva\VehiclesDeclarationsEvidenceSmall;
 use Common\FormService\Form\Lva\VehiclesDeclarationsSmallConditions;
 use Common\FormService\Form\Lva\VehiclesDeclarationsWritten;
 use Common\Rbac\Service\Permission;
+use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -529,7 +530,7 @@ class FormServiceAbstractFactory implements AbstractFactoryInterface
             // Continuation forms
             case self::FORM_SERVICE_CLASS_ALIASES['continuations-checklist']:
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);
-                return new LicenceChecklist($formHelper, $urlHelper);
+                return new LicenceChecklist($formHelper, $urlHelper, $serviceLocator->get(QuerySender::class));
             case self::FORM_SERVICE_CLASS_ALIASES['continuations-start']:
                 return new Start($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['continuations-payment']:

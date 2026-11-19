@@ -20,8 +20,8 @@ class RevocationsSla
     #[Form\Options(['label' => 'Date approval submission issued', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ptr-yes'])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $approvalSubmissionIssuedDate = null;
 
@@ -29,8 +29,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Date approval submission returned', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ptr-yes'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $approvalSubmissionReturnedDate = null;
 
@@ -44,8 +44,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Date IOR letter issued', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $iorLetterIssuedDate = null;
 
@@ -53,8 +53,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => "Date operator's response due", 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $operatorResponseDueDate = null;
 
@@ -62,8 +62,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => "Date operator's response received", 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $operatorResponseReceivedDate = null;
 
@@ -78,8 +78,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Date final submission issued', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__sra-yes'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $finalSubmissionIssuedDate = null;
 
@@ -87,8 +87,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Date final submission returned', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__sra-yes'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $finalSubmissionReturnedDate;
 
@@ -107,8 +107,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Revocation letter issued date', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ior-revoke'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $revocationLetterIssuedDate = null;
 
@@ -116,8 +116,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'NFA letter issued date', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ior-nfa'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $nfaLetterIssuedDate = null;
 
@@ -125,8 +125,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Warning letter issued date', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ior-warning'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $warningLetterIssuedDate = null;
 
@@ -134,8 +134,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'PI agreed', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ior-pi'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $piAgreedDate = null;
 
@@ -143,8 +143,8 @@ class RevocationsSla
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Other action agreed', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ior-other'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $otherActionAgreedDate = null;
 }

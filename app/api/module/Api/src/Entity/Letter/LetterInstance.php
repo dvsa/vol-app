@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Entity\Letter;
 
 use Doctrine\ORM\Mapping as ORM;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -21,13 +22,25 @@ class LetterInstance extends AbstractLetterInstance
     public const STATUS_CANCELLED = 'ltr_sts_cancelled';
 
     /**
-     * Where a to-do shared by several issues appears in the letter: after the first of those
-     * issues, or after the last (VOL-7737). The stored owner stays the first issue either way
-     * (VOL-7280/7408), so this only changes where it is drawn and can be flipped at any time.
+     * What a letter can be raised on, by the name of its link to each, the most specific first.
+     * A letter raised on a case, an application or a bus registration is given the licence as
+     * well, and a case can give it its application, so a letter was raised on the first of
+     * these that it has.
+     */
+    public const array RAISED_ON = ['case', 'application', 'busReg', 'transportManager', 'irfoOrganisation', 'licence'];
+
+    /**
+     * Which of the issues that share a to-do it goes with: the first of them, or the last
+     * (VOL-7737). The stored owner stays the first issue either way (VOL-7280/7408), so this only
+     * changes where it is shown and can be flipped at any time.
+     *
+     * It goes with the last: the business asked for a to-do to come after every issue it is
+     * for. The edit page shows it after the last of its issues, and the letter lists it with
+     * that issue's group (LetterPreviewService::renderIssues), so the two match.
      */
     public const SHARED_TODO_UNDER_FIRST_ISSUE = 'first';
     public const SHARED_TODO_UNDER_LAST_ISSUE = 'last';
-    public const SHARED_TODO_PLACEMENT = self::SHARED_TODO_UNDER_FIRST_ISSUE;
+    public const SHARED_TODO_PLACEMENT = self::SHARED_TODO_UNDER_LAST_ISSUE;
 
     /**
      * Memoised issues that bring each to-do, in letter order, keyed by LetterTodoVersion::getDedupeKey.
@@ -231,8 +244,8 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * The issue a to-do is drawn after in the letter (VOL-7737). A to-do none of the letter's
-     * issues brings any more stays with the issue it belongs to.
+     * The issue a to-do goes with (VOL-7737). A to-do none of the letter's issues brings any
+     * more stays with the issue it belongs to.
      */
     public function getPlacementIssue(
         LetterInstanceTodo $todo,
@@ -242,7 +255,7 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * The issue each of the letter's to-dos is drawn after, keyed by spl_object_id of the to-do.
+     * The issue each of the letter's to-dos goes with, keyed by spl_object_id of the to-do.
      * Worked out in one pass so drawing the letter doesn't redo it per to-do.
      *
      * @return array<int, LetterInstanceIssue|null>
@@ -256,6 +269,24 @@ class LetterInstance extends AbstractLetterInstance
         }
 
         return $placements;
+    }
+
+    /**
+     * What the letter was raised on: the name of its link to it (one of RAISED_ON) and its id.
+     * Null for a letter with none of those links, whatever else it is linked to.
+     *
+     * @return array{0: string, 1: int}|null
+     */
+    public function getRaisedOn(): ?array
+    {
+        foreach (self::RAISED_ON as $raisedOn) {
+            $linked = $this->{'get' . ucfirst($raisedOn)}();
+            if ($linked !== null) {
+                return [$raisedOn, (int) $linked->getId()];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -365,6 +396,14 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
+     * Whether caseworkers can still change what is on the letter: its issues and its own to-dos.
+     */
+    public function isOpenForChanges(): bool
+    {
+        return ($this->isDraft() || $this->isReady()) && !$this->isDeleted();
+    }
+
+    /**
      * Check if letter is draft
      *
      * @return bool
@@ -394,6 +433,11 @@ class LetterInstance extends AbstractLetterInstance
         return $this->status && $this->status->getId() === self::STATUS_SENT;
     }
 
+    public function isCancelled(): bool
+    {
+        return $this->status?->getId() === self::STATUS_CANCELLED;
+    }
+
     /**
      * Check if letter can be edited
      *
@@ -415,12 +459,12 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * Mark as sent
-     *
-     * @return self
+     * Mark as sent, once its document has been printed or emailed. A sent letter is no longer open
+     * for changes, so what's on it stays what was sent.
      */
-    public function markAsSent()
+    public function markAsSent(RefData $sentStatus): self
     {
+        $this->status = $sentStatus;
         $this->sentOn = new \DateTime();
         return $this;
     }

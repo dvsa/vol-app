@@ -14,7 +14,7 @@ class PartnerName extends Base
     #[Form\Input('Common\InputFilter\ContinueIfEmptyInput')]
     #[Form\Options(['label' => 'Partner name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 3, 'max' => 35])]
     public $description = null;
     #[Form\Attributes(['value' => 'ct_partner'])]
