@@ -36,10 +36,17 @@ class FinancialEvidencePassOverride
 
     #[Annotation\Required(true)]
     #[Annotation\Type('Radio')]
-    #[Annotation\Attributes(['radios_wrapper_attributes' => ['class' => 'govuk-radios--standard'], 'value' => 'Y'])]
+    // Yes and No sit side by side, as the VOL-7338 design draws them. The label is the radio
+    // group's legend, shown in bold as the question; the view must not print the question again.
+    #[Annotation\Attributes([
+        'radios_wrapper_attributes' => ['class' => 'govuk-radios--standard govuk-radios--inline'],
+        'value' => 'Y',
+    ])]
     #[Annotation\Options([
         'label' => 'Do you want to change the outcome of this issue?',
         'value_options' => ['Y' => 'Yes', 'N' => 'No'],
+        'fieldset-attributes' => ['class' => 'govuk-fieldset'],
+        'legend-attributes' => ['class' => 'govuk-fieldset__legend govuk-fieldset__legend--s'],
     ])]
     public $changeRecommendation = null;
 

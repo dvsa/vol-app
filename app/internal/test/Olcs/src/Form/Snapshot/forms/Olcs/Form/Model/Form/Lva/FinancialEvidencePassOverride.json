@@ -31,7 +31,7 @@
         "attributes": {
           "required": "required",
           "radios_wrapper_attributes": {
-            "class": "govuk-radios--standard"
+            "class": "govuk-radios--standard govuk-radios--inline"
           },
           "value": "Y"
         },
@@ -41,6 +41,12 @@
           "value_options": {
             "Y": "Yes",
             "N": "No"
+          },
+          "fieldset-attributes": {
+            "class": "govuk-fieldset"
+          },
+          "legend-attributes": {
+            "class": "govuk-fieldset__legend govuk-fieldset__legend--s"
           }
         }
       }

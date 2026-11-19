@@ -192,13 +192,18 @@
       $passOverrideForm->get('changeRecommendation')->setValue('Y')->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
       $passOverrideForm->get('comment')->setValue($pass['comment'] ?? '')->setAttribute('id', 'pass-comment-' . $pass['key']);
       ?>
-      <p class="govuk-body">Do you want to change the outcome of this issue?</p>
+      <?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>
       <form method="post" novalidate>
         <?php echo $this->formElement($passOverrideForm->get('security')); ?>
         <?php echo $this->formElement($passOverrideForm->get('analysisId')); ?>
         <?php echo $this->formElement($passOverrideForm->get('row')); ?>
-        <?php echo $this->formRow($passOverrideForm->get('changeRecommendation')); ?>
-        <?php echo $this->formRow($passOverrideForm->get('comment')); ?>
+        <?php // Each field in its own GOV.UK form group, which gives the spacing between them the design shows. ?>
+        <div class="govuk-form-group">
+          <?php echo $this->formRow($passOverrideForm->get('changeRecommendation')); ?>
+        </div>
+        <div class="govuk-form-group">
+          <?php echo $this->formRow($passOverrideForm->get('comment')); ?>
+        </div>
         <div class="govuk-button-group">
           <?php echo $this->formElement($passOverrideForm->get('savePassOverride')); ?>
         </div>
