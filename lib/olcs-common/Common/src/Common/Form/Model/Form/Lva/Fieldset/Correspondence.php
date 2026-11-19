@@ -16,7 +16,7 @@ class Correspondence
     public $version;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
-    #[Form\Options(['label' => 'application_your-business_fao.label', 'label_attributes' => ['aria-label' => 'application_your-business_fao.label']])]
+    #[Form\Options(['label' => 'application_your-business_fao.label'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 90])]

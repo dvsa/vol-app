@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as UpdateApplicationCompletionCmd;
@@ -32,6 +33,8 @@ class Application extends AbstractQueryHandler
      */
     private $feesHelper;
 
+    private SmsNumberCapture $smsNumberCapture;
+
     #[\Override]
     public function handleQuery(QueryInterface $query)
     {
@@ -49,7 +52,7 @@ class Application extends AbstractQueryHandler
         }
 
         $latestNote = $this->getRepo('Note')->fetchForOverview($application->getLicence()->getId());
-        return $this->result(
+        $result = $this->result(
             $application,
             [
                 'licence' => [
@@ -85,6 +88,9 @@ class Application extends AbstractQueryHandler
                 'canHaveInspectionRequest' => !$application->isSpecialRestricted(),
             ]
         );
+
+        // Addresses done before sms_number_capture went on is shown as not done.
+        return $this->smsNumberCapture->markStaleAddressesIncomplete($result, $application, $this->isExternalUser(...));
     }
 
     /**
@@ -102,6 +108,7 @@ class Application extends AbstractQueryHandler
 
         $this->sectionAccessService = $container->get('SectionAccessService');
         $this->feesHelper = $container->get('FeesHelperService');
+        $this->smsNumberCapture = $container->get(SmsNumberCapture::class);
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }

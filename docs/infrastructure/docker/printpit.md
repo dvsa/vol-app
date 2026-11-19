@@ -68,7 +68,12 @@ FileBrowser provides a REST API for programmatic access to PDFs, enabling automa
 
 ### API Endpoints
 
-All endpoints are unauthenticated when running with `--noauth` flag (this is test infrastructure. Auth is possible if desired).
+FileBrowser runs with the `--noauth` flag, so it asks for no username or password (this is test infrastructure. Auth is possible if desired). Every endpoint still needs a token, sent in an `X-Auth` header. `POST /api/login` with an empty body returns one:
+
+```bash
+TOKEN=$(curl -s -X POST https://printpit.{env}.olcs.dev-dvsacloud.uk:8631/api/login)
+curl -H "X-Auth: $TOKEN" https://printpit.{env}.olcs.dev-dvsacloud.uk:8631/api/resources/
+```
 
 #### List PDFs
 
@@ -82,7 +87,7 @@ Returns JSON array of all PDFs with metadata:
 {
     "items": [
         {
-            "path": "No-Auth_Test__enable-job_1.pdf",
+            "path": "/No-Auth_Test__enable-job_1.pdf",
             "name": "No-Auth_Test__enable-job_1.pdf",
             "size": 3814,
             "extension": ".pdf",
@@ -107,7 +112,7 @@ Returns JSON array of all PDFs with metadata:
 GET https://printpit.{env}.olcs.dev-dvsacloud.uk:8631/api/raw/job_001_document.pdf
 ```
 
-Returns the PDF file directly for download or processing.
+Returns the PDF file as a download. Add `?inline=true` to have it served as `application/pdf`, for viewing in a browser.
 
 #### Delete PDF
 
@@ -120,10 +125,10 @@ Removes the specified PDF from storage.
 #### Search PDFs
 
 ```bash
-GET https://printpit.{env}.olcs.dev-dvsacloud.uk:8631/api/search?query=licence
+GET https://printpit.{env}.olcs.dev-dvsacloud.uk:8631/api/search/?query=licence
 ```
 
-Search for PDFs by filename.
+Search for PDFs by filename. The response is not a single JSON array: it has one JSON object per line for each match, such as `{"dir":false,"path":"job_001_licence.pdf"}`, so read it line by line.
 
 ### Environment Variables
 

@@ -36,8 +36,10 @@
                         <?php foreach ($this->vrmList as $vrm): ?>
                             <?php $count++; ?>
                             <li>
-                                <span aria-label="<?php echo $this->translateReplace('licence.vehicle.remove.confirm.selected-vehicles.list.item.aria',
-                                    [$count, $vrm]); ?>"><?php echo $vrm; ?></span></li>
+                                <span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translateReplace(
+                                    'licence.vehicle.remove.confirm.selected-vehicles.list.item.aria',
+                                    [$count, '']
+                                )); ?></span><?php echo $this->escapeHtml($vrm); ?></li>
                         <?php endforeach; ?>
                     </ul>
                     <div class="govuk-clearfix"></div>

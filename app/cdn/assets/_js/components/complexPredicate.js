@@ -4,16 +4,15 @@ var OLCS = OLCS || {};
  * Complex predicate
  */
 
-OLCS.complexPredicate = (function(document, $, undefined) {
-
+OLCS.complexPredicate = (function (document, $, undefined) {
   "use strict";
 
   return function init(options) {
     var attr;
 
-    if ($.isArray(options)) {
+    if (Array.isArray(options)) {
       options = {
-        allow: options
+        allow: options,
       };
     }
 
@@ -27,23 +26,19 @@ OLCS.complexPredicate = (function(document, $, undefined) {
 
     if (typeof options.attr !== "function") {
       attr = options.attr;
-      options.attr = function(input) {
+      options.attr = function (input) {
         return $(input).data(attr);
       };
     }
 
     return function checkComplexPredicate(length, enable, selectedInputs) {
-
       if (length < 1 || length > options.max) {
         return enable(false);
       }
 
       var rows = $.map(selectedInputs, options.attr);
 
-      enable(
-        $(rows).not(options.allow).length === 0
-      );
+      enable($(rows).not(options.allow).length === 0);
     };
   };
-
-}(document, window.jQuery));
+})(document, window.jQuery);

@@ -39,7 +39,8 @@ class LetterGenerationControllerFactory implements FactoryInterface
             $translationHelper,
             $formHelper,
             $flashMessenger,
-            $navigation
+            $navigation,
+            (int) ($container->get('config')['csrf']['timeout'] ?? 5400)
         );
     }
 }

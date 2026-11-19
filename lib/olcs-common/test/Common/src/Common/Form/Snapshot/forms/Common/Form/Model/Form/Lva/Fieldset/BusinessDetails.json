@@ -31,7 +31,6 @@
           "label": "Nature of business",
           "error-message": "businessDetails_natureOfBusiness-error",
           "label_attributes": {
-            "aria-label": "businessDetails_natureOfBusiness-error",
             "class": "form-element__question"
           }
         }

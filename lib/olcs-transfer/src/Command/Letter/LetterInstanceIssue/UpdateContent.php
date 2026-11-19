@@ -21,6 +21,18 @@ final class UpdateContent extends AbstractCommand
     protected $editedContent;
 
     /**
+     * Caseworker-written heading, only used on an Other issue (VOL-7735). Not sent = leave as is.
+     * Plain text, escaped wherever it's shown, so not tag-stripped: that would cut "<5 vehicles".
+     *
+     * @var string|null
+     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
+    #[Transfer\Escape(false)]
+    protected $editedHeading;
+
+    /**
      * @var int
      */
     #[Transfer\Filter('Laminas\Filter\Digits')]
@@ -34,6 +46,14 @@ final class UpdateContent extends AbstractCommand
     public function getEditedContent()
     {
         return $this->editedContent;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEditedHeading()
+    {
+        return $this->editedHeading;
     }
 
     /**

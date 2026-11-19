@@ -28,7 +28,6 @@
         "name": "vrm",
         "attributes": {
           "class": "medium",
-          "id": "vrm",
           "placeholder": ""
         },
         "type": "Hidden"

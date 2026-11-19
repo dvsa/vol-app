@@ -19,6 +19,7 @@ class PhoneContact extends AbstractPhoneContact
 {
     public const TYPE_PRIMARY = 'phone_t_primary';
     public const TYPE_SECONDARY = 'phone_t_secondary';
+    public const TYPE_SMS = 'phone_t_SMS';
 
     /**
      * PhoneContact constructor.

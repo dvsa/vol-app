@@ -44,6 +44,10 @@ class Template extends AbstractRepository
         if (method_exists($query, 'getFormat') && $query->getFormat() !== '') {
             $qb->andWhere($qb->expr()->eq('m.format', ':format'))
                 ->setParameter('format', $query->getFormat());
+        } elseif (method_exists($query, 'getFormat')) {
+            // No format chosen: SMS templates belong to their own admin screen.
+            $qb->andWhere($qb->expr()->neq('m.format', ':smsFormat'))
+                ->setParameter('smsFormat', 'sms');
         }
     }
 
@@ -93,8 +97,8 @@ class Template extends AbstractRepository
             ->andWhere('t.id != :id')
             ->setParameter('name', $name)
             ->setParameter('id', $excludeId)
-            ->orderBy('t.locale', 'ASC')
-            ->addOrderBy('t.format', 'ASC')
+            ->orderBy('t.locale', \SortDirection::Ascending)
+            ->addOrderBy('t.format', \SortDirection::Ascending)
             ->getQuery()
             ->getArrayResult();
     }
@@ -125,9 +129,9 @@ class Template extends AbstractRepository
             ->from(Entity::class, 't')
             ->where('t.name IN (:names)')
             ->setParameter('names', $names)
-            ->orderBy('t.name', 'ASC')
-            ->addOrderBy('t.locale', 'ASC')
-            ->addOrderBy('t.format', 'ASC')
+            ->orderBy('t.name', \SortDirection::Ascending)
+            ->addOrderBy('t.locale', \SortDirection::Ascending)
+            ->addOrderBy('t.format', \SortDirection::Ascending)
             ->getQuery()
             ->getArrayResult();
 
@@ -219,7 +223,7 @@ class Template extends AbstractRepository
             ->select('m.name AS name', 'MIN(m.description) AS description')
             ->from(Entity::class, 'm')
             ->groupBy('m.name')
-            ->orderBy('description', 'ASC')
+            ->orderBy('description', \SortDirection::Ascending)
             ->setFirstResult(($page - 1) * $perPage)
             ->setMaxResults($perPage);
 
@@ -258,6 +262,10 @@ class Template extends AbstractRepository
                 ->andWhere('fmt.format = :format');
             $qb->andWhere($qb->expr()->exists($sub->getDQL()))
                 ->setParameter('format', $query->getFormat());
+        } elseif (method_exists($query, 'getFormat')) {
+            // No format chosen: hide SMS rows (they have their own admin screen).
+            $qb->andWhere($qb->expr()->neq('m.format', ':smsFormat'))
+                ->setParameter('smsFormat', 'sms');
         }
     }
 

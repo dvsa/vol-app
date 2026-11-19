@@ -17,18 +17,18 @@ class PermitsReportOptions
     #[Form\Required(true)]
     #[Form\Attributes(['required' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $startDate = null;
 
     #[Form\Options(['label' => 'End date', 'short-label' => 'End date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(true)]
     #[Form\Attributes(['required' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
-    #[Form\Validator(['name' => 'DateCompare', 'options' => ['has_time' => false, 'compare_to' => 'startDate', 'operator' => 'gte', 'compare_to_label' => 'Start date']])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
+    #[Form\Validator('DateCompare', options: ['has_time' => false, 'compare_to' => 'startDate', 'operator' => 'gte', 'compare_to_label' => 'Start date'])]
     public $endDate = null;
 }

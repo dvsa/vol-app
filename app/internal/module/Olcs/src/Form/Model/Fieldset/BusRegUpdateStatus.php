@@ -17,7 +17,7 @@ class BusRegUpdateStatus extends Base
     #[Form\Attributes(['class' => 'extra-long'])]
     #[Form\Options(['label' => 'Reason'])]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $reason = null;
 }

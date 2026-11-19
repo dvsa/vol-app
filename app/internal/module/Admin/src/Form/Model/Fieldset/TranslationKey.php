@@ -25,7 +25,7 @@ class TranslationKey
     public $translationKey = null;
 
     #[Form\Name('description')]
-    #[Form\Attributes(['id' => 'translationKey', 'data-container-class' => 'translationKeyContainer js-hidden'])]
+    #[Form\Attributes(['id' => 'description', 'data-container-class' => 'translationKeyContainer js-hidden'])]
     #[Form\Options(['label' => 'Description'])]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 512])]
     #[Form\Type('Text')]

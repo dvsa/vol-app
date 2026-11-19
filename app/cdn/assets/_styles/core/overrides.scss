@@ -26,11 +26,12 @@ form#AcceptAndPayForm {
 }
 
 div.table__wrapper + form#Fees {
-    clear: both;
-    padding-top: 40px;
+  clear: both;
+  padding-top: 40px;
 }
 
-form#surrender-start, form#surrender-information-changed {
+form#surrender-start,
+form#surrender-information-changed {
   button[type="submit"].govuk-button--start {
     @extend .govuk-button;
     @extend .govuk-button--start;
@@ -38,12 +39,12 @@ form#surrender-start, form#surrender-information-changed {
   }
 }
 
-fieldset[data-group=fields\[permitsRequired\]] {
+fieldset[data-group="fields\[permitsRequired\]"] {
   input {
     width: 215px;
   }
 
-  p.no-more-available { 
+  p.no-more-available {
     color: $govuk-secondary-text-colour;
 
     &::first-line {
@@ -53,7 +54,7 @@ fieldset[data-group=fields\[permitsRequired\]] {
 }
 
 form#Qa fieldset.date {
-    margin-top: -15px;
+  margin-top: -15px;
 }
 
 .radio-button__fieldset--horizontal .govuk-radios,
@@ -84,37 +85,33 @@ form#surrender-current-discs {
   max-width: none;
 }
 
-.govuk-warning-text__icon {
-  box-sizing: content-box;
-}
-
 div#global-cookie-message {
-    @media(min-width: 40.0625em) {
-        .govuk-button {
-            margin-bottom: 0px;
-        }
+  @media (min-width: 40.0625em) {
+    .govuk-button {
+      margin-bottom: 0px;
     }
+  }
 
-    @media(min-width: 48.0625em) {
-        .gem-c-cookie-banner__button .govuk-button {
-            width: 90%;
-        }
+  @media (min-width: 48.0625em) {
+    .gem-c-cookie-banner__button .govuk-button {
+      width: 90%;
     }
-    
-    @media(max-width: 48.0525em) {
-        .gem-c-cookie-banner__button .govuk-button {
-            margin-bottom: 20px;
-        }
-    }
+  }
 
-    .gem-c-button--inline {
-        margin-bottom: 5px;
-        width: 100%;
+  @media (max-width: 48.0525em) {
+    .gem-c-cookie-banner__button .govuk-button {
+      margin-bottom: 20px;
     }
+  }
+
+  .gem-c-button--inline {
+    margin-bottom: 5px;
+    width: 100%;
+  }
 }
 
 ul.two-column {
-  float:left;
+  float: left;
   min-width: 70%;
   display: block;
   li {
@@ -124,4 +121,3 @@ ul.two-column {
     margin-bottom: 5px;
   }
 }
-

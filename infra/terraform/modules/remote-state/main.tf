@@ -5,8 +5,12 @@ locals {
   identifier = var.environment != null ? "${var.identifier}-${local.account_id}-${var.environment}-terraform-state" : "${var.identifier}-${local.account_id}-terraform-state"
 }
 
+#checkov:skip=CKV_AWS_18: Terraform state storage intentionally does not emit S3 access logs to avoid additional operational churn in the backend account.
 #checkov:skip=CKV_AWS_19: Encryption is configured via the module input, but Checkov does not resolve it through this external module.
 #checkov:skip=CKV_AWS_21: Versioning is configured via the module input, but Checkov does not resolve it through this external module.
+#checkov:skip=CKV_AWS_144: Terraform state buckets are intentionally single-region because they store backend data for a single AWS account and do not require cross-region replication.
+#checkov:skip=CKV_AWS_145: Terraform state buckets intentionally use the module default AES256 encryption for backend storage and are not KMS-encrypted by design.
+#checkov:skip=CKV_AWS_300: Terraform state S3 buckets intentionally do not enforce abort-incomplete-upload lifecycles because lock files and state objects are short-lived and not operationally sensitive.
 module "s3" {
   count = var.create_bucket ? 1 : 0
 

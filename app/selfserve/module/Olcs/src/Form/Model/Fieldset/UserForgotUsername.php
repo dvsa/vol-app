@@ -10,14 +10,14 @@ use Laminas\Form\Annotation as Form;
 class UserForgotUsername
 {
     #[Form\Type('Text')]
-    #[Form\Options(['label' => 'user-forgot-username.field.licenceNumber.label', 'label_attributes' => ['aria-label' => 'Enter your licence number']])]
+    #[Form\Options(['label' => 'user-forgot-username.field.licenceNumber.label'])]
     #[Form\Attributes(['class' => 'medium'])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 18])]
     public $licenceNumber = null;
 
     #[Form\Type('Text')]
-    #[Form\Options(['label' => 'user-forgot-username.field.emailAddress.label', 'label_attributes' => ['aria-label' => 'Enter your email address']])]
+    #[Form\Options(['label' => 'user-forgot-username.field.emailAddress.label'])]
     #[Form\Attributes(['class' => 'long'])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\EmailAddress')]

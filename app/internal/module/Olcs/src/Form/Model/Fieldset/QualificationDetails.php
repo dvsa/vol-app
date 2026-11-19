@@ -26,7 +26,7 @@ class QualificationDetails
     #[Form\Type('Text')]
     #[Form\Required(false)]
     #[Form\Filter('Laminas\Filter\StringTrim')]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 50]])]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 50])]
     public $serialNo = null;
 
     #[Form\Required(true)]
@@ -34,9 +34,9 @@ class QualificationDetails
     #[Form\Options(['label' => 'transport-manager.competences.form.date-of-issue', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $issuedDate = null;
 

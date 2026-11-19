@@ -91,6 +91,7 @@ final class DocumentSearchTraitTest extends MockeryTestCase
             'limit' => 10,
             'showDocs' => FilterOptions::SHOW_ALL,
             'query' => 'unit_Query',
+            'hideUnsubmittedApplicationDocs' => 'Y',
         ];
         yield [
             'extra' => [
@@ -107,6 +108,7 @@ final class DocumentSearchTraitTest extends MockeryTestCase
                     'isExternal' => 'N',
                     'newKey' => 'unit_NewKey',
                     'query' => 'unit_Query',
+                    'hideUnsubmittedApplicationDocs' => 'Y',
                 ],
         ];
         yield [
@@ -207,20 +209,6 @@ final class DocumentSearchTraitTest extends MockeryTestCase
         $this->assertSame([], $this->sut->getDocumentsExtensionList($filters));
     }
 
-    public function testInternalOverridesQueryWhenPassedAsExtraParameter(): void
-    {
-        $query = ['isExternal' => 'external'];
-        $overrides = ['isExternal' => 'internal'];
-
-        $mockRequest = m::mock(\Laminas\Http\Request::class);
-        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
-        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
-
-        $filters = $this->sut->traitMapDocumentFilters($overrides);
-
-        $this->assertSame('N', $filters['isExternal']);
-    }
-
     public function testNullIsExternalDoesNotOverrideQueryWhenPassedAsExtraParameter(): void
     {
         $query = ['isExternal' => 'external'];
@@ -247,5 +235,16 @@ final class DocumentSearchTraitTest extends MockeryTestCase
         $filters = $this->sut->traitMapDocumentFilters($overrides);
 
         $this->assertSame('N', $filters['isExternal']);
+    }
+
+    public function testHideUnsubmittedApplicationDocsCannotBeTurnedOffFromQuery(): void
+    {
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
+        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn(['hideUnsubmittedApplicationDocs' => 'N']);
+        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
+
+        $filters = $this->sut->traitMapDocumentFilters([]);
+
+        $this->assertSame('Y', $filters['hideUnsubmittedApplicationDocs']);
     }
 }

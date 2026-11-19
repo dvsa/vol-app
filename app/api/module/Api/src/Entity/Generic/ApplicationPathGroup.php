@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Entity\Generic;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
@@ -41,7 +42,7 @@ class ApplicationPathGroup extends AbstractApplicationPathGroup
 
         $criteria = Criteria::create();
         $criteria->where($criteria->expr()->lte('effectiveFrom', $dateTime));
-        $criteria->orderBy(['effectiveFrom' => Criteria::DESC]);
+        $criteria->orderBy(['effectiveFrom' => Order::Descending]);
         $criteria->setMaxResults(1);
 
         $activeApplicationPaths = $this->getApplicationPaths()->matching($criteria);

@@ -384,6 +384,12 @@ return [
                             'route' => 'admin-dashboard/admin-email-templates',
                         ],
                         [
+                            'id' => 'admin-dashboard/content-management/sms-templates',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'SMS Management',
+                            'route' => 'admin-dashboard/admin-sms-templates',
+                        ],
+                        [
                             'id' => 'admin-dashboard/content-management/document-templates',
                             'class' => 'govuk-link--no-visited-state',
                             'label' => 'Document Templates',

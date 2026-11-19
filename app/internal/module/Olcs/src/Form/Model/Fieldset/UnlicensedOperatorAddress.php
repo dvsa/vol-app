@@ -22,42 +22,42 @@ class UnlicensedOperatorAddress
     #[Form\Options(['label' => 'Address lines'])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $addressLine1 = null;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
     #[Form\Options(['label' => 'Address line 2', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $addressLine2 = null;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
     #[Form\Options(['label' => 'Address line 3', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $addressLine3 = null;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
     #[Form\Options(['label' => 'Address line 4', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $addressLine4 = null;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
     #[Form\Options(['label' => 'Town/City', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $town = null;
 
     #[Form\Attributes(['id' => ''])]
     #[Form\Options(['label' => 'Postcode'])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Dvsa\Olcs\Transfer\Filter\Postcode'])]
+    #[Form\Filter('Dvsa\Olcs\Transfer\Filter\Postcode')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\Postcode')]
     public $postcode = null;
 }

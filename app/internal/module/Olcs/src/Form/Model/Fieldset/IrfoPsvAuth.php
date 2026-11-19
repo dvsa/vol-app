@@ -41,7 +41,7 @@ class IrfoPsvAuth extends OrganisationBase
     public $irfoFileNo = null;
 
     #[Form\Attributes(['class' => 'add-another'])]
-    #[Form\ComposedObject(['target_object' => 'Olcs\Form\Model\Fieldset\IrfoPsvAuthNumber', 'is_collection' => true, 'options' => ['count' => 1, 'label' => 'Authorisation number', 'hint' => 'markup-authorisation-number-hint', 'hint_at_bottom' => true]])]
+    #[Form\ComposedObject('Olcs\Form\Model\Fieldset\IrfoPsvAuthNumber', isCollection: true, options: ['count' => 1, 'label' => 'Authorisation number', 'hint' => 'markup-authorisation-number-hint', 'hint_at_bottom' => true])]
     public $irfoPsvAuthNumbers = null;
 
     #[Form\Required(false)]
@@ -54,7 +54,7 @@ class IrfoPsvAuth extends OrganisationBase
     #[Form\Options(['label' => 'In force date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+1', 'min_year_delta' => '-40'])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $inForceDate;
 
@@ -62,7 +62,7 @@ class IrfoPsvAuth extends OrganisationBase
     #[Form\Options(['label' => 'Expiry date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+2', 'min_year_delta' => '-40', 'hint' => 'The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>'])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'expiryDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'inForceDate', 'compare_to_label' => 'In force date', 'operator' => 'gte']]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'expiryDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'inForceDate', 'compare_to_label' => 'In force date', 'operator' => 'gte']]]])]
     public $expiryDate;
 
     #[Form\Attributes(['id' => ''])]
@@ -70,7 +70,7 @@ class IrfoPsvAuth extends OrganisationBase
     #[Form\Options(['label' => 'Application sent date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+1', 'min_year_delta' => '-40'])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $applicationSentDate;
 

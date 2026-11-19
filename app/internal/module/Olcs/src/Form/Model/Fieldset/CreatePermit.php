@@ -22,10 +22,10 @@ class CreatePermit extends Base
     #[Form\Options(['label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $dateReceived = null;
 
     #[Form\Type('Laminas\Form\Element\Hidden')]
@@ -49,7 +49,7 @@ class CreatePermit extends Base
 
     #[Form\Name('roadworthiness')]
     #[Form\Required(false)]
-    #[Form\Attributes(['class' => 'input--roadworthiness', 'id' => 'cabotage'])]
+    #[Form\Attributes(['class' => 'input--roadworthiness', 'id' => 'roadworthiness'])]
     #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I understand that I must obtain and carry the appropriate ECMT Certificate of Compliance and Certificate of Roadworthiness for each vehicle and trailer I intend to use with this permit', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced']])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $roadworthiness = null;
@@ -59,7 +59,7 @@ class CreatePermit extends Base
     #[Form\Options(['label' => 'The following countries have imposed limits on the number of permits for UK Hauliers. Please select any countries the applicant intends to travel to below.', 'label_attributes' => ['class' => 'form-control form-control--checkbox'], 'service_name' => 'Common\Service\Data\Country', 'category' => 'ecmtConstraint', 'disable_inarray_validator' => true])]
     #[Form\Attributes(['class' => 'chosen-select-large', 'id' => 'countrys', 'allowWrap' => true, 'multiple' => 'multiple', 'empty' => 'Select options if applicable', 'data-container-class' => 'form-control__container'])]
     #[Form\Type('DynamicSelect')]
-    #[Form\Filter(['name' => 'Common\Filter\NullToArray'])]
+    #[Form\Filter('Common\Filter\NullToArray')]
     public $countrys = null;
 
 
@@ -74,14 +74,14 @@ class CreatePermit extends Base
     #[Form\Required(false)]
     #[Form\Attributes(['class' => 'input--permits-requiredEuro5', 'id' => 'requiredEuro5', 'step' => 'any', 'data-container-class' => 'js-hidden'])]
     #[Form\Options(['label' => 'Number of permits required for <strong>Euro5</strong> Emissions Standard', 'hint' => '', 'short-label' => '', 'allow_empty' => true, 'label_options' => ['disable_html_escape' => 'true']])]
-    #[Form\Validator(['name' => 'SumCompare', 'options' => ['compare_to' => 'numVehicles', 'operator' => 'lte', 'sumWith' => 'requiredEuro6', 'allowEmpty' => true, 'compare_to_label' => 'Your number of authorised vehicles']])]
+    #[Form\Validator('SumCompare', options: ['compare_to' => 'numVehicles', 'operator' => 'lte', 'sumWith' => 'requiredEuro6', 'allowEmpty' => true, 'compare_to_label' => 'Your number of authorised vehicles'])]
     #[Form\Type('Laminas\Form\Element\Number')]
     public $requiredEuro5 = 0;
 
     #[Form\Required(false)]
     #[Form\Attributes(['class' => 'input--permits-requiredEuro6', 'id' => 'requiredEuro6', 'step' => 'any', 'data-container-class' => 'js-hidden'])]
     #[Form\Options(['label' => 'Number of permits required for <strong>Euro6</strong> Emissions Standard', 'hint' => '', 'short-label' => '', 'allow_empty' => true, 'label_options' => ['disable_html_escape' => 'true']])]
-    #[Form\Validator(['name' => 'SumCompare', 'options' => ['compare_to' => 'numVehicles', 'operator' => 'lte', 'sumWith' => 'requiredEuro5', 'allowEmpty' => true, 'compare_to_label' => 'Your number of authorised vehicles']])]
+    #[Form\Validator('SumCompare', options: ['compare_to' => 'numVehicles', 'operator' => 'lte', 'sumWith' => 'requiredEuro5', 'allowEmpty' => true, 'compare_to_label' => 'Your number of authorised vehicles'])]
     #[Form\Type('Laminas\Form\Element\Number')]
     public $requiredEuro6 = 0;
 

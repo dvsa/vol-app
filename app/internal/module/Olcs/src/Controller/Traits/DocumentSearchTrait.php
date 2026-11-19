@@ -37,18 +37,17 @@ trait DocumentSearchTrait
             'showDocs' => $this->showDocsFilter,
         ];
 
-        $hideExternalDocumentsOverride = $extra['isExternal'] === 'internal' ?? false;
-
         $filters = array_merge(
             $defaults,
             $extra,
             $this->getRequest()->getQuery()->toArray()
         );
 
+        // never let the URL turn this off
+        $filters['hideUnsubmittedApplicationDocs'] = 'Y';
+
         if (isset($filters['isExternal'])) {
-            if ($hideExternalDocumentsOverride) {
-                $filters['isExternal'] = 'N';
-            } elseif ($filters['isExternal'] === 'external') {
+            if ($filters['isExternal'] === 'external') {
                 $filters['isExternal'] = 'Y';
             } elseif ($filters['isExternal'] === 'internal') {
                 $filters['isExternal'] = 'N';

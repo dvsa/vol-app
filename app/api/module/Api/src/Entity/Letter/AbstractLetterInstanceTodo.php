@@ -67,11 +67,11 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     protected $letterInstanceIssue;
 
     /**
-     * LetterTodoVersion
+     * LetterTodoVersion, null for a caseworker-written to-do (VOL-7735)
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion|null
      */
-    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class, fetch: 'LAZY')]
     protected $letterTodoVersion;
 
@@ -227,7 +227,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Set the letter todo version
      *
-     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion $letterTodoVersion new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion|null $letterTodoVersion new value being set
      *
      * @return static
      */
@@ -241,7 +241,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the letter todo version
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion|null
      */
     public function getLetterTodoVersion()
     {

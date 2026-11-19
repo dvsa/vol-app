@@ -19,7 +19,7 @@ class PrinterDetails
     #[Form\Attributes(['placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'Printer'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 45])]
     public $printerName = null;
 
@@ -27,7 +27,7 @@ class PrinterDetails
     #[Form\Options(['label' => 'Description'])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $description = null;
 }

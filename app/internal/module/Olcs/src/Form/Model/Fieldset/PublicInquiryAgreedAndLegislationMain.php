@@ -13,10 +13,10 @@ class PublicInquiryAgreedAndLegislationMain
 {
     #[Form\Options(['label' => 'Agreed date', 'create_empty_option' => false, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $agreedDate = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'medium'])]
@@ -44,10 +44,10 @@ class PublicInquiryAgreedAndLegislationMain
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Date ECMS case first received by OTC', 'create_empty_option' => false, 'render_delimiters' => true, 'fieldsetClass' => 'pi_ecms_first_received_date'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $ecmsFirstReceivedDate = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'chosen-select-medium', 'multiple' => true])]
@@ -65,7 +65,7 @@ class PublicInquiryAgreedAndLegislationMain
     #[Form\Options(['label' => 'Comments'])]
     #[Form\Required(false)]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     public $comment = null;
 

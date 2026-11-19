@@ -6,20 +6,20 @@
 #
 # Grouping is presentational. Every statement below is compared; nothing is hidden.
 
-# ---- actionable (6) ----
+# ---- actionable (5) ----
 # A real disagreement between an entity and the schema. Resolve by changing the
 # mapping, or by adding a Liquibase migration in olcs-etl.
 
 ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL
-ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL
 ALTER TABLE pi_sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE si_penalty_imposed_type CHANGE deleted_date deleted_date DATETIME DEFAULT NULL
 ALTER TABLE sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE transport_manager CHANGE merge_details merge_details JSON DEFAULT NULL
 
-# ---- inexpressible from mapping (74) ----
+# ---- inexpressible from mapping (75) ----
 # Differences on implicit ManyToMany join tables that no entity change can fix -
-# generated index names, and columns a JoinTable cannot carry. See classify().
+# generated index names, columns a JoinTable cannot carry, and database ENUM 
+# columns mapped as strings See classify().
 # Recorded and compared like any other statement, but not work anyone can pick up.
 
 ALTER TABLE bus_reg_bus_service_type DROP olbs_key
@@ -37,6 +37,7 @@ ALTER TABLE case_category RENAME INDEX ix_case_category_case_id TO IDX_913163BCC
 ALTER TABLE case_category RENAME INDEX ix_case_category_category_id TO IDX_913163BC12469DE2
 ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_cases_id TO IDX_9F1F98C92A69AB62
 ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_outcome_id TO IDX_9F1F98C9E6EE6D63
+ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL, CHANGE assessment_status assessment_status VARCHAR(255) DEFAULT NULL
 ALTER TABLE impounding_legislation_type RENAME INDEX ix_impounding_legislation_type_impounding_id TO IDX_56C373FED885EE1F
 ALTER TABLE impounding_legislation_type RENAME INDEX ix_impounding_legislation_type_impounding_legislation_type_id TO IDX_56C373FEDF642283
 ALTER TABLE irfo_psv_auth_country RENAME INDEX ix_irfo_psv_auth_country_country_id TO IDX_64EA0E34F92F3E70

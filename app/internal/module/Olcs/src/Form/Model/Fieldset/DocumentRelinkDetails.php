@@ -24,7 +24,7 @@ class DocumentRelinkDetails
     #[Form\Attributes(['id' => 'targetId', 'class' => 'medium', 'name' => 'targetId'])]
     #[Form\Options(['label' => 'Application ID'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     public $targetId = null;
 

@@ -31,7 +31,7 @@ class DataService extends AbstractRepository
         $qb->innerJoin(
             Entity\Application\Application::class,
             'a',
-            Expr\Join::WITH,
+            Expr\Join::ON,
             'a.status = ' . $this->alias . '.id'
         );
 

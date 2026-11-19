@@ -80,6 +80,28 @@ final class DocumentSearchViewTest extends RepositoryTestCase
             ['licence' => 'unit_LicenceId', 'showDocs' => FilterOptions::EXCLUDE_IRHP],
             ' WHERE m.irhpApplicationId IS NULL AND m.licenceId = :licence',
         ];
+
+        yield 'hide unsubmitted application docs' => [
+            ['hideUnsubmittedApplicationDocs' => 'Y'],
+            ' LEFT JOIN Dvsa\\Olcs\\Api\\Entity\\Application\\Application a ON m.applicationId = a.id'
+            . ' WHERE a.status NOT IN(:applicationStatusesNotSent) OR a.status IS NULL'
+            . ' OR (a.status IN(:applicationStatusesNotSent) AND m.isExternal = 0)',
+        ];
+    }
+
+    public function testFetchListBindsTheUnsentApplicationStatuses(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->expects('fetchPaginatedList')->andReturn([]);
+        $this->sut->shouldReceive('buildDefaultListQuery');
+
+        $this->sut->fetchList(DocumentList::create(['hideUnsubmittedApplicationDocs' => 'Y']));
+
+        $this->assertSame(
+            ['apsts_not_submitted', 'apsts_cancelled'],
+            $qb->getParameter('applicationStatusesNotSent')->getValue()
+        );
     }
 
     public function testFetchListBindsTheUnlinkedIdentifier(): void

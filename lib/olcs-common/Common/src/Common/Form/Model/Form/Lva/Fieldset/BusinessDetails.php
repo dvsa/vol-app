@@ -28,7 +28,7 @@ class BusinessDetails
     public $tradingNames;
 
     #[Form\Attributes(['id' => 'natureOfBusiness', 'placeholder' => '', 'class' => 'extra-long'])]
-    #[Form\Options(['label' => 'Nature of business', 'error-message' => 'businessDetails_natureOfBusiness-error', 'label_attributes' => ['aria-label' => 'businessDetails_natureOfBusiness-error', 'class' => 'form-element__question']])]
+    #[Form\Options(['label' => 'Nature of business', 'error-message' => 'businessDetails_natureOfBusiness-error', 'label_attributes' => ['class' => 'form-element__question']])]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]
     public $natureOfBusiness;
 }

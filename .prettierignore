@@ -6,3 +6,5 @@ lib/olcs-auth/test/Form/Snapshot/forms/
 lib/olcs-common/test/Common/src/Common/Form/Snapshot/forms/
 app/internal/test/Olcs/src/Form/Snapshot/forms/
 app/selfserve/test/Olcs/src/Form/Snapshot/forms/
+# Third-party scripts, not formatted by hand
+app/cdn/assets/_js/vendor/

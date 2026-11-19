@@ -29,7 +29,7 @@ class UpdateContinuationFormActions
     public $printSeperator = null;
 
     #[Form\Attributes(['class' => 'govuk-link', 'id' => 'view-continuation', 'target' => '_blank'])]
-    #[Form\Options(['label' => 'View digital continuation (opens in new window)'])]
+    #[Form\Options(['label' => 'View digital continuation'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\ActionLink')]
     public $viewContinuation = null;
 }

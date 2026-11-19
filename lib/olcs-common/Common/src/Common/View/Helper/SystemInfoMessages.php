@@ -1,46 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\View\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\View\Helper\AbstractHelper;
 
 /**
  * View helper to print system info messages
- *
- * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
 class SystemInfoMessages extends AbstractHelper
 {
-    public const HTML_BLOCK = '<div class="system-messages">%s</div>';
-
-    public const HTML_ITEM = '<div class="system-messages__wrapper"><p>%s</p></div>';
-
-    /** @var AnnotationBuilder */
-    protected $annotationBuilder;
-
-    /** @var QueryService */
-    protected $queryService;
-
-    /** @var  array */
-    protected $mssgs;
+    public const string HTML_BLOCK = '<div class="govuk-notification-banner" role="region" aria-labelledby="system-info-messages-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="system-info-messages-title">
+      %s
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    %s
+  </div>
+</div>';
+    public const string HTML_ITEM = '<p class="govuk-notification-banner__heading">%s</p>';
+    protected ?array $mssgs;
 
     public function __construct(
-        AnnotationBuilder $annotationBuilder,
-        QueryService $querySrv
+        private readonly AnnotationBuilder $annotationBuilder,
+        private readonly QueryService $queryService,
+        private readonly TranslationHelperService $translator
     ) {
-        $this->annotationBuilder = $annotationBuilder;
-        $this->queryService = $querySrv;
     }
 
-    /**
-     * @param boolean $isInternal
-     *
-     * @return string
-     */
-    public function __invoke($isInternal)
+    public function __invoke(bool $isInternal): ?string
     {
         $this->getData($isInternal);
 
@@ -58,7 +53,11 @@ class SystemInfoMessages extends AbstractHelper
             $items[] = sprintf(self::HTML_ITEM, htmlspecialchars($msg['description']));
         }
 
-        return sprintf(self::HTML_BLOCK, implode('', $items));
+        return sprintf(
+            self::HTML_BLOCK,
+            htmlspecialchars($this->translator->translate('lva-summary-important')),
+            implode('', $items)
+        );
     }
 
     private function getData(bool $isInternal): static

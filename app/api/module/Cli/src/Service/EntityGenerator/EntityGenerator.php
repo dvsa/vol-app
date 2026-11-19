@@ -82,6 +82,7 @@ class EntityGenerator implements EntityGeneratorInterface
 
         // Process columns and generate fields with EntityConfig support
         $fields = $this->processColumnsWithConfig($table, $config);
+        $fields = $this->preserveExistingFieldOrder($fields, $entityData, $config);
 
         // Generate abstract entity
         $abstractContent = $this->generateAbstractEntity($entityData, $table, $fields, $config);
@@ -259,7 +260,7 @@ class EntityGenerator implements EntityGeneratorInterface
             $className = $entityData->getClassName();
 
             if (isset($inverseRelationships[$className])) {
-                $this->addInverseRelationshipsToEntity($entityData, $inverseRelationships[$className]);
+                $this->addInverseRelationshipsToEntity($entityData, $inverseRelationships[$className], $config);
             }
         }
     }
@@ -267,7 +268,7 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Add inverse relationships to a specific entity
      */
-    private function addInverseRelationshipsToEntity(EntityData $entityData, array $relationships): void
+    private function addInverseRelationshipsToEntity(EntityData $entityData, array $relationships, array $config): void
     {
         $metadata = $entityData->getMetadata();
         $fields = $metadata['fields'] ?? [];
@@ -338,8 +339,55 @@ class EntityGenerator implements EntityGeneratorInterface
         $entityData->setMetadata($metadata);
 
         // Regenerate abstract entity content with inverse relationships
+        $fields = $this->preserveExistingFieldOrder($fields, $entityData, $config);
         $abstractContent = $this->generateAbstractEntity($entityData, $metadata['table'], $fields, []);
         $entityData->setAbstractContent($abstractContent);
+    }
+
+    /**
+     * Keep existing generated properties and accessors in their current order.
+     * Newly added fields retain their schema order and are appended afterward.
+     */
+    private function preserveExistingFieldOrder(array $fields, EntityData $entityData, array $config): array
+    {
+        $entityPath = $config['sourceEntityPath'] ?? null;
+        if (!is_string($entityPath) || $entityPath === '') {
+            return $fields;
+        }
+
+        $namespaceFolder = $entityData->getNamespaceFolder();
+        $entityDirectory = $namespaceFolder === '' || $namespaceFolder === 'Entity'
+            ? $entityPath
+            : $entityPath . '/' . $namespaceFolder;
+        $abstractPath = $entityDirectory . '/Abstract' . $entityData->getClassName() . '.php';
+
+        if (!is_file($abstractPath)) {
+            return $fields;
+        }
+
+        $source = file_get_contents($abstractPath);
+        if ($source === false) {
+            throw new \RuntimeException(sprintf('Unable to read existing entity: %s', $abstractPath));
+        }
+
+        preg_match_all('/^\s*protected\s+\$([A-Za-z_][A-Za-z0-9_]*)\b/m', $source, $matches);
+        $existingOrder = array_flip($matches[1]);
+        $indexedFields = [];
+
+        foreach ($fields as $index => $field) {
+            $propertyName = $field['property']['name'] ?? '';
+            $indexedFields[] = [
+                'field' => $field,
+                'order' => $existingOrder[$propertyName] ?? count($existingOrder) + $index,
+            ];
+        }
+
+        usort(
+            $indexedFields,
+            static fn(array $left, array $right): int => $left['order'] <=> $right['order']
+        );
+
+        return array_column($indexedFields, 'field');
     }
 
     /**

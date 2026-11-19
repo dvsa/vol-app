@@ -56,7 +56,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy:'documentAnalyses', fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'documentAnalyses', fetch: 'LAZY')]
     protected $document;
 
     /**
@@ -113,7 +113,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     protected $result;
 
     /**
-     * Result mapped to the assessment payload; caseworker annotations overlay it at read time
+     * Result normalised
      *
      * @var array|null
      */
@@ -121,7 +121,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     protected $resultNormalised;
 
     /**
-     * Caseworker's approval decision for the analysis
+     * Assessment status
      *
      * @var string|null
      */
@@ -168,6 +168,14 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
+
+    /**
+     * Provider metadata accompanying the analysis result
+     *
+     * @var array|null
+     */
+    #[ORM\Column(type: 'json', name: 'result_metadata', nullable: true)]
+    protected $resultMetadata;
 
     /**
      * Initialise the collections
@@ -555,6 +563,30 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the result metadata
+     *
+     * @param array|null $resultMetadata new value being set
+     *
+     * @return static
+     */
+    public function setResultMetadata($resultMetadata)
+    {
+        $this->resultMetadata = $resultMetadata;
+
+        return $this;
+    }
+
+    /**
+     * Get the result metadata
+     *
+     * @return array|null
+     */
+    public function getResultMetadata()
+    {
+        return $this->resultMetadata;
     }
 
     /**

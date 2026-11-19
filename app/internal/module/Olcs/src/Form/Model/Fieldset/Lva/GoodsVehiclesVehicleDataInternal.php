@@ -15,7 +15,7 @@ class GoodsVehiclesVehicleDataInternal
     #[Form\Type('Hidden')]
     public $version = null;
 
-    #[Form\Attributes(['class' => 'medium', 'id' => 'vrm', 'placeholder' => ''])]
+    #[Form\Attributes(['class' => 'medium', 'placeholder' => ''])]
     #[Form\Type('Hidden')]
     public $vrm = 'FOO1';
 

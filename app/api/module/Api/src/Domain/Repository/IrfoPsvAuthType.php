@@ -29,6 +29,6 @@ class IrfoPsvAuthType extends AbstractRepository
     #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
-        $qb->orderBy($this->alias . '.description', 'ASC');
+        $qb->orderBy($this->alias . '.description', \SortDirection::Ascending);
     }
 }

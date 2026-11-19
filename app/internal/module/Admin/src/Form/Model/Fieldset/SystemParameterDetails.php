@@ -15,7 +15,7 @@ class SystemParameterDetails
     #[Form\Options(['label' => 'Key'])]
     #[Form\Type('Text')]
     #[Form\Required(true)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 32])]
     public $id = null;
 
@@ -23,7 +23,7 @@ class SystemParameterDetails
     #[Form\Options(['label' => 'Param value'])]
     #[Form\Type('TextArea')]
     #[Form\Required(true)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 1024])]
     public $paramValue = null;
 
@@ -31,7 +31,7 @@ class SystemParameterDetails
     #[Form\Options(['label' => 'Description'])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $description = null;
 

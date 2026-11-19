@@ -13,8 +13,8 @@ class UserLoginSecurity
     #[Form\Required(false)]
     #[Form\Attributes(['id' => 'username', 'placeholder' => '', 'class' => 'medium', 'required' => false])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringToLower'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Filter('Laminas\Filter\StringToLower')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\UsernameCreate')]
     public $loginId = null;
 

@@ -132,7 +132,7 @@
         "name": "purchaseDate",
         "attributes": {
           "required": false,
-          "id": "dob"
+          "id": "purchaseDate"
         },
         "options": {
           "label": "selfserve-app-subSection-previous-history-licence-history-purchaseDate",

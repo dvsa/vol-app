@@ -25,17 +25,21 @@ final class InfoIconAdderTest extends MockeryTestCase
         $fieldset = m::mock(Fieldset::class);
 
         $translator = m::mock(TranslationHelperService::class);
-        $translator->shouldReceive('translate')
+        $translator->expects('translate')
+            ->with('lva-summary-important')
+            ->andReturn('Important');
+        $translator->expects('translate')
             ->with($translationKey)
             ->andReturn('translated translation key');
 
         $expectedMarkup = '<p class="govuk-!-margin-top-7 info-box__icon-wrapper info-box__text">' .
-            '<i class="info-box__icon selfserve-important"></i>translated translation key</p>';
+            '<i class="info-box__icon selfserve-important"></i>' .
+            '<span class="govuk-visually-hidden">Important: </span>translated translation key</p>';
 
         $htmlAdder = m::mock(HtmlAdder::class);
-        $htmlAdder->shouldReceive('add')
+        $htmlAdder->expects('add')
             ->with($fieldset, 'infoIcon', $expectedMarkup)
-            ->once();
+            ->andReturnNull();
 
         $infoIconAdder = new InfoIconAdder($translator, $htmlAdder);
 

@@ -39,7 +39,7 @@ class IrhpPermitType extends AbstractRepository
             ->andWhere($qb->expr()->gt('ipw.endDate', ':now'))
             ->andWhere($qb->expr()->neq('ips.hiddenSs', 1))
             ->setParameter('now', $now)
-            ->orderBy('rd.displayOrder', 'ASC');
+            ->orderBy('rd.displayOrder', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult();
     }
@@ -62,7 +62,7 @@ class IrhpPermitType extends AbstractRepository
             ->innerJoin('ipr.irhpPermits', 'ip')
             ->where($qb->expr()->in('ip.status', ':statuses'))
             ->setParameter('statuses', IrhpPermitEntity::$readyToPrintStatuses)
-            ->orderBy('rd.description', 'ASC');
+            ->orderBy('rd.description', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

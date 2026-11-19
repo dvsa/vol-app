@@ -236,6 +236,28 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'change-issues' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/change-issues',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'changeIssues',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'update-issues' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/update-issues',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'updateIssues',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
             'save-issue-content' => [
                 'type' => 'Literal',
                 'options' => [
@@ -287,6 +309,28 @@ $routes = [
                     'defaults' => [
                         'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
                         'action' => 'saveTodoContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'add-custom-todo' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/add-custom-todo',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'addCustomTodo',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'delete-custom-todo' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/delete-custom-todo',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'deleteCustomTodo',
                     ]
                 ],
                 'may_terminate' => true,

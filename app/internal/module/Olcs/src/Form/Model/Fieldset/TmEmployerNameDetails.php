@@ -8,11 +8,11 @@ use Laminas\Form\Annotation as Form;
 #[Form\Name('tm-employer-name-details')]
 class TmEmployerNameDetails
 {
-    #[Form\Attributes(['class' => 'long', 'id' => 'position'])]
+    #[Form\Attributes(['class' => 'long', 'id' => 'employerName'])]
     #[Form\Options(['label' => 'transport-manager.employment.form.employerName'])]
     #[Form\Required(true)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 90]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 90])]
     public $employerName = null;
 }

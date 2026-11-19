@@ -16,7 +16,7 @@ class DiscNumbering
     #[Form\Name('maxPages')]
     #[Form\Options(['label' => 'Max pages to print'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Digits'])]
+    #[Form\Filter('Digits')]
     #[Form\Validator('GreaterThan', options: ['min' => 0])]
     #[Form\Required(false)]
     public $maxPages = null;
