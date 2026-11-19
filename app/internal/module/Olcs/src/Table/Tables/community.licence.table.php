@@ -60,6 +60,8 @@ return [
         ],
         [
             'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select community licence ' . $row['serialNoPrefix']
+                . ', issue ' . $row['issueNo'],
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'disableIfRowIsDisabled' => true,

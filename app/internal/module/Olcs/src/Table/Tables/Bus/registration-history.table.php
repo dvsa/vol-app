@@ -80,10 +80,14 @@ return [
         [
             'title' => '&nbsp;',
             'width' => 'checkbox',
-            'formatter' => function ($data) {
+            'formatter' => function ($data, $column = []) {
                 if ($data['isLatestVariation']) {
-                    return '<input type="radio" name="id" value="'
-                        . \Common\Util\Escape::html($data['id']) . '">';
+                    $id = $column['selectionId'] ?? 'bus-registration-variation-' . $data['id'];
+                    return '<input type="radio" id="' . \Common\Util\Escape::htmlAttr($id)
+                        . '" name="id" value="' . \Common\Util\Escape::htmlAttr($data['id']) . '">'
+                        . '<label class="govuk-visually-hidden" for="' . \Common\Util\Escape::htmlAttr($id)
+                        . '">Select registration ' . \Common\Util\Escape::html($data['regNo'])
+                        . ', variation ' . \Common\Util\Escape::html($data['variationNo']) . '</label>';
                 }
             },
         ],

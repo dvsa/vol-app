@@ -70,6 +70,7 @@ return [
             'title' => 'markup-table-th-action', //this is a translation key
             'width' => 'checkbox',
             'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select task ' . $row['description'],
             'formatter' => TaskCheckbox::class,
         ]
     ]

@@ -89,7 +89,8 @@ return [
             // Row's `id` is the primary variant id (en_GB/md > en_GB/html > lowest id) so
             // clicking Edit opens the modal on the group's most useful default variant. The
             // existing radio.phtml partial reads {{id}}.
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select email template ' . $row['description'],
         ],
     ]
 ];

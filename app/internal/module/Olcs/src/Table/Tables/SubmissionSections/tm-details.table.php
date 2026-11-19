@@ -61,6 +61,7 @@ return [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
+            'label-callback' => static fn($row) => 'Select transport manager ' . $row['forename'] . ' ' . $row['familyName'],
             'hideWhenDisabled' => true
         ],
     ]

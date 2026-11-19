@@ -68,7 +68,8 @@ return [
         [
             'title' => 'Select',
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select ' . $row['entityName'] . ' ' . $row['entityPk'],
         ],
     ],
 ];

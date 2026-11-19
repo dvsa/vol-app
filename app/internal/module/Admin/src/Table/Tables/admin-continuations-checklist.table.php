@@ -53,6 +53,7 @@ return [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select continuation for licence ' . $row['licence']['licNo'],
             'disableIfRowIsDisabled' => true,
         ]
     ]

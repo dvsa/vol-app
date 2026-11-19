@@ -119,6 +119,7 @@ return [
         [
             'type' => 'Checkbox',
             'width' => 'checkbox',
+            'label-callback' => static fn($row) => 'Select permit ' . $row['permitNumberWithPrefix'],
             'disableIfRowIsDisabled' => true,
         ],
     ]

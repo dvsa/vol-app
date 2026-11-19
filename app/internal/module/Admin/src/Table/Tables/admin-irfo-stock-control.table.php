@@ -92,6 +92,7 @@ return [
         [
             'type' => 'Checkbox',
             'width' => 'checkbox',
+            'label-callback' => static fn($row) => 'Select IRFO permit serial number ' . $row['serialNo'],
         ],
     ]
 ];

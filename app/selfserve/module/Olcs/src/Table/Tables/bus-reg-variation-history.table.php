@@ -83,9 +83,12 @@ return [
         [
             'title' => 'Action',
             'width' => 'checkbox',
-            'formatter' => function ($data) {
+            'formatter' => function ($data, $column = []) {
                 if (isset($data['canDelete'])) {
-                    return '<input type="radio" aria-label="Delete ' . Escape::htmlAttr($data['regNo']) . '" name="id" value="' . Escape::htmlAttr($data['id']) . '">';
+                    $id = $column['selectionId'] ?? 'bus-registration-variation-' . $data['id'];
+                    return '<input type="radio" id="' . Escape::htmlAttr($id) . '" name="id" value="'
+                        . Escape::htmlAttr($data['id']) . '"><label class="govuk-visually-hidden" for="'
+                        . Escape::htmlAttr($id) . '">Delete ' . Escape::html($data['regNo']) . '</label>';
                 }
             },
         ]

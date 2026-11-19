@@ -52,7 +52,8 @@ return [
         [
             'name' => 'select',
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select person ' . $row['forename'] . ' ' . $row['familyName'],
         ]
     ]
 ];

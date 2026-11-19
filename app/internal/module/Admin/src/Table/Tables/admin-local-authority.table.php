@@ -49,7 +49,8 @@ return [
         [
             'title' => 'markup-table-th-action',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select local authority ' . $row['description'],
         ],
     ]
 ];
