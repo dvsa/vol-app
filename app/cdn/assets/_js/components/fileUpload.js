@@ -22,6 +22,7 @@ OLCS.fileUpload = (function (document, $, undefined) {
     var uploadInProgress = false;
     var heldBackSubmits = $();
     var uploadsInFlight = 0;
+    var answers = {};
 
     if (window.FormData === undefined) {
       OLCS.logger.warn("XHR form uploads not supported in this browser", "fileUpload");
@@ -62,6 +63,16 @@ OLCS.fileUpload = (function (document, $, undefined) {
 
       F.render(originalUploader, updatedUploader[0].innerHTML);
       return true;
+    }
+
+    function refreshUploader(index, responses) {
+      var refreshed = responses.reverse().some(function (response) {
+        return handleResponse(response, index);
+      });
+
+      if (!refreshed) {
+        $(containerSelector).eq(index).find("[data-upload-index]").remove();
+      }
     }
 
     var deleteResponse = OLCS.normaliseResponse(function (response) {
@@ -132,13 +143,14 @@ OLCS.fileUpload = (function (document, $, undefined) {
             .find(".uploading")
             .replaceWith("<a href=# class=file__remove>Remove</a>");
 
+          answers[containerIndex] = (answers[containerIndex] || []).concat(xhr.responseText);
+
           if (uploadsInFlight === 0) {
             OLCS.logger.debug("All files uploaded", "fileUpload");
             try {
-              if (!handleResponse(xhr.responseText, containerIndex)) {
-                $(container).find("[data-upload-index]").remove();
-              }
+              $.each(answers, refreshUploader);
             } finally {
+              answers = {};
               enableElements();
             }
           }

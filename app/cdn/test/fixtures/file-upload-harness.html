@@ -26,6 +26,22 @@
         <button type="submit" name="send" id="send">Send message</button>
         <button type="submit" name="locked" id="locked" disabled>Not available</button>
       </form>
+
+      <form id="section" method="post" action="http://localhost:9/upload">
+        <fieldset class="file-uploader" data-group="attachments">
+          <ul class="attach-action__list">
+            <li class="attach-action">
+              <label class="attach-action__label">
+                Attach file(s)
+                <input type="file" name="attachments[file]" class="attach-action__input" />
+              </label>
+            </li>
+          </ul>
+          <button type="submit" name="attachments[upload]" class="js-upload">Upload</button>
+        </fieldset>
+
+        <button type="submit" name="save" id="save">Save</button>
+      </form>
     </div>
 
     <script src="../../node_modules/jquery/dist/jquery.js"></script>
