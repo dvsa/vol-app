@@ -17,7 +17,8 @@
           "label_attributes": {
             "class": "govuk-label govuk-checkboxes__label"
           },
-          "must_be_value": "Y"
+          "must_be_value": "Y",
+          "error-message": "checkbox.error.operating-centre-permission"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }

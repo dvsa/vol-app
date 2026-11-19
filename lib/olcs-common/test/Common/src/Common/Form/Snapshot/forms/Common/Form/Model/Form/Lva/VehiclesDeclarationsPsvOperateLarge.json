@@ -37,7 +37,8 @@
           "checked_value": "Y",
           "unchecked_value": "N",
           "must_be_value": "Y",
-          "use_hidden_element": false
+          "use_hidden_element": false,
+          "error-message": "checkbox.error.psv-large-vehicles"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }

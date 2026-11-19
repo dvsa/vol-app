@@ -318,7 +318,8 @@
                   "class": "govuk-label govuk-checkboxes__label",
                   "id": "insolvency"
                 },
-                "must_be_value": "Y"
+                "must_be_value": "Y",
+                "error-message": "checkbox.error.insolvency-confirmation"
               },
               "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
             }

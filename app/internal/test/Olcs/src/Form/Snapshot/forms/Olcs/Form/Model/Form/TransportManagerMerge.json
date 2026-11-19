@@ -43,7 +43,8 @@
           "unchecked_value": "N",
           "label": "form.tm-merge.confirm",
           "short-label": "form.tm-merge.confirm",
-          "must_be_value": "Y"
+          "must_be_value": "Y",
+          "error-message": "checkbox.error.tm-merge"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }

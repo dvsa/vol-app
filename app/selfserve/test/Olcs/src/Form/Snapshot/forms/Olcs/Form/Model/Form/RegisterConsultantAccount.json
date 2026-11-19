@@ -135,7 +135,8 @@
                 },
                 "checked_value": "Y",
                 "unchecked_value": "N",
-                "must_be_value": "Y"
+                "must_be_value": "Y",
+                "error-message": "checkbox.error.terms"
               },
               "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
             }

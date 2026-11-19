@@ -38,7 +38,7 @@ class EmploymentDetails
 
     #[Form\Name('understood-availability-agreement-confirmation')]
     #[Form\Attributes(['id' => 'understoodAvailabilityAgreement', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'transportManager.data.availability.understoodAvailabilityAgreementConfirmation', 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label']])]
+    #[Form\Options(['label' => 'transportManager.data.availability.understoodAvailabilityAgreementConfirmation', 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'error-message' => 'checkbox.error.tm-availability'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $understoodAvailabilityAgreementConfirmation;
 }

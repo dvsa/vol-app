@@ -32,7 +32,8 @@
           "label_attributes": {
             "class": "govuk-label govuk-checkboxes__label",
             "id": "label-declarationConfirmation"
-          }
+          },
+          "error-message": "checkbox.error.variation-declaration"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }

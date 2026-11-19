@@ -10,7 +10,7 @@ use Laminas\Form\Annotation as Form;
 class AgreeTerms
 {
     #[Form\Attributes(['id' => 'termsAgreed', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'user-registration.field.termsAgreed.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y'])]
+    #[Form\Options(['label' => 'user-registration.field.termsAgreed.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'error-message' => 'checkbox.error.terms'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $termsAgreed = null;
 }

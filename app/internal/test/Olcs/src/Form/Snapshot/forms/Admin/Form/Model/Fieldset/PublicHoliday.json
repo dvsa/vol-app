@@ -21,7 +21,8 @@
             "isWales": "Wales",
             "isScotland": "Scotland",
             "isNi": "Northern Ireland"
-          }
+          },
+          "error-message": "checkbox.error.public-holiday-areas"
         }
       }
     },
