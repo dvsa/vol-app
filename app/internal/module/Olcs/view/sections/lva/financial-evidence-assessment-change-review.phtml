@@ -138,23 +138,17 @@
     <?php $key = $this->escapeHtmlAttr($pass['key']); ?>
     <h3 class="govuk-heading-m">Issue</h3>
     <dl class="govuk-summary-list">
+      <?php // Laid out as the VOL-7338 design draws it: the check's name against its value and flag, ?>
+      <?php // then the analyser's remarks, then the caseworker's comment. ?>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Information</dt>
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($pass['label']); ?></dt>
         <dd class="govuk-summary-list__value">
           <?php if ($pass['value'] !== null) : ?>
-            <?php echo $this->escapeHtml($pass['label']); ?>: <?php echo $this->escapeHtml($pass['value']); ?>
-          <?php else : ?>
-            <?php echo $this->escapeHtml($pass['label']); ?>
+            <?php echo $this->escapeHtml($pass['value']); ?>
           <?php endif; ?>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Flag</dt>
-        <dd class="govuk-summary-list__value">
           <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$pass['flagTag']); ?>">
             <?php echo $this->escapeHtml((string)$pass['flag']); ?>
           </strong>
-          <?php echo $this->escapeHtml((string)($pass['remark'] ?? '')); ?>
           <?php // A real change shows what it moved to; a note says the flag was kept. ?>
           <?php if ($pass['changed']) : ?>
             <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
@@ -173,6 +167,13 @@
               by <strong><?php echo $this->escapeHtml($pass['changedBy'] ?? 'Unknown user'); ?></strong>
             </p>
           <?php endif; ?>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Remarks</dt>
+        <dd class="govuk-summary-list__value">
+          <?php // Model-generated text, so escaped; its own line breaks are kept (one point per line). ?>
+          <?php echo ($pass['remark'] ?? '') !== '' ? nl2br($this->escapeHtml($pass['remark'])) : '-'; ?>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
