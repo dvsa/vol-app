@@ -54,6 +54,21 @@ final class CustomSelectorTest extends MockeryTestCase
         );
     }
 
+    public function testRenderWithAccessibleLabel(): void
+    {
+        $this->table->shouldReceive('getFieldset')->andReturn(null);
+        $output = $this->sut->render(
+            ['userId' => 7, 'loginId' => 'A & B'],
+            [
+                'data-field' => 'userId',
+                'selectionId' => 'unique-control',
+                'label-callback' => static fn($row) => 'Select user ' . $row['loginId'],
+            ]
+        );
+        self::assertStringContainsString('name="id" value="7" id="unique-control"', $output);
+        self::assertStringContainsString('for="unique-control">Select user A &amp; B</label>', $output);
+    }
+
     /**
      * Test render with disabled attribute
      */

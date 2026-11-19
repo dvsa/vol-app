@@ -22,6 +22,15 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class TableBuilder implements \Stringable
 {
+    private static int $selectionSequence = 0;
+    private static ?string $selectionRequestId = null;
+
+    private static function nextSelectionId(): string
+    {
+        self::$selectionRequestId ??= bin2hex(random_bytes(8));
+        return 'table-selection-' . self::$selectionRequestId . '-' . ++self::$selectionSequence;
+    }
+
     public const TYPE_DEFAULT = 1;
 
     public const TYPE_PAGINATE = 2;
@@ -1575,7 +1584,10 @@ class TableBuilder implements \Stringable
         }
 
         if (isset($column['type']) && $column['type'] == 'Checkbox' && ($column['selectAll'] ?? true)) {
-            $column['title'] = $this->replaceContent('{{[elements/checkall]}}');
+            $column['title'] = $this->replaceContent(
+                '{{[elements/checkall]}}',
+                ['selectionId' => self::nextSelectionId()]
+            );
         }
 
         return $this->replaceContent($wrapper, $column);
@@ -1594,6 +1606,8 @@ class TableBuilder implements \Stringable
         if ($this->shouldHide($column)) {
             return;
         }
+
+        $column['selectionId'] = self::nextSelectionId();
 
         if (isset($column['formatter'])) {
             $return = $this->callFormatter($column, $row);
@@ -1622,6 +1636,12 @@ class TableBuilder implements \Stringable
         }
 
         if (isset($column['format'])) {
+            if (in_array($column['format'], ['{{[elements/checkbox]}}', '{{[elements/radio]}}'], true)) {
+                $row['selectionId'] = $column['selectionId'];
+                $row['selectionLabel'] = isset($column['label-callback'])
+                    ? $column['label-callback']($row)
+                    : 'Select row';
+            }
             // The format string is developer-authored markup and $row is data, so the values are
             // escaped on the way in and the template itself is left alone.
             $content = $this->replaceContentEscapingValues($column['format'], $row);

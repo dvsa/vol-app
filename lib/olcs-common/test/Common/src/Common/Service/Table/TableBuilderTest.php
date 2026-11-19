@@ -2858,7 +2858,9 @@ final class TableBuilderTest extends MockeryTestCase
             ->method('replaceContent')
             ->with(
                 '{{[elements/td]}}',
-                ['content' => '<input type="radio" name="id" value="1" id="[id][1]" />', 'attrs' => ' class="' . TableBuilder::CLASS_TABLE_CELL . '"']
+                self::callback(static fn($vars) =>
+                    preg_match('/^<input type="radio" name="id" value="1" id="table-selection-[0-9a-f]{16}-[0-9]+" \\/>$/', $vars['content']) === 1
+                    && $vars['attrs'] === ' class="' . TableBuilder::CLASS_TABLE_CELL . '"')
             );
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
@@ -2868,6 +2870,72 @@ final class TableBuilderTest extends MockeryTestCase
             ->willReturn($mockContentHelper);
 
         $table->renderBodyColumn($row, $column);
+    }
+
+    public function testTemplateSelectionLabelUsesEscapedRowData(): void
+    {
+        $table = $this->getMockTableBuilder(['getContentHelper']);
+        $table->method('getContentHelper')->willReturn(new ContentHelper(
+            __DIR__ . '/../../../../../../Common/view/table/'
+        ));
+        $column = [
+            'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select team ' . $row['name'],
+        ];
+
+        $output = $table->renderBodyColumn(['id' => 7, 'name' => 'A & B'], $column);
+
+        self::assertMatchesRegularExpression('/id="(table-selection-[0-9a-f]{16}-[0-9]+)".*for="\\1"/s', $output);
+        self::assertStringContainsString('name="id" value="7"', $output);
+        self::assertStringContainsString('Select team A &amp; B</span>', $output);
+    }
+
+    public function testTemplateSelectionKeepsDefaultLabel(): void
+    {
+        $table = $this->getMockTableBuilder(['getContentHelper']);
+        $table->method('getContentHelper')->willReturn(new ContentHelper(
+            __DIR__ . '/../../../../../../Common/view/table/'
+        ));
+
+        $output = $table->renderBodyColumn(['id' => 8], ['format' => '{{[elements/checkbox]}}']);
+
+        self::assertMatchesRegularExpression('/id="(table-selection-[0-9a-f]{16}-[0-9]+)".*for="\\1"/s', $output);
+        self::assertStringContainsString('name="id[]" value="8"', $output);
+        self::assertStringContainsString('Select row</span>', $output);
+    }
+
+    public function testSelectionIdsAreUniqueAcrossTablesWithIdenticalRows(): void
+    {
+        $html = '';
+        for ($i = 0; $i < 2; $i++) {
+            $table = $this->getMockTableBuilder(['getContentHelper']);
+            $table->method('getContentHelper')->willReturn(new ContentHelper(
+                __DIR__ . '/../../../../../../Common/view/table/'
+            ));
+            $column = ['type' => 'Checkbox', 'label-callback' => static fn($row) => 'Select ' . $row['name']];
+            $html .= '<table><thead><tr>' . $table->renderHeaderColumn($column) . '</tr></thead><tbody><tr>'
+                . $table->renderBodyColumn(['id' => 7, 'name' => 'Example'], $column)
+                . '</tr></tbody></table>';
+        }
+
+        $document = new \DOMDocument();
+        $document->loadHTML($html);
+        $inputs = $document->getElementsByTagName('input');
+        $labels = $document->getElementsByTagName('label');
+        self::assertCount(4, $inputs);
+        self::assertCount(4, $labels);
+        $ids = [];
+        foreach ($inputs as $index => $input) {
+            $id = $input->getAttribute('id');
+            self::assertNotSame('', $id);
+            self::assertSame($id, $labels->item($index)->getAttribute('for'));
+            $ids[] = $id;
+        }
+        self::assertCount(4, array_unique($ids));
+        self::assertSame('id[]', $inputs->item(1)->getAttribute('name'));
+        self::assertSame('7', $inputs->item(1)->getAttribute('value'));
+        self::assertSame('id[]', $inputs->item(3)->getAttribute('name'));
+        self::assertSame('7', $inputs->item(3)->getAttribute('value'));
     }
 
     /**
@@ -2889,7 +2957,9 @@ final class TableBuilderTest extends MockeryTestCase
             ->method('replaceContent')
             ->with(
                 '{{[elements/td]}}',
-                ['content' => '<input type="radio" name="table[id]" value="1" id="table[id][1]" />', 'attrs' => ' class="' . TableBuilder::CLASS_TABLE_CELL . '"']
+                self::callback(static fn($vars) =>
+                    preg_match('/^<input type="radio" name="table\\[id\\]" value="1" id="table-selection-[0-9a-f]{16}-[0-9]+" \\/>$/', $vars['content']) === 1
+                    && $vars['attrs'] === ' class="' . TableBuilder::CLASS_TABLE_CELL . '"')
             );
 
         $table = $this->getMockTableBuilder(['getContentHelper']);

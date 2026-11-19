@@ -146,4 +146,18 @@ final class CheckboxTest extends MockeryTestCase
             $response
         );
     }
+
+    public function testLabelTargetsIdContainingSpecialCharacters(): void
+    {
+        $this->table->shouldReceive('getFieldset')->andReturn('table');
+
+        $response = $this->sut->render(['id' => 'A&B"'], []);
+        $document = new \DOMDocument();
+        $document->loadHTML($response);
+        $input = $document->getElementsByTagName('input')->item(0);
+        $label = $document->getElementsByTagName('label')->item(0);
+
+        self::assertSame('table[id][A&B"]', $input->getAttribute('id'));
+        self::assertSame($input->getAttribute('id'), $label->getAttribute('for'));
+    }
 }
