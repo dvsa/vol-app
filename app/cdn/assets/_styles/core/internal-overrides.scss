@@ -1,5 +1,4 @@
 .govuk-radios {
-
   &__item {
     padding: 0;
     min-height: auto;
@@ -22,7 +21,7 @@
     padding: 0;
   }
 
-  &__conditional{
+  &__conditional {
     border-left: none;
     margin-left: 0;
     padding-left: 0;
@@ -50,8 +49,27 @@ dt.govuk-summary-list__key--weight-normal {
   display: none;
 }
 
+.table__wrapper .govuk-radios--small {
+  .govuk-radios__input {
+    width: 44px;
+    height: 44px;
+    margin-right: 0;
+    opacity: 0;
+  }
+
+  .govuk-radios__label {
+    padding: 6px 15px 6px 1px;
+  }
+
+  .govuk-radios__input + .govuk-radios__label::before,
+  .govuk-radios__input + .govuk-radios__label::after,
+  .govuk-radios__input:checked + .govuk-radios__label::after {
+    display: block;
+  }
+}
+
 // Fix for table width when table is included in internal form field Divs.
-div.field>div.table__wrapper {
+div.field > div.table__wrapper {
   max-width: 100%;
 }
 
@@ -83,10 +101,10 @@ pre.wordwrap {
 }
 
 form#irhpApplication fieldset legend {
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
 }
 
 fieldset#bilateralContainer input[type="text"]:disabled {
-    background-color: #bfc1c3;
+  background-color: #bfc1c3;
 }

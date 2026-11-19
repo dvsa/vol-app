@@ -2150,7 +2150,7 @@ final class TableBuilderTest extends MockeryTestCase
         ];
 
         $expectedColumn = [
-            'width' => '20px',
+            'width' => '24px',
             'title' => self::TRANSLATED . 'Title',
             'scope' => 'col',
             'class' => TableBuilder::CLASS_TABLE_HEADER,

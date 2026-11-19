@@ -61,7 +61,11 @@ final class CheckboxTest extends MockeryTestCase
         $response = $this->sut->render($data, $column);
 
         $this->assertEquals(
-            '<input type="checkbox" name="table[id][]" value="7" disabled="disabled" id="table[id][7]" />',
+            '<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">'
+            . '<div class="govuk-checkboxes__item"><input type="checkbox" name="table[id][]" value="7" '
+            . 'class="govuk-checkboxes__input" disabled="disabled" id="table[id][7]" />'
+            . '<label class="govuk-label govuk-checkboxes__label" for="table&#x5B;id&#x5D;&#x5B;7&#x5D;">'
+            . '<span class="govuk-visually-hidden">Select row</span></label></div></div>',
             $response
         );
     }
@@ -84,7 +88,11 @@ final class CheckboxTest extends MockeryTestCase
         $response = $this->sut->render($data, $column);
 
         $this->assertEquals(
-            '<input type="checkbox" name="table[id][]" value="7" id="table[id][7]" />',
+            '<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">'
+            . '<div class="govuk-checkboxes__item"><input type="checkbox" name="table[id][]" value="7" '
+            . 'class="govuk-checkboxes__input" id="table[id][7]" />'
+            . '<label class="govuk-label govuk-checkboxes__label" for="table&#x5B;id&#x5D;&#x5B;7&#x5D;">'
+            . '<span class="govuk-visually-hidden">Select row</span></label></div></div>',
             $response
         );
     }
@@ -112,7 +120,11 @@ final class CheckboxTest extends MockeryTestCase
         $response = $this->sut->render($data, $column);
 
         $this->assertEquals(
-            '<input type="checkbox" name="table[id][]" value="7" data-action="foo" id="table[id][7]" />',
+            '<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">'
+            . '<div class="govuk-checkboxes__item"><input type="checkbox" name="table[id][]" value="7" '
+            . 'class="govuk-checkboxes__input" data-action="foo" id="table[id][7]" />'
+            . '<label class="govuk-label govuk-checkboxes__label" for="table&#x5B;id&#x5D;&#x5B;7&#x5D;">'
+            . '<span class="govuk-visually-hidden">Select row</span></label></div></div>',
             $response
         );
     }
