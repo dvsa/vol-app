@@ -344,9 +344,7 @@ td {
       &:hover {
         color: govuk-colour("black");
       }
-      // Focus is on the visually hidden file input inside (selfserve's accessibility.js also adds
-      // .focused), so give the label the GOV.UK button focus style
-      &.focused,
+      // The file input may be visually hidden, so show its focus on the label.
       &:focus-within {
         outline: $govuk-focus-width solid transparent;
         border-color: govuk-functional-colour(focus);

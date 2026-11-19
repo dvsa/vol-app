@@ -21,12 +21,12 @@
                 "id": "typeOfLicenceCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#typeOfLicenceCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.type-of-licence-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-type-of-licence",
                 "checked_value": "Y",
@@ -46,12 +46,12 @@
                 "id": "businessTypeCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#businessTypeCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.business-type-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-business-type",
                 "checked_value": "Y",
@@ -71,12 +71,12 @@
                 "id": "businessDetailsCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#businessDetailsCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.business-details-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-business-details",
                 "checked_value": "Y",
@@ -96,12 +96,12 @@
                 "id": "addressesCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#addressesCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.addresses-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-addresses",
                 "checked_value": "Y",
@@ -121,12 +121,12 @@
                 "id": "peopleCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#peopleCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.people-checkbox.label.",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-people",
                 "checked_value": "Y",
@@ -146,12 +146,12 @@
                 "id": "operatingCentresCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#operatingCentresCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.operatingCentres-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-operating-centres",
                 "checked_value": "Y",
@@ -171,12 +171,12 @@
                 "id": "transportManagersCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#transportManagersCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.transportManagers-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-transport-managers",
                 "checked_value": "Y",
@@ -196,12 +196,12 @@
                 "id": "vehiclesCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#vehiclesCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.vehicles-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-vehicles",
                 "checked_value": "Y",
@@ -221,12 +221,12 @@
                 "id": "safetyCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#safetyCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.safety-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-safety",
                 "checked_value": "Y",
@@ -246,12 +246,12 @@
                 "id": "usersCheckbox",
                 "data-js-validate": "required",
                 "data-show-element": "#usersCheckbox-hidden",
-                "class": "checkbox"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "continuations.users-checkbox.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "content": "partials/continuation/licence-checklist-users",
                 "checked_value": "Y",

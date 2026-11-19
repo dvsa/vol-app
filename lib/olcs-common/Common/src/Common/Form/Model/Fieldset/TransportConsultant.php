@@ -16,7 +16,7 @@ class TransportConsultant
 
     #[Form\Type('OlcsCheckbox')]
     #[Form\Attributes(['id' => 'written-permission-to-engage', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'application_your-business_business-type.written-perm-engage.label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--confirm'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
+    #[Form\Options(['label' => 'application_your-business_business-type.written-perm-engage.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
     public $writtenPermissionToEngage;
 
     #[Form\Type('Text')]

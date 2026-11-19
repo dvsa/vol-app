@@ -207,7 +207,7 @@
                                   "must_be_value": "1",
                                   "not_checked_message": "lgv-undertakings.form.declaration.error",
                                   "label_attributes": {
-                                    "class": "form-control form-control--checkbox form-control--advanced"
+                                    "class": "govuk-label govuk-checkboxes__label"
                                   }
                                 },
                                 "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"

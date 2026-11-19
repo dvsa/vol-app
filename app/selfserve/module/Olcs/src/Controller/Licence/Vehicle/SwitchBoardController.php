@@ -64,16 +64,22 @@ class SwitchBoardController
             $flashedInput = json_decode(array_values($this->flashMessenger->getMessages(static::FLASH_MESSAGE_INPUT_NAMESPACE))[0], true);
         }
 
+        $title = 'licence.vehicle.switchboard.header';
+        $panel = $this->flashMessenger->getMessages(static::PANEL_FLASH_MESSENGER_NAMESPACE);
+        if (!empty($panel)) {
+            $title = 'licence.vehicle.switchboard.header.after-journey';
+        }
+
+        $form = $this->createSwitchBoardForm($licence, $flashedInput);
+        $form->get(SwitchBoardForm::FIELD_OPTIONS_FIELDSET_NAME)->setLabel($title);
+
         $viewVariables = [
-            'title' => 'licence.vehicle.switchboard.header',
             'subTitle' => $licence['licNo'],
-            'form' => $this->createSwitchBoardForm($licence, $flashedInput),
+            'form' => $form,
             'backLink' => $this->urlHelper->fromRoute(static::ROUTE_LICENCE_OVERVIEW, [], [], true)
         ];
 
-        $panel = $this->flashMessenger->getMessages(static::PANEL_FLASH_MESSENGER_NAMESPACE);
         if (!empty($panel)) {
-            $viewVariables['title'] = 'licence.vehicle.switchboard.header.after-journey';
             $viewVariables['panel'] = [
                 'title' => $panel[0],
                 'theme' => Panel::TYPE_SUCCESS,

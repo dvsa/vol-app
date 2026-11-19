@@ -8,7 +8,7 @@ use Laminas\Form\Annotation as Form;
 class FinancialHistoryConfirmation
 {
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['short-label' => 'short-label-financial-history-insolvency', 'checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'application_previous-history_financial-history.insolvencyConfirmation.title', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced', 'id' => 'insolvency'], 'must_be_value' => 'Y'])]
+    #[Form\Options(['short-label' => 'short-label-financial-history-insolvency', 'checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'application_previous-history_financial-history.insolvencyConfirmation.title', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label', 'id' => 'insolvency'], 'must_be_value' => 'Y', 'error-message' => 'checkbox.error.insolvency-confirmation'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $insolvencyConfirmation;
 }

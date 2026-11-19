@@ -29,7 +29,7 @@ class KnowledgeExperience
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     #[Form\Required(false)]
     #[Form\Attributes(['id' => 'knowledgeExperienceOlat', 'data-container-class' => 'confirm'])]
-    #[Form\Options(['label' => 'knowledge-experience-olat.label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'use_hidden_element' => false])]
+    #[Form\Options(['label' => 'knowledge-experience-olat.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'use_hidden_element' => false])]
     #[Form\Flags(['priority' => -40])]
     public $knowledgeExperienceOlat;
 

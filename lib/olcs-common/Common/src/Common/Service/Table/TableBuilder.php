@@ -117,7 +117,7 @@ class TableBuilder implements \Stringable
      *
      * @var array
      */
-    private $widths = ['checkbox' => '20px'];
+    private $widths = ['checkbox' => '24px'];
 
     /**
      * Total count of results

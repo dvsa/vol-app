@@ -14,12 +14,12 @@ class VariationDeclarationsAndUndertakings
     #[Form\Type('\Common\Form\Elements\Types\Html')]
     public $summaryDownload;
 
-    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'label' => 'variation.review-declarations.confirm-text', 'short-label' => 'variation.review-declarations.confirm-short-label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced', 'id' => 'label-declarationConfirmation']])]
+    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'label' => 'variation.review-declarations.confirm-text', 'short-label' => 'variation.review-declarations.confirm-short-label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label', 'id' => 'label-declarationConfirmation'], 'error-message' => 'checkbox.error.variation-declaration'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $declarationConfirmation;
 
     #[Form\Type('Radio')]
-    #[Form\Options(['label' => 'variation.review-notransportmanager.confirm-text', 'value_options' => ['Y' => 'Yes', 'N' => 'N/A'], 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced', 'id' => 'label-noTmConfirmation']])]
+    #[Form\Options(['label' => 'variation.review-notransportmanager.confirm-text', 'value_options' => ['Y' => 'Yes', 'N' => 'N/A'], 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label', 'id' => 'label-noTmConfirmation']])]
     public $noTmConfirmation;
 
     #[Form\Attributes(['value' => ''])]

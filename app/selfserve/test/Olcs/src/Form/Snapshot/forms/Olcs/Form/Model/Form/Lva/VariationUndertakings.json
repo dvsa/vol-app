@@ -39,9 +39,10 @@
                 "label": "variation.review-declarations.confirm-text",
                 "short-label": "variation.review-declarations.confirm-short-label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced",
+                  "class": "govuk-label govuk-checkboxes__label",
                   "id": "label-declarationConfirmation"
-                }
+                },
+                "error-message": "checkbox.error.variation-declaration"
               },
               "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
             }
@@ -58,7 +59,7 @@
                   "N": "N/A"
                 },
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced",
+                  "class": "govuk-label govuk-checkboxes__label",
                   "id": "label-noTmConfirmation"
                 }
               }

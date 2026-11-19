@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Common\Form\Elements\Validators\Messages;
 
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Element\Checkbox;
 use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Validator\NotEmpty;
 use Common\Helper\Str;
 
 /**
@@ -57,6 +59,17 @@ class FormElementMessageFormatter
      */
     public function formatElementMessage(ElementInterface $element, $message, mixed $messageKey = null): string
     {
+        if (
+            $element instanceof Checkbox
+            && $messageKey === NotEmpty::IS_EMPTY
+            && $element->getOption('not_checked_message')
+        ) {
+            $defaultMessage = (new NotEmpty())->getMessageTemplates()[NotEmpty::IS_EMPTY];
+            if ($message === $defaultMessage || $message === $this->translator->translate($defaultMessage)) {
+                $message = $element->getOption('not_checked_message');
+            }
+        }
+
         $label = $this->getElementShortLabel($element);
         if ($label === '' || $label === '0') {
             $message = $this->replaceDefaultValidationMessages($element, $messageKey, $message);

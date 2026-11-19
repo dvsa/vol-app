@@ -30,7 +30,7 @@ class Declarations
     #[Form\Type('\Common\Form\Elements\Types\HtmlTranslated')]
     public $external;
 
-    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y'])]
+    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'error-message' => 'checkbox.error.tm-declaration'])]
     #[Form\Attributes(['data-container-class' => 'confirm checkbox'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $confirmation;

@@ -14,7 +14,7 @@ class CacheClear extends Base
     #[Form\Type('MultiCheckbox')]
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'cacheTypes', 'name' => 'cacheTypes'])]
-    #[Form\Options(['label' => 'Select the caches to clear', 'value_options' => ['translations' => 'Translations', 'system_parameters' => 'System parameters', 'cqrs' => 'Feature toggles and front-end CQRS cache', 'doctrine' => 'Doctrine ORM (entity metadata, query and result cache)', 'jwks' => 'Cognito signing keys (JWKS)']])]
+    #[Form\Options(['label' => 'Select the caches to clear', 'value_options' => ['translations' => 'Translations', 'system_parameters' => 'System parameters', 'cqrs' => 'Feature toggles and front-end CQRS cache', 'doctrine' => 'Doctrine ORM (entity metadata, query and result cache)', 'jwks' => 'Cognito signing keys (JWKS)'], 'error-message' => 'checkbox.error.cache-types'])]
     public $cacheTypes = null;
 
     #[Form\Name('form-actions')]

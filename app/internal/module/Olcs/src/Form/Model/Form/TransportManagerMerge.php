@@ -20,7 +20,7 @@ class TransportManagerMerge
     public $toTmId = null;
 
     #[Form\Attributes(['id' => 'confirm'])]
-    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'form.tm-merge.confirm', 'short-label' => 'form.tm-merge.confirm', 'must_be_value' => 'Y'])]
+    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'form.tm-merge.confirm', 'short-label' => 'form.tm-merge.confirm', 'must_be_value' => 'Y', 'error-message' => 'checkbox.error.tm-merge'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $confirm = null;
 

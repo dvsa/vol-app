@@ -56,7 +56,7 @@
               "options": {
                 "label": "application_vehicle-safety_undertakings.limousinesApplication.agreement",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "checked_value": "Y",
                 "unchecked_value": "N"
@@ -81,7 +81,7 @@
               "options": {
                 "label": "application_vehicle-safety_undertakings.limousinesNine.agreement",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "checked_value": "Y",
                 "unchecked_value": "N"

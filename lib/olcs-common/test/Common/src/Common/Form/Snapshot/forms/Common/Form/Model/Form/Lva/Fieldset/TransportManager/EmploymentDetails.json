@@ -86,8 +86,9 @@
           "unchecked_value": "N",
           "must_be_value": "Y",
           "label_attributes": {
-            "class": "form-control form-control--checkbox form-control--advanced"
-          }
+            "class": "govuk-label govuk-checkboxes__label"
+          },
+          "error-message": "checkbox.error.tm-availability"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }

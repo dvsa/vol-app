@@ -9,7 +9,7 @@ use Laminas\Form\Annotation as Form;
 class ConditionsUndertakings
 {
     #[Form\Attributes(['id' => 'confirmation'])]
-    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'continuations.conditions-undertakings.confirmation', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'must_be_value' => 'Y', 'not_checked_message' => 'continuations.conditions-undertakings.confirmation.error'])]
+    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'continuations.conditions-undertakings.confirmation', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'must_be_value' => 'Y', 'not_checked_message' => 'continuations.conditions-undertakings.confirmation.error'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $confirmation;
 

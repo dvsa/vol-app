@@ -43,14 +43,14 @@ class CreatePermit extends Base
     #[Form\Name('cabotage')]
     #[Form\Required(false)]
     #[Form\Attributes(['class' => 'input--cabotage', 'id' => 'cabotage'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I confirm that I will not undertake any cabotage journeys using an ECMT permit.', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced']])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I confirm that I will not undertake any cabotage journeys using an ECMT permit.', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label']])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $cabotage = null;
 
     #[Form\Name('roadworthiness')]
     #[Form\Required(false)]
     #[Form\Attributes(['class' => 'input--roadworthiness', 'id' => 'roadworthiness'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I understand that I must obtain and carry the appropriate ECMT Certificate of Compliance and Certificate of Roadworthiness for each vehicle and trailer I intend to use with this permit', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced']])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I understand that I must obtain and carry the appropriate ECMT Certificate of Compliance and Certificate of Roadworthiness for each vehicle and trailer I intend to use with this permit', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label']])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $roadworthiness = null;
 
@@ -66,7 +66,7 @@ class CreatePermit extends Base
     #[Form\Name('emissions')]
     #[Form\Required(false)]
     #[Form\Attributes(['class' => 'input--euro6', 'id' => 'emissions'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I confirm that I will only use my ECMT permits with vehicles that are environmentally compliant with the minimum Euro emissions standards that the permit allows', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'must_be_value' => 'Yes', 'error-message' => 'error.messages.euro6'])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I confirm that I will only use my ECMT permits with vehicles that are environmentally compliant with the minimum Euro emissions standards that the permit allows', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'must_be_value' => 'Yes', 'error-message' => 'error.messages.euro6'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $emissions = null;
 
@@ -107,13 +107,13 @@ class CreatePermit extends Base
 
     #[Form\Required(false)]
     #[Form\Attributes(['class' => 'input--declaration', 'id' => 'declaration'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'permits.form.declaration.label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'must_be_value' => '1'])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'permits.form.declaration.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'must_be_value' => '1', 'error-message' => 'checkbox.error.permit-declaration'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $declaration = null;
 
     #[Form\Required(false)]
     #[Form\Attributes(['class' => 'input--checked', 'id' => 'checked'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'permits.form.checked.label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'must_be_value' => '1'])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'permits.form.checked.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'must_be_value' => '1', 'error-message' => 'checkbox.error.permit-checked'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $checked = null;
 

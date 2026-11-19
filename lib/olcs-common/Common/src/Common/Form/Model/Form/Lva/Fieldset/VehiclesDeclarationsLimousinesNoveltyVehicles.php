@@ -17,7 +17,7 @@ class VehiclesDeclarationsLimousinesNoveltyVehicles
     public $psvNoLimousineConfirmationLabel;
 
     #[Form\Input('Common\InputFilter\ContinueIfEmptyInput')]
-    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.limousinesApplication.agreement', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
+    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.limousinesApplication.agreement', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     #[Form\Validator('Common\Form\Elements\Validators\VehicleUndertakingsNoLimousineConfirmationValidator', options: ['required_context_value' => 'N'])]
     public $psvNoLimousineConfirmation;
@@ -26,7 +26,7 @@ class VehiclesDeclarationsLimousinesNoveltyVehicles
     #[Form\Type('\Common\Form\Elements\Types\Html')]
     public $psvOnlyLimousinesConfirmationLabel;
 
-    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.limousinesNine.agreement', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
+    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.limousinesNine.agreement', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     #[Form\Validator('Common\Form\Elements\Validators\VehicleUndertakingsOnlyLimousineConfirmationValidator', options: ['required_context_value' => 'Y'])]
     public $psvOnlyLimousinesConfirmation;

@@ -52,7 +52,6 @@
         <file name="Common/src/Common/Form/Elements/Validators/PasswordConfirm.php" />
         <file name="Common/src/Common/Form/Elements/Validators/ReceivedAmount.php" />
         <file name="Common/src/Common/Form/View/Helper/Form.php" />
-        <file name="Common/src/Common/Form/View/Helper/FormCheckboxAdvanced.php" />
         <file name="Common/src/Common/Form/View/Helper/FormCollection.php" />
         <file name="Common/src/Common/Form/View/Helper/FormDateSelect.php" />
         <file name="Common/src/Common/Form/View/Helper/FormDateTimeSelect.php" />

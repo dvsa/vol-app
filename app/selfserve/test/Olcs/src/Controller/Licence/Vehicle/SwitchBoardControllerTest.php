@@ -131,6 +131,11 @@ final class SwitchBoardControllerTest extends MockeryTestCase
 
         // Assert
         $this->assertSame($expected, $result->getVariable('panel'));
+        $form = $result->getVariable('form');
+        $this->assertSame(
+            'licence.vehicle.switchboard.header.after-journey',
+            $form->get(SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME)->getLabel()
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -197,6 +202,10 @@ final class SwitchBoardControllerTest extends MockeryTestCase
         $result = $this->sut->indexAction(new Request(), $routeMatch);
         // Assert
         $this->assertInstanceOf(Form::class, $result->getVariable('form'));
+        $this->assertSame(
+            'licence.vehicle.switchboard.header',
+            $result->getVariable('form')->get(SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME)->getLabel()
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

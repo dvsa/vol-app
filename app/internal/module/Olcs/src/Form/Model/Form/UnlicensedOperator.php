@@ -25,7 +25,7 @@ class UnlicensedOperator
     public $contact = null;
 
     #[Form\Attributes(['id' => 'is-exempt'])]
-    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'This is an Exemption approved by the Traffic Commissioner', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced']])]
+    #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'This is an Exemption approved by the Traffic Commissioner', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label']])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     #[Form\Flags(['priority' => -1])]
     public $isExempt = null;

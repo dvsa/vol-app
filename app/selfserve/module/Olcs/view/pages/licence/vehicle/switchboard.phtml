@@ -6,11 +6,12 @@
         <?php if (! empty($this->panel)) { ?>
             <?php echo $this->panel($this->panel['theme'], $this->panel['title'], $this->panel['body'] ?? ''); ?>
         <?php } ?>
-        <?php echo $this->partial('partials/page-header-simple', [
-            'pageTitle' => $this->translate($this->title),
-            'pageSubTitle' => $this->subTitle,
-            'formErrors' => $this->formErrors($this->form),
-        ]); ?>
+        <?php echo $this->formErrors($this->form); ?>
+        <div class="page-header">
+            <div class="page-header__wrapper">
+                <span class="page-header__subtitle page-header__h3"><?php echo $this->escapeHtml($this->subTitle); ?></span>
+            </div>
+        </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <?php echo $this->form($this->form); ?>

@@ -16,7 +16,7 @@
           "unchecked_value": "0",
           "label": "permits.form.withdraw_application.label",
           "label_attributes": {
-            "class": "form-control form-control--checkbox"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "must_be_value": "1",
           "not_checked_message": "permits.form.withdraw_application.error_message"

@@ -130,7 +130,7 @@
                 "unchecked_value": "0",
                 "label": "Cabotage",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "must_be_value": "Yes"
               },
@@ -149,7 +149,7 @@
                 "unchecked_value": "0",
                 "label": "Reserve",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "must_be_value": "Yes"
               },
@@ -168,7 +168,7 @@
                 "unchecked_value": "0",
                 "label": "Lost and Replacement",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "must_be_value": "Yes"
               },
