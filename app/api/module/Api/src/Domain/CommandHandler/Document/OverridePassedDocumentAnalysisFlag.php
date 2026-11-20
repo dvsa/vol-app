@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as DocumentAnalysisEntity;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
@@ -25,7 +26,10 @@ use Dvsa\Olcs\Transfer\Command\Document\OverridePassedDocumentAnalysisFlag as Cm
  * must be one the analyser passed. The caseworker's answer on it stands and can be revisited: "Y"
  * makes it a fail (or keeps it one and replaces the comment). "N" means the analyser's outcome
  * stands, which changes a check already failed back to a pass: with a comment the comment is kept
- * as a note, and with none the caseworker's entry for the check is deleted altogether. The analysis may be changed
+ * as a note, and with none the caseworker's entry for the check is deleted altogether.
+ *
+ * "Y" needs a reason: without one the command is refused with a ValidationException keyed
+ * ERR_REASON_REQUIRED, whoever the caller is. The analysis may be changed
  * whether or not it has been decided. The caseworker's name is captured now, so the
  * change reads the same however the user record changes later.
  *
@@ -35,6 +39,11 @@ use Dvsa\Olcs\Transfer\Command\Document\OverridePassedDocumentAnalysisFlag as Cm
 final class OverridePassedDocumentAnalysisFlag extends AbstractCommandHandler implements AuthAwareInterface
 {
     use AuthAwareTrait;
+
+    /** The key of the refusal to change a passed check to a fail with no reason given. */
+    public const string ERR_REASON_REQUIRED = 'ERR_DOCUMENT_ANALYSIS_REASON_REQUIRED';
+
+    public const string MSG_REASON_REQUIRED = 'A reason is required to change a passed check to a fail';
 
     protected $repoServiceName = 'DocumentAnalysis';
 
@@ -96,7 +105,15 @@ final class OverridePassedDocumentAnalysisFlag extends AbstractCommandHandler im
         // "Y" makes the check a fail, or keeps it one and replaces the comment. "N" means the
         // analyser's outcome stands: a check already changed goes back to a pass.
         $changeToFail = (string)$command->getChangeRecommendation() === 'Y';
-        $comment = (string)$command->getComment();
+        $comment = trim((string)$command->getComment());
+
+        // Every check this command can answer is a genuine pass, so failing it needs a reason on
+        // record. The internal app's form asks for one; this is the same rule for any other
+        // caller of the API. The command's own validation cannot make the comment required,
+        // because "N" with no comment is a real request (it removes the caseworker's entry).
+        if ($changeToFail && $comment === '') {
+            throw new ValidationException([self::ERR_REASON_REQUIRED => self::MSG_REASON_REQUIRED]);
+        }
         $changedBack = !$changeToFail && $currentFlag !== $analyserFlag;
 
         // "N" with nothing to say leaves no caseworker entry at all, so the check reads exactly

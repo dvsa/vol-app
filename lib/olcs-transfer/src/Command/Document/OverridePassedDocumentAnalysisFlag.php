@@ -19,8 +19,9 @@ use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
  * The answer on a check stands and can be sent again. changeRecommendation "Y" changes the row
  * to a fail, or keeps it one and replaces the comment. "N" leaves it as the analyser had it,
  * which changes a row already failed back to a pass. Either way the comment, if given, is kept
- * against the row. The comment is not required here: every row this command can target is a
- * genuine pass, so changing its outcome always needs a reason, which the caller enforces.
+ * against the row. The comment is not required by this command's own
+ * validation, because "N" with no comment is a real request. Changing a row to a fail does
+ * need a reason, and the API's handler refuses "Y" without one.
  */
 #[Transfer\RouteName('backend/document/document_analysis/single/override-pass-flag')]
 #[Transfer\Method('PUT')]

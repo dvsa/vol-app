@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\OverridePassedDocumentAnalysisFlag;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
 use Dvsa\Olcs\Api\Entity\User\User;
@@ -254,6 +255,45 @@ final class OverridePassedDocumentAnalysisFlagTest extends AbstractCommandHandle
         );
 
         $this->assertSame(['Document analysis 5 check name left as it is'], $result->getMessages());
+    }
+
+    /**
+     * Changing a passed check to a fail needs a reason, and that is enforced here, not only by
+     * the internal app's form: any caller of the API is refused, so no pass can be overturned
+     * with nothing on record to say why. It holds for a check already failed too, where "Y" with
+     * no text would otherwise blank the reason on record.
+     */
+    #[DataProvider('noReasonProvider')]
+    public function testYesWithoutAReasonIsRefused(string $comment, ?string $existingEntryFlag): void
+    {
+        $annotations = $existingEntryFlag === null ? null : $this->earlierFailAnnotationOnName();
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $annotations, 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('pass'));
+        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAnnotations');
+
+        try {
+            $this->sut->handleCommand(
+                Cmd::create(['id' => 5, 'row' => 'name', 'comment' => $comment, 'changeRecommendation' => 'Y'])
+            );
+            $this->fail('Expected the change to be refused for want of a reason');
+        } catch (ValidationException $e) {
+            $this->assertSame(
+                [
+                    OverridePassedDocumentAnalysisFlag::ERR_REASON_REQUIRED =>
+                        OverridePassedDocumentAnalysisFlag::MSG_REASON_REQUIRED,
+                ],
+                $e->getMessages()
+            );
+        }
+    }
+
+    public static function noReasonProvider(): \Iterator
+    {
+        yield 'empty' => ['', null];
+        yield 'only spaces' => ['   ', null];
+        yield 'empty, on a check already failed' => ['', 'fail'];
     }
 
     /**
