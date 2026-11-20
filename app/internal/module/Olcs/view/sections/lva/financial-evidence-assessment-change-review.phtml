@@ -134,15 +134,15 @@
 <?php else : ?>
   <?php
   // When a check's form is being shown again with errors, the form object holds what was posted
-  // and the messages. They are captured here, before the loop below reuses the one form for each
-  // check, and the framework's error summary is rendered from the form as on any other page. The
+  // and the messages. They are captured here (with each field's own class, which rendering an
+  // error changes), before the loop below reuses the one form for each check, and the framework's error summary is rendered from the form as on any other page. The
   // two fields are given that check's ids first, so the summary's links land on the right fields.
   $passOverrideErrorRow = $passOverrideErrorRow ?? null;
   $passOverrideBound = [];
 
   foreach (['changeRecommendation', 'comment'] as $name) {
       $element = $passOverrideForm->get($name);
-      $passOverrideBound[$name] = [$element->getValue(), $element->getMessages()];
+      $passOverrideBound[$name] = [$element->getValue(), $element->getMessages(), $element->getAttribute('class')];
 
       if ($passOverrideErrorRow !== null) {
           $element->setAttribute('id', 'pass-' . $name . '-' . $passOverrideErrorRow);
@@ -216,9 +216,14 @@
     // One form instance serves every check. The check the caseworker just tried to save shows
     // the form as it was posted (their values and the form's own error messages, captured above);
     // every other check shows its saved answer with no messages.
-    foreach ($passOverrideBound as $name => [$value, $messages]) {
+    //
+    // The field's class is put back too: formRow() marks a field in error by adding an error class
+    // to the element itself, which would otherwise stay on the shared element and colour every
+    // check drawn after the one in error.
+    foreach ($passOverrideBound as $name => [$value, $messages, $class]) {
         $isErrorRow = $passOverrideErrorRow === $pass['key'];
         $passOverrideForm->get($name)->setMessages($isErrorRow ? $messages : []);
+        $passOverrideForm->get($name)->setAttribute('class', $class);
 
         if ($isErrorRow) {
             $passOverrideForm->get($name)->setValue($value);
