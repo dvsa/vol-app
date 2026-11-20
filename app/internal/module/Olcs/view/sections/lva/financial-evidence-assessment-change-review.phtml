@@ -66,8 +66,6 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
             'original' => $issue['changed'] ? $issue['flag'] : null,
             'current' => $issue['changed'] ? $issue['changedTo'] : $issue['flag'],
             'currentTag' => $issue['changed'] ? $issue['changedToTag'] : $issue['flagTag'],
-            // Every flag carries the analyser's remark as its tooltip, wherever a check is shown.
-            'tooltip' => $issue['remark'],
           ]); ?>
           <?php echo $this->escapeHtml((string)($issue['remark'] ?? '')); ?>
         </dd>
@@ -185,8 +183,6 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
             'original' => $pass['changed'] ? $pass['flag'] : null,
             'current' => $pass['changed'] ? $pass['changedTo'] : $pass['flag'],
             'currentTag' => $pass['changed'] ? $pass['changedToTag'] : $pass['flagTag'],
-            // Every flag carries the analyser's remark as its tooltip, wherever a check is shown.
-            'tooltip' => $pass['remark'],
           ]); ?>
         </dd>
       </div>

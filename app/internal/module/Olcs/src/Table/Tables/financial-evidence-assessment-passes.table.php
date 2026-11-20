@@ -52,14 +52,7 @@ return [
                     return '';
                 }
 
-                // Every flag carries the analyser's remark as the browser's own tooltip, labelled as
-                // IDP's, wherever a check is shown. This table has no remarks column, so here it
-                // is the only place the remark appears.
-                $remark = (string)($row['remark'] ?? '');
-                $tooltip = $this->translator->translate(FinancialEvidenceAssessmentTab::IDP_REMARK_PREFIX) . $remark;
-
-                return '<strong class="govuk-tag ' . Escape::htmlAttr((string)$row['flagTag']) . '"'
-                    . ($remark !== '' ? ' title="' . Escape::htmlAttr($tooltip) . '"' : '') . '>'
+                return '<strong class="govuk-tag ' . Escape::htmlAttr((string)$row['flagTag']) . '">'
                     . Escape::html($this->translator->translate(
                         FinancialEvidenceAssessmentTab::flagTranslationKey((string)$row['flag'])
                     ))

@@ -10,9 +10,6 @@
  *                              changed it; null when the check reads as the analyser left it
  * @var string|null $current    the flag label the check has now; null for a check with no flag
  * @var string|null $currentTag the GOV.UK tag class for $current
- * @var string|null $tooltip    the analyser's remark, shown as the browser's own tooltip (the title
- *                              attribute) and labelled as IDP's. Every flag gets it, on every
- *                              page, so there is one rule: no remark, no tooltip
  */
 
 use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
@@ -23,9 +20,6 @@ if ($current === null) {
 
 $changed = $original !== null;
 ?>
-<strong class="govuk-tag <?php echo $this->escapeHtmlAttr($changed ? FinancialEvidenceAssessmentTab::FLAG_TAG_SUPERSEDED : (string)$currentTag); ?>"<?php
-if (($tooltip ?? '') !== '') :
-    ?> title="<?php echo $this->escapeHtmlAttr($this->translate(FinancialEvidenceAssessmentTab::IDP_REMARK_PREFIX) . $tooltip); ?>"<?php
-endif; ?>>
+<strong class="govuk-tag <?php echo $this->escapeHtmlAttr($changed ? FinancialEvidenceAssessmentTab::FLAG_TAG_SUPERSEDED : (string)$currentTag); ?>">
   <?php echo $this->escapeHtml($this->translate(FinancialEvidenceAssessmentTab::flagTranslationKey($changed ? $original : $current))); ?>
 </strong>

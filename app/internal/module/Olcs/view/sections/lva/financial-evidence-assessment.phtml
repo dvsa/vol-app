@@ -97,18 +97,14 @@ $warningText = $hasDocuments
                   'original' => $changed ? $override['originalFlag'] : null,
                   'current' => $row['flag'],
                   'currentTag' => $row['flagTag'],
-                  // Every flag carries the analyser's remark as its tooltip, wherever a check is
-                  // shown. Here that keeps the remark within reach once a caseworker's comment
-                  // has taken its place in the next column.
-                  'tooltip' => $row['remark'],
                 ]); ?>
               </td>
               <td class="govuk-table__cell">
                 <?php
-                // This column shows one thing: the caseworker's comment once they have answered
-                // the check (a change, or a note that keeps the flag), and otherwise the
-                // analyser's remark. The remark is not lost when replaced: it is the tooltip on
-                // the flag in the column before.
+                // This column shows one thing, as the design draws it: the caseworker's comment once
+                // they have answered the check (a change, or a note that keeps the flag), and
+                // otherwise the analyser's remark. The remark is still shown for every check on
+                // the change document review pages.
                 ?>
                 <?php if ($override !== null) : ?>
                   <?php echo $this->partial('partials/financial-evidence/comment', [
