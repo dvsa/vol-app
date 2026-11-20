@@ -36,8 +36,9 @@ return [
                     return '';
                 }
 
-                // This table has no remarks column, so the analyser's remark is offered as the
-                // browser's own tooltip on its flag, labelled as IDP's.
+                // Every flag carries the analyser's remark as the browser's own tooltip, labelled as
+                // IDP's, wherever a check is shown. This table has no remarks column, so here it
+                // is the only place the remark appears.
                 $remark = (string)($row['remark'] ?? '');
 
                 return '<strong class="govuk-tag ' . Escape::htmlAttr((string)$row['flagTag']) . '"'

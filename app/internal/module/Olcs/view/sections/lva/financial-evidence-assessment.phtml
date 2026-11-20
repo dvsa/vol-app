@@ -96,26 +96,20 @@ $warningText = $hasDocuments
                   'original' => $changed ? $override['originalFlag'] : null,
                   'current' => $row['flag'],
                   'currentTag' => $row['flagTag'],
-                  // On a changed check the caseworker's comment takes the remark's place in the
-                  // next column, so the analyser's remark is kept within reach as the tooltip on
-                  // the analyser's flag.
-                  'tooltip' => $changed ? $row['remark'] : null,
+                  // Every flag carries the analyser's remark as its tooltip, wherever a check is
+                  // shown. Here that keeps the remark within reach once a caseworker's comment
+                  // has taken its place in the next column.
+                  'tooltip' => $row['remark'],
                 ]); ?>
               </td>
               <td class="govuk-table__cell">
                 <?php
-                // The analyser's remark explains the analyser's flag. Once a caseworker has
-                // changed the check, their flag and comment take its place, as the design shows:
-                // the remark would be arguing for a flag that no longer stands. A note (the flag
-                // was kept) sits beneath the remark it adds to.
+                // This column shows one thing: the caseworker's comment once they have answered
+                // the check (a change, or a note that keeps the flag), and otherwise the
+                // analyser's remark. The remark is not lost when replaced: it is the tooltip on
+                // the flag in the column before.
                 ?>
-                <?php if ($row['remark'] !== null && !$changed) : ?>
-                  <?php echo $this->escapeHtml($row['remark']); ?>
-                <?php endif; ?>
                 <?php if ($override !== null) : ?>
-                  <?php if (!$changed) : ?>
-                    <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
-                  <?php endif; ?>
                   <?php echo $this->partial('partials/financial-evidence/comment', [
                     'tag' => $changed ? $row['flag'] : null,
                     'tagClass' => $changed ? $row['flagTag'] : null,
@@ -124,9 +118,8 @@ $warningText = $hasDocuments
                     'date' => $override['changedOn'],
                     'answered' => true,
                   ]); ?>
-                  <?php if (!$changed) : ?>
-                    </p>
-                  <?php endif; ?>
+                <?php elseif ($row['remark'] !== null) : ?>
+                  <?php echo $this->escapeHtml($row['remark']); ?>
                 <?php endif; ?>
               </td>
             </tr>
