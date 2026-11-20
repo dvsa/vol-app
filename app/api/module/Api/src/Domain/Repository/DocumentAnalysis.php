@@ -225,11 +225,15 @@ class DocumentAnalysis extends AbstractRepository
      * it may overwrite an existing assessment status. A first decision
      * (AcceptDocumentAnalysisReview) uses recordInitialAssessmentStatus() instead, which cannot.
      *
-     * @return int rows affected (0 if no successful analysis has that id)
+     * @return int rows affected (0 if no successful analysis has that id at that version)
      */
-    public function recordAssessmentStatus(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): int
-    {
-        return (int)$this->assessmentStatusUpdate($analysisId, $status, $reviewedBy)
+    public function recordAssessmentStatus(
+        int $analysisId,
+        AssessmentStatus $status,
+        UserEntity $reviewedBy,
+        int $expectedVersion
+    ): int {
+        return (int)$this->assessmentStatusUpdate($analysisId, $status, $reviewedBy, $expectedVersion)
             ->getQuery()
             ->execute();
     }
@@ -245,11 +249,15 @@ class DocumentAnalysis extends AbstractRepository
      * A deliberate change of a decision already made goes through recordAssessmentStatus() via
      * UpdateDocumentAnalysisAssessmentStatus instead.
      *
-     * @return int rows affected (0 if no successful, undecided analysis has that id)
+     * @return int rows affected (0 if no successful, undecided analysis has that id at that version)
      */
-    public function recordInitialAssessmentStatus(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): int
-    {
-        $qb = $this->assessmentStatusUpdate($analysisId, $status, $reviewedBy);
+    public function recordInitialAssessmentStatus(
+        int $analysisId,
+        AssessmentStatus $status,
+        UserEntity $reviewedBy,
+        int $expectedVersion
+    ): int {
+        $qb = $this->assessmentStatusUpdate($analysisId, $status, $reviewedBy, $expectedVersion);
 
         return (int)$qb
             ->andWhere(
@@ -267,17 +275,30 @@ class DocumentAnalysis extends AbstractRepository
      * The UPDATE common to both assessment status writes: the SET clause, the base SUCCESS
      * guard, and the audit columns, which are set explicitly here because a bulk UPDATE bypasses
      * the ORM's lifecycle and Blameable listeners, as User::updateLastLogin() does.
+     *
+     * A decision is drawn over the checks as the handler read them, so the write is guarded on
+     * the version that was read and bumps it, exactly as recordAnnotations() does. A check
+     * changed, or a decision made, by someone else in between then matches nothing here, and a
+     * decision recorded here makes a concurrent recordAnnotations() match nothing in turn: the
+     * two kinds of write can never cross and leave APPROVED standing over a failing check.
      */
-    private function assessmentStatusUpdate(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): QueryBuilder
-    {
+    private function assessmentStatusUpdate(
+        int $analysisId,
+        AssessmentStatus $status,
+        UserEntity $reviewedBy,
+        int $expectedVersion
+    ): QueryBuilder {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         return $qb->update(Entity::class, $this->alias)
             ->set($this->alias . '.assessmentStatus', ':assessmentStatus')
+            ->set($this->alias . '.version', $this->alias . '.version + 1')
             ->set($this->alias . '.lastModifiedOn', ':now')
             ->set($this->alias . '.lastModifiedBy', ':lastModifiedBy')
             ->where($qb->expr()->eq($this->alias . '.id', ':id'))
             ->andWhere($qb->expr()->eq($this->alias . '.status', ':success'))
+            ->andWhere($qb->expr()->eq($this->alias . '.version', ':version'))
+            ->setParameter('version', $expectedVersion)
             ->setParameter('assessmentStatus', $status->value)
             ->setParameter('now', new \DateTime())
             ->setParameter('lastModifiedBy', $reviewedBy->getId())
