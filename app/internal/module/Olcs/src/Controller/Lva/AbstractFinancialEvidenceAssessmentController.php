@@ -532,8 +532,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     /**
      * Something on one passed check's form is the caseworker's to put right. The message is set
      * on the form against the field it is about, as form validation does, so the framework's own
-     * helpers render it (formErrors() for the summary, formRow() beside the field) and the form
-     * keeps what the caseworker entered. The page is then drawn again rather than redirected.
+     * formRow() renders it beside the field and the form keeps what the caseworker entered. The page is then drawn again rather than redirected.
      *
      * Returns null so changeReviewAction() carries on to render. If the posted row is not one of
      * the page's passed checks there is no form to show it on, so it falls back to a flash

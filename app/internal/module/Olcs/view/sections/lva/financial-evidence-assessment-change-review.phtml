@@ -135,22 +135,17 @@
   <?php
   // When a check's form is being shown again with errors, the form object holds what was posted
   // and the messages. They are captured here (with each field's own class, which rendering an
-  // error changes), before the loop below reuses the one form for each check, and the framework's error summary is rendered from the form as on any other page. The
-  // two fields are given that check's ids first, so the summary's links land on the right fields.
+  // error changes), before the loop below reuses the one form for each check.
+  //
+  // The framework's "There is a problem" summary (formErrors()) is deliberately not rendered: the
+  // page returns to the check that was submitted, where the message sits against its field, so
+  // a summary at the top would be off-screen and only repeat it.
   $passOverrideErrorRow = $passOverrideErrorRow ?? null;
   $passOverrideBound = [];
 
   foreach (['changeRecommendation', 'comment'] as $name) {
       $element = $passOverrideForm->get($name);
       $passOverrideBound[$name] = [$element->getValue(), $element->getMessages(), $element->getAttribute('class')];
-
-      if ($passOverrideErrorRow !== null) {
-          $element->setAttribute('id', 'pass-' . $name . '-' . $passOverrideErrorRow);
-      }
-  }
-
-  if ($passOverrideErrorRow !== null) {
-      echo $this->formErrors($passOverrideForm, true);
   }
   ?>
   <?php foreach ($passes as $pass) : ?>
