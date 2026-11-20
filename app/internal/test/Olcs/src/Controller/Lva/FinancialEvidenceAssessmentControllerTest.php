@@ -858,15 +858,19 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     public function testPassOverrideWithoutDetailAsksForSome(): void
     {
         $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''];
-        $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->expects('addErrorMessage')->with('You must provide explanatory text.');
 
-        $sut = $this->createSut(ApplicationController::class, $flash);
+        // The message goes on the form, against the field it is about, for the framework's own
+        // helpers to render; nothing is flashed and the page is drawn again, not redirected.
+        $form = $this->reviewForm($post, true);
+        $form->expects('setMessages')->with(['comment' => ['You must provide explanatory text.']]);
+
+        $sut = $this->createSut(ApplicationController::class, m::mock(FlashMessengerHelperService::class));
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectBackToChangeReview($sut);
+        $sut->shouldNotReceive('redirect');
 
-        $this->passOverride($sut, $post, true);
+        $this->assertNull($this->passOverride($sut, $post, true, null, $form));
+        $this->assertSame('largeDeposit', $this->passOverrideErrorRow($sut));
     }
 
     /**
@@ -877,16 +881,40 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     #[DataProvider('passOverrideNoSelectionProvider')]
     public function testPassOverrideWithNeitherYesNorNoSelectedAsksForOne(array $post): void
     {
+        // The form is invalid without the radio; the missing answer is what is reported, on the
+        // form against the radios, and the page is drawn again with what was entered kept.
+        $form = $this->reviewForm($post, false);
+        $form->expects('setMessages')->with(['changeRecommendation' => ['Select yes or no']]);
+
+        $sut = $this->createSut(ApplicationController::class, m::mock(FlashMessengerHelperService::class));
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $sut->shouldNotReceive('redirect');
+
+        $this->assertNull($this->passOverride($sut, $post, false, null, $form));
+        $this->assertSame('largeDeposit', $this->passOverrideErrorRow($sut));
+    }
+
+    /**
+     * A field error needs a check's form to be shown on. If the posted row is not one of the
+     * page's passed checks there is none, so the message is flashed and the page redirected.
+     */
+    public function testPassOverrideFieldErrorForARowThatIsNotAPassedCheckIsFlashed(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'bank', 'comment' => 'x'];
         $flash = m::mock(FlashMessengerHelperService::class);
         $flash->expects('addErrorMessage')->with('Select yes or no');
+
+        $form = $this->reviewForm($post, false);
+        $form->shouldNotReceive('setMessages');
 
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectBackToChangeReview($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
-        // The form is invalid without the radio; the missing answer is still what is reported.
-        $this->passOverride($sut, $post, false);
+        $this->assertSame($response, $this->passOverride($sut, $post, false, null, $form));
+        $this->assertNull($this->passOverrideErrorRow($sut));
     }
 
     public static function passOverrideNoSelectionProvider(): \Iterator
@@ -1144,12 +1172,24 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     }
 
     /** Runs processPassOverride for analysis 9 against $analysis (default: every flagged row passing). */
-    private function passOverride(m\MockInterface $sut, array $post, bool $formIsValid, ?array $analysis = null): mixed
-    {
+    private function passOverride(
+        m\MockInterface $sut,
+        array $post,
+        bool $formIsValid,
+        ?array $analysis = null,
+        ?Form $form = null
+    ): mixed {
         $page = ReviewPageMapper::mapFromAnalysis($analysis ?? $this->assessedAnalysis(9, 'pass'));
 
         return (new \ReflectionMethod($sut, 'processPassOverride'))
-            ->invoke($sut, $this->reviewForm($post, $formIsValid), 9, $page);
+            ->invoke($sut, $form ?? $this->reviewForm($post, $formIsValid), 9, $page);
+    }
+
+    /** The passed check whose form the controller has marked to be shown again with errors, if any. */
+    private function passOverrideErrorRow(m\MockInterface $sut): ?string
+    {
+        return (new \ReflectionProperty(AbstractFinancialEvidenceAssessmentController::class, 'passOverrideErrorRow'))
+            ->getValue($sut);
     }
 
     /**

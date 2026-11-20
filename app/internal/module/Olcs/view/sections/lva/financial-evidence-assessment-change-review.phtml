@@ -138,10 +138,33 @@
     Change and Review
   </a>
 <?php else : ?>
+  <?php
+  // When a check's form is being shown again with errors, the form object holds what was posted
+  // and the messages. They are captured here, before the loop below reuses the one form for each
+  // check, and the framework's error summary is rendered from the form as on any other page. The
+  // two fields are given that check's ids first, so the summary's links land on the right fields.
+  $passOverrideErrorRow = $passOverrideErrorRow ?? null;
+  $passOverrideBound = [];
+
+  foreach (['changeRecommendation', 'comment'] as $name) {
+      $element = $passOverrideForm->get($name);
+      $passOverrideBound[$name] = [$element->getValue(), $element->getMessages()];
+
+      if ($passOverrideErrorRow !== null) {
+          $element->setAttribute('id', 'pass-' . $name . '-' . $passOverrideErrorRow);
+      }
+  }
+
+  if ($passOverrideErrorRow !== null) {
+      echo $this->formErrors($passOverrideForm, true);
+  }
+  ?>
   <?php foreach ($passes as $pass) : ?>
     <?php if (!$pass['flagged']) : continue; endif; ?>
     <?php $key = $this->escapeHtmlAttr($pass['key']); ?>
-    <h3 class="govuk-heading-m">Issue</h3>
+    <?php // The id is where this issue's form sends the browser back to (see the form below); ?>
+    <?php // tabindex lets it take focus there, so keyboard and screen reader users land on it too. ?>
+    <h3 class="govuk-heading-m" id="issue-<?php echo $key; ?>" tabindex="-1">Issue</h3>
     <dl class="govuk-summary-list">
       <?php // Laid out as the VOL-7338 design draws it: the check's name against its value and flag, ?>
       <?php // then the analyser's remarks, then the caseworker's comment. ?>
@@ -201,9 +224,23 @@
         ->setValue($pass['changed'] ? 'Y' : ($pass['kept'] ? 'N' : null))
         ->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
     $passOverrideForm->get('comment')->setValue($pass['comment'] ?? '')->setAttribute('id', 'pass-comment-' . $pass['key']);
+
+    // One form instance serves every check. The check the caseworker just tried to save shows
+    // the form as it was posted (their values and the form's own error messages, captured above);
+    // every other check shows its saved answer with no messages.
+    foreach ($passOverrideBound as $name => [$value, $messages]) {
+        $isErrorRow = $passOverrideErrorRow === $pass['key'];
+        $passOverrideForm->get($name)->setMessages($isErrorRow ? $messages : []);
+
+        if ($isErrorRow) {
+            $passOverrideForm->get($name)->setValue($value);
+        }
+    }
     ?>
     <?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>
-    <form method="post" novalidate>
+    <?php // Posting to this issue's anchor brings the page back to it, so the caseworker does not ?>
+    <?php // have to scroll down again to find the error (or the result) on a long page. ?>
+    <form method="post" novalidate action="#issue-<?php echo $key; ?>">
       <?php echo $this->formElement($passOverrideForm->get('security')); ?>
       <?php echo $this->formElement($passOverrideForm->get('analysisId')); ?>
       <?php echo $this->formElement($passOverrideForm->get('row')); ?>

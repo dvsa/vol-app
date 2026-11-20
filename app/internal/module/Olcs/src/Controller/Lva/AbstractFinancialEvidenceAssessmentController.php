@@ -94,6 +94,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
     private const string SECTION_ROUTE = 'lva-%s/financial_evidence_assessment';
 
+    /**
+     * The passed check whose form is being shown again with errors, or null. The errors and the
+     * values the caseworker entered are on the form object itself, as for any other form.
+     */
+    protected ?string $passOverrideErrorRow = null;
+
     protected string $location = 'internal';
 
     protected $toggleConfig = [
@@ -323,16 +329,20 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             }
 
             if ($post->get('savePassOverride') === self::CHANGE_OVERRIDE_PASS) {
-                return $this->processPassOverride($passOverrideForm, $analysisId, $page);
-            }
+                $response = $this->processPassOverride($passOverrideForm, $analysisId, $page);
 
-            if ($post->get('saveDecision') === self::CHANGE_DECIDE) {
+                // Null means the caseworker has something to put right: the page is drawn again
+                // (no redirect) with the error against the field and what they entered kept.
+                if ($response !== null) {
+                    return $response;
+                }
+            } elseif ($post->get('saveDecision') === self::CHANGE_DECIDE) {
                 return $this->processDecision($decisionForm, $analysisId);
+            } else {
+                $this->flashMessengerHelper->addUnknownError();
+
+                return $this->redirectBackToChangeReview();
             }
-
-            $this->flashMessengerHelper->addUnknownError();
-
-            return $this->redirectBackToChangeReview();
         }
 
         $decisionForm->get('analysisId')->setValue((string)$analysisId);
@@ -350,6 +360,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             'showPassOverride' => $this->getRequest()->getQuery(self::QUERY_VIEW) === self::VIEW_PASSES,
             'overrideForm'     => $overrideForm,
             'passOverrideForm' => $passOverrideForm,
+            'passOverrideErrorRow' => $this->passOverrideErrorRow,
             'decisionForm'     => $decisionForm,
             'backUrl'          => $this->url()->fromRoute($this->sectionRoute(), [], [], true),
         ]);
@@ -449,9 +460,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         // can arrive without an answer. That leaves the form invalid, but it is the caseworker's
         // to put right, so it is asked for by name rather than reported as an unknown error.
         if (!in_array($post->get('changeRecommendation'), ['Y', 'N'], true)) {
-            $this->flashMessengerHelper->addErrorMessage('Select yes or no');
-
-            return $this->redirectBackToChangeReview();
+            return $this->passOverrideFieldError($form, $post, $page, 'changeRecommendation', 'Select yes or no');
         }
 
         if (!$form->isValid()) {
@@ -487,9 +496,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         // Every row here is a genuine pass, so changing it to a fail always needs a reason.
         if ($changeToFail && $comment === '') {
-            $this->flashMessengerHelper->addErrorMessage('You must provide explanatory text.');
-
-            return $this->redirectBackToChangeReview();
+            return $this->passOverrideFieldError($form, $post, $page, 'comment', 'You must provide explanatory text.');
         }
 
         if (!$changeToFail && $comment === '' && !$answered) {
@@ -520,6 +527,40 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         }
 
         return $this->redirectBackToChangeReview();
+    }
+
+    /**
+     * Something on one passed check's form is the caseworker's to put right. The message is set
+     * on the form against the field it is about, as form validation does, so the framework's own
+     * helpers render it (formErrors() for the summary, formRow() beside the field) and the form
+     * keeps what the caseworker entered. The page is then drawn again rather than redirected.
+     *
+     * Returns null so changeReviewAction() carries on to render. If the posted row is not one of
+     * the page's passed checks there is no form to show it on, so it falls back to a flash
+     * message and a redirect.
+     *
+     * @return \Laminas\Http\Response|null
+     */
+    protected function passOverrideFieldError(
+        FormInterface $form,
+        \Laminas\Stdlib\ParametersInterface $post,
+        array $page,
+        string $field,
+        string $message
+    ) {
+        $row = (string)$post->get('row');
+        $pass = self::findByKey($page['passes'], $row);
+
+        if ($pass === null || !$pass['flagged']) {
+            $this->flashMessengerHelper->addErrorMessage($message);
+
+            return $this->redirectBackToChangeReview();
+        }
+
+        $form->setMessages([$field => [$message]]);
+        $this->passOverrideErrorRow = $row;
+
+        return null;
     }
 
     /**
