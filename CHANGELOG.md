@@ -1,5 +1,15 @@
 # Changelog
 
+## [9.7.1](https://github.com/dvsa/vol-app/compare/v9.7.0...v9.7.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* add slack alerting for ni compliance ([#1932](https://github.com/dvsa/vol-app/issues/1932)) ([367590e](https://github.com/dvsa/vol-app/commit/367590e6021d097d9bc2bdc82162565baa165f7b))
+* hide documents from cancelled draft applications (vol-7730) ([#1917](https://github.com/dvsa/vol-app/issues/1917)) ([4f4116f](https://github.com/dvsa/vol-app/commit/4f4116fa52e911e65a3e887936a7279b9d61d8a1))
+* hide unsubmitted application documents on every docs tab (vol-7729) ([#1916](https://github.com/dvsa/vol-app/issues/1916)) ([d9c90c4](https://github.com/dvsa/vol-app/commit/d9c90c4c4b9d6669fb79f0b116ce830fe1feec6d))
+* let uploads over 1 MB through the local Docker proxy, and upgrade it from nginx-proxy 1.5 to 1.11.6 - VOL-7777 ([#1921](https://github.com/dvsa/vol-app/issues/1921)) ([cc81cc2](https://github.com/dvsa/vol-app/commit/cc81cc235473a1f6dacbbd47ee92f114bf92aea9))
+
 ## [9.7.0](https://github.com/dvsa/vol-app/compare/v9.6.0...v9.7.0) (2026-11-17)
 
 
