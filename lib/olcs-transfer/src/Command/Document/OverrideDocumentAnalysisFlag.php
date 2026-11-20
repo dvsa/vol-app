@@ -81,4 +81,3 @@ final class OverrideDocumentAnalysisFlag extends AbstractCommand
         return $this->changeRecommendation;
     }
 }
-
