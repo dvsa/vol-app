@@ -1,0 +1,157 @@
+{
+  "name": "financial-evidence-issue-override",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "analysisId",
+        "type": "Hidden",
+        "attributes": {
+          "required": "required"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "row",
+        "type": "Hidden",
+        "attributes": {
+          "required": "required"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "changeRecommendation",
+        "attributes": {
+          "required": "required",
+          "value": "N"
+        },
+        "type": "Radio",
+        "options": {
+          "label": "Change this recommendation to a pass?",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "comment",
+        "attributes": {
+          "required": false,
+          "class": "extra-long"
+        },
+        "type": "TextArea",
+        "options": {
+          "label": "Reason for the change"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "saveOverride",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "value": "override"
+        },
+        "options": {
+          "label": "Save and continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "analysisId": {
+      "name": "analysisId",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    },
+    "row": {
+      "name": "row",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\InArray",
+          "options": {
+            "haystack": [
+              "authenticity",
+              "name",
+              "statementDate",
+              "statementPeriod",
+              "averageFunds",
+              "largeDeposit"
+            ],
+            "strict": true
+          }
+        }
+      ]
+    },
+    "changeRecommendation": {
+      "name": "changeRecommendation",
+      "required": true
+    },
+    "comment": {
+      "name": "comment",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "changeRecommendation",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty"
+              },
+              {
+                "name": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "max": 1000
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
