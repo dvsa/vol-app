@@ -36,7 +36,7 @@
         },
         "type": "Radio",
         "options": {
-          "label": "Do you want to change the outcome of this issue?",
+          "label": "lva-financial-evidence-assessment-pass-change-outcome",
           "value_options": {
             "Y": "Yes",
             "N": "No"
@@ -60,7 +60,7 @@
         },
         "type": "TextArea",
         "options": {
-          "label": "Can you provide more detail?"
+          "label": "lva-financial-evidence-assessment-pass-more-detail"
         }
       }
     },
@@ -119,7 +119,7 @@
     "changeRecommendation": {
       "name": "changeRecommendation",
       "required": true,
-      "error_message": "Select yes if you want to change the outcome of this issue"
+      "error_message": "lva-financial-evidence-assessment-error-answer-required"
     },
     "comment": {
       "name": "comment",
@@ -149,7 +149,7 @@
                 "name": "Laminas\\Validator\\NotEmpty",
                 "options": {
                   "messages": {
-                    "isEmpty": "You must provide explanatory text."
+                    "isEmpty": "lva-financial-evidence-assessment-error-reason-required"
                   }
                 }
               }
@@ -161,7 +161,7 @@
           "options": {
             "max": 1000,
             "messages": {
-              "stringLengthTooLong": "More detail must be 1,000 characters or fewer"
+              "stringLengthTooLong": "lva-financial-evidence-assessment-error-comment-too-long"
             }
           }
         }

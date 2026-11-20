@@ -86,11 +86,11 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     public const string ERR_UNCHANGED_ISSUES = 'ERR_DOCUMENT_ANALYSIS_UNCHANGED_ISSUES';
 
     /**
-     * Shown only if that refusal arrives without usable text; the API's own wording is preferred
-     * so the two cannot drift. Says what to do next, not what is wrong.
+     * The translation key shown for that refusal. The API sends its own English wording with it,
+     * but text on this page comes from translation keys, so the refusal is recognised by its
+     * error key and worded here. Says what to do next, not what is wrong.
      */
-    public const string MSG_UNCHANGED_ISSUES =
-        'Change all failed and skipped checks to a pass before you accept the financial evidence';
+    public const string MSG_UNCHANGED_ISSUES = 'lva-financial-evidence-assessment-error-unchanged-issues';
 
     /** The fields of the passed-check form that the caseworker fills in; the rest are hidden. */
     private const array PASS_OVERRIDE_CASEWORKER_FIELDS = ['changeRecommendation', 'comment'];
@@ -180,7 +180,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         }
 
         if (!FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis)['hasAssessment']) {
-            $this->flashMessengerHelper->addErrorMessage('This document has no assessment to review');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-no-assessment');
 
             return $this->redirect()->refresh();
         }
@@ -193,13 +193,13 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             : null;
 
         if ($outcome === AssessmentStatus::APPROVED) {
-            $this->flashMessengerHelper->addSuccessMessage('Document review accepted: the document is approved');
+            $this->flashMessengerHelper->addSuccessMessage('lva-financial-evidence-assessment-message-accepted-approved');
         } elseif ($outcome === AssessmentStatus::REJECTED) {
             $this->flashMessengerHelper->addWarningMessage(
-                'Document review accepted: the document is rejected because one or more checks did not pass'
+                'lva-financial-evidence-assessment-message-accepted-rejected'
             );
         } else {
-            $this->flashMessengerHelper->addErrorMessage('The document review could not be recorded');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-review-not-recorded');
         }
 
         return $this->redirect()->refresh();
@@ -264,7 +264,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
                 ? (new \DateTime($analysis['documentDate']))->format('d/m/Y')
                 : null;
             $isLatest = $tabs === [];
-            $dateLabel = $date ?? 'Unknown date';
+            $dateLabel = $date ?? 'lva-financial-evidence-assessment-tab-unknown-date';
 
             // Null when the analysis has not been reviewed (or holds a value this app does not know).
             $assessmentStatus = AssessmentStatus::tryFrom((string)($analysis['assessmentStatus'] ?? ''));
@@ -272,7 +272,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             $tab = [
                 'id'              => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
                 'analysisId'      => $analysis['id'],
-                'label'           => $isLatest ? 'Latest' : $dateLabel,
+                'label'           => $isLatest ? 'lva-financial-evidence-assessment-tab-latest' : $dateLabel,
                 // Optional: only set when the tab should read differently once deselected.
                 'unselectedLabel' => $isLatest ? $dateLabel : null,
                 'date'            => $date,
@@ -315,7 +315,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $page = ReviewPageMapper::mapFromAnalysis($analysis);
 
         if (!$page['hasAssessment']) {
-            $this->flashMessengerHelper->addErrorMessage('This document has no assessment to review');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-no-assessment');
 
             return $this->redirectToIndex();
         }
@@ -402,7 +402,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $issue = self::findByKey($page['issues'], (string)$data['row']);
 
         if ($issue === null || $issue['changed']) {
-            $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-already-changed');
 
             return $this->redirectBackToChangeReview();
         }
@@ -412,7 +412,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         // A genuine fail always needs a reason to change; a skipped check does not.
         if ($changeToPass && $comment === '' && $issue['flag'] === FinancialEvidenceAssessmentTab::FLAG_FAIL) {
-            $this->flashMessengerHelper->addErrorMessage('Enter a reason for changing the recommendation');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-error-issue-reason-required');
 
             return $this->redirectBackToChangeReview();
         }
@@ -433,10 +433,10 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         if ($response->isOk()) {
             $this->flashMessengerHelper->addSuccessMessage(
-                $changeToPass ? 'The recommendation has been changed to a pass' : 'Your comment has been saved'
+                $changeToPass ? 'lva-financial-evidence-assessment-message-changed-to-pass' : 'lva-financial-evidence-assessment-message-comment-saved'
             );
         } else {
-            $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-change-not-recorded');
         }
 
         return $this->redirectBackToChangeReview();
@@ -478,7 +478,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $pass = self::findByKey($page['passes'], (string)$data['row']);
 
         if ($pass === null || !$pass['flagged']) {
-            $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-already-changed');
 
             return $this->redirectBackToChangeReview();
         }
@@ -509,14 +509,14 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ($response->isOk()) {
             $this->flashMessengerHelper->addSuccessMessage(
                 match (true) {
-                    $changeToFail => 'The recommendation has been changed to a fail',
-                    $changeBack => 'The recommendation has been changed back to a pass',
-                    $comment === '' => 'Your comment has been removed',
-                    default => 'Your comment has been saved',
+                    $changeToFail => 'lva-financial-evidence-assessment-message-changed-to-fail',
+                    $changeBack => 'lva-financial-evidence-assessment-message-changed-back-to-pass',
+                    $comment === '' => 'lva-financial-evidence-assessment-message-comment-removed',
+                    default => 'lva-financial-evidence-assessment-message-comment-saved',
                 }
             );
         } else {
-            $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-change-not-recorded');
         }
 
         return $this->redirectBackToChangeReview();
@@ -568,7 +568,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
-            $this->flashMessengerHelper->addErrorMessage('Select a decision');
+            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-error-decision-required');
 
             return $this->redirectBackToChangeReview();
         }
@@ -592,11 +592,9 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             $refusal = is_array($messages) ? ($messages[self::ERR_UNCHANGED_ISSUES] ?? null) : null;
 
             if ($refusal !== null) {
-                $this->flashMessengerHelper->addErrorMessage(
-                    is_string($refusal) && trim($refusal) !== '' ? $refusal : self::MSG_UNCHANGED_ISSUES
-                );
+                $this->flashMessengerHelper->addErrorMessage(self::MSG_UNCHANGED_ISSUES);
             } else {
-                $this->flashMessengerHelper->addErrorMessage('The decision could not be recorded');
+                $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-decision-not-recorded');
             }
 
             return $this->redirectBackToChangeReview();
@@ -604,8 +602,8 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         $this->flashMessengerHelper->addSuccessMessage(
             $decision === AssessmentStatus::APPROVED
-                ? 'Financial evidence accepted'
-                : 'Financial evidence rejected'
+                ? 'lva-financial-evidence-assessment-message-evidence-accepted'
+                : 'lva-financial-evidence-assessment-message-evidence-rejected'
         );
 
         return $this->redirectToIndex();
@@ -661,10 +659,10 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     protected function mapStatus(?AssessmentStatus $assessmentStatus): string
     {
         return match ($assessmentStatus) {
-            AssessmentStatus::APPROVED => 'Approved',
-            AssessmentStatus::REJECTED => 'Rejected',
-            AssessmentStatus::PENDING  => 'Pending',
-            null                       => 'Unknown',
+            AssessmentStatus::APPROVED => 'lva-financial-evidence-assessment-status-approved',
+            AssessmentStatus::REJECTED => 'lva-financial-evidence-assessment-status-rejected',
+            AssessmentStatus::PENDING  => 'lva-financial-evidence-assessment-status-pending',
+            null                       => 'lva-financial-evidence-assessment-status-unknown',
         };
     }
 

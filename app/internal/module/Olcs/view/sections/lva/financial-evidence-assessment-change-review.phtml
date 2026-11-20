@@ -15,26 +15,31 @@
  * LVA section route's child route is shared by every section; adding a segment there would
  * change every section's URL shape.
  */
+
+use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
+
 ?>
 <a class="govuk-back-link" href="<?php echo $this->escapeHtmlAttr($backUrl); ?>">Back</a>
 
 <?php // The passed-checks view is its own page in the VOL-7338 design: "Finance evidence review". ?>
 <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
-  <?php echo $showPassOverride ? 'Finance evidence review' : 'Finance evidence document overview'; ?>
+  <?php echo $this->escapeHtml($this->translate($showPassOverride
+      ? 'lva-financial-evidence-assessment-pass-review-heading'
+      : 'lva-financial-evidence-assessment-change-review-heading')); ?>
 </h2>
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
 <?php // Shown on both views. The VOL-7338 design leaves it off the passed-checks page, but without ?>
 <?php // it nothing there says which document the checks belong to, so it is kept deliberately. ?>
-<h3 class="govuk-heading-m">Bank Statements</h3>
+<h3 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-bank-statements')); ?></h3>
 
 <?php if ($document !== null) : ?>
   <dl class="govuk-summary-list govuk-!-margin-bottom-8">
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">Finance Evidence</dt>
+      <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-finance-evidence')); ?></dt>
       <dd class="govuk-summary-list__value">
         <a class="govuk-link" href="<?php echo $this->escapeHtmlAttr($this->url('getfile', ['identifier' => $document['id']])); ?>">
-          <?php echo $this->escapeHtml($document['name'] ?? 'Document'); ?>
+          <?php echo $this->escapeHtml($document['name'] ?? $this->translate('lva-financial-evidence-assessment-document-fallback-name')); ?>
         </a>
       </dd>
     </div>
@@ -44,17 +49,17 @@
 <?php if (!$showPassOverride) : ?>
   <?php foreach ($issues as $issue) : ?>
     <?php $key = $this->escapeHtmlAttr($issue['key']); ?>
-    <h3 class="govuk-heading-m">Issue</h3>
+    <h3 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-issue')); ?></h3>
     <dl class="govuk-summary-list">
       <?php // Only when the value names what failed; the mapper leaves it null otherwise. ?>
       <?php if ($issue['value'] !== null) : ?>
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($issue['label']); ?></dt>
+          <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate($issue['label'])); ?></dt>
           <dd class="govuk-summary-list__value"><?php echo $this->escapeHtml($issue['value']); ?></dd>
         </div>
       <?php endif; ?>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Flag</dt>
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-column-flag')); ?></dt>
         <dd class="govuk-summary-list__value">
           <?php // The analyser's flag, greyed out when a caseworker changed it (the new flag is with their comment). ?>
           <?php echo $this->partial('partials/financial-evidence/flag', [
@@ -68,7 +73,7 @@
         </dd>
       </div>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Comment</dt>
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-comment')); ?></dt>
         <dd class="govuk-summary-list__value">
           <?php echo $this->partial('partials/financial-evidence/comment', [
             'tag' => $issue['changed'] ? $issue['changedTo'] : null,
@@ -94,7 +99,7 @@
       <?php // A native disclosure, as in the design; it works without JavaScript, unlike an accordion. ?>
       <details class="govuk-details" id="change-<?php echo $key; ?>">
         <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">Do you want to change the recommendation above?</span>
+          <span class="govuk-details__summary-text"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-recommendation-above')); ?></span>
         </summary>
         <div class="govuk-details__text">
           <form method="post" novalidate>
@@ -115,23 +120,33 @@
   <?php endforeach; ?>
 
   <?php if ($issues === []) : ?>
-    <p class="govuk-body">No issues were found.</p>
+    <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-no-issues-found')); ?></p>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
   <?php endif; ?>
 
-  <h3 class="govuk-heading-m">Pass Issues</h3>
+  <h3 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-pass-issues')); ?></h3>
   <p class="govuk-body">
-    There <?php echo $passCount === 1 ? 'is' : 'are'; ?>
-    <?php echo (int)$passCount; ?> <?php echo $passCount === 1 ? 'issue' : 'issues'; ?> shown as
-    <strong class="govuk-tag govuk-tag--green">PASS</strong>
+    <?php
+    // One translation key for one check and another for several, with the count placed by
+    // sprintf, so each language can word the sentence its own way.
+    echo $this->escapeHtml(sprintf(
+        $this->translate($passCount === 1
+            ? 'lva-financial-evidence-assessment-pass-issues-count-one'
+            : 'lva-financial-evidence-assessment-pass-issues-count-many'),
+        (int)$passCount
+    ));
+    ?>
+    <strong class="govuk-tag govuk-tag--green"><?php
+        echo $this->escapeHtml($this->translate(FinancialEvidenceAssessmentTab::flagTranslationKey(FinancialEvidenceAssessmentTab::FLAG_PASS)));
+    ?></strong>
   </p>
 
   <?php echo $passesTable->render(); ?>
 
-  <h3 class="govuk-heading-s">Do you want to change any of the recommendations above?</h3>
+  <h3 class="govuk-heading-s"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-any-recommendations')); ?></h3>
   <a href="<?php echo $this->escapeHtmlAttr($this->url(null, [], ['query' => ['view' => 'passes']], true)); ?>"
      class="govuk-button govuk-button--secondary" data-module="govuk-button" role="button" draggable="false">
-    Change and Review
+    <?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-and-review')); ?>
   </a>
 <?php else : ?>
   <?php
@@ -155,12 +170,12 @@
     <?php $key = $this->escapeHtmlAttr($pass['key']); ?>
     <?php // The id is where this issue's form sends the browser back to (see the form below); ?>
     <?php // tabindex lets it take focus there, so keyboard and screen reader users land on it too. ?>
-    <h3 class="govuk-heading-m" id="issue-<?php echo $key; ?>" tabindex="-1">Issue</h3>
+    <h3 class="govuk-heading-m" id="issue-<?php echo $key; ?>" tabindex="-1"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-issue')); ?></h3>
     <dl class="govuk-summary-list">
       <?php // Laid out as the VOL-7338 design draws it: the check's name against its value and flag, ?>
       <?php // then the analyser's remarks, then the caseworker's comment. ?>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($pass['label']); ?></dt>
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate($pass['label'])); ?></dt>
         <dd class="govuk-summary-list__value">
           <?php if ($pass['value'] !== null) : ?>
             <?php echo $this->escapeHtml($pass['value']); ?>
@@ -176,14 +191,14 @@
         </dd>
       </div>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Remarks</dt>
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-remarks')); ?></dt>
         <dd class="govuk-summary-list__value">
           <?php // Model-generated text, so escaped; its own line breaks are kept (one point per line). ?>
           <?php echo ($pass['remark'] ?? '') !== '' ? nl2br($this->escapeHtml($pass['remark'])) : '-'; ?>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Comment</dt>
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-comment')); ?></dt>
         <dd class="govuk-summary-list__value">
           <?php echo $this->partial('partials/financial-evidence/comment', [
             'tag' => $pass['changed'] ? $pass['changedTo'] : null,
@@ -252,7 +267,7 @@
   <?php endforeach; ?>
 
   <?php if (array_filter($passes, static fn(array $pass): bool => $pass['flagged']) === []) : ?>
-    <p class="govuk-body">No passed checks were found.</p>
+    <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-no-passed-checks')); ?></p>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
   <?php endif; ?>
 <?php endif; ?>

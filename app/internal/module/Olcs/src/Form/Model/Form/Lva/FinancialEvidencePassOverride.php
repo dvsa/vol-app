@@ -21,12 +21,13 @@ use Laminas\Form\Annotation;
 #[Annotation\Options(['prefer_form_input_filter' => true])]
 class FinancialEvidencePassOverride
 {
-    // Worded as GOV.UK error messages are: they say how to put it right and name the thing
-    // ("Select yes if...", "... must be [number] characters or fewer"). The missing-reason message
-    // is the exception: its wording is set by VOL-7338 AC2.
-    public const string MSG_ANSWER_REQUIRED = 'Select yes if you want to change the outcome of this issue';
-    public const string MSG_REASON_REQUIRED = 'You must provide explanatory text.';
-    public const string MSG_COMMENT_TOO_LONG = 'More detail must be 1,000 characters or fewer';
+    // Translation keys; the text is in the translations database. The English is worded as
+    // GOV.UK error messages are, saying how to put it right and naming the thing ("Select yes
+    // if...", "... must be 1,000 characters or fewer"). The missing-reason message is the
+    // exception: its wording is set by VOL-7338 AC2 ("You must provide explanatory text.").
+    public const string MSG_ANSWER_REQUIRED = 'lva-financial-evidence-assessment-error-answer-required';
+    public const string MSG_REASON_REQUIRED = 'lva-financial-evidence-assessment-error-reason-required';
+    public const string MSG_COMMENT_TOO_LONG = 'lva-financial-evidence-assessment-error-comment-too-long';
 
     /** The same limit the API's command applies. */
     public const int COMMENT_MAX_LENGTH = 1000;
@@ -55,7 +56,7 @@ class FinancialEvidencePassOverride
         'radios_wrapper_attributes' => ['class' => 'govuk-radios--standard govuk-radios--inline'],
     ])]
     #[Annotation\Options([
-        'label' => 'Do you want to change the outcome of this issue?',
+        'label' => 'lva-financial-evidence-assessment-pass-change-outcome',
         'value_options' => ['Y' => 'Yes', 'N' => 'No'],
         'fieldset-attributes' => ['class' => 'govuk-fieldset'],
         'legend-attributes' => ['class' => 'govuk-fieldset__legend govuk-fieldset__legend--s'],
@@ -74,7 +75,7 @@ class FinancialEvidencePassOverride
     // non-required one skips its validators altogether when empty.
     #[Annotation\Required(true)]
     #[Annotation\Type('TextArea')]
-    #[Annotation\Options(['label' => 'Can you provide more detail?'])]
+    #[Annotation\Options(['label' => 'lva-financial-evidence-assessment-pass-more-detail'])]
     #[Annotation\Attributes(['class' => 'extra-long', 'required' => false])]
     #[Annotation\Filter('Laminas\Filter\StringTrim')]
     #[Annotation\Validator('Laminas\Validator\NotEmpty', options: ['null'])]

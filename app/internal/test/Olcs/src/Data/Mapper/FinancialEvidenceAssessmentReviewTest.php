@@ -22,7 +22,7 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
 
         $this->assertSame(['statementDate', 'largeDeposit'], array_column($page['issues'], 'key'));
         $this->assertSame(
-            ['Bank', 'Bank address', 'Authenticity', 'Name', 'Statement period', 'Average funds'],
+            ['lva-financial-evidence-assessment-check-bank', 'lva-financial-evidence-assessment-check-bank-address', 'lva-financial-evidence-assessment-check-authenticity', 'lva-financial-evidence-assessment-check-name', 'lva-financial-evidence-assessment-check-statement-period', 'lva-financial-evidence-assessment-check-average-funds'],
             array_column($page['passes'], 'label')
         );
         // Bank and bank address carry no flag, so they are not counted as passes.
@@ -59,7 +59,7 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
             [
                 'key' => 'statementDate',
                 'flagged' => true,
-                'label' => 'Statement date',
+                'label' => 'lva-financial-evidence-assessment-check-statement-date',
                 'value' => '29/12/2025',
                 'flag' => 'FAIL',
                 'flagTag' => 'govuk-tag--red',

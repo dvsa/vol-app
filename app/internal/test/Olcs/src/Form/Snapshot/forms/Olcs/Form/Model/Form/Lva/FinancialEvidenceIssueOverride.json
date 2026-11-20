@@ -34,7 +34,7 @@
         },
         "type": "Radio",
         "options": {
-          "label": "Change this recommendation to a pass?",
+          "label": "lva-financial-evidence-assessment-issue-change-to-pass",
           "value_options": {
             "N": "No",
             "Y": "Yes"
@@ -51,7 +51,7 @@
         "name": "comment",
         "type": "TextArea",
         "options": {
-          "label": "Reason for the change"
+          "label": "lva-financial-evidence-assessment-issue-reason"
         },
         "attributes": {
           "class": "extra-long"

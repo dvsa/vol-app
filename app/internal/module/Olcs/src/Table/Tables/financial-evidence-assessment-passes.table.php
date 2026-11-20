@@ -5,7 +5,9 @@
  * for reference.
  *
  * Rows come from Olcs\Data\Mapper\FinancialEvidenceAssessmentReview as plain text, so every
- * value is escaped here.
+ * value is escaped here. Titles are translation keys, which the table builder translates. Text
+ * inside a cell is translated with the table builder's own translator ($this->translator), as
+ * other table definitions do, which is why the formatters are not static.
  */
 
 use Common\Util\Escape;
@@ -13,7 +15,7 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 
 return [
     'variables' => [
-        'title' => 'Pass issues',
+        'title' => 'lva-financial-evidence-assessment-pass-issues',
     ],
     'attributes' => [
         'name' => 'financialEvidenceAssessmentPasses',
@@ -23,15 +25,18 @@ return [
     ],
     'columns' => [
         [
-            'title' => 'Information',
-            'formatter' => static fn(array $row): string => '<strong>' . Escape::html($row['label']) . '</strong>'
-                . ($row['value'] !== null ? ': ' . Escape::html($row['value']) : ''),
+            'title' => 'lva-financial-evidence-assessment-column-information',
+            // The check's name is a translation key.
+            'formatter' => function (array $row): string {
+                return '<strong>' . Escape::html($this->translator->translate($row['label'])) . '</strong>'
+                    . ($row['value'] !== null ? ': ' . Escape::html($row['value']) : '');
+            },
         ],
         [
-            'title' => 'Flag',
+            'title' => 'lva-financial-evidence-assessment-column-flag',
             // As everywhere a check is shown: the analyser's flag, greyed out when a caseworker
             // changed it (flagTag is then the superseded grey). The new flag is with their comment.
-            'formatter' => static function (array $row): string {
+            'formatter' => function (array $row): string {
                 if ($row['flag'] === null) {
                     return '';
                 }
@@ -40,20 +45,23 @@ return [
                 // IDP's, wherever a check is shown. This table has no remarks column, so here it
                 // is the only place the remark appears.
                 $remark = (string)($row['remark'] ?? '');
+                $tooltip = $this->translator->translate(FinancialEvidenceAssessmentTab::IDP_REMARK_PREFIX) . $remark;
 
                 return '<strong class="govuk-tag ' . Escape::htmlAttr((string)$row['flagTag']) . '"'
-                    . ($remark !== ''
-                        ? ' title="' . Escape::htmlAttr(FinancialEvidenceAssessmentTab::IDP_REMARK_PREFIX . $remark) . '"'
-                        : '') . '>'
-                    . Escape::html((string)$row['flag']) . '</strong>';
+                    . ($remark !== '' ? ' title="' . Escape::htmlAttr($tooltip) . '"' : '') . '>'
+                    . Escape::html($this->translator->translate(
+                        FinancialEvidenceAssessmentTab::flagTranslationKey((string)$row['flag'])
+                    ))
+                    . '</strong>';
             },
         ],
         [
-            'title' => 'Comment',
+            'title' => 'lva-financial-evidence-assessment-comment',
             // The flag the caseworker changed the check to (when they changed it), the comment,
-            // then who wrote it and when on its own line with a little space above. A dash when nobody has answered the check, so an
-            // empty cell reads as "no comment" and not as missing data.
-            'formatter' => static function (array $row): string {
+            // then who wrote it and when on its own line with a little space above. A dash when
+            // nobody has answered the check, so an empty cell reads as "no comment" and not as
+            // missing data.
+            'formatter' => function (array $row): string {
                 $changed = $row['changed'] ?? false;
 
                 if (!$changed && !($row['kept'] ?? false)) {
@@ -61,14 +69,19 @@ return [
                 }
 
                 $comment = (string)($row['comment'] ?? '');
+                $author = $row['changedBy']
+                    ?? $this->translator->translate('lva-financial-evidence-assessment-unknown-user');
 
                 return ($changed
                         ? '<strong class="govuk-tag ' . Escape::htmlAttr((string)$row['changedToTag']) . '">'
-                            . Escape::html((string)$row['changedTo']) . '</strong> '
+                            . Escape::html($this->translator->translate(
+                                FinancialEvidenceAssessmentTab::flagTranslationKey((string)$row['changedTo'])
+                            ))
+                            . '</strong> '
                         : '')
                     . Escape::html($comment !== '' ? $comment : '-')
                     . '<span class="govuk-!-display-block govuk-!-margin-top-2">'
-                    . '<strong>' . Escape::html($row['changedBy'] ?? 'Unknown user') . '</strong>'
+                    . '<strong>' . Escape::html($author) . '</strong>'
                     . (($row['changedOn'] ?? null) !== null ? ' ' . Escape::html($row['changedOn']) : '')
                     . '</span>';
             },

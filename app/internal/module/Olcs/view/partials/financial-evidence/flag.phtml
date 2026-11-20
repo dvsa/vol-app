@@ -25,7 +25,7 @@ $changed = $original !== null;
 ?>
 <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($changed ? FinancialEvidenceAssessmentTab::FLAG_TAG_SUPERSEDED : (string)$currentTag); ?>"<?php
 if (($tooltip ?? '') !== '') :
-    ?> title="<?php echo $this->escapeHtmlAttr(FinancialEvidenceAssessmentTab::IDP_REMARK_PREFIX . $tooltip); ?>"<?php
+    ?> title="<?php echo $this->escapeHtmlAttr($this->translate(FinancialEvidenceAssessmentTab::IDP_REMARK_PREFIX) . $tooltip); ?>"<?php
 endif; ?>>
-  <?php echo $this->escapeHtml($changed ? $original : $current); ?>
+  <?php echo $this->escapeHtml($this->translate(FinancialEvidenceAssessmentTab::flagTranslationKey($changed ? $original : $current))); ?>
 </strong>

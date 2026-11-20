@@ -13,6 +13,8 @@
  * @var bool        $answered whether a caseworker has answered the check at all
  */
 
+use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
+
 if (!$answered) {
     echo '-';
 
@@ -21,14 +23,14 @@ if (!$answered) {
 ?>
 <?php if ($tag !== null) : ?>
   <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$tagClass); ?>">
-    <?php echo $this->escapeHtml($tag); ?>
+    <?php echo $this->escapeHtml($this->translate(FinancialEvidenceAssessmentTab::flagTranslationKey($tag))); ?>
   </strong>
 <?php endif; ?>
 <?php echo $this->escapeHtml(($comment ?? '') !== '' ? $comment : '-'); ?>
 <?php // Who and when, as its own line with a little space above it. A span, not a div, so it ?>
 <?php // is valid wherever the comment sits (inside a paragraph on the summary page, for one). ?>
 <span class="govuk-!-display-block govuk-!-margin-top-2">
-  <strong><?php echo $this->escapeHtml($author ?? 'Unknown user'); ?></strong>
+  <strong><?php echo $this->escapeHtml($author ?? $this->translate('lva-financial-evidence-assessment-unknown-user')); ?></strong>
   <?php if (($date ?? null) !== null) : ?>
     <?php echo $this->escapeHtml($date); ?>
   <?php endif; ?>

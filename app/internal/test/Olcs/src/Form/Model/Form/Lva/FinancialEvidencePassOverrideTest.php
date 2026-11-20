@@ -58,19 +58,19 @@ final class FinancialEvidencePassOverrideTest extends TestCase
 
     public static function caseworkerErrorProvider(): \Iterator
     {
-        yield 'no answer' => [['changeRecommendation' => ''], 'changeRecommendation', 'Select yes if you want to change the outcome of this issue'];
+        yield 'no answer' => [['changeRecommendation' => ''], 'changeRecommendation', 'lva-financial-evidence-assessment-error-answer-required'];
         // Changing a pass to a fail always needs a reason.
-        yield 'yes, no reason' => [['comment' => ''], 'comment', 'You must provide explanatory text.'];
-        yield 'yes, only spaces' => [['comment' => '   '], 'comment', 'You must provide explanatory text.'];
+        yield 'yes, no reason' => [['comment' => ''], 'comment', 'lva-financial-evidence-assessment-error-reason-required'];
+        yield 'yes, only spaces' => [['comment' => '   '], 'comment', 'lva-financial-evidence-assessment-error-reason-required'];
         yield 'yes, too long' => [
             ['comment' => str_repeat('a', 1001)],
             'comment',
-            'More detail must be 1,000 characters or fewer',
+            'lva-financial-evidence-assessment-error-comment-too-long',
         ];
         yield 'no, note too long' => [
             ['changeRecommendation' => 'N', 'comment' => str_repeat('a', 1001)],
             'comment',
-            'More detail must be 1,000 characters or fewer',
+            'lva-financial-evidence-assessment-error-comment-too-long',
         ];
     }
 

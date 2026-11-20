@@ -36,7 +36,7 @@ class FinancialEvidenceIssueOverride
     #[Annotation\Required(true)]
     #[Annotation\Type('Radio')]
     #[Annotation\Options([
-        'label' => 'Change this recommendation to a pass?',
+        'label' => 'lva-financial-evidence-assessment-issue-change-to-pass',
         'value_options' => ['N' => 'No', 'Y' => 'Yes'],
         'fieldset-attributes' => ['class' => 'inline'],
     ])]
@@ -44,7 +44,7 @@ class FinancialEvidenceIssueOverride
     public $changeRecommendation = null;
 
     #[Annotation\Type('TextArea')]
-    #[Annotation\Options(['label' => 'Reason for the change'])]
+    #[Annotation\Options(['label' => 'lva-financial-evidence-assessment-issue-reason'])]
     #[Annotation\Attributes(['class' => 'extra-long'])]
     #[Annotation\Filter('Laminas\Filter\StringTrim')]
     #[Annotation\Validator('Laminas\Validator\StringLength', options: ['max' => 1000])]

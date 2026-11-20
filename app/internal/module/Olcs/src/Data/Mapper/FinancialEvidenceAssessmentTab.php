@@ -37,14 +37,14 @@ final class FinancialEvidenceAssessmentTab
      * flagged; Authenticity is a judgement on the whole document, so it has no value to show.
      */
     private const array ROWS = [
-        'bank' => ['label' => 'Bank', 'flagged' => false, 'hasValue' => true],
-        'bankAddress' => ['label' => 'Bank address', 'flagged' => false, 'hasValue' => true],
-        'authenticity' => ['label' => 'Authenticity', 'flagged' => true, 'hasValue' => false],
-        'name' => ['label' => 'Name', 'flagged' => true, 'hasValue' => true],
-        'statementDate' => ['label' => 'Statement date', 'flagged' => true, 'hasValue' => true],
-        'statementPeriod' => ['label' => 'Statement period', 'flagged' => true, 'hasValue' => true],
-        'averageFunds' => ['label' => 'Average funds', 'flagged' => true, 'hasValue' => true],
-        'largeDeposit' => ['label' => 'Large deposit', 'flagged' => true, 'hasValue' => true],
+        'bank' => ['label' => 'lva-financial-evidence-assessment-check-bank', 'flagged' => false, 'hasValue' => true],
+        'bankAddress' => ['label' => 'lva-financial-evidence-assessment-check-bank-address', 'flagged' => false, 'hasValue' => true],
+        'authenticity' => ['label' => 'lva-financial-evidence-assessment-check-authenticity', 'flagged' => true, 'hasValue' => false],
+        'name' => ['label' => 'lva-financial-evidence-assessment-check-name', 'flagged' => true, 'hasValue' => true],
+        'statementDate' => ['label' => 'lva-financial-evidence-assessment-check-statement-date', 'flagged' => true, 'hasValue' => true],
+        'statementPeriod' => ['label' => 'lva-financial-evidence-assessment-check-statement-period', 'flagged' => true, 'hasValue' => true],
+        'averageFunds' => ['label' => 'lva-financial-evidence-assessment-check-average-funds', 'flagged' => true, 'hasValue' => true],
+        'largeDeposit' => ['label' => 'lva-financial-evidence-assessment-check-large-deposit', 'flagged' => true, 'hasValue' => true],
     ];
 
     /** Anything else the API might send is shown as skipped: it can never read as a pass or a fail. */
@@ -58,10 +58,11 @@ final class FinancialEvidenceAssessmentTab
     public const string FLAG_TAG_SUPERSEDED = 'govuk-tag--grey';
 
     /**
-     * Put before the analyser's remark where it is shown as a tooltip on a flag, so it is clear
-     * the text is what IDP said and not the caseworker's comment beside it.
+     * Translation key of the text put before the analyser's remark where it is shown as a tooltip
+     * on a flag ("IDP remark: "), so it is clear the text is what IDP said and not the
+     * caseworker's comment beside it.
      */
-    public const string IDP_REMARK_PREFIX = 'IDP remark: ';
+    public const string IDP_REMARK_PREFIX = 'lva-financial-evidence-assessment-idp-remark-prefix';
 
     /**
      * @param array $analysis one entry of DocumentAnalysisList's "analyses"
@@ -111,6 +112,16 @@ final class FinancialEvidenceAssessmentTab
                 static fn(array $row): bool => $row['flagged'] && $row['flag'] !== self::FLAG_PASS
             )),
         ];
+    }
+
+    /**
+     * The translation key for a flag label (PASS, FAIL, SKIPPED). The labels themselves stay as
+     * they are in the mapped rows, because the code compares them; they are translated where they
+     * are displayed.
+     */
+    public static function flagTranslationKey(string $flag): string
+    {
+        return 'lva-financial-evidence-assessment-flag-' . strtolower($flag);
     }
 
     /** The tag colour for a flag label (PASS, FAIL or SKIPPED) as this mapper produces it. */

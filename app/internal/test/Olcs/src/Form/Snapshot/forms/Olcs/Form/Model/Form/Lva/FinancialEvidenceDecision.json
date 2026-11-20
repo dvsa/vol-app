@@ -26,7 +26,7 @@
         },
         "type": "Radio",
         "options": {
-          "label": "Select your decision",
+          "label": "lva-financial-evidence-assessment-decision-legend",
           "fieldset-attributes": {
             "class": "govuk-fieldset"
           },
@@ -34,8 +34,8 @@
             "class": "govuk-fieldset__legend govuk-fieldset__legend--l"
           },
           "value_options": {
-            "APPROVED": "Accept financial evidence",
-            "REJECTED": "Reject financial evidence"
+            "APPROVED": "lva-financial-evidence-assessment-decision-accept",
+            "REJECTED": "lva-financial-evidence-assessment-decision-reject"
           }
         }
       }

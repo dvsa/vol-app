@@ -21,14 +21,14 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
 
         $this->assertSame(
             [
-                'Bank',
-                'Bank address',
-                'Authenticity',
-                'Name',
-                'Statement date',
-                'Statement period',
-                'Average funds',
-                'Large deposit',
+                'lva-financial-evidence-assessment-check-bank',
+                'lva-financial-evidence-assessment-check-bank-address',
+                'lva-financial-evidence-assessment-check-authenticity',
+                'lva-financial-evidence-assessment-check-name',
+                'lva-financial-evidence-assessment-check-statement-date',
+                'lva-financial-evidence-assessment-check-statement-period',
+                'lva-financial-evidence-assessment-check-average-funds',
+                'lva-financial-evidence-assessment-check-large-deposit',
             ],
             array_column($tab['rows'], 'label')
         );
@@ -78,7 +78,7 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
             'statementDate' => ['flag' => 'fail', 'remark' => null, 'value' => '2026-02-30', 'checks' => []],
         ]));
 
-        $this->assertSame('-', $this->row($tab, 'Statement date')['value']);
+        $this->assertSame('-', $this->row($tab, 'lva-financial-evidence-assessment-check-statement-date')['value']);
     }
 
     #[DataProvider('currencyProvider')]
@@ -88,7 +88,7 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
             'averageFunds' => ['flag' => 'pass', 'remark' => null, 'value' => $amount, 'checks' => []],
         ]));
 
-        $this->assertSame($expected, $this->row($tab, 'Average funds')['value']);
+        $this->assertSame($expected, $this->row($tab, 'lva-financial-evidence-assessment-check-average-funds')['value']);
     }
 
     public static function currencyProvider(): array
@@ -111,10 +111,10 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
             'statementDate' => ['flag' => 'skipped', 'remark' => 'Not assessed.', 'value' => null, 'checks' => []],
         ]));
 
-        $this->assertSame([null, null], [$this->row($tab, 'Bank')['flag'], $this->row($tab, 'Bank address')['flag']]);
-        $this->assertSame(['PASS', 'govuk-tag--green'], $this->flagOf($tab, 'Authenticity'));
-        $this->assertSame(['FAIL', 'govuk-tag--red'], $this->flagOf($tab, 'Name'));
-        $this->assertSame(['SKIPPED', 'govuk-tag--grey'], $this->flagOf($tab, 'Statement date'));
+        $this->assertSame([null, null], [$this->row($tab, 'lva-financial-evidence-assessment-check-bank')['flag'], $this->row($tab, 'lva-financial-evidence-assessment-check-bank-address')['flag']]);
+        $this->assertSame(['PASS', 'govuk-tag--green'], $this->flagOf($tab, 'lva-financial-evidence-assessment-check-authenticity'));
+        $this->assertSame(['FAIL', 'govuk-tag--red'], $this->flagOf($tab, 'lva-financial-evidence-assessment-check-name'));
+        $this->assertSame(['SKIPPED', 'govuk-tag--grey'], $this->flagOf($tab, 'lva-financial-evidence-assessment-check-statement-date'));
     }
 
     /** A flag the view does not know cannot be shown as a pass or a fail. */
@@ -124,15 +124,15 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
             'authenticity' => ['flag' => 'maybe', 'remark' => null, 'value' => null, 'checks' => []],
         ]));
 
-        $this->assertSame(['SKIPPED', 'govuk-tag--grey'], $this->flagOf($tab, 'Authenticity'));
+        $this->assertSame(['SKIPPED', 'govuk-tag--grey'], $this->flagOf($tab, 'lva-financial-evidence-assessment-check-authenticity'));
     }
 
     public function testCarriesRemarksThrough(): void
     {
         $tab = FinancialEvidenceAssessmentTab::mapFromAnalysis($this->givenAnalysis());
 
-        $this->assertSame('Statement is too old.', $this->row($tab, 'Statement date')['remark']);
-        $this->assertNull($this->row($tab, 'Bank')['remark']);
+        $this->assertSame('Statement is too old.', $this->row($tab, 'lva-financial-evidence-assessment-check-statement-date')['remark']);
+        $this->assertNull($this->row($tab, 'lva-financial-evidence-assessment-check-bank')['remark']);
     }
 
     /** A missing value shows as a dash, except for Authenticity, which has no value to show. */
@@ -160,9 +160,9 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
         $tab = FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis);
 
         $this->assertCount(8, $tab['rows']);
-        $this->assertSame(['SKIPPED', 'govuk-tag--grey'], $this->flagOf($tab, 'Large deposit'));
-        $this->assertSame('-', $this->row($tab, 'Bank')['value']);
-        $this->assertNull($this->row($tab, 'Bank')['flag']);
+        $this->assertSame(['SKIPPED', 'govuk-tag--grey'], $this->flagOf($tab, 'lva-financial-evidence-assessment-check-large-deposit'));
+        $this->assertSame('-', $this->row($tab, 'lva-financial-evidence-assessment-check-bank')['value']);
+        $this->assertNull($this->row($tab, 'lva-financial-evidence-assessment-check-bank')['flag']);
     }
 
     public function testIgnoresRowsItDoesNotKnow(): void
@@ -270,7 +270,7 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
 
         $this->assertSame(
             ['originalFlag' => 'FAIL', 'comment' => 'Checked by hand', 'changedBy' => 'Jo Bloggs', 'changedOn' => '08/10/2026'],
-            $this->row($tab, 'Statement date')['override']
+            $this->row($tab, 'lva-financial-evidence-assessment-check-statement-date')['override']
         );
     }
 
@@ -285,7 +285,7 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
 
         $this->assertSame(
             ['originalFlag' => 'SKIPPED', 'comment' => null, 'changedBy' => null, 'changedOn' => null],
-            $this->row($tab, 'Name')['override']
+            $this->row($tab, 'lva-financial-evidence-assessment-check-name')['override']
         );
     }
 
@@ -298,9 +298,9 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
             ],
         ]));
 
-        $this->assertNull($this->row($tab, 'Name')['override']);
+        $this->assertNull($this->row($tab, 'lva-financial-evidence-assessment-check-name')['override']);
         // Bank is never flagged, so an override on it is ignored even if the payload carries one.
-        $this->assertNull($this->row($tab, 'Bank')['override']);
+        $this->assertNull($this->row($tab, 'lva-financial-evidence-assessment-check-bank')['override']);
     }
 
     private function row(array $tab, string $label): array
