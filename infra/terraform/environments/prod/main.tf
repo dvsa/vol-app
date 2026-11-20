@@ -1,3 +1,7 @@
+data "aws_sns_topic" "cloudwatch_alerts" {
+  name = "cloudwatch-alerts"
+}
+
 locals {
   #testing tf plan
   service_names = ["api", "selfserve", "internal", "cli"]
@@ -327,7 +331,8 @@ module "service" {
 
   legacy_environment = "APP"
 
-  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+  dva_ni_export_s3uri        = module.parameters.dva_ni_export_s3uri
+  slack_alerts_sns_topic_arn = data.aws_sns_topic.cloudwatch_alerts.arn
 
   domain_env = "app"
 
