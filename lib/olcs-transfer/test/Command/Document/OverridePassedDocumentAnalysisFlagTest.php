@@ -22,7 +22,8 @@ final class OverridePassedDocumentAnalysisFlagTest extends TestCase
     #[\Override]
     protected function getOptionalDtoFields()
     {
-        return [];
+        // "N" with no comment removes the caseworker's entry for the check, so it may be empty.
+        return ['comment'];
     }
 
     #[\Override]
@@ -42,7 +43,7 @@ final class OverridePassedDocumentAnalysisFlagTest extends TestCase
             'id' => ['0', 'abc', null],
             // Bank and bank address carry no flag, so they cannot be overridden.
             'row' => ['bank', 'bankAddress', 'nonsense', '', null],
-            'comment' => ['', str_repeat('a', 1001), null],
+            'comment' => [str_repeat('a', 1001)],
         ];
     }
 
@@ -56,4 +57,3 @@ final class OverridePassedDocumentAnalysisFlagTest extends TestCase
         ];
     }
 }
-
