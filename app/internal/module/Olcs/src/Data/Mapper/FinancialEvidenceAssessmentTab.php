@@ -58,6 +58,12 @@ final class FinancialEvidenceAssessmentTab
     public const string FLAG_TAG_SUPERSEDED = 'govuk-tag--grey';
 
     /**
+     * Put before the analyser's remark where it is shown as a tooltip on a flag, so it is clear
+     * the text is what IDP said and not the caseworker's comment beside it.
+     */
+    public const string IDP_REMARK_PREFIX = 'IDP remark: ';
+
+    /**
      * @param array $analysis one entry of DocumentAnalysisList's "analyses"
      *
      * @return array{

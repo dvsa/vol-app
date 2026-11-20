@@ -79,10 +79,10 @@ $warningText = $hasDocuments
           <tbody class="govuk-table__body">
           <?php foreach ($tab['rows'] as $row) : ?>
             <?php
-            // Set only when a caseworker has changed this check to a pass. The remark is still the
-            // analyser's original one, so who changed it and why is shown on one line beneath it.
+            // Set when a caseworker has answered this check: changed it (either way) or left a
+            // note on it. A change has an original flag different from the flag the row has now.
             $override = $row['override'] ?? null;
-            $overrideComment = trim((string)($override['comment'] ?? ''));
+            $changed = $override !== null && $override['originalFlag'] !== $row['flag'];
             ?>
             <tr class="govuk-table__row">
               <th scope="row" class="govuk-table__header">
@@ -91,21 +91,42 @@ $warningText = $hasDocuments
                 <?php endif; ?>
               </th>
               <td class="govuk-table__cell">
-                <?php if ($row['flag'] !== null) : ?>
-                  <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($row['flagTag']); ?>">
-                    <?php echo $this->escapeHtml($row['flag']); ?>
-                  </strong>
-                <?php endif; ?>
+                <?php // The analyser's flag, greyed out when a caseworker changed it (the new flag is with their comment). ?>
+                <?php echo $this->partial('partials/financial-evidence/flag', [
+                  'original' => $changed ? $override['originalFlag'] : null,
+                  'current' => $row['flag'],
+                  'currentTag' => $row['flagTag'],
+                  // On a changed check the caseworker's comment takes the remark's place in the
+                  // next column, so the analyser's remark is kept within reach as the tooltip on
+                  // the analyser's flag.
+                  'tooltip' => $changed ? $row['remark'] : null,
+                ]); ?>
               </td>
               <td class="govuk-table__cell">
-                <?php if ($row['remark'] !== null) : ?>
+                <?php
+                // The analyser's remark explains the analyser's flag. Once a caseworker has
+                // changed the check, their flag and comment take its place, as the design shows:
+                // the remark would be arguing for a flag that no longer stands. A note (the flag
+                // was kept) sits beneath the remark it adds to.
+                ?>
+                <?php if ($row['remark'] !== null && !$changed) : ?>
                   <?php echo $this->escapeHtml($row['remark']); ?>
                 <?php endif; ?>
                 <?php if ($override !== null) : ?>
-                  <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
-                    <strong><?php echo $this->escapeHtml($override['changedBy'] ?? 'Unknown user'); ?></strong>:
-                    <?php echo $this->escapeHtml($overrideComment !== '' ? $overrideComment : '-'); ?>
-                  </p>
+                  <?php if (!$changed) : ?>
+                    <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
+                  <?php endif; ?>
+                  <?php echo $this->partial('partials/financial-evidence/comment', [
+                    'tag' => $changed ? $row['flag'] : null,
+                    'tagClass' => $changed ? $row['flagTag'] : null,
+                    'comment' => $override['comment'],
+                    'author' => $override['changedBy'],
+                    'date' => $override['changedOn'],
+                    'answered' => true,
+                  ]); ?>
+                  <?php if (!$changed) : ?>
+                    </p>
+                  <?php endif; ?>
                 <?php endif; ?>
               </td>
             </tr>

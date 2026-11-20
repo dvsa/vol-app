@@ -1,0 +1,35 @@
+<?php
+/**
+ * A caseworker's comment on one financial evidence check, shown the same way wherever it appears:
+ * the flag they changed the check to (when they changed it) and the comment, then on a new line
+ * who wrote it and when. A note left without changing the flag has no tag. Comments are free
+ * text and names come from the user record, so both are escaped.
+ *
+ * @var string|null $tag      the flag label the caseworker changed the check to; null for a note
+ * @var string|null $tagClass the GOV.UK tag class for $tag
+ * @var string|null $comment  the comment; null or empty when none was given
+ * @var string|null $author   who answered the check; null when the name is not known
+ * @var string|null $date     when they answered it, already formatted; null when not known
+ * @var bool        $answered whether a caseworker has answered the check at all
+ */
+
+if (!$answered) {
+    echo '-';
+
+    return;
+}
+?>
+<?php if ($tag !== null) : ?>
+  <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$tagClass); ?>">
+    <?php echo $this->escapeHtml($tag); ?>
+  </strong>
+<?php endif; ?>
+<?php echo $this->escapeHtml(($comment ?? '') !== '' ? $comment : '-'); ?>
+<?php // Who and when, as its own line with a little space above it. A span, not a div, so it ?>
+<?php // is valid wherever the comment sits (inside a paragraph on the summary page, for one). ?>
+<span class="govuk-!-display-block govuk-!-margin-top-2">
+  <strong><?php echo $this->escapeHtml($author ?? 'Unknown user'); ?></strong>
+  <?php if (($date ?? null) !== null) : ?>
+    <?php echo $this->escapeHtml($date); ?>
+  <?php endif; ?>
+</span>

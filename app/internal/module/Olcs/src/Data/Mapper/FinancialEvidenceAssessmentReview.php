@@ -49,7 +49,8 @@ final class FinancialEvidenceAssessmentReview
      *         kept: bool,
      *         changedTo: string|null,
      *         changedToTag: string|null,
-     *         changedBy: string|null
+     *         changedBy: string|null,
+     *         changedOn: string|null
      *     }>,
      *     passes: list<array{
      *         key: string,
@@ -64,7 +65,8 @@ final class FinancialEvidenceAssessmentReview
      *         kept: bool,
      *         changedTo: string|null,
      *         changedToTag: string|null,
-     *         changedBy: string|null
+     *         changedBy: string|null,
+     *         changedOn: string|null
      *     }>,
      *     passCount: int,
      *     unchangedIssueCount: int
@@ -165,6 +167,8 @@ final class FinancialEvidenceAssessmentReview
             'changedTo' => ($changed || $kept) ? $row['flag'] : null,
             'changedToTag' => ($changed || $kept) ? $row['flagTag'] : null,
             'changedBy' => $override['changedBy'] ?? null,
+            // Already formatted for display (dd/mm/yyyy) by FinancialEvidenceAssessmentTab.
+            'changedOn' => $override['changedOn'] ?? null,
         ];
     }
 }

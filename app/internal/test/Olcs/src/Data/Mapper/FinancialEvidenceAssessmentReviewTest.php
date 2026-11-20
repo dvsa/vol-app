@@ -70,6 +70,7 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
                 'changedTo' => null,
                 'changedToTag' => null,
                 'changedBy' => null,
+                'changedOn' => null,
             ],
             $page['issues'][0]
         );
@@ -148,6 +149,8 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
         $this->assertSame('FAIL', $pass['changedTo']);
         $this->assertSame('govuk-tag--red', $pass['changedToTag']);
         $this->assertSame('Sam Taylor', $pass['changedBy']);
+        // The date is carried with the name, formatted for display, for the comment's second line.
+        $this->assertSame('08/10/2026', $pass['changedOn']);
         $this->assertSame('Reconsidered after a second look', $pass['comment']);
         // Still unresolved, even though it is shown in the passes list: it currently reads as a
         // fail, so it still counts, decoupled from which section it happens to be shown in.

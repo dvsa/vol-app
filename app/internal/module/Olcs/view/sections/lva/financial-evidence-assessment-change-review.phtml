@@ -56,33 +56,27 @@
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Flag</dt>
         <dd class="govuk-summary-list__value">
-          <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($issue['flagTag']); ?>">
-            <?php echo $this->escapeHtml($issue['flag']); ?>
-          </strong>
+          <?php // The analyser's flag, greyed out when a caseworker changed it (the new flag is with their comment). ?>
+          <?php echo $this->partial('partials/financial-evidence/flag', [
+            'original' => $issue['changed'] ? $issue['flag'] : null,
+            'current' => $issue['changed'] ? $issue['changedTo'] : $issue['flag'],
+            'currentTag' => $issue['changed'] ? $issue['changedToTag'] : $issue['flagTag'],
+          ]); ?>
           <?php echo $this->escapeHtml((string)($issue['remark'] ?? '')); ?>
-          <?php // A real change shows what it moved to; a note says the flag was kept. ?>
-          <?php if ($issue['changed']) : ?>
-            <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
-              Changed to
-              <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$issue['changedToTag']); ?>">
-                <?php echo $this->escapeHtml((string)$issue['changedTo']); ?>
-              </strong>
-              by <strong><?php echo $this->escapeHtml($issue['changedBy'] ?? 'Unknown user'); ?></strong>
-            </p>
-          <?php elseif ($issue['kept']) : ?>
-            <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
-              Kept as
-              <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$issue['changedToTag']); ?>">
-                <?php echo $this->escapeHtml((string)$issue['changedTo']); ?>
-              </strong>
-              by <strong><?php echo $this->escapeHtml($issue['changedBy'] ?? 'Unknown user'); ?></strong>
-            </p>
-          <?php endif; ?>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Comment</dt>
-        <dd class="govuk-summary-list__value"><?php echo $this->escapeHtml($issue['comment'] ?? '-'); ?></dd>
+        <dd class="govuk-summary-list__value">
+          <?php echo $this->partial('partials/financial-evidence/comment', [
+            'tag' => $issue['changed'] ? $issue['changedTo'] : null,
+            'tagClass' => $issue['changed'] ? $issue['changedToTag'] : null,
+            'comment' => $issue['comment'],
+            'author' => $issue['changedBy'],
+            'date' => $issue['changedOn'],
+            'answered' => $issue['changed'] || $issue['kept'],
+          ]); ?>
+        </dd>
       </div>
     </dl>
 
@@ -174,27 +168,12 @@
           <?php if ($pass['value'] !== null) : ?>
             <?php echo $this->escapeHtml($pass['value']); ?>
           <?php endif; ?>
-          <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$pass['flagTag']); ?>">
-            <?php echo $this->escapeHtml((string)$pass['flag']); ?>
-          </strong>
-          <?php // A real change shows what it moved to; a note says the flag was kept. ?>
-          <?php if ($pass['changed']) : ?>
-            <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
-              Changed to
-              <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$pass['changedToTag']); ?>">
-                <?php echo $this->escapeHtml((string)$pass['changedTo']); ?>
-              </strong>
-              by <strong><?php echo $this->escapeHtml($pass['changedBy'] ?? 'Unknown user'); ?></strong>
-            </p>
-          <?php elseif ($pass['kept']) : ?>
-            <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
-              Kept as
-              <strong class="govuk-tag <?php echo $this->escapeHtmlAttr((string)$pass['changedToTag']); ?>">
-                <?php echo $this->escapeHtml((string)$pass['changedTo']); ?>
-              </strong>
-              by <strong><?php echo $this->escapeHtml($pass['changedBy'] ?? 'Unknown user'); ?></strong>
-            </p>
-          <?php endif; ?>
+          <?php // The analyser's flag, greyed out when a caseworker changed it (the new flag is with their comment). ?>
+          <?php echo $this->partial('partials/financial-evidence/flag', [
+            'original' => $pass['changed'] ? $pass['flag'] : null,
+            'current' => $pass['changed'] ? $pass['changedTo'] : $pass['flag'],
+            'currentTag' => $pass['changed'] ? $pass['changedToTag'] : $pass['flagTag'],
+          ]); ?>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -206,7 +185,16 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Comment</dt>
-        <dd class="govuk-summary-list__value"><?php echo $this->escapeHtml($pass['comment'] ?? '-'); ?></dd>
+        <dd class="govuk-summary-list__value">
+          <?php echo $this->partial('partials/financial-evidence/comment', [
+            'tag' => $pass['changed'] ? $pass['changedTo'] : null,
+            'tagClass' => $pass['changed'] ? $pass['changedToTag'] : null,
+            'comment' => $pass['comment'],
+            'author' => $pass['changedBy'],
+            'date' => $pass['changedOn'],
+            'answered' => $pass['changed'] || $pass['kept'],
+          ]); ?>
+        </dd>
       </div>
     </dl>
 
