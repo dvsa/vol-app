@@ -21,6 +21,8 @@ class FinancialEvidenceDecision
     #[Annotation\Validator('Laminas\Validator\Digits')]
     public $analysisId = null;
 
+    public const string MSG_SELECT_DECISION = 'Select a decision';
+
     #[Annotation\Required(true)]
     #[Annotation\Type('Radio')]
     #[Annotation\Attributes(['radios_wrapper_attributes' => ['class' => 'govuk-radios--standard']])]
@@ -32,6 +34,9 @@ class FinancialEvidenceDecision
             'APPROVED' => 'Accept financial evidence',
             'REJECTED' => 'Reject financial evidence',
         ],
+    ])]
+    #[Annotation\Validator('Laminas\Validator\NotEmpty', options: [
+        'messages' => ['isEmpty' => self::MSG_SELECT_DECISION],
     ])]
     public $decision = null;
 

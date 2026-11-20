@@ -7,10 +7,37 @@
  * Issues come from Olcs\Data\Mapper\FinancialEvidenceAssessmentReview as plain text and are
  * escaped here (remarks are model-generated, comments are free text). The passes table is built
  * by the table helper, whose formatters escape it. Both forms post back to this page, which
- * redirects after handling them.
+ * redirects after handling them, or shows the page again with the errors of an invalid form.
+ *
+ * One override form serves every issue. When it failed, $failedRow names the issue it was posted
+ * for: only that issue keeps the posted values and errors, and its disclosure starts open.
  */
+
+$failedRow = $failedRow ?? null;
+$failedOverride = null;
+
+if ($failedRow !== null) {
+    // Ids match the failed issue's fields so the error summary links to them.
+    $overrideForm->get('changeRecommendation')->setAttribute('id', 'changeRecommendation-' . $failedRow);
+    $overrideForm->get('comment')->setAttribute('id', 'comment-' . $failedRow);
+
+    // Kept before the loop below resets the shared form for every other issue.
+    $failedOverride = [
+        'changeRecommendation' => [
+            'value' => $overrideForm->get('changeRecommendation')->getValue(),
+            'messages' => $overrideForm->get('changeRecommendation')->getMessages(),
+        ],
+        'comment' => [
+            'value' => $overrideForm->get('comment')->getValue(),
+            'messages' => $overrideForm->get('comment')->getMessages(),
+        ],
+    ];
+}
 ?>
 <a class="govuk-back-link" href="<?php echo $this->escapeHtmlAttr($backUrl); ?>">Back</a>
+
+<?php echo $this->formErrors($overrideForm); ?>
+<?php echo $this->formErrors($decisionForm); ?>
 
 <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Finance evidence document overview</h2>
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
@@ -68,15 +95,20 @@
 
   <?php if (!$issue['changed']) : ?>
     <?php
-    // One override form serves every issue; only the row differs. Values are reset so one
-    // issue's input never shows against another, and ids are made unique per issue.
+    // One override form serves every issue; only the row differs. Values and errors are reset so
+    // one issue's input never shows against another, and ids are made unique per issue.
+    $isFailed = $failedOverride !== null && $issue['key'] === $failedRow;
     $overrideForm->get('analysisId')->setValue((string)$analysisId);
     $overrideForm->get('row')->setValue($issue['key']);
-    $overrideForm->get('changeRecommendation')->setValue('N')->setAttribute('id', 'changeRecommendation-' . $issue['key']);
-    $overrideForm->get('comment')->setValue('')->setAttribute('id', 'comment-' . $issue['key']);
+    foreach (['changeRecommendation', 'comment'] as $field) {
+        $overrideForm->get($field)
+            ->setValue($isFailed ? $failedOverride[$field]['value'] : null)
+            ->setMessages($isFailed ? $failedOverride[$field]['messages'] : [])
+            ->setAttribute('id', $field . '-' . $issue['key']);
+    }
     ?>
     <?php // A native disclosure, as in the design; it works without JavaScript, unlike an accordion. ?>
-    <details class="govuk-details" id="change-<?php echo $key; ?>">
+    <details class="govuk-details" id="change-<?php echo $key; ?>"<?php echo $isFailed ? ' open' : ''; ?>>
       <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">Do you want to change the recommendation above?</span>
       </summary>

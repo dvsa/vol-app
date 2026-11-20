@@ -576,6 +576,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertSame('rendered-table', $view->getVariable('passesTable'));
         $this->assertSame($overrideForm, $view->getVariable('overrideForm'));
         $this->assertSame($decisionForm, $view->getVariable('decisionForm'));
+        $this->assertNull($view->getVariable('failedRow'));
         $this->assertSame('/back', $view->getVariable('backUrl'));
     }
 
@@ -644,32 +645,46 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->override($sut, $post, true);
     }
 
-    public function testOverrideWithoutAReasonAsksForOne(): void
+    public static function overrideFieldErrorProvider(): \Iterator
     {
-        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''];
-        $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->expects('addErrorMessage')->with('Enter a reason for changing the recommendation');
-
-        $sut = $this->createSut(ApplicationController::class, $flash);
-        $sut->allows('getRequest')->andReturn($this->postRequest($post));
-        $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
-
-        $this->override($sut, $post, false);
+        yield 'no answer' => [
+            ['analysisId' => '9', 'row' => 'largeDeposit', 'comment' => ''],
+            ['changeRecommendation' => ['isEmpty' => 'Select yes if you want to change this recommendation to a pass']],
+        ];
+        yield 'yes without a reason' => [
+            ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''],
+            ['comment' => ['isEmpty' => 'Enter a reason for changing the recommendation']],
+        ];
+        yield 'yes with a reason over 1,000 characters' => [
+            ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => str_repeat('a', 1001)],
+            ['comment' => ['stringLengthTooLong' => 'Reason for the change must be 1,000 characters or fewer']],
+        ];
     }
 
-    public function testOverrideWithAnInvalidFormThatIsNotAMissingReasonReadsAsUnknownError(): void
+    /**
+     * A missing answer, or a missing or too long reason, shows the page again with the form that
+     * failed, so its errors sit against the issue's fields; nothing is sent and nothing is flashed.
+     */
+    #[DataProvider('overrideFieldErrorProvider')]
+    public function testOverrideFieldErrorsAreShownOnThePage(array $post, array $messages): void
     {
-        $post = ['analysisId' => 'x', 'row' => 'largeDeposit', 'changeRecommendation' => 'N'];
         $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->expects('addUnknownError');
+        $flash->shouldNotReceive('addErrorMessage', 'addUnknownError');
 
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
-        $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $sut->shouldNotReceive('handleCommand', 'redirect');
 
-        $this->override($sut, $post, false);
+        $form = $this->reviewForm($post, false, $post + ['changeRecommendation' => null]);
+        $decisionForm = m::mock(Form::class);
+        $page = $this->reviewPage();
+        $view = new ViewModel();
+        $sut->expects('renderChangeReview')->with(9, $page, $form, $decisionForm, 'largeDeposit')->andReturn($view);
+
+        $this->assertSame(
+            $view,
+            (new \ReflectionMethod($sut, 'processOverride'))->invoke($sut, $form, $decisionForm, 9, $page)
+        );
     }
 
     /** The posted analysis must be the one the page was opened for. */
@@ -718,18 +733,23 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
 
     // ---- processDecision (the refusals are covered above) ----
 
-    public function testDecisionWithoutASelectionAsksForOne(): void
+    public function testDecisionWithoutASelectionIsShownOnThePage(): void
     {
         $post = ['analysisId' => '9', 'saveDecision' => 'decide'];
         $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->expects('addErrorMessage')->with('Select a decision');
+        $flash->shouldNotReceive('addErrorMessage', 'addUnknownError');
 
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
-        $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $sut->shouldNotReceive('handleCommand', 'redirect');
 
-        (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, false), 9);
+        $form = $this->reviewForm($post, false);
+        $overrideForm = m::mock(Form::class);
+        $page = $this->reviewPage();
+        $view = new ViewModel();
+        $sut->expects('renderChangeReview')->with(9, $page, $overrideForm, $form)->andReturn($view);
+
+        $this->assertSame($view, $this->decideWith($sut, $form, $overrideForm, $page));
     }
 
     public function testDecisionForAnotherAnalysisSendsNothing(): void
@@ -743,7 +763,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut->shouldNotReceive('handleCommand');
         $this->expectRedirectToRefresh($sut);
 
-        (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9);
+        $this->decideWith($sut, $this->reviewForm($post, true));
     }
 
     public static function decisionProvider(): \Iterator
@@ -771,7 +791,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
 
         $this->assertSame(
             $response,
-            (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9)
+            $this->decideWith($sut, $this->reviewForm($post, true))
         );
     }
 
@@ -814,9 +834,27 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     private function override(m\MockInterface $sut, array $post, bool $formIsValid, ?array $analysis = null): mixed
     {
         $page = ReviewPageMapper::mapFromAnalysis($analysis ?? $this->assessedAnalysis(9, 'fail'));
+        // The controller adds the radio's key when it was not posted.
+        $form = $this->reviewForm($post, $formIsValid, $post + ['changeRecommendation' => null]);
 
         return (new \ReflectionMethod($sut, 'processOverride'))
-            ->invoke($sut, $this->reviewForm($post, $formIsValid), 9, $page);
+            ->invoke($sut, $form, m::mock(Form::class), 9, $page);
+    }
+
+    /** Runs processDecision for analysis 9. */
+    private function decideWith(
+        m\MockInterface $sut,
+        Form $form,
+        ?Form $overrideForm = null,
+        ?array $page = null
+    ): mixed {
+        return (new \ReflectionMethod($sut, 'processDecision'))
+            ->invoke($sut, $form, $overrideForm ?? m::mock(Form::class), 9, $page ?? $this->reviewPage());
+    }
+
+    private function reviewPage(): array
+    {
+        return ReviewPageMapper::mapFromAnalysis($this->assessedAnalysis(9, 'fail'));
     }
 
     /**
@@ -882,12 +920,14 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
      * A review form that receives the post and reports the given validity.
      *
      * @param array<string, mixed> $post
+     * @param array<string, mixed>|null $expectedData What setData receives, when not the post as posted
      */
-    private function reviewForm(array $post, bool $isValid): Form|m\MockInterface
+    private function reviewForm(array $post, bool $isValid, ?array $expectedData = null): Form|m\MockInterface
     {
+        $expected = $expectedData ?? $post;
         $form = m::mock(Form::class);
         $form->expects('setData')->with(m::on(
-            static fn($data): bool => $data instanceof Parameters && $data->toArray() === $post
+            static fn($data): bool => ($data instanceof Parameters ? $data->toArray() : $data) === $expected
         ));
         $form->allows('isValid')->andReturn($isValid);
         $form->allows('getData')->andReturn($post);
@@ -955,7 +995,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             ->andReturn($apiResponse);
         $redirectResponse = $this->expectRedirectToRefresh($sut);
 
-        $result = (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9);
+        $result = $this->decideWith($sut, $this->reviewForm($post, true));
         $this->assertSame($redirectResponse, $result);
 
         return $result;

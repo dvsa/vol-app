@@ -74,7 +74,17 @@
     },
     "decision": {
       "name": "decision",
-      "required": true
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "Select a decision"
+            }
+          }
+        }
+      ]
     }
   }
 }

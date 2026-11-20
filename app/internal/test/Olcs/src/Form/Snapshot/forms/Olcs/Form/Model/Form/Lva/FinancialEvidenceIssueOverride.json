@@ -30,7 +30,9 @@
         "name": "changeRecommendation",
         "attributes": {
           "required": "required",
-          "value": "N"
+          "radios_wrapper_attributes": {
+            "class": "govuk-radios--standard govuk-radios--inline"
+          }
         },
         "type": "Radio",
         "options": {
@@ -40,7 +42,10 @@
             "Y": "Yes"
           },
           "fieldset-attributes": {
-            "class": "inline"
+            "class": "govuk-fieldset"
+          },
+          "legend-attributes": {
+            "class": "govuk-fieldset__legend govuk-fieldset__legend--s"
           }
         }
       }
@@ -113,7 +118,17 @@
     },
     "changeRecommendation": {
       "name": "changeRecommendation",
-      "required": true
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "Select yes if you want to change this recommendation to a pass"
+            }
+          }
+        }
+      ]
     },
     "comment": {
       "name": "comment",
@@ -140,12 +155,21 @@
             "allow_empty": false,
             "validators": [
               {
-                "name": "Laminas\\Validator\\NotEmpty"
+                "name": "Laminas\\Validator\\NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "Enter a reason for changing the recommendation"
+                  }
+                },
+                "break_chain_on_failure": true
               },
               {
                 "name": "Laminas\\Validator\\StringLength",
                 "options": {
-                  "max": 1000
+                  "max": 1000,
+                  "messages": {
+                    "stringLengthTooLong": "Reason for the change must be 1,000 characters or fewer"
+                  }
                 }
               }
             ]

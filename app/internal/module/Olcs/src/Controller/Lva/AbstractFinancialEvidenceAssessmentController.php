@@ -304,11 +304,11 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             $post = $this->getRequest()->getPost();
 
             if ($post->get('saveOverride') === self::CHANGE_OVERRIDE) {
-                return $this->processOverride($overrideForm, $analysisId, $page);
+                return $this->processOverride($overrideForm, $decisionForm, $analysisId, $page);
             }
 
             if ($post->get('saveDecision') === self::CHANGE_DECIDE) {
-                return $this->processDecision($decisionForm, $analysisId);
+                return $this->processDecision($decisionForm, $overrideForm, $analysisId, $page);
             }
 
             $this->flashMessengerHelper->addUnknownError();
@@ -316,6 +316,21 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             return $this->redirect()->refresh();
         }
 
+        return $this->renderChangeReview($analysisId, $page, $overrideForm, $decisionForm);
+    }
+
+    /**
+     * The change document review page. Also shown, without a redirect, when one of its forms is
+     * invalid, so that form keeps the caseworker's input and shows its errors against the fields.
+     * $failedRow names the issue whose override form failed, so only that issue shows them.
+     */
+    protected function renderChangeReview(
+        int $analysisId,
+        array $page,
+        FormInterface $overrideForm,
+        FormInterface $decisionForm,
+        ?string $failedRow = null
+    ) {
         $decisionForm->get('analysisId')->setValue((string)$analysisId);
 
         // Issues are short key/value lists rendered directly by the view; only the passes,
@@ -329,6 +344,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             'passesTable'  => $this->tableFactory->prepareTable('financial-evidence-assessment-passes', $page['passes']),
             'overrideForm' => $overrideForm,
             'decisionForm' => $decisionForm,
+            'failedRow'    => $failedRow,
             'backUrl'      => $this->url()->fromRoute($this->sectionRoute(), [], [], true),
         ]);
         $view->setTemplate('sections/lva/financial-evidence-assessment-change-review');
@@ -337,22 +353,25 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * Change one issue to a pass. "No" changes nothing; "Yes" needs a reason, and the API refuses
-     * a row that is not currently a fail or skipped, or an analysis already decided.
+     * Change one issue to a pass. "No" changes nothing; "Yes" needs a reason of up to 1,000
+     * characters. An invalid form (no answer, or "Yes" without a usable reason) is shown again
+     * with its errors against the issue's fields. The API refuses a row that is not currently a
+     * fail or skipped, or an analysis already decided.
      */
-    protected function processOverride(FormInterface $form, int $analysisId, array $page)
-    {
+    protected function processOverride(
+        FormInterface $form,
+        FormInterface $decisionForm,
+        int $analysisId,
+        array $page
+    ) {
         $post = $this->getRequest()->getPost();
-        $form->setData($post);
+        // An unanswered radio is not posted at all, but the reason's conditional check needs the key.
+        $form->setData($post->toArray() + ['changeRecommendation' => null]);
 
         if (!$form->isValid()) {
-            if ($post->get('changeRecommendation') === 'Y') {
-                $this->flashMessengerHelper->addErrorMessage('Enter a reason for changing the recommendation');
-            } else {
-                $this->flashMessengerHelper->addUnknownError();
-            }
+            $row = $post->get('row');
 
-            return $this->redirect()->refresh();
+            return $this->renderChangeReview($analysisId, $page, $form, $decisionForm, is_string($row) ? $row : null);
         }
 
         $data = $form->getData();
@@ -398,16 +417,19 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     /**
      * Record the caseworker's decision. The API refuses acceptance while any issue is unchanged;
      * that refusal is explained, anything else reads as not recorded. A recorded decision ends the
-     * review, so the caseworker goes back to the tabs.
+     * review, so the caseworker goes back to the tabs. An invalid form (no decision selected) is
+     * shown again with its error against the field.
      */
-    protected function processDecision(FormInterface $form, int $analysisId)
-    {
+    protected function processDecision(
+        FormInterface $form,
+        FormInterface $overrideForm,
+        int $analysisId,
+        array $page
+    ) {
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
-            $this->flashMessengerHelper->addErrorMessage('Select a decision');
-
-            return $this->redirect()->refresh();
+            return $this->renderChangeReview($analysisId, $page, $overrideForm, $form);
         }
 
         $data = $form->getData();
