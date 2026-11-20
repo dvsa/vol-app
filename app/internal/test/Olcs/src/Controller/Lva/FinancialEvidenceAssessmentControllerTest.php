@@ -855,86 +855,62 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertSame($response, $this->passOverride($sut, $post, true));
     }
 
-    public function testPassOverrideWithoutDetailAsksForSome(): void
+    /**
+     * The form holds every rule the caseworker can fall foul of, with its message. When it does
+     * not validate on the fields they fill in, nothing is flashed, nothing is sent and the page
+     * is not redirected: it is drawn again for that check, with the form's own messages.
+     */
+    #[DataProvider('caseworkerFieldProvider')]
+    public function testPassOverrideShowsTheFormsOwnErrorsOnTheCheck(array $messages): void
     {
         $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''];
 
-        // The message goes on the form, against the field it is about, for the framework's own
-        // helpers to render; nothing is flashed and the page is drawn again, not redirected.
-        $form = $this->reviewForm($post, true);
-        $form->expects('setMessages')->with(['comment' => ['You must provide explanatory text.']]);
-
         $sut = $this->createSut(ApplicationController::class, m::mock(FlashMessengerHelperService::class));
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
         $sut->shouldNotReceive('redirect');
 
-        $this->assertNull($this->passOverride($sut, $post, true, null, $form));
+        $this->assertNull($this->passOverride($sut, $post, false, null, $this->reviewForm($post, false, $messages)));
         $this->assertSame('largeDeposit', $this->passOverrideErrorRow($sut));
     }
 
-    /**
-     * Neither Yes nor No is selected until the caseworker chooses (the VOL-7338 design), so a
-     * save can arrive with no answer. It is asked for by name rather than read as an unknown
-     * error, and nothing is sent.
-     */
-    #[DataProvider('passOverrideNoSelectionProvider')]
-    public function testPassOverrideWithNeitherYesNorNoSelectedAsksForOne(array $post): void
+    public static function caseworkerFieldProvider(): \Iterator
     {
-        // The form is invalid without the radio; the missing answer is what is reported, on the
-        // form against the radios, and the page is drawn again with what was entered kept.
-        $form = $this->reviewForm($post, false);
-        $form->expects('setMessages')->with(['changeRecommendation' => ['Select yes or no']]);
-
-        $sut = $this->createSut(ApplicationController::class, m::mock(FlashMessengerHelperService::class));
-        $sut->allows('getRequest')->andReturn($this->postRequest($post));
-        $sut->shouldNotReceive('handleCommand');
-        $sut->shouldNotReceive('redirect');
-
-        $this->assertNull($this->passOverride($sut, $post, false, null, $form));
-        $this->assertSame('largeDeposit', $this->passOverrideErrorRow($sut));
+        yield 'no answer' => [['changeRecommendation' => ['Select yes if you want to change the outcome of this issue']]];
+        yield 'no reason' => [['comment' => ['You must provide explanatory text.']]];
+        yield 'too long' => [['comment' => ['More detail must be 1,000 characters or fewer']]];
+        yield 'both fields' => [['changeRecommendation' => ['x'], 'comment' => ['y']]];
     }
 
     /**
-     * A field error needs a check's form to be shown on. If the posted row is not one of the
-     * page's passed checks there is none, so the message is flashed and the page redirected.
+     * An invalid form the caseworker cannot put right reads as an unknown error: a hidden field
+     * with a bad value or an expired security token (alone or alongside a field error), or a row
+     * that is not one of the page's passed checks, which has no form to show the message on.
      */
-    public function testPassOverrideFieldErrorForARowThatIsNotAPassedCheckIsFlashed(): void
+    #[DataProvider('brokenFormProvider')]
+    public function testPassOverrideWithABrokenFormReadsAsUnknownError(string $row, array $messages): void
     {
-        $post = ['analysisId' => '9', 'row' => 'bank', 'comment' => 'x'];
-        $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->expects('addErrorMessage')->with('Select yes or no');
-
-        $form = $this->reviewForm($post, false);
-        $form->shouldNotReceive('setMessages');
-
-        $sut = $this->createSut(ApplicationController::class, $flash);
-        $sut->allows('getRequest')->andReturn($this->postRequest($post));
-        $sut->shouldNotReceive('handleCommand');
-        $response = $this->expectRedirectBackToChangeReview($sut);
-
-        $this->assertSame($response, $this->passOverride($sut, $post, false, null, $form));
-        $this->assertNull($this->passOverrideErrorRow($sut));
-    }
-
-    public static function passOverrideNoSelectionProvider(): \Iterator
-    {
-        yield 'not posted' => [['analysisId' => '9', 'row' => 'largeDeposit', 'comment' => 'x']];
-        yield 'empty' => [['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => '', 'comment' => 'x']];
-    }
-
-    public function testPassOverrideWithAnInvalidFormThatIsNotMissingDetailReadsAsUnknownError(): void
-    {
-        $post = ['analysisId' => 'x', 'row' => 'largeDeposit', 'changeRecommendation' => 'N'];
+        $post = ['analysisId' => '9', 'row' => $row, 'changeRecommendation' => 'Y', 'comment' => ''];
         $flash = m::mock(FlashMessengerHelperService::class);
         $flash->expects('addUnknownError');
 
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectBackToChangeReview($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
-        $this->passOverride($sut, $post, false);
+        $this->assertSame($response, $this->passOverride($sut, $post, false, null, $this->reviewForm($post, false, $messages)));
+        $this->assertNull($this->passOverrideErrorRow($sut));
+    }
+
+    public static function brokenFormProvider(): \Iterator
+    {
+        yield 'a hidden field' => ['largeDeposit', ['analysisId' => ['not digits']]];
+        yield 'the security token' => ['largeDeposit', ['security' => ['expired']]];
+        yield 'a hidden field as well as a visible one' => ['largeDeposit', ['row' => ['x'], 'comment' => ['y']]];
+        yield 'no messages at all' => ['largeDeposit', []];
+        yield 'a row that is not a passed check' => ['bank', ['comment' => ['You must provide explanatory text.']]];
+        yield 'a made-up row' => ['nonsense', ['comment' => ['You must provide explanatory text.']]];
     }
 
     /** The posted analysis must be the one the page was opened for. */
@@ -1256,7 +1232,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
      *
      * @param array<string, mixed> $post
      */
-    private function reviewForm(array $post, bool $isValid): Form|m\MockInterface
+    private function reviewForm(array $post, bool $isValid, array $messages = []): Form|m\MockInterface
     {
         $form = m::mock(Form::class);
         $form->expects('setData')->with(m::on(
@@ -1264,6 +1240,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         ));
         $form->allows('isValid')->andReturn($isValid);
         $form->allows('getData')->andReturn($post);
+        $form->allows('getMessages')->andReturn($messages);
 
         return $form;
     }

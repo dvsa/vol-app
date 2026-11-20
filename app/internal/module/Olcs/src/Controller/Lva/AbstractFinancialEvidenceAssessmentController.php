@@ -92,6 +92,9 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     public const string MSG_UNCHANGED_ISSUES =
         'Change all failed and skipped checks to a pass before you accept the financial evidence';
 
+    /** The fields of the passed-check form that the caseworker fills in; the rest are hidden. */
+    private const array PASS_OVERRIDE_CASEWORKER_FIELDS = ['changeRecommendation', 'comment'];
+
     private const string SECTION_ROUTE = 'lva-%s/financial_evidence_assessment';
 
     /**
@@ -445,7 +448,8 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
      *
      * The answer stands and can be revisited, so a check already changed is handled like any
      * other. "Yes" makes it a fail (or keeps it one and replaces the comment); every row here is
-     * a genuine pass, so that always needs a reason. "No" means the analyser's outcome stands,
+     * a genuine pass, so that always needs a reason, which the form enforces along with its other
+     * rules. "No" means the analyser's outcome stands,
      * which changes a check already failed back to a pass: with text, the text is kept as a
      * note; with none, the caseworker's entry for the check is deleted. "No" with nothing typed
      * on a check nobody has answered is nothing to send. The API refuses a row the analyser did
@@ -456,17 +460,11 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $post = $this->getRequest()->getPost();
         $form->setData($post);
 
-        // Neither radio is selected until the caseworker chooses (the VOL-7338 design), so a save
-        // can arrive without an answer. That leaves the form invalid, but it is the caseworker's
-        // to put right, so it is asked for by name rather than reported as an unknown error.
-        if (!in_array($post->get('changeRecommendation'), ['Y', 'N'], true)) {
-            return $this->passOverrideFieldError($form, $post, $page, 'changeRecommendation', 'Select yes or no');
-        }
-
+        // Every rule the caseworker can fall foul of (no answer, "Yes" with no reason, text over
+        // the limit) is the form's, with its message. An invalid form is shown again with those
+        // messages against their fields; nothing is sent to the API.
         if (!$form->isValid()) {
-            $this->flashMessengerHelper->addUnknownError();
-
-            return $this->redirectBackToChangeReview();
+            return $this->passOverrideFormErrors($form, $post, $page);
         }
 
         $data = $form->getData();
@@ -493,11 +491,6 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         // for the check altogether (a change is undone, a note removed).
         $changeBack = !$changeToFail && $pass['changed'];
         $answered = $pass['changed'] || $pass['kept'];
-
-        // Every row here is a genuine pass, so changing it to a fail always needs a reason.
-        if ($changeToFail && $comment === '') {
-            return $this->passOverrideFieldError($form, $post, $page, 'comment', 'You must provide explanatory text.');
-        }
 
         if (!$changeToFail && $comment === '' && !$answered) {
             // Nothing to change, nothing to remove and nothing to say.
@@ -530,33 +523,36 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * Something on one passed check's form is the caseworker's to put right. The message is set
-     * on the form against the field it is about, as form validation does, so the framework's own
-     * formRow() renders it beside the field and the form keeps what the caseworker entered. The page is then drawn again rather than redirected.
+     * The form for one passed check did not validate. If that is something the caseworker can
+     * put right (the messages are all on the fields they fill in), the page is drawn again with
+     * the form's own messages against those fields and what they entered kept: formRow() renders
+     * them, as on any other form. Returns null so changeReviewAction() carries on to render.
      *
-     * Returns null so changeReviewAction() carries on to render. If the posted row is not one of
-     * the page's passed checks there is no form to show it on, so it falls back to a flash
-     * message and a redirect.
+     * Anything else is not theirs to fix (a hidden field with a bad value, an expired security
+     * token, a row that is not one of the page's passed checks), so it reads as an unknown error.
      *
      * @return \Laminas\Http\Response|null
      */
-    protected function passOverrideFieldError(
+    protected function passOverrideFormErrors(
         FormInterface $form,
         \Laminas\Stdlib\ParametersInterface $post,
         array $page,
-        string $field,
-        string $message
     ) {
         $row = (string)$post->get('row');
         $pass = self::findByKey($page['passes'], $row);
+        $fieldsInError = array_keys($form->getMessages());
 
-        if ($pass === null || !$pass['flagged']) {
-            $this->flashMessengerHelper->addErrorMessage($message);
+        $caseworkerCanFixIt = $fieldsInError !== []
+            && array_diff($fieldsInError, self::PASS_OVERRIDE_CASEWORKER_FIELDS) === []
+            && $pass !== null
+            && $pass['flagged'];
+
+        if (!$caseworkerCanFixIt) {
+            $this->flashMessengerHelper->addUnknownError();
 
             return $this->redirectBackToChangeReview();
         }
 
-        $form->setMessages([$field => [$message]]);
         $this->passOverrideErrorRow = $row;
 
         return null;

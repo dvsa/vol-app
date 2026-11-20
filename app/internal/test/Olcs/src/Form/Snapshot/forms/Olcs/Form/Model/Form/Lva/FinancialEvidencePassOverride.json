@@ -54,12 +54,13 @@
       "flags": [],
       "spec": {
         "name": "comment",
+        "attributes": {
+          "required": false,
+          "class": "extra-long"
+        },
         "type": "TextArea",
         "options": {
           "label": "Can you provide more detail?"
-        },
-        "attributes": {
-          "class": "extra-long"
         }
       }
     },
@@ -117,11 +118,12 @@
     },
     "changeRecommendation": {
       "name": "changeRecommendation",
-      "required": true
+      "required": true,
+      "error_message": "Select yes if you want to change the outcome of this issue"
     },
     "comment": {
       "name": "comment",
-      "required": false,
+      "required": true,
       "filters": [
         {
           "name": "Laminas\\Filter\\StringTrim"
@@ -129,9 +131,38 @@
       ],
       "validators": [
         {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "changeRecommendation",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "You must provide explanatory text."
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
           "name": "Laminas\\Validator\\StringLength",
           "options": {
-            "max": 1000
+            "max": 1000,
+            "messages": {
+              "stringLengthTooLong": "More detail must be 1,000 characters or fewer"
+            }
           }
         }
       ]
