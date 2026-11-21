@@ -434,8 +434,7 @@ final class ViewRenderingTest extends FrameworkTestCase
     }
 
     /**
-     * Rendering logs nothing. Anything logged would also start a PHP session: the log's SessionId processor
-     * starts one to read its id.
+     * Rendering logs nothing.
      */
     private function assertNothingLogged(ApiApplication $app): void
     {

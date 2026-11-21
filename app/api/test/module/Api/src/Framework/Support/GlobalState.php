@@ -24,7 +24,7 @@ use Olcs\Logging\Log\Processor\UserId;
  *  - Doctrine's global type registry: Roave registers the custom types, and Api Module::onBootstrap
  *    gives encrypted_string its cipher
  *  - the default session manager (Cli Module::onBootstrap) and PHP's own session: the Cli module installs
- *    a save handler, and the SessionId log processor starts a session the first time anything is logged
+ *    a save handler, and api code may start a session through it
  *  - autoloaders: the ModuleManager and the Cli module each register one
  *
  * Monolog also registers a shutdown function for fatal errors. That cannot be undone, and only acts

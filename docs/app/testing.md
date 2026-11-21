@@ -1241,19 +1241,16 @@ real class is already loaded. `S3ProcessorFactoryTest` and
   every environment's job definitions by `BatchJobTest`. CI's sparse checkout
   includes `infra/terraform` for it. The API's checks don't run when only the
   terraform changes, so a mistake made only in the terraform is reported by
-  the next API change. Jobs that are wrong in the terraform today are listed
-  in the test's `KNOWN_FAILURES`, which fails once one of them is fixed.
+  the next API change. A job that is wrong in the terraform and can't be
+  fixed straight away can be listed in the test's `KNOWN_FAILURES`, which
+  fails once the job is fixed.
 
 ### What they do not cover
 
-- **Headers that PHP sends itself.** The CLI SAPI discards them. Today these are:
-    - the headers a stream download sends with `header()`
-      (`GenericController::getList()` via `streamResult()`), though the body is
-      still captured;
-    - the `Set-Cookie: PHPSESSID` and no-cache headers that come with a PHP
-      session. The logger's `SessionId` processor starts one whenever a log record
-      is written: on every request locally, but only on requests that log a
-      warning or worse in the deployed environments.
+- **Headers that PHP sends itself.** The CLI SAPI discards them. Today these are
+  the headers a stream download sends with `header()`
+  (`GenericController::getList()` via `streamResult()`), though the body is
+  still captured.
 - **What `public/index.php` does after an exception escapes the application.**
   Today that happens when a bearer token is invalid or malformed: identity is
   resolved while bootstrapping, before laminas-mvc can turn the exception into

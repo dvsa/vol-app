@@ -448,10 +448,6 @@ final class HttpContractTest extends FrameworkTestCase
         // Wall-clock and random values
         unset($extra['microsecs']);
 
-        if (($extra['sessionId'] ?? '') !== '') {
-            $extra['sessionId'] = '(session id)';
-        }
-
         ksort($extra);
 
         $context = $record->context;

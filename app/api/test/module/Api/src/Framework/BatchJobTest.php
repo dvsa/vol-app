@@ -46,20 +46,13 @@ final class BatchJobTest extends FrameworkTestCase
     ];
 
     /**
-     * Jobs that are wrong in the terraform today, by job name, with the reason this test gives. Each is fixed
-     * in infra/terraform, not here; once a job is right in every environment the test fails until it is taken
-     * off this list, so the list cannot outlive the problem.
+     * Jobs known to be wrong in the terraform, by job name, with the reason this test gives; none at present.
+     * Each is fixed in infra/terraform, not here; once a job is right in every environment the test fails
+     * until it is taken off this list, so the list cannot outlive the problem.
+     *
+     * @var array<string, string>
      */
-    private const array KNOWN_FAILURES = [
-        // Monthly. It runs only because Symfony Console accepts an unambiguous abbreviation, so a new command
-        // whose name starts the same way would stop it.
-        'create-psv-licence-surrender-task' => '"batch:create-psv-licence-surrender-task" is only an abbreviation'
-            . ' of "batch:create-psv-licence-surrender-tasks"',
-        // Unscheduled, so it fails only when someone submits it. The laminas-mvc-console route it was meant
-        // for, `system-parameter <name> <value>`, went in the move to laminas-cli (March 2024) with no
-        // replacement; the job was added to the terraform four months later.
-        'system-parameter' => 'Command "batch:system-parameter" is not defined.',
-    ];
+    private const array KNOWN_FAILURES = [];
 
     public function testJobsStartFromTheCommandLineContainer(): void
     {

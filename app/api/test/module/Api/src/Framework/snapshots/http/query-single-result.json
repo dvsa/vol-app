@@ -50,7 +50,6 @@
         "correlationId": "framework-test-correlation-id",
         "remoteIp": "10.0.0.1",
         "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
-        "sessionId": "(session id)",
         "userId": "anon"
       }
     },
@@ -67,7 +66,6 @@
         "correlationId": "framework-test-correlation-id",
         "remoteIp": "10.0.0.1",
         "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
-        "sessionId": "(session id)",
         "userId": "anon"
       }
     },
@@ -85,7 +83,6 @@
         "correlationId": "framework-test-correlation-id",
         "remoteIp": "10.0.0.1",
         "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
-        "sessionId": "(session id)",
         "userId": "anon"
       }
     },
@@ -100,7 +97,6 @@
         "correlationId": "framework-test-correlation-id",
         "remoteIp": "10.0.0.1",
         "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
-        "sessionId": "(session id)",
         "userId": "anon"
       }
     }

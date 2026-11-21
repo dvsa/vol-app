@@ -10,7 +10,6 @@ use Dvsa\Olcs\Transfer\Service\CacheEncryption;
 use Dvsa\OlcsTest\Api\Framework\Support\ApiApplication;
 use Dvsa\OlcsTest\Api\Framework\Support\Entrypoint;
 use Dvsa\OlcsTest\Api\Framework\Support\FrameworkTestCase;
-use Dvsa\OlcsTest\Api\Framework\Support\InertSessionManager;
 use Dvsa\OlcsTest\Api\Framework\Support\JsonSnapshot;
 use Dvsa\OlcsTest\Api\Framework\Support\PortableValues;
 use Dvsa\OlcsTest\Api\Framework\Support\SystemUser;
@@ -18,7 +17,6 @@ use Laminas\I18n\Translator\LoaderPluginManager;
 use Laminas\ModuleManager\Listener\ServiceListener;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\ServiceManager;
-use Olcs\Logging\Log\Processor\SessionId;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
@@ -283,12 +281,7 @@ final class ContainerTest extends FrameworkTestCase
     }
 
     /**
-     * Boots the real application, with logging kept from starting a PHP session.
-     *
-     * The logger's SessionId processor calls SessionManager::start() for every record, and creating the
-     * services writes records (factories that catch a failure log it). Inside PHPUnit no headers have been
-     * sent, so that would start a real PHP session that outlives the test; the processor is given
-     * InertSessionManager instead. (ApiApplication points the database at a socket that does not exist, so
+     * Boots the real application. (ApiApplication points the database at a socket that does not exist, so
      * anything that queries it while being created fails at once, the same way on every machine.)
      */
     private function boot(Entrypoint $entrypoint, bool $withRealTranslationLoader = false): ApiApplication
@@ -299,10 +292,6 @@ final class ContainerTest extends FrameworkTestCase
                 if ($withRealTranslationLoader) {
                     self::useRealTranslationLoader($serviceManager);
                 }
-
-                $sessionId = $serviceManager->get(SessionId::class);
-                assert($sessionId instanceof SessionId);
-                $sessionId->setSessionManager(new InertSessionManager());
 
                 if ($entrypoint === Entrypoint::Cli) {
                     SystemUser::answerTheBootstrapLookup($serviceManager);
