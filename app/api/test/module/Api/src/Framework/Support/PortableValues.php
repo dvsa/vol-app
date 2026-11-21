@@ -10,7 +10,9 @@ namespace Dvsa\OlcsTest\Api\Framework\Support;
  *
  *  - the app (app/api) and repository roots become {app} and {repo}; libs are symlinked from
  *    vendor/olcs/* into lib/, so their __DIR__ paths resolve under the repository, not the app
- *  - the system temp directory (macOS /var/folders/..., Linux /tmp) becomes {tmp}
+ *  - the system temp directory becomes /tmp, as on Linux and in the deployed containers. A placeholder
+ *    would not do: config also hardcodes /tmp paths, and where the temp directory is /tmp the two can't be
+ *    told apart, so the snapshot would differ between macOS and Linux
  *  - closures and objects, which cannot be encoded, become "(closure)" and "(object Fqcn)"
  */
 final class PortableValues
@@ -32,11 +34,11 @@ final class PortableValues
         // The app root first: it starts with the repository root
         $value = str_replace([self::appRoot(), self::repoRoot()], ['{app}', '{repo}'], $value);
 
-        // Only as a whole path: on Linux the temp directory is /tmp, which other strings can contain
+        // Only as a whole path, so a temp directory that is a prefix of another path is left alone
         $tmp = rtrim(sys_get_temp_dir(), '/');
 
         if ($value === $tmp || str_starts_with($value, $tmp . '/')) {
-            $value = '{tmp}' . substr($value, strlen($tmp));
+            $value = '/tmp' . substr($value, strlen($tmp));
         }
 
         return $value;

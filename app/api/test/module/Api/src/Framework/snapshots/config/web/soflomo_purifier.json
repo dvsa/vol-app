@@ -2,6 +2,6 @@
   "standalone": false,
   "standalone_path": "vendor/ezyang/htmlpurifier/library/HTMLPurifier.standalone.php",
   "config": {
-    "Cache.SerializerPath": "{tmp}"
+    "Cache.SerializerPath": "/tmp"
   }
 }
