@@ -96,6 +96,8 @@ jobs:
           dir_names: true
           files: |
             app/cdn/**
+            app/*/module/*/assets/js/**
+            lib/olcs-common/Common/src/Common/assets/js/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v47
         id: changed-docker-files
