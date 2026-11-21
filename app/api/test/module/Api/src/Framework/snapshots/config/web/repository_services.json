@@ -223,6 +223,7 @@
     "RetrievalLinkDocument": "Dvsa\\Olcs\\Api\\Domain\\Repository\\RepositoryFactory",
     "RetrievalOtp": "Dvsa\\Olcs\\Api\\Domain\\Repository\\RepositoryFactory",
     "RetrievalLinkEvent": "Dvsa\\Olcs\\Api\\Domain\\Repository\\RepositoryFactory",
+    "NotifyMessage": "Dvsa\\Olcs\\Api\\Domain\\Repository\\RepositoryFactory",
     "Dvsa\\Olcs\\Api\\Domain\\Repository\\LetterSectionVariant": "Dvsa\\Olcs\\Api\\Domain\\Repository\\RepositoryFactory"
   },
   "aliases": {

@@ -201,6 +201,25 @@
     },
     "withoutTrailingSlash": "api/letter/letter-instance-todo/single/PUT"
   },
+  "api/letter/letter-instance-todo/single/DELETE": {
+    "request": "DELETE /api/letter/letter-instance-todo/101/",
+    "matches": "api/letter/letter-instance-todo/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceTodo\\DeleteCustom",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-instance-todo/single/DELETE"
+  },
+  "api/letter/letter-instance-todo/create-custom/POST": {
+    "request": "POST /api/letter/letter-instance-todo/create-custom",
+    "matches": "api/letter/letter-instance-todo/create-custom/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceTodo\\CreateCustom"
+    },
+    "withTrailingSlash": null
+  },
   "api/letter/letter-instance/single/GET": {
     "request": "GET /api/letter/letter-instance/101/",
     "query": {
@@ -268,12 +287,33 @@
     },
     "withTrailingSlash": "api/letter/letter-instance/single/GET"
   },
+  "api/letter/letter-instance/previously-sent/GET": {
+    "request": "GET /api/letter/letter-instance/previously-sent",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\PreviouslySent"
+    },
+    "matches": "api/letter/letter-instance/previously-sent/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\PreviouslySent"
+    },
+    "withTrailingSlash": "api/letter/letter-instance/single/GET"
+  },
   "api/letter/letter-instance/prepare-to-send/POST": {
     "request": "POST /api/letter/letter-instance/prepare-to-send",
     "matches": "api/letter/letter-instance/prepare-to-send/POST",
     "params": {
       "controller": "Api\\Generic",
       "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\PrepareToSend"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter/letter-instance/update-issues/POST": {
+    "request": "POST /api/letter/letter-instance/update-issues",
+    "matches": "api/letter/letter-instance/update-issues/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\UpdateIssues"
     },
     "withTrailingSlash": null
   },

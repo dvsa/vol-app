@@ -27,6 +27,7 @@
     "canAccessLicenceVehicle": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Validators\\CanAccessLicenceVehicle",
     "canAccessCorrespondenceInbox": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Validators\\CanAccessCorrespondenceInbox",
     "canAccessDocument": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Validators\\CanAccessDocument",
+    "canDownloadDocument": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Validators\\CanDownloadDocument",
     "canDeleteDocument": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Validators\\CanDeleteDocument",
     "canAccessSubmission": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Validators\\CanAccessSubmission",
     "canAccessCase": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Validators\\CanAccessCase",

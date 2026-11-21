@@ -8,5 +8,24 @@
       "id": "101"
     },
     "withoutTrailingSlash": "api/letter-instance-todo/single/PUT"
+  },
+  "api/letter-instance-todo/single/DELETE": {
+    "request": "DELETE /api/letter-instance-todo/101/",
+    "matches": "api/letter-instance-todo/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceTodo\\DeleteCustom",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-instance-todo/single/DELETE"
+  },
+  "api/letter-instance-todo/create-custom/POST": {
+    "request": "POST /api/letter-instance-todo/create-custom",
+    "matches": "api/letter-instance-todo/create-custom/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceTodo\\CreateCustom"
+    },
+    "withTrailingSlash": null
   }
 }

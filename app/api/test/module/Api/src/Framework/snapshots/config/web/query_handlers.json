@@ -497,6 +497,7 @@
     "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GetList": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\LetterInstance\\GetList",
     "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Preview": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\LetterInstance\\Preview",
     "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GenerationContext": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\LetterInstance\\GenerationContext",
+    "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\PreviouslySent": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\LetterInstance\\PreviouslySent",
     "Dvsa\\Olcs\\Transfer\\Query\\Letter\\MasterTemplate\\Get": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\MasterTemplate\\Get",
     "Dvsa\\Olcs\\Transfer\\Query\\Letter\\MasterTemplate\\GetList": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\MasterTemplate\\GetList",
     "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTestData\\Get": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\LetterTestData\\Get",

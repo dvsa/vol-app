@@ -250,6 +250,16 @@
     },
     "withoutTrailingSlash": "api/licence/single/addresses/PUT"
   },
+  "api/licence/single/sms-number/PUT": {
+    "request": "PUT /api/licence/101/sms-number/",
+    "matches": "api/licence/single/sms-number/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateSmsNumber",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/sms-number/PUT"
+  },
   "api/licence/single/safety/GET": {
     "request": "GET /api/licence/101/safety/",
     "query": {

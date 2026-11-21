@@ -6,15 +6,5 @@
   "http": {
     "adapter": "Laminas\\Http\\Client\\Adapter\\Curl"
   },
-  "send_all_mail_to": "1",
-  "notify": {
-    "passthrough_templates": {
-      "en_GB": "1",
-      "cy_GB": "1"
-    },
-    "proxy": "http://1"
-  },
-  "notify_test": {
-    "dsn": "1"
-  }
+  "send_all_mail_to": "1"
 }

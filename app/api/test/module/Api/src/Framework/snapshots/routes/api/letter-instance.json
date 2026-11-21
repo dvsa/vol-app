@@ -66,12 +66,33 @@
     },
     "withTrailingSlash": "api/letter-instance/single/GET"
   },
+  "api/letter-instance/previously-sent/GET": {
+    "request": "GET /api/letter-instance/previously-sent",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\PreviouslySent"
+    },
+    "matches": "api/letter-instance/previously-sent/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\PreviouslySent"
+    },
+    "withTrailingSlash": "api/letter-instance/single/GET"
+  },
   "api/letter-instance/prepare-to-send/POST": {
     "request": "POST /api/letter-instance/prepare-to-send",
     "matches": "api/letter-instance/prepare-to-send/POST",
     "params": {
       "controller": "Api\\Generic",
       "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\PrepareToSend"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter-instance/update-issues/POST": {
+    "request": "POST /api/letter-instance/update-issues",
+    "matches": "api/letter-instance/update-issues/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\UpdateIssues"
     },
     "withTrailingSlash": null
   }

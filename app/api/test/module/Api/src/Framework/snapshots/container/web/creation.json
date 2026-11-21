@@ -120,6 +120,7 @@
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\ApplicantProfileBuilder": "Dvsa\\Olcs\\Api\\Service\\Idp\\ApplicantProfileBuilder",
     "Dvsa\\Olcs\\Api\\Service\\Letter\\CompositionDiagnostics": "Dvsa\\Olcs\\Api\\Service\\Letter\\CompositionDiagnostics",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\IssueChange\\IssueChangePlanner": "Dvsa\\Olcs\\Api\\Service\\Letter\\IssueChange\\IssueChangePlanner",
     "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceComposer": "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceComposer",
     "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceGrabSnapshotter": "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceGrabSnapshotter",
     "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterPreviewService": "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterPreviewService",
@@ -211,6 +212,12 @@
     "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalPolicyResolver": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalPolicyResolver",
     "Dvsa\\Olcs\\Api\\Service\\Retrieval\\SessionGrantService": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\SessionGrantService",
     "Dvsa\\Olcs\\Api\\Service\\Retrieval\\TokenGenerator": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\TokenGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Sms\\SmsConfig": "Dvsa\\Olcs\\Api\\Service\\Sms\\SmsConfig",
+    "Dvsa\\Olcs\\Api\\Service\\Sms\\SmsGate": "Dvsa\\Olcs\\Api\\Service\\Sms\\SmsGate",
+    "Dvsa\\Olcs\\Api\\Service\\Sms\\SmsNumberCapture": "Dvsa\\Olcs\\Api\\Service\\Sms\\SmsNumberCapture",
+    "Dvsa\\Olcs\\Api\\Service\\Sms\\SmsTransportInterface": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Sms\\SmsTransportInterface\" could not be created. Reason: Invalid serviceId passed: ''"
+    },
     "Dvsa\\Olcs\\Api\\Service\\Submission\\Sections\\SectionGeneratorPluginManager": "Dvsa\\Olcs\\Api\\Service\\Submission\\Sections\\SectionGeneratorPluginManager",
     "Dvsa\\Olcs\\Api\\Service\\Submission\\SubmissionGenerator": "Dvsa\\Olcs\\Api\\Service\\Submission\\SubmissionGenerator",
     "Dvsa\\Olcs\\Api\\Service\\Toggle\\ToggleService": "Dvsa\\OlcsTest\\Api\\Framework\\Support\\FixedToggleService",
@@ -234,11 +241,11 @@
     "Dvsa\\Olcs\\DvsaAddressService\\Service\\DvsaAddressService": {
       "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\DvsaAddressService\\Client\\DvsaAddressServiceClient\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
     },
-    "Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer": {
-      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer\" could not be created. Reason: The mailer DSN must contain a scheme."
-    },
+    "Dvsa\\Olcs\\Email\\Service\\NotifyClientFactory": "Dvsa\\Olcs\\Email\\Service\\NotifyClientFactory",
+    "Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer": "Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer",
     "Dvsa\\Olcs\\Email\\Service\\TemplateRenderer": "Dvsa\\Olcs\\Email\\Service\\TemplateRenderer",
     "Dvsa\\Olcs\\Email\\Transport\\GovUkNotifyTransportFactory": "Dvsa\\Olcs\\Email\\Transport\\GovUkNotifyTransportFactory",
+    "Dvsa\\Olcs\\Email\\Transport\\NotifyMessageRecorderInterface": "Dvsa\\Olcs\\Api\\Service\\Notify\\NotifyMessageRecorder",
     "Dvsa\\Olcs\\Queue\\Service\\Message\\MessageBuilder": "Dvsa\\Olcs\\Queue\\Service\\Message\\MessageBuilder",
     "Dvsa\\Olcs\\Queue\\Service\\Queue": {
       "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
@@ -758,6 +765,7 @@
     },
     "TemplateDatabaseTemplateFetcher": "Dvsa\\Olcs\\Api\\Service\\Template\\DatabaseTemplateFetcher",
     "TemplateDatabaseTwigLoader": "Dvsa\\Olcs\\Api\\Service\\Template\\DatabaseTwigLoader",
+    "TemplatePlainTextTwigRenderer": "Dvsa\\Olcs\\Api\\Service\\Template\\TwigRenderer",
     "TemplateStrategySelectingViewRenderer": "Dvsa\\Olcs\\Api\\Service\\Template\\StrategySelectingViewRenderer",
     "TemplateTwigEnvironment": "Twig\\Environment",
     "TemplateTwigRenderer": "Dvsa\\Olcs\\Api\\Service\\Template\\TwigRenderer",
@@ -816,7 +824,7 @@
     "CommandHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\CommandHandlerManager",
       "config_key": null,
-      "plugins": 893,
+      "plugins": 900,
       "not_created": {
         "Dvsa\\Olcs\\Api\\Domain\\Command\\Bus\\Ebsr\\ProcessRequestMap": {
           "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Ebsr\\S3Processor\" could not be created. Reason: Found 1 error while validating the input provided for the AssumeRole operation:"
@@ -832,6 +840,9 @@
         },
         "Dvsa\\Olcs\\Api\\Domain\\Command\\Document\\StoreDocumentAnalysisResult": {
           "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\Sfn\\SfnClient\" could not be created. Reason: The states service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Command\\Sms\\SendSms": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Sms\\SmsTransportInterface\" could not be created. Reason: Invalid serviceId passed: ''"
         },
         "Dvsa\\Olcs\\Api\\Domain\\Command\\Transaction\\ResolvePayment": {
           "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
@@ -878,9 +889,6 @@
         "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\PrepareToSend": {
           "error": "TypeError: Cannot assign Dvsa\\Olcs\\Api\\Service\\ConvertToPdf\\WebServiceClient to property Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\Letter\\LetterInstance\\PrepareToSend::$convertHtmlToPdf of type Dvsa\\Olcs\\Api\\Service\\ConvertToPdf\\ConvertHtmlToPdfInterface"
         },
-        "Dvsa\\Olcs\\Transfer\\Command\\Template\\SendTestEmail": {
-          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer\" could not be created. Reason: The mailer DSN must contain a scheme."
-        },
         "Dvsa\\Olcs\\Transfer\\Command\\Tm\\CheckRepute": {
           "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Nr\\InrClientInterface\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
         },
@@ -916,7 +924,7 @@
     "DomainValidatorManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\ValidatorManager",
       "config_key": null,
-      "plugins": 58,
+      "plugins": 59,
       "not_created": []
     },
     "Dvsa\\Olcs\\Api\\Service\\Letter\\SectionRenderer\\SectionRendererPluginManager": {
@@ -1040,7 +1048,7 @@
     "QueryHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\QueryHandlerManager",
       "config_key": null,
-      "plugins": 504,
+      "plugins": 505,
       "not_created": {
         "Dvsa\\Olcs\\Api\\Domain\\Query\\DataRetention\\Postcheck": {
           "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Domain\\Query\\DataRetention\\Postcheck\" could not be created. Reason: An exception occurred in the driver: SQLSTATE[HY000] [2002] No such file or directory"
@@ -1074,7 +1082,7 @@
     "RepositoryServiceManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\RepositoryServiceManager",
       "config_key": null,
-      "plugins": 264,
+      "plugins": 265,
       "not_created": []
     },
     "RoutePluginManager": {
@@ -1092,7 +1100,7 @@
     "ValidationHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\ValidationHandlerManager",
       "config_key": null,
-      "plugins": 1428,
+      "plugins": 1436,
       "not_created": []
     },
     "ValidatorManager": {
