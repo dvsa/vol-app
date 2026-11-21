@@ -33,8 +33,7 @@ use Olcs\Logging\Log\Processor\UserId;
 final class GlobalState
 {
     /**
-     * @param array<string, Type> $typeInstances
-     * @param array<int, string> $typeReverseIndex
+     * @param array<string, mixed> $typeRegistry
      * @param list<callable> $autoloaders
      */
     private function __construct(
@@ -42,8 +41,7 @@ final class GlobalState
         private readonly mixed $exceptionHandler,
         private readonly mixed $logger,
         private readonly mixed $logUserId,
-        private readonly array $typeInstances,
-        private readonly array $typeReverseIndex,
+        private readonly array $typeRegistry,
         private readonly mixed $sessionManager,
         private readonly int $sessionStatus,
         private readonly string|false $sessionSaveHandler,
@@ -58,8 +56,7 @@ final class GlobalState
             self::currentExceptionHandler(),
             self::staticProperty(Logger::class, 'logger'),
             self::staticProperty(UserId::class, 'userId'),
-            self::typeRegistryProperty('instances'),
-            self::typeRegistryProperty('instancesReverseIndex'),
+            self::typeRegistryProperties(),
             self::staticProperty(AbstractContainer::class, 'defaultManager'),
             session_status(),
             ini_get('session.save_handler'),
@@ -92,9 +89,10 @@ final class GlobalState
         $this->restoreSession();
 
         $registry = Type::getTypeRegistry();
-        (new \ReflectionProperty(TypeRegistry::class, 'instances'))->setValue($registry, $this->typeInstances);
-        (new \ReflectionProperty(TypeRegistry::class, 'instancesReverseIndex'))
-            ->setValue($registry, $this->typeReverseIndex);
+
+        foreach ($this->typeRegistry as $name => $value) {
+            (new \ReflectionProperty(TypeRegistry::class, $name))->setValue($registry, $value);
+        }
 
         foreach (spl_autoload_functions() as $autoloader) {
             if (!in_array($autoloader, $this->autoloaders, true)) {
@@ -138,14 +136,25 @@ final class GlobalState
     }
 
     /**
-     * @return array<array-key, mixed>
+     * Every property of Doctrine's type registry, by name. They are all taken, rather than the ones that hold
+     * the types today, because those are private and change between DBAL releases (4.6 replaced instances and
+     * instancesReverseIndex with typeObjects and typesMap). The registry object itself stays the same, so
+     * anything holding it sees the restored types.
+     *
+     * @return array<string, mixed>
      */
-    private static function typeRegistryProperty(string $name): array
+    public static function typeRegistryProperties(): array
     {
-        $value = (new \ReflectionProperty(TypeRegistry::class, $name))->getValue(Type::getTypeRegistry());
-        assert(is_array($value));
+        $registry = Type::getTypeRegistry();
+        $properties = [];
 
-        return $value;
+        foreach ((new \ReflectionClass(TypeRegistry::class))->getProperties() as $property) {
+            if (!$property->isStatic() && !$property->isReadOnly()) {
+                $properties[$property->getName()] = $property->getValue($registry);
+            }
+        }
+
+        return $properties;
     }
 
     private static function staticProperty(string $class, string $name): mixed

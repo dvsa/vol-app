@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Framework;
 
-use Doctrine\DBAL\Types\Type;
 use Dvsa\OlcsTest\Api\Framework\Support\ApiApplication;
 use Dvsa\OlcsTest\Api\Framework\Support\Entrypoint;
 use Dvsa\OlcsTest\Api\Framework\Support\GlobalState;
@@ -71,8 +70,8 @@ final class GlobalStateTest extends MockeryTestCase
             'logger' => (new \ReflectionProperty(Logger::class, 'logger'))->getValue(),
             'log user id' => (new \ReflectionProperty(\Olcs\Logging\Log\Processor\UserId::class, 'userId'))->getValue(),
             'doctrine types' => array_map(
-                spl_object_id(...),
-                (new \ReflectionProperty(\Doctrine\DBAL\Types\TypeRegistry::class, 'instances'))->getValue(Type::getTypeRegistry())
+                static fn(mixed $value): mixed => is_array($value) ? array_map(self::identity(...), $value) : self::identity($value),
+                GlobalState::typeRegistryProperties()
             ),
             'session manager' => (new \ReflectionProperty(\Laminas\Session\AbstractContainer::class, 'defaultManager'))->getValue(),
             'session status' => session_status(),
@@ -80,6 +79,14 @@ final class GlobalStateTest extends MockeryTestCase
             'session save handler' => ini_get('session.save_handler'),
             'autoloaders' => count(spl_autoload_functions()),
         ];
+    }
+
+    /**
+     * Objects by identity, so a type replaced by an equal one still counts as a change
+     */
+    private static function identity(mixed $value): mixed
+    {
+        return is_object($value) ? spl_object_id($value) : $value;
     }
 
     private function boot(Entrypoint $entrypoint): void
