@@ -17,6 +17,7 @@ use Dvsa\Olcs\Api\Domain\Repository\GracePeriod as GracePeriodRepo;
 use Dvsa\Olcs\Api\Domain\Repository\Licence as LicenceRepo;
 use Dvsa\Olcs\Api\Domain\CommandHandler\GracePeriod\CreateGracePeriod;
 use Dvsa\Olcs\Api\Entity\Licence\GracePeriod;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Command\GracePeriod\CreateGracePeriod as Cmd;
 
 /**
@@ -42,20 +43,29 @@ final class CreateGracePeriodTest extends AbstractCommandHandlerTestCase
         $data = [
             'startDate' => '2015-01-01',
             'endDate' => '2015-01-02',
-            'description' => 'description'
+            'description' => 'description',
+            'gracePeriodType' => GracePeriod::TYPE_TM,
         ];
 
         $command = Cmd::create($data);
+
+        $type = new RefData(GracePeriod::TYPE_TM);
+        $this->repoMap['GracePeriod']
+            ->shouldReceive('fetchType')
+            ->once()
+            ->with(GracePeriod::TYPE_TM)
+            ->andReturn($type);
 
         $this->repoMap['GracePeriod']
             ->shouldReceive('save')
             ->once()
             ->with(m::type(GracePeriod::class))
             ->andReturnUsing(
-                function (GracePeriod $gracePeriod) use ($data) {
+                function (GracePeriod $gracePeriod) use ($data, $type) {
                     $this->assertSame($gracePeriod->getStartDate()->format('Y-m-d'), $data['startDate']);
                     $this->assertSame($gracePeriod->getEndDate()->format('Y-m-d'), $data['endDate']);
                     $this->assertEquals($gracePeriod->getDescription(), $data['description']);
+                    $this->assertSame($type, $gracePeriod->getGracePeriodType());
                 }
             );
 
