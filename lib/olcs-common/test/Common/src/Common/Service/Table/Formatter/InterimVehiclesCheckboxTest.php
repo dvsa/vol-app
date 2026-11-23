@@ -33,6 +33,20 @@ final class InterimVehiclesCheckboxTest extends MockeryTestCase
         $this->assertSame($checked, str_contains($output, ' checked>'));
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
+    public function testFormatPreservesPercentInVrm($data, bool $checked): void
+    {
+        $data['vehicle'] = ['vrm' => 'AB12% Business & CDE'];
+
+        $output = new \Common\Service\Table\Formatter\InterimVehiclesCheckbox()->format($data);
+
+        $this->assertStringContainsString(
+            'for="interim-vehicle-1">Select vehicle AB12% Business &amp; CDE</label>',
+            $output
+        );
+        $this->assertSame($checked, str_contains($output, ' checked>'));
+    }
+
     public static function formatProvider(): \Iterator
     {
         yield [

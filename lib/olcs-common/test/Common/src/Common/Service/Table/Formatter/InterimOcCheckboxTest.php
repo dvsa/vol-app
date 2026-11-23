@@ -33,6 +33,20 @@ final class InterimOcCheckboxTest extends MockeryTestCase
         $this->assertSame($checked, str_contains($output, ' checked>'));
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
+    public function testFormatPreservesPercentInAddress($data, bool $checked): void
+    {
+        $data['operatingCentre'] = ['address' => ['addressLine1' => '100% Business & Park', 'town' => 'York']];
+
+        $output = new \Common\Service\Table\Formatter\InterimOcCheckbox()->format($data);
+
+        $this->assertStringContainsString(
+            'for="interim-operating-centre-1">Select operating centre 100% Business &amp; Park, York</label>',
+            $output
+        );
+        $this->assertSame($checked, str_contains($output, ' checked>'));
+    }
+
     public static function formatProvider(): \Iterator
     {
         yield [

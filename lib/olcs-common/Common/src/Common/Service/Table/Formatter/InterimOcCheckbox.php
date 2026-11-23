@@ -35,15 +35,14 @@ class InterimOcCheckbox implements FormatterPluginManagerInterface
         ));
         $format = '<input type="checkbox" id="' . Escape::htmlAttr($id) . '" value="'
             . Escape::htmlAttr($data['id']) . '" name="operatingCentres[id][]" %s>'
-            . '<label class="govuk-visually-hidden" for="' . Escape::htmlAttr($id) . '">Select operating centre '
-            . Escape::html($description) . '</label>';
+            . '<label class="govuk-visually-hidden" for="' . Escape::htmlAttr($id) . '">Select operating centre %s</label>';
         if (
             isset($data['isInterim'])
             && $data['isInterim'] == 'Y'
         ) {
-            return sprintf($format, 'checked');
+            return sprintf($format, 'checked', Escape::html($description));
         }
 
-        return sprintf($format, '');
+        return sprintf($format, '', Escape::html($description));
     }
 }
