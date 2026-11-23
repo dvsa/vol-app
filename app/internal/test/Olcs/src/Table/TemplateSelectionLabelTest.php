@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OlcsTest\Table;
 
+use Common\Service\Table\ContentHelper;
+use Common\Service\Table\TableBuilder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +25,31 @@ final class TemplateSelectionLabelTest extends TestCase
 
         self::assertContains($column['format'], ['{{[elements/radio]}}', '{{[elements/checkbox]}}']);
         self::assertSame($expected, $column['label-callback']($row));
+    }
+
+    public function testReplacementLabelPreservesPlaceholderWhenRendered(): void
+    {
+        $config = require __DIR__ . '/../../../../module/Admin/src/Table/Tables/admin-replacements.table.php';
+        $column = $config['columns'][3];
+        $helper = new ContentHelper(__DIR__ . '/../../../../vendor/olcs/olcs-common/Common/view/table');
+        $table = $this->getMockBuilder(TableBuilder::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getContentHelper'])
+            ->getMock();
+        $table->expects(self::atLeastOnce())->method('getContentHelper')->willReturn($helper);
+
+        $output = $table->renderBodyColumn(
+            ['id' => 7, 'placeholder' => '{{name}} & <example>'],
+            $column
+        );
+        $document = new \DOMDocument();
+        $document->loadHTML($output);
+        $label = $document->getElementsByTagName('label')->item(0);
+
+        self::assertNotNull($label);
+        self::assertSame('Select replacement {{name}} & <example>, 7', trim($label->textContent));
+        self::assertStringNotContainsString('<example>', $output);
+        self::assertStringNotContainsString('&amp;#123;', $output);
     }
 
     public static function rows(): array

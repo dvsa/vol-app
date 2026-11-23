@@ -188,7 +188,10 @@ class ContentHelper
 
         foreach ($vars as $key => $val) {
             if (is_string($val) || is_numeric($val)) {
-                $replacement = $escapeValues ? self::escapeValue($val) : (string)$val;
+                // Escaped row data must not be interpreted as a template variable in this or a later pass.
+                $replacement = $escapeValues
+                    ? str_replace(['{', '}'], ['&#123;', '&#125;'], self::escapeValue($val))
+                    : (string)$val;
                 $content = str_replace('{{' . $key . '}}', $replacement, $content);
             }
         }
