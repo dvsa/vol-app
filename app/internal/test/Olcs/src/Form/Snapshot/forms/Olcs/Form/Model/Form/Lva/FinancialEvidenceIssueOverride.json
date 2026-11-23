@@ -146,6 +146,15 @@
           ]
         },
         {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 1000,
+            "messages": {
+              "stringLengthTooLong": "Reason for the change must be 1,000 characters or fewer"
+            }
+          }
+        },
+        {
           "name": "ValidateIf",
           "options": {
             "context_field": "changeRecommendation",
@@ -162,15 +171,6 @@
                   }
                 },
                 "break_chain_on_failure": true
-              },
-              {
-                "name": "Laminas\\Validator\\StringLength",
-                "options": {
-                  "max": 1000,
-                  "messages": {
-                    "stringLengthTooLong": "Reason for the change must be 1,000 characters or fewer"
-                  }
-                }
               }
             ]
           }
