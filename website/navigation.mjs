@@ -14,6 +14,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fenceTracker } from "./markdown-fences.mjs";
 
 const INDEX_FILES = ["index.md", "readme.md"];
 
@@ -29,22 +30,23 @@ function readFrontMatter(source) {
   return data;
 }
 
+// A heading's text without inline Markdown, as Docusaurus showed it: images dropped, links reduced
+// to their text and code ticks removed. Emphasis is left, as underscores appear in names.
+function plainText(markdown) {
+  return markdown
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/`+([^`]+?)`+/g, "$1")
+    .trim();
+}
+
 // The first level-one heading outside fenced code, so a `# comment` in a shell example is skipped.
 function firstHeading(source) {
-  let fence = null;
+  const inCode = fenceTracker();
   for (const line of source.replace(/^---\r?\n[\s\S]*?\r?\n---/, "").split(/\r?\n/)) {
-    const marker = line.match(/^\s*(`{3,}|~{3,})/);
-    if (marker) {
-      if (fence === null) {
-        fence = marker[1][0];
-      } else if (marker[1][0] === fence) {
-        fence = null;
-      }
-      continue;
-    }
-    const heading = fence === null && line.match(/^#\s+(.+?)(?:\s+#+)?\s*$/);
+    const heading = !inCode(line) && line.match(/^#\s+(.+?)(?:\s+#+)?\s*$/);
     if (heading) {
-      return heading[1];
+      return plainText(heading[1]);
     }
   }
   return null;

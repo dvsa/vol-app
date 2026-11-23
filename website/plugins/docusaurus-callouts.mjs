@@ -6,10 +6,14 @@
 // - `:::tip` is docmd's tooltip container, so a tip comes out as an unstyled span. It is
 //   rewritten to docmd's own `::: callout tip`.
 // - docmd takes only the first word of an unquoted title as the title (and the second as a
-//   link), so `:::warning MFA Required` is titled "MFA". The title is quoted.
+//   link), so `:::warning MFA Required` is titled "MFA". Even quoted, a title loses any
+//   `word=value` or `word:value` inside it. The title is passed as `title:"..."`, which docmd
+//   reads whole.
 //
 // Callouts may be indented inside list items. Fenced code blocks are left alone. If docmd
 // changes to handle these itself, this and its entry in docmd.config.mjs can be deleted.
+
+import { fenceTracker } from "../markdown-fences.mjs";
 
 export const plugin = {
   name: "vol-docusaurus-callouts",
@@ -19,14 +23,17 @@ export const plugin = {
 
 const CALLOUT = /^(\s*):::[ \t]*(note|tip|info|warning|danger|caution)(?:[ \t]+(.*?))?[ \t]*$/;
 
-function quoteTitle(title) {
+// docmd accepts "...", '...' or “...” and has no escapes, so use a pair the title doesn't contain.
+function titleArgument(title) {
   if (/^["'“«]/.test(title)) {
-    return title;
+    return `title:${title}`;
   }
-  if (!title.includes('"')) {
-    return `"${title}"`;
-  }
-  return title.includes("'") ? title : `'${title}'`;
+  const quotes = [
+    ['"', '"'],
+    ["'", "'"],
+    ["“", "”"],
+  ].find(([, close]) => !title.includes(close));
+  return quotes ? `title:${quotes[0]}${title}${quotes[1]}` : title;
 }
 
 function rewrite(line) {
@@ -36,24 +43,14 @@ function rewrite(line) {
   }
   const [, indent, type, title] = match;
   const opener = type === "tip" ? "::: callout tip" : `:::${type}`;
-  return title ? `${indent}${opener} ${quoteTitle(title)}` : `${indent}${opener}`;
+  return title ? `${indent}${opener} ${titleArgument(title)}` : `${indent}${opener}`;
 }
 
+// Lines are rejoined with LF whatever they were split on. markdown-it converts CRLF to LF anyway.
 export function onBeforeParse(source) {
-  let fence = null;
+  const inCode = fenceTracker();
   return source
-    .split("\n")
-    .map((line) => {
-      const marker = line.match(/^\s*(`{3,}|~{3,})/);
-      if (marker) {
-        if (fence === null) {
-          fence = marker[1][0];
-        } else if (marker[1][0] === fence) {
-          fence = null;
-        }
-        return line;
-      }
-      return fence === null ? rewrite(line) : line;
-    })
+    .split(/\r?\n/)
+    .map((line) => (inCode(line) ? line : rewrite(line)))
     .join("\n");
 }
