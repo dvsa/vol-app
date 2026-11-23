@@ -1,0 +1,12 @@
+<p>Hello,</p>
+
+<p>Welcome to the Vehicle Operator Licensing service. Here’s a summary of your registration details:</p>
+
+<ul>
+    <li>company name: [orgName &lt;&amp;&gt;]</li>
+    <li>username: [loginId &lt;&amp;&gt;]</li>
+</ul>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Sign in</a>
+</p>

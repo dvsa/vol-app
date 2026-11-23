@@ -1,0 +1,11 @@
+<p>Helô,</p>
+<p>
+    Mae [tmFullName &lt;&amp;&gt;] wedi cyflwyno eu manylion ar gyfer y cais
+    [licNo &lt;&amp;&gt;]/[applicationId &lt;&amp;&gt;].
+</p>
+<p>
+    I'w hadolygu mewngofnodwch i'ch cyfrif.
+</p>
+<p>
+    <a href="[tmaUrl &lt;&amp;&gt;]">Adolygu'r cais</a>
+</p>

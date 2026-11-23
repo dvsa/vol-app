@@ -1,0 +1,9 @@
+<p>Hello,</p>
+
+<p>You asked for a reminder of your Vehicle Operator Licensing account username.</p>
+
+<p>It’s: <strong>[loginId &lt;&amp;&gt;]</strong></p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Sign in</a>
+</p>
