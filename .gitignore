@@ -8,9 +8,6 @@
 CLAUDE.md
 /.anth
 
-# AWS Emulator: per-run certificate and keys fetched by infra/docker/aws-emulator/aws-local.
-/.aws-emulator/
-
 # VOL-7238: local-only converter scratch dir (docker-volume side effect). The actual
 # review artefacts live in repo-root /docs/vol-7238/.
 /app/api/docs/

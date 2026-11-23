@@ -35,7 +35,7 @@ infra/docker/aws-emulator/aws-local aws s3 mb s3://my-bucket
 infra/docker/aws-emulator/aws-local aws s3 ls
 ```
 
-Each time, it fetches the running emulator's certificate and access keys into `.aws-emulator/9297/` (Git ignores it) and points the AWS settings of that one command at them. It keeps your own AWS credentials and `~/.aws` profiles out of the command, so the command can't reach real AWS, and it leaves your shell unchanged. It works for anything that uses an AWS SDK or the AWS CLI, such as scripts or `terraform`.
+Each time, it fetches the running emulator's certificate and access keys into a temporary folder of its own, points the AWS settings of that one command at them, and removes the folder when the command finishes. It keeps your own AWS credentials, `AWS_*` environment variables and `~/.aws` profiles out of the command, so the command can't reach real AWS, and it leaves your shell unchanged. It works for anything that uses an AWS SDK or the AWS CLI, such as scripts or `terraform`.
 
 If the account shown is anything other than `000000000000`, the command reached real AWS: stop and check your environment.
 

@@ -13,7 +13,6 @@ if [[ $# -eq 0 ]]; then
 fi
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-dir="$root/.aws-emulator/9297"
 endpoint=https://127.0.0.1:9297
 region=eu-west-1
 
@@ -28,8 +27,12 @@ if ! files="$(cd "$root" && docker compose exec -T aws-emulator sh -c \
   exit 1
 fi
 
+# A private folder for this invocation alone, removed when the command finishes, so commands run
+# at the same time never read files another one is still writing.
 umask 077
-mkdir -p "$dir"
+tmp="${TMPDIR:-/tmp}"
+dir="$(mktemp -d "${tmp%/}/aws-local.XXXXXX")"
+trap 'rm -rf "$dir"' EXIT
 printf '%s\n' "${files%%$'\n'"$boundary"*}" > "$dir/ca.pem"
 printf '%s\n' "${files#*"$boundary"$'\n'}" > "$dir/emulator_credentials"
 # Our own config file rather than yours, so no profile of yours (SSO, assumed roles) is used.
@@ -40,9 +43,12 @@ endpoint_url = $endpoint
 ca_bundle = $dir/ca.pem
 EOF
 
-unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE AWS_DEFAULT_PROFILE \
-  AWS_WEB_IDENTITY_TOKEN_FILE AWS_ROLE_ARN AWS_ROLE_SESSION_NAME AWS_CONTAINER_CREDENTIALS_RELATIVE_URI \
-  AWS_CONTAINER_CREDENTIALS_FULL_URI AWS_CONTAINER_AUTHORIZATION_TOKEN
+# Clear every AWS setting from your environment, not just credentials: some would send requests
+# elsewhere, such as a service's own endpoint (AWS_ENDPOINT_URL_S3, which beats AWS_ENDPOINT_URL) or
+# AWS_IGNORE_CONFIGURED_ENDPOINT_URLS, which ignores the emulator's endpoint altogether.
+while IFS= read -r name; do
+  unset "$name"
+done < <(compgen -e AWS_)
 
 export AWS_ENDPOINT_URL="$endpoint"
 export AWS_SHARED_CREDENTIALS_FILE="$dir/emulator_credentials"
@@ -54,4 +60,5 @@ export AWS_REGION="$region"
 export AWS_DEFAULT_REGION="$region"
 export AWS_PAGER=""
 
-exec "$@"
+# Not exec, so the EXIT trap can remove the folder afterwards. The exit status is the command's.
+"$@"
