@@ -25,11 +25,12 @@ trap 'rm -rf "$dir"' EXIT
 
 # The emulator makes a new certificate and new access keys every time it starts, so fetch this
 # run's copies from the container each time. One call for both files; the line between them
-# cannot appear in either.
+# cannot appear in either. Its input is /dev/null because docker compose exec reads stdin even
+# with -T, and would otherwise swallow anything piped in for the command (aws s3 cp - ...).
 boundary='--- aws-emulator file boundary ---'
 if ! files="$(cd "$root" && docker compose exec -T aws-emulator sh -c \
   "cd \"\$HOME/.aws/emulator/9297\" && cat ca.pem && echo '$boundary' && cat emulator_credentials" \
-  2>"$dir/docker-error")"; then
+  </dev/null 2>"$dir/docker-error")"; then
   echo "Could not fetch the AWS Emulator's certificate and keys from its container. Docker said:" >&2
   sed 's/^/  /' "$dir/docker-error" >&2
   echo "If the emulator isn't running, or is still starting: docker compose up -d --wait aws-emulator" >&2
