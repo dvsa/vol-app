@@ -43,6 +43,7 @@
     "beberlei/doctrineextensions": "^1.5",
     "caseyamcl/guzzle_retry_middleware": "^2.13",
     "doctrine/collections": "^2.6",
+    "doctrine/common": "^3.5",
     "doctrine/orm": "^3.8",
     "dvsa/authentication-cognito": "^4.1",
     "dvsa/laminas-config-cloud-parameters": "^2.4",
@@ -89,8 +90,7 @@
     "symfony/cache": "^8.1",
     "laminas/laminas-authentication": "^2.19",
     "symfony/uid": "^8.1",
-    "opensearch-project/opensearch-php": "^2.7",
-    "doctrine/common": "^3.5"
+    "opensearch-project/opensearch-php": "^2.7"
   },
   "autoload": {
     "psr-4": {
