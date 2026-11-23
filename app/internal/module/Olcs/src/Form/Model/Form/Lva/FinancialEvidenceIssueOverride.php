@@ -56,13 +56,18 @@ class FinancialEvidenceIssueOverride
     public $changeRecommendation = null;
 
     // The plain NotEmpty (null only) stops Laminas adding its own "required" check, so the reason
-    // may be blank for "No"; ValidateIf requires it, up to 1,000 characters, only for "Yes".
+    // may be blank for "No". The 1,000 character limit always applies, regardless of whether the
+    // caseworker chose "Yes" or "No"; ValidateIf additionally requires a reason only for "Yes".
     #[Annotation\Required(true)]
     #[Annotation\Type('TextArea')]
     #[Annotation\Options(['label' => 'Reason for the change'])]
     #[Annotation\Attributes(['class' => 'extra-long', 'required' => false])]
     #[Annotation\Filter('Laminas\Filter\StringTrim')]
     #[Annotation\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
+    #[Annotation\Validator('Laminas\Validator\StringLength', options: [
+        'max' => 1000,
+        'messages' => ['stringLengthTooLong' => self::MSG_REASON_TOO_LONG],
+    ])]
     #[Annotation\Validator('ValidateIf', options: [
         'context_field' => 'changeRecommendation',
         'context_values' => ['Y'],
@@ -72,10 +77,6 @@ class FinancialEvidenceIssueOverride
                 'name' => 'Laminas\Validator\NotEmpty',
                 'options' => ['messages' => ['isEmpty' => self::MSG_ENTER_REASON]],
                 'break_chain_on_failure' => true,
-            ],
-            [
-                'name' => 'Laminas\Validator\StringLength',
-                'options' => ['max' => 1000, 'messages' => ['stringLengthTooLong' => self::MSG_REASON_TOO_LONG]],
             ],
         ],
     ])]
