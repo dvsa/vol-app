@@ -517,9 +517,11 @@ final class LicenceTest extends RepositoryTestCase
         // Neither correlated sub-select leaks its own predicates into the outer WHERE.
         $this->assertStringContainsString(
             '(m.id NOT IN(SELECT IDENTITY(gp.licence) FROM ' . GracePeriodEntity::class . ' gp'
-            . ' WHERE gp.startDate <= :today AND gp.endDate >= :today))',
+            . ' WHERE gp.startDate <= :today AND gp.endDate >= :today'
+            . ' AND (gp.gracePeriodType IS NULL OR gp.gracePeriodType = :tmGraceType)))',
             $dql,
         );
+        $this->assertSame(GracePeriodEntity::TYPE_TM, $qb->getParameter('tmGraceType')->getValue());
         $this->assertStringContainsString(
             '(m.id NOT IN(SELECT IDENTITY(tml2.licence) FROM ' . TMLicenceEntity::class . ' tml2'
             . ' WHERE (tml2.deletedDate >= :tomorrow OR tml2.deletedDate IS NULL)'
