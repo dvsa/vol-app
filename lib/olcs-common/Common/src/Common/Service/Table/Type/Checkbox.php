@@ -13,7 +13,7 @@ class Checkbox extends Selector
     {
         $input = parent::render($data, $column, $formattedContent);
         $idx = $column['idIndex'] ?? 'id';
-        $id = ($this->getTable()->getFieldset() ?? '') . '[id][' . Escape::html($data[$idx]) . ']';
+        $id = ($this->getTable()->getFieldset() ?? '') . '[id][' . $data[$idx] . ']';
 
         return '<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">'
             . '<div class="govuk-checkboxes__item">'
