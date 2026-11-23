@@ -94,14 +94,20 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
             );
         }
 
-        // Guarded on status = SUCCESS and assessmentStatus not already APPROVED/REJECTED, so a
-        // row resolved otherwise, or decided (even concurrently, by another accept), matches nothing.
-        if ($repo->recordInitialAssessmentStatus($analysisId, $status, $this->getCurrentUser()) === 0) {
+        // Guarded on status = SUCCESS, assessmentStatus not already APPROVED/REJECTED, and the
+        // version that was read. A row resolved otherwise, decided (even concurrently, by another
+        // accept), or with a check changed since it was read matches nothing, so the outcome is
+        // never recorded over checks it was not decided on.
+        $written = $repo->recordInitialAssessmentStatus(
+            $analysisId,
+            $status,
+            $this->getCurrentUser(),
+            (int)$analysis->getVersion()
+        );
+
+        if ($written === 0) {
             throw new BadRequestException(
-                sprintf(
-                    'Document analysis %d is no longer a successful, undecided analysis, so cannot be reviewed',
-                    $analysisId
-                )
+                sprintf('Document analysis %d changed while it was being reviewed; reload and try again', $analysisId)
             );
         }
 

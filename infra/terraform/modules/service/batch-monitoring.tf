@@ -111,40 +111,66 @@ module "eventbridge_sns" {
   create_role = true
   role_name   = "vol-app-${var.environment}-batch-failures"
 
-  rules = {
-    "vol-app-${var.environment}-batch-failure-event" = {
-      description = "Capture failed Batch Events sent to SNS"
-      event_pattern = jsonencode({
-        "source" : ["aws.batch"],
-        "detail-type" : ["Batch Job State Change"],
-        "detail" : {
-          "status" : [
-            "FAILED"
-          ],
-          "jobName" : [{
-            "wildcard" : "vol-app-${var.environment}-*"
-          }]
-        }
-      })
-      enabled = true
-    }
-  }
+  rules = merge(
+    {
+      "vol-app-${var.environment}-batch-failure-event" = {
+        description = "Capture failed Batch Events sent to SNS"
+        event_pattern = jsonencode({
+          "source" : ["aws.batch"],
+          "detail-type" : ["Batch Job State Change"],
+          "detail" : {
+            "status" : [
+              "FAILED"
+            ],
+            "jobName" : [{
+              "wildcard" : "vol-app-${var.environment}-*"
+            }]
+          }
+        })
+        enabled = true
+      }
+    },
+    var.environment == "prod" && var.slack_alerts_sns_topic_arn != null ? {
+      "vol-app-prod-ni-compliance-failure-event" = {
+        description = "Capture failed NI DVA compliance Batch job events for Slack"
+        event_pattern = jsonencode({
+          "source" : ["aws.batch"],
+          "detail-type" : ["Batch Job State Change"],
+          "detail" : {
+            "status" : ["FAILED"],
+            "jobName" : ["vol-app-prod-ni-compliance"]
+          }
+        })
+        enabled = true
+      }
+    } : {}
+  )
 
   attach_cloudwatch_policy = true
   cloudwatch_target_arns   = [aws_cloudwatch_log_group.failures.arn]
 
-  targets = {
-    "vol-app-${var.environment}-batch-failure-event" = [
-      {
-        name = "batch-fail-event"
-        arn  = module.sns_batch_failure.topic_arn
-      },
-      {
-        arn  = aws_cloudwatch_log_group.failures.arn
-        name = "batch-failures-log-group"
-      }
-    ]
-  }
+  targets = merge(
+    {
+      "vol-app-${var.environment}-batch-failure-event" = [
+        {
+          name = "batch-fail-event"
+          arn  = module.sns_batch_failure.topic_arn
+        },
+        {
+          arn  = aws_cloudwatch_log_group.failures.arn
+          name = "batch-failures-log-group"
+        }
+      ]
+    },
+    var.environment == "prod" && var.slack_alerts_sns_topic_arn != null ? {
+      "vol-app-prod-ni-compliance-failure-event" = [
+        {
+          name = "ni-compliance-slack-alert"
+          arn  = var.slack_alerts_sns_topic_arn
+        }
+      ]
+    } : {}
+  )
 
 }
 

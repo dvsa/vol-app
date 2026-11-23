@@ -36,10 +36,10 @@
         },
         "type": "Radio",
         "options": {
-          "label": "Change this recommendation to a pass?",
+          "label": "lva-financial-evidence-assessment-issue-change-to-pass",
           "value_options": {
-            "N": "No",
-            "Y": "Yes"
+            "Y": "Yes",
+            "N": "No"
           },
           "fieldset-attributes": {
             "class": "govuk-fieldset"
@@ -60,7 +60,7 @@
         },
         "type": "TextArea",
         "options": {
-          "label": "Reason for the change"
+          "label": "lva-financial-evidence-assessment-issue-reason"
         }
       }
     },
@@ -71,7 +71,7 @@
         "attributes": {
           "data-module": "govuk-button",
           "type": "submit",
-          "class": "govuk-button",
+          "class": "govuk-button govuk-button--secondary",
           "value": "override"
         },
         "options": {
@@ -119,16 +119,7 @@
     "changeRecommendation": {
       "name": "changeRecommendation",
       "required": true,
-      "validators": [
-        {
-          "name": "Laminas\\Validator\\NotEmpty",
-          "options": {
-            "messages": {
-              "isEmpty": "Select yes if you want to change this recommendation to a pass"
-            }
-          }
-        }
-      ]
+      "error_message": "lva-financial-evidence-assessment-error-answer-required"
     },
     "comment": {
       "name": "comment",
@@ -146,15 +137,6 @@
           ]
         },
         {
-          "name": "Laminas\\Validator\\StringLength",
-          "options": {
-            "max": 1000,
-            "messages": {
-              "stringLengthTooLong": "Reason for the change must be 1,000 characters or fewer"
-            }
-          }
-        },
-        {
           "name": "ValidateIf",
           "options": {
             "context_field": "changeRecommendation",
@@ -164,15 +146,36 @@
             "allow_empty": false,
             "validators": [
               {
-                "name": "Laminas\\Validator\\NotEmpty",
+                "name": "ValidateIf",
                 "options": {
-                  "messages": {
-                    "isEmpty": "Enter a reason for changing the recommendation"
-                  }
-                },
-                "break_chain_on_failure": true
+                  "context_field": "analyserFlag",
+                  "context_values": [
+                    "SKIPPED"
+                  ],
+                  "context_truth": false,
+                  "allow_empty": false,
+                  "validators": [
+                    {
+                      "name": "Laminas\\Validator\\NotEmpty",
+                      "options": {
+                        "messages": {
+                          "isEmpty": "lva-financial-evidence-assessment-error-reason-required"
+                        }
+                      }
+                    }
+                  ]
+                }
               }
             ]
+          }
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 1000,
+            "messages": {
+              "stringLengthTooLong": "lva-financial-evidence-assessment-error-comment-too-long"
+            }
           }
         }
       ]

@@ -71,7 +71,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
             ->andReturn($this->analysis(Entity::STATUS_SUCCESS));
         $this->normaliser->expects('fromStored')->with(self::STORED)->andReturn($this->normalisedResult($flag));
         $this->repoMap['DocumentAnalysis']->expects('recordInitialAssessmentStatus')
-            ->with(5, $expected, $this->user)
+            ->with(5, $expected, $this->user, 7)
             ->andReturn(1);
 
         $result = $this->sut->handleCommand($command);
@@ -150,7 +150,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
             ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $undecided));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('pass'));
         $this->repoMap['DocumentAnalysis']->expects('recordInitialAssessmentStatus')
-            ->with(5, AssessmentStatus::APPROVED, $this->user)
+            ->with(5, AssessmentStatus::APPROVED, $this->user, 7)
             ->andReturn(1);
 
         $result = $this->sut->handleCommand($command);
@@ -188,7 +188,11 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
         ])];
     }
 
-    /** The row stopped being SUCCESS (or became decided) between the read and the guarded write. */
+    /**
+     * Between the read and the guarded write the row stopped being SUCCESS, became decided, or
+     * had a check changed (the write is guarded on the version that was read, so the outcome is
+     * never recorded over checks it was not decided on).
+     */
     public function testThrowsWhenTheGuardedWriteMatchesNothing(): void
     {
         $command = Cmd::create(['id' => 5]);
@@ -198,7 +202,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
         $this->repoMap['DocumentAnalysis']->expects('recordInitialAssessmentStatus')->andReturn(0);
 
         $this->expectException(BadRequestException::class);
-        $this->expectExceptionMessage('Document analysis 5 is no longer a successful, undecided analysis');
+        $this->expectExceptionMessage('Document analysis 5 changed while it was being reviewed');
 
         $this->sut->handleCommand($command);
     }
@@ -208,6 +212,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
         $analysis = m::mock(Entity::class);
         $analysis->allows('getStatus')->andReturn($status);
         $analysis->allows('getAssessmentStatus')->andReturn($assessmentStatus?->value);
+        $analysis->allows('getVersion')->andReturn(7);
         $analysis->allows('getResultNormalised')->andReturn(self::STORED);
         $analysis->allows('getAnnotations')->andReturn(null);
 

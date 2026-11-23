@@ -1,0 +1,71 @@
+<?php
+/**
+ * The form a caseworker answers one check with on the change document review page, drawn the
+ * same way for an issue (FinancialEvidenceIssueOverride) and a pass (FinancialEvidencePassOverride).
+ *
+ * One form instance serves every check of its kind; only the row differs. It is always shown,
+ * with the caseworker's saved answer on this check, so a typo can be fixed, the comment edited or
+ * the change undone (agreed with UX): "Yes" and their text on a check they changed, "No" and
+ * their note where one was left (a note is saved by answering "No"), and nothing selected on a
+ * check nobody has answered. Ids are made unique per check.
+ *
+ * The check the caseworker just tried to save shows the form as it was posted: their values and
+ * the form's own error messages, captured by the caller before any check was drawn. Every other
+ * check shows its saved answer with no messages. Each field's class is put back too: formRow()
+ * marks a field in error by adding an error class to the element itself, which would otherwise
+ * stay on the shared element and colour every check drawn after the one in error.
+ *
+ * The framework's "There is a problem" summary (formErrors()) is deliberately not rendered: the
+ * form posts to its check's anchor, so the page returns to the check that was submitted, where
+ * the message sits against its field; a summary at the top would be off-screen and only repeat it.
+ *
+ * @var \Laminas\Form\FormInterface $form       the issue or pass override form
+ * @var int                         $analysisId
+ * @var array                       $check      one of the review mapper's issues or passes
+ * @var string                      $idPrefix   keeps element ids unique between the two forms
+ * @var string                      $button     the name of the form's submit element
+ * @var array                       $captured   per caseworker field: [value, messages, class] as posted
+ * @var string|null                 $errorRow   the check whose form is being shown again with errors
+ */
+
+$key = $check['key'];
+$isErrorRow = $errorRow === $key;
+
+$form->get('analysisId')->setValue((string)$analysisId);
+$form->get('row')->setValue($key);
+$form->get('changeRecommendation')
+    ->setValue($check['changed'] ? 'Y' : ($check['kept'] ? 'N' : null))
+    ->setAttribute('id', $idPrefix . 'changeRecommendation-' . $key);
+$form->get('comment')
+    ->setValue($check['comment'] ?? '')
+    ->setAttribute('id', $idPrefix . 'comment-' . $key);
+
+foreach ($captured as $name => [$value, $messages, $class]) {
+    $element = $form->get($name);
+    $element->setMessages($isErrorRow ? $messages : []);
+    $element->setAttribute('class', $class);
+
+    if ($isErrorRow) {
+        $element->setValue($value);
+    }
+}
+?>
+<?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>
+<?php // Posting to this check's anchor brings the page back to it, so the caseworker does not ?>
+<?php // have to scroll down again to find the error (or the result) on a long page. ?>
+<form method="post" novalidate action="#issue-<?php echo $this->escapeHtmlAttr($key); ?>">
+  <?php echo $this->formElement($form->get('security')); ?>
+  <?php echo $this->formElement($form->get('analysisId')); ?>
+  <?php echo $this->formElement($form->get('row')); ?>
+  <?php // Each field in its own GOV.UK form group, which gives the spacing between them the design shows. ?>
+  <div class="govuk-form-group">
+    <?php echo $this->formRow($form->get('changeRecommendation')); ?>
+  </div>
+  <div class="govuk-form-group">
+    <?php echo $this->formRow($form->get('comment')); ?>
+  </div>
+  <div class="govuk-button-group">
+    <?php echo $this->formElement($form->get($button)); ?>
+  </div>
+</form>
+

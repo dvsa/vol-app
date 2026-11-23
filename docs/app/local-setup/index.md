@@ -232,6 +232,34 @@ docker compose exec -d selfserve clamd    # or internal
 
 Restarting the container stops it again.
 
+## Mock GOV.UK One Login and address lookup
+
+A local stack can't reach GOV.UK One Login's integration environment or the DVSA Address Service without credentials and a route to them. `compose-mocks.yaml` adds a stand-in for both: one container, from `docker/mock-govuk-signin` in [dvsa/vol-terraform](https://github.com/dvsa/vol-terraform), that answers as `mocksignin.local.olcs.dev-dvsacloud.uk` and `mockaddress.local.olcs.dev-dvsacloud.uk`. It also points the API at them, through `app/api/config/autoload/mocks.global-development.php`, which is only loaded in development and only does anything in containers started with this file.
+
+1. Check out `vol-terraform` next to this repository, as `../vol-terraform`. Compose builds the mock from that copy the first time it starts. If yours is somewhere else, set `VOL_TERRAFORM_DIR` to its path in the `.env` file in the repository root. If Compose can't find it, it stops with an error about the build context or about "additional privileges requested".
+
+1. Add the sign-in mock to the line you added to `/etc/hosts`, because your browser is sent to it:
+
+    ```text
+    127.0.0.1 mocksignin.local.olcs.dev-dvsacloud.uk
+    ```
+
+1. Start the stack with both files:
+
+    ```bash
+    docker compose -f compose.yaml -f compose-mocks.yaml up -d
+    ```
+
+    To have every `docker compose` command use both, add `COMPOSE_FILE=compose.yaml:compose-mocks.yaml` to the root `.env` file. To go back, leave the second file out and run `docker compose up -d --remove-orphans`.
+
+1. For address lookups, switch the `use_new_address_service` feature toggle on (internal: Admin, then Feature toggles). With it off, the API uses the old address service.
+
+Sign in as any of the mock's test users, which `http://mocksignin.local.olcs.dev-dvsacloud.uk/mock-info` lists. Your `app/api/config/autoload/local.php` still needs a `client_id` and signing keys under `govuk_account`: the mock accepts any, but the API can't start a sign-in without them.
+
+The postcodes the address mock knows, by traffic area, are in `docker/mock-govuk-signin/README.md` in `vol-terraform`. Any other full postcode finds no addresses.
+
+After pulling `vol-terraform`, rebuild the mock with `docker compose -f compose.yaml -f compose-mocks.yaml build mock-govuk-signin`.
+
 ## Troubleshooting
 
 ### Containers lose the in-tree lib mounts after `composer install`

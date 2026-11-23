@@ -6,10 +6,11 @@ use Dvsa\Olcs\Transfer\Command\Document\OverrideDocumentAnalysisFlag;
 use Laminas\Form\Annotation;
 
 /**
- * Caseworker change of one failed or skipped check to a pass, on the change document review page.
+ * Caseworker change of one failed or skipped check to a pass, on the change document review
+ * page. The reverse of FinancialEvidencePassOverride; the rules both share, and their wording,
+ * are in FinancialEvidenceOverrideRules (a reason is required to change a fail, not a skipped check).
  *
  * One instance serves every issue: the view sets row per issue before rendering it.
- * The comment is required only when the caseworker chooses to change the recommendation.
  *
  * @codeCoverageIgnore
  */
@@ -32,60 +33,37 @@ class FinancialEvidenceIssueOverride
     ])]
     public $row = null;
 
-    public const string MSG_SELECT_YES_OR_NO = 'Select yes if you want to change this recommendation to a pass';
-    public const string MSG_ENTER_REASON = 'Enter a reason for changing the recommendation';
-    public const string MSG_REASON_TOO_LONG = 'Reason for the change must be 1,000 characters or fewer';
-
-    // Yes and No sit side by side, as the design draws them. The label is the radio group's
-    // legend, shown in bold as the question; the view must not print the question again.
-    // No default: neither is selected until the caseworker chooses.
+    // Laid out as FinancialEvidencePassOverride's: Yes and No side by side, the label as the
+    // radio group's legend (the view must not print the question again), and no default.
     #[Annotation\Required(true)]
+    #[Annotation\ErrorMessage(FinancialEvidenceOverrideRules::MSG_ANSWER_REQUIRED)]
     #[Annotation\Type('Radio')]
     #[Annotation\Attributes([
         'radios_wrapper_attributes' => ['class' => 'govuk-radios--standard govuk-radios--inline'],
     ])]
     #[Annotation\Options([
-        'label' => 'Change this recommendation to a pass?',
-        'value_options' => ['N' => 'No', 'Y' => 'Yes'],
+        'label' => 'lva-financial-evidence-assessment-issue-change-to-pass',
+        'value_options' => FinancialEvidenceOverrideRules::ANSWER_OPTIONS,
         'fieldset-attributes' => ['class' => 'govuk-fieldset'],
         'legend-attributes' => ['class' => 'govuk-fieldset__legend govuk-fieldset__legend--s'],
     ])]
-    #[Annotation\Validator('Laminas\Validator\NotEmpty', options: [
-        'messages' => ['isEmpty' => self::MSG_SELECT_YES_OR_NO],
-    ])]
     public $changeRecommendation = null;
 
-    // The plain NotEmpty (null only) stops Laminas adding its own "required" check, so the reason
-    // may be blank for "No". The 1,000 character limit always applies, regardless of whether the
-    // caseworker chose "Yes" or "No"; ValidateIf additionally requires a reason only for "Yes".
+    // See FinancialEvidencePassOverride::$comment for why it is Required with a "null only" NotEmpty.
     #[Annotation\Required(true)]
     #[Annotation\Type('TextArea')]
-    #[Annotation\Options(['label' => 'Reason for the change'])]
+    #[Annotation\Options(['label' => 'lva-financial-evidence-assessment-issue-reason'])]
     #[Annotation\Attributes(['class' => 'extra-long', 'required' => false])]
     #[Annotation\Filter('Laminas\Filter\StringTrim')]
     #[Annotation\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
-    #[Annotation\Validator('Laminas\Validator\StringLength', options: [
-        'max' => 1000,
-        'messages' => ['stringLengthTooLong' => self::MSG_REASON_TOO_LONG],
-    ])]
-    #[Annotation\Validator('ValidateIf', options: [
-        'context_field' => 'changeRecommendation',
-        'context_values' => ['Y'],
-        'allow_empty' => false,
-        'validators' => [
-            [
-                'name' => 'Laminas\Validator\NotEmpty',
-                'options' => ['messages' => ['isEmpty' => self::MSG_ENTER_REASON]],
-                'break_chain_on_failure' => true,
-            ],
-        ],
-    ])]
+    #[Annotation\Validator('ValidateIf', options: FinancialEvidenceOverrideRules::REASON_REQUIRED)]
+    #[Annotation\Validator('Laminas\Validator\StringLength', options: FinancialEvidenceOverrideRules::COMMENT_LENGTH)]
     public $comment = null;
 
     #[Annotation\Attributes([
         'data-module' => 'govuk-button',
         'type' => 'submit',
-        'class' => 'govuk-button',
+        'class' => 'govuk-button govuk-button--secondary',
         'value' => 'override',
     ])]
     #[Annotation\Options(['label' => 'Save and continue'])]

@@ -266,18 +266,20 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $qb = $this->expectEntityManagerQb();
         $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
 
-        $this->assertSame(1, $this->sut->recordAssessmentStatus(5, AssessmentStatus::APPROVED, $user));
+        $this->assertSame(1, $this->sut->recordAssessmentStatus(5, AssessmentStatus::APPROVED, $user, 3));
 
         $this->assertSame(
             'UPDATE ' . Entity::class . ' da'
-            . ' SET da.assessmentStatus = :assessmentStatus, da.lastModifiedOn = :now,'
-            . ' da.lastModifiedBy = :lastModifiedBy'
-            . ' WHERE da.id = :id AND da.status = :success',
+            . ' SET da.assessmentStatus = :assessmentStatus, da.version = da.version + 1,'
+            . ' da.lastModifiedOn = :now, da.lastModifiedBy = :lastModifiedBy'
+            . ' WHERE da.id = :id AND da.status = :success AND da.version = :version',
             $qb->getDQL(),
         );
         $this->assertSame('APPROVED', $qb->getParameter('assessmentStatus')->getValue());
         $this->assertSame(99, $qb->getParameter('lastModifiedBy')->getValue());
         $this->assertSame(5, $qb->getParameter('id')->getValue());
+        // Guarded on the version the caller read, and bumped, so concurrent writes cannot cross.
+        $this->assertSame(3, $qb->getParameter('version')->getValue());
         $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('success')->getValue());
         $this->assertInstanceOf(\DateTime::class, $qb->getParameter('now')->getValue());
     }
@@ -291,7 +293,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $qb = $this->expectEntityManagerQb();
         $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(0);
 
-        $this->assertSame(0, $this->sut->recordAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
+        $this->assertSame(0, $this->sut->recordAssessmentStatus(5, AssessmentStatus::REJECTED, $user, 3));
     }
 
     /**
@@ -308,13 +310,13 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $qb = $this->expectEntityManagerQb();
         $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
 
-        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::APPROVED, $user));
+        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::APPROVED, $user, 3));
 
         $this->assertSame(
             'UPDATE ' . Entity::class . ' da'
-            . ' SET da.assessmentStatus = :assessmentStatus, da.lastModifiedOn = :now,'
-            . ' da.lastModifiedBy = :lastModifiedBy'
-            . ' WHERE da.id = :id AND da.status = :success'
+            . ' SET da.assessmentStatus = :assessmentStatus, da.version = da.version + 1,'
+            . ' da.lastModifiedOn = :now, da.lastModifiedBy = :lastModifiedBy'
+            . ' WHERE da.id = :id AND da.status = :success AND da.version = :version'
             . ' AND (da.assessmentStatus IS NULL OR da.assessmentStatus NOT IN(:decided))',
             $qb->getDQL(),
         );
@@ -338,7 +340,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $qb = $this->expectEntityManagerQb();
         $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
 
-        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
+        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user, 3));
     }
 
     /** A row not successful, not found, or already decided (even by a concurrent accept) is left untouched. */
@@ -350,7 +352,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $qb = $this->expectEntityManagerQb();
         $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(0);
 
-        $this->assertSame(0, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
+        $this->assertSame(0, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user, 3));
     }
 
     private function expectEntityManagerQb(): TestQueryBuilder

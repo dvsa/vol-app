@@ -6,6 +6,7 @@ namespace Olcs\Controller\Messages;
 
 use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -27,6 +28,8 @@ use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
 
 abstract class AbstractConversationMessagesController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface, NavigationIdProvider, MessagingControllerInterface
 {
+    use MessageAttachmentsTrait;
+
     protected $listDto = ByConversation::class;
     protected $topNavigationId = '';
     protected $tableName = 'messages-list';
@@ -43,7 +46,8 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        protected ScriptFactory $scriptFactory
+        protected ScriptFactory $scriptFactory,
+        protected FileUploadHelperService $uploadHelper
     ) {
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }
@@ -81,19 +85,20 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
 
         $replyForm = $this->getForm(LicenceMessageReply::class);
         $replyForm->get('id')->setValue($this->params()->fromRoute('conversation'));
+        $replyForm->get('correlationId')->setValue($this->newCorrelationId());
         $this->placeholder()->setPlaceholder('send-reply', $replyForm);
 
         $actionsForm = $this->getForm(LicenceMessageActions::class);
         $actionsForm->get('id')->setValue($this->params()->fromRoute('conversation'));
 
-        $this->placeholder()->setPlaceholder('can-reply', true);
-        if ($response->getResult()['extra']['conversation']['isClosed']) {
+        $canReply = !$response->getResult()['extra']['conversation']['isClosed'];
+        $this->placeholder()->setPlaceholder('can-reply', $canReply);
+        if (!$canReply) {
             $actionsForm->get('form-actions')->get('close')->setAttribute('disabled', 'disabled');
             $actionsForm->get('form-actions')->get('close')->setAttribute(
                 'class',
                 'govuk-button govuk-button--warning govuk-button--disabled'
             );
-            $this->placeholder()->setPlaceholder('can-reply', false);
         }
 
         $this->placeholder()->setPlaceholder('message-actions', $actionsForm);
@@ -102,30 +107,40 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
             return parent::indexAction();
         }
 
-        $action = strtolower((string) $this->params()->fromPost('action'));
-        switch ($action) {
-            case 'end and archive conversation':
-                $route = str_replace('/view', '/close', $this->getConversationViewRoute());
-                return $this->redirect()->toRoute($route, [], [], true);
-            case 'reply':
-                return $this->parseReply($replyForm);
-        }
+        return $this->handlePost($replyForm, $canReply);
     }
 
     /** @return Response|ViewModel */
-    protected function parseReply(Form $form)
+    protected function handlePost(Form $replyForm, bool $canReply)
+    {
+        if (strtolower((string) $this->params()->fromPost('action')) === 'end and archive conversation') {
+            $route = str_replace('/view', '/close', $this->getConversationViewRoute());
+            return $this->redirect()->toRoute($route, [], [], true);
+        }
+
+        return $this->parseReply($replyForm, $canReply);
+    }
+
+    /** @return Response|ViewModel */
+    protected function parseReply(Form $form, bool $canReply)
     {
         $form->setData((array)$this->params()->fromPost());
         $form->get('id')->setValue($this->params()->fromRoute('conversation'));
+        $form->get('correlationId')->setValue($this->getPostedCorrelationId() ?? $this->newCorrelationId());
 
-        if (!$form->isValid()) {
+        if (
+            ($canReply && $this->handleAttachmentPost($form, 'form-actions->file'))
+            || $this->params()->fromPost('action') !== 'reply'
+            || !$form->isValid()
+        ) {
             $this->placeholder()->setPlaceholder('open-reply', true);
-            return parent::indexAction();
+            return $this->renderConversation();
         }
 
         $response = $this->handleCommand(CreateMessageCommand::create([
             'conversation' => $this->params()->fromRoute('conversation'),
-            'messageContent' => $form->get('form-actions')->get('reply')->getValue()
+            'messageContent' => $form->get('form-actions')->get('reply')->getValue(),
+            'correlationId' => $this->getPostedCorrelationId(),
         ]));
 
         if ($response->isOk()) {
@@ -135,6 +150,12 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
 
         $this->handleErrors($response->getResult());
 
+        return $this->renderConversation();
+    }
+
+    /** @return Response|ViewModel */
+    protected function renderConversation()
+    {
         return parent::indexAction();
     }
 

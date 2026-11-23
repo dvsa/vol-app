@@ -16,27 +16,26 @@ use Laminas\Form\Annotation;
 #[Annotation\Options(['prefer_form_input_filter' => true])]
 class FinancialEvidenceDecision
 {
+    /** Shown against the field when no decision is selected. */
+    public const string MSG_DECISION_REQUIRED = 'lva-financial-evidence-assessment-error-decision-required';
+
     #[Annotation\Type('Hidden')]
     #[Annotation\Required(true)]
     #[Annotation\Validator('Laminas\Validator\Digits')]
     public $analysisId = null;
 
-    public const string MSG_SELECT_DECISION = 'Select a decision';
-
     #[Annotation\Required(true)]
+    #[Annotation\ErrorMessage(self::MSG_DECISION_REQUIRED)]
     #[Annotation\Type('Radio')]
     #[Annotation\Attributes(['radios_wrapper_attributes' => ['class' => 'govuk-radios--standard']])]
     #[Annotation\Options([
-        'label' => 'Select your decision',
+        'label' => 'lva-financial-evidence-assessment-decision-legend',
         'fieldset-attributes' => ['class' => 'govuk-fieldset'],
         'legend-attributes' => ['class' => 'govuk-fieldset__legend govuk-fieldset__legend--l'],
         'value_options' => [
-            'APPROVED' => 'Accept financial evidence',
-            'REJECTED' => 'Reject financial evidence',
+            'APPROVED' => 'lva-financial-evidence-assessment-decision-accept',
+            'REJECTED' => 'lva-financial-evidence-assessment-decision-reject',
         ],
-    ])]
-    #[Annotation\Validator('Laminas\Validator\NotEmpty', options: [
-        'messages' => ['isEmpty' => self::MSG_SELECT_DECISION],
     ])]
     public $decision = null;
 

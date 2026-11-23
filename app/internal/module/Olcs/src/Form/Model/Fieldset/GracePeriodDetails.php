@@ -11,6 +11,12 @@ use Laminas\Form\Annotation as Form;
 #[Form\Name('grace-period-details')]
 class GracePeriodDetails
 {
+    #[Form\Options(['label' => 'internal-licence-grace-periods-period-details-gracePeriodType', 'empty_option' => 'Please Select', 'disable_inarray_validator' => false, 'category' => 'grace_period_type'])]
+    #[Form\Required(true)]
+    #[Form\Attributes(['id' => 'gracePeriodType'])]
+    #[Form\Type('DynamicSelect')]
+    public $gracePeriodType = null;
+
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'startDate'])]
     #[Form\Options(['label' => 'internal-licence-grace-periods-period-details-startDate', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+5', 'min_year_delta' => '-5'])]

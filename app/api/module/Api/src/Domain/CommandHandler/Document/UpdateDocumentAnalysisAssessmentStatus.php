@@ -7,6 +7,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
@@ -62,15 +63,34 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommandHandle
         /** @var DocumentAnalysisRepo $repo */
         $repo = $this->getRepo();
 
+        // Always read first: the write below is guarded on this row's version. A missing
+        // analysis is a 404 from fetchUsingId.
+        /** @var DocumentAnalysisEntity $analysis */
+        $analysis = $repo->fetchUsingId($command);
+
+        if ($analysis->getStatus() !== DocumentAnalysisEntity::STATUS_SUCCESS) {
+            throw new NotFoundException(
+                sprintf('No successful document analysis %d to review', $analysisId)
+            );
+        }
+
         if ($status === AssessmentStatus::APPROVED) {
-            /** @var DocumentAnalysisEntity $analysis */
-            $analysis = $repo->fetchUsingId($command);
             $this->guardApproval($analysis);
         }
 
-        if ($repo->recordAssessmentStatus($analysisId, $status, $this->getCurrentUser()) === 0) {
-            throw new NotFoundException(
-                sprintf('No successful document analysis %d to review', $analysisId)
+        // Guarded on the version that was read, so a check changed (or a decision made) by
+        // someone else since then matches nothing: the decision is never recorded over a result
+        // the caseworker did not see, and approval can never land on a check that now fails.
+        $written = $repo->recordAssessmentStatus(
+            $analysisId,
+            $status,
+            $this->getCurrentUser(),
+            (int)$analysis->getVersion()
+        );
+
+        if ($written === 0) {
+            throw new BadRequestException(
+                sprintf('Document analysis %d changed while it was being reviewed; reload and try again', $analysisId)
             );
         }
 

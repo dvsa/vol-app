@@ -1,0 +1,24 @@
+{
+  "name": "LicenceMessageReplyActions",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "send",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button govuk-button--default",
+          "id": "send"
+        },
+        "options": {
+          "label": "Send message"
+        },
+        "type": "Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

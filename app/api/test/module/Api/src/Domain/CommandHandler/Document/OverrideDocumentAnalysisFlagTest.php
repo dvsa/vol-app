@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\OverrideDocumentAnalysisFlag;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
 use Dvsa\Olcs\Api\Entity\User\User;
@@ -76,6 +77,33 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->assertSame(['Document analysis 5 check largeDeposit changed to pass'], $result->getMessages());
     }
 
+    /**
+     * changeRecommendation "N" with a comment still given is saved as a note: the annotation's
+     * flag is the row's own current flag, so the row is not promoted to a pass.
+     */
+    public function testANoteWithoutChangingTheFlagRecordsTheCommentOnly(): void
+    {
+        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Just a note', 'changeRecommendation' => 'N']);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->with($command)
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
+        $this->normaliser->expects('fromStored')->with(self::STORED)->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static function (array $annotations): bool {
+                $row = $annotations['rows']['largeDeposit'] ?? null;
+
+                return $row !== null
+                    && $row['flag'] === 'fail'
+                    && $row['originalFlag'] === 'fail'
+                    && $row['comment'] === 'Just a note';
+            }), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(['Document analysis 5 check largeDeposit comment saved'], $result->getMessages());
+    }
+
     public function testKeepsEarlierAnnotationsOnOtherRows(): void
     {
         $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Because', 'changeRecommendation' => 'Y']);
@@ -112,7 +140,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage(sprintf('Document analysis 5 is %s, not SUCCESS', $status));
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
     }
 
     public function testRefusesAnAnalysisWithNoAssessment(): void
@@ -124,11 +152,10 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('Document analysis 5 has no assessment to change');
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
     }
 
-    /** The analyser's own flag is what is asked, not what any annotation has it read as now. */
-    public function testRefusesARowTheAnalyserDidNotFailOrSkip(): void
+    public function testRefusesARowThatIsAlreadyAPass(): void
     {
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('pass'));
@@ -137,85 +164,142 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('Check name of document analysis 5 is not a fail or skipped');
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
     }
 
     /**
-     * A row changed earlier reads as a pass once annotations are laid over it, but the guard asks
-     * the analyser's own flag, so the caseworker can still revisit (and here, undo) their change.
+     * The caseworker's answer can be revisited: which rows can be answered is asked of the
+     * analyser's own flag, so a row already changed to a pass is still theirs to edit. "Y" again
+     * keeps it a pass and replaces the comment.
      */
-    public function testARowChangedEarlierCanStillBeRevisited(): void
+    public function testYesOnARowAlreadyChangedToAPassUpdatesTheComment(): void
     {
-        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N']);
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => $a['rows']['name']['flag'] === 'pass'
+                && $a['rows']['name']['originalFlag'] === 'fail'
+                && $a['rows']['name']['comment'] === 'A better reason'), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'A better reason', 'changeRecommendation' => 'Y'])
+        );
+
+        $this->assertSame(['Document analysis 5 check name changed to pass'], $result->getMessages());
+    }
+
+    /** "N" on a row that was changed to a pass changes it back to the flag the analyser gave it. */
+    public function testNoOnARowChangedToAPassChangesItBack(): void
+    {
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => $a['rows']['name']['flag'] === 'fail'
+                && $a['rows']['name']['originalFlag'] === 'fail'
+                && $a['rows']['name']['comment'] === 'Changed in error'), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'Changed in error', 'changeRecommendation' => 'N'])
+        );
+
+        $this->assertSame(['Document analysis 5 check name changed back to fail'], $result->getMessages());
+    }
+
+    /**
+     * "N" with nothing to say deletes the caseworker's entry for the row, so it reads exactly as
+     * the analyser left it: a change is undone and a note removed alike. Other rows' entries are kept.
+     */
+    #[DataProvider('existingEntryProvider')]
+    public function testNoWithNoCommentDeletesTheCaseworkersEntryForTheRow(string $entryFlag, string $message): void
+    {
+        $annotations = $this->earlierAnnotationOnName();
+        $annotations['rows']['name']['flag'] = $entryFlag;
+        $annotations['rows']['largeDeposit'] = $annotations['rows']['name'];
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
-            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 4));
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $annotations, 3));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
         $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
-            ->with(5, m::on(static fn(array $a): bool => !isset($a['rows']['name'])), 4, $this->user)
+            ->with(5, m::on(static fn(array $a): bool => array_keys($a['rows']) === ['largeDeposit']), 3, $this->user)
             ->andReturn(1);
 
-        $result = $this->sut->handleCommand($command);
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N'])
+        );
 
-        $this->assertSame(['Document analysis 5 check name changed back to its original flag'], $result->getMessages());
+        $this->assertSame([$message], $result->getMessages());
     }
 
-    /** "No" with a comment on a row changed earlier undoes the change, keeping the comment as a note. */
-    public function testUndoingAChangeWithACommentKeepsItAsANote(): void
+    public static function existingEntryProvider(): \Iterator
     {
-        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'Reconsidered', 'changeRecommendation' => 'N']);
+        yield 'a change to a pass' => ['pass', 'Document analysis 5 check name changed back to fail'];
+        yield 'a note' => ['fail', 'Document analysis 5 check name comment removed'];
+    }
 
+    /** Nothing to delete and nothing to say: nothing is written, so the version is not bumped. */
+    public function testNoWithNoCommentOnARowNobodyHasAnsweredWritesNothing(): void
+    {
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
-            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 4));
-        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
-        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
-            ->with(5, m::on(static function (array $a): bool {
-                $row = $a['rows']['name'] ?? null;
-
-                return $row !== null && $row['flag'] === 'fail' && $row['originalFlag'] === 'fail'
-                    && $row['comment'] === 'Reconsidered';
-            }), 4, $this->user)
-            ->andReturn(1);
-
-        $result = $this->sut->handleCommand($command);
-
-        $this->assertSame(['Document analysis 5 check name changed back to its original flag'], $result->getMessages());
-    }
-
-    /** "No" with a comment on a row nobody has answered yet is saved as a note, the flag untouched. */
-    public function testANoteCanBeLeftWithoutChangingTheFlag(): void
-    {
-        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'Checked manually', 'changeRecommendation' => 'N']);
-
-        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 2));
-        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
-        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
-            ->with(5, m::on(static function (array $a): bool {
-                $row = $a['rows']['name'] ?? null;
-
-                return $row !== null && $row['flag'] === 'fail' && $row['originalFlag'] === 'fail'
-                    && $row['comment'] === 'Checked manually';
-            }), 2, $this->user)
-            ->andReturn(1);
-
-        $result = $this->sut->handleCommand($command);
-
-        $this->assertSame(['Document analysis 5 check name comment saved'], $result->getMessages());
-    }
-
-    /** "No" with nothing to say on a row nobody has answered writes nothing at all. */
-    public function testNoWithNoCommentOnAnUnansweredRowWritesNothing(): void
-    {
-        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N']);
-
-        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS));
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
         $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAnnotations');
 
-        $result = $this->sut->handleCommand($command);
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N'])
+        );
 
-        $this->assertSame(5, $result->getId('documentAnalysis'));
         $this->assertSame(['Document analysis 5 check name left as it is'], $result->getMessages());
+    }
+
+    /** Changing a genuine fail to a pass needs a reason, whoever the caller is. */
+    #[DataProvider('noReasonProvider')]
+    public function testYesWithoutAReasonOnAFailIsRefused(string $comment): void
+    {
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAnnotations');
+
+        try {
+            $this->sut->handleCommand(
+                Cmd::create(['id' => 5, 'row' => 'name', 'comment' => $comment, 'changeRecommendation' => 'Y'])
+            );
+            $this->fail('Expected the change to be refused for want of a reason');
+        } catch (ValidationException $e) {
+            $this->assertSame(
+                [OverrideDocumentAnalysisFlag::ERR_REASON_REQUIRED => OverrideDocumentAnalysisFlag::MSG_REASON_REQUIRED],
+                $e->getMessages()
+            );
+        }
+    }
+
+    public static function noReasonProvider(): \Iterator
+    {
+        yield 'empty' => [''];
+        yield 'only spaces' => ['   '];
+    }
+
+    /** A skipped check was never assessed, so changing it to a pass needs no reason. */
+    public function testYesWithoutAReasonOnASkippedCheckIsAllowed(): void
+    {
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('skipped'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => $a['rows']['name']['flag'] === 'pass'
+                && $a['rows']['name']['originalFlag'] === 'skipped'
+                && $a['rows']['name']['comment'] === ''), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'Y'])
+        );
+
+        $this->assertSame(['Document analysis 5 check name changed to pass'], $result->getMessages());
     }
 
     public function testRefusesAnUnknownRow(): void
@@ -226,7 +310,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
 
         $this->expectException(BadRequestException::class);
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'nonsense', 'comment' => 'x', 'changeRecommendation' => 'Y']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'nonsense', 'comment' => 'x']));
     }
 
     /** Someone else changed the row between the read and the version-guarded write. */
@@ -239,7 +323,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('changed while it was being reviewed');
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
     }
 
     private function earlierAnnotationOnName(): array

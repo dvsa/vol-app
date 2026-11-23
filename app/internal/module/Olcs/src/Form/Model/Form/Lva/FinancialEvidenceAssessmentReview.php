@@ -30,7 +30,7 @@ class FinancialEvidenceAssessmentReview
         'class' => 'govuk-button',
         'value' => 'accept',
     ])]
-    #[Annotation\Options(['label' => 'Accept document review'])]
+    #[Annotation\Options(['label' => 'lva-financial-evidence-assessment-accept-document-review'])]
     #[Annotation\Type('\Common\Form\Elements\InputFilters\ActionButton')]
     public $review = null;
 }

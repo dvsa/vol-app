@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus;
+use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
@@ -65,10 +66,12 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
     public function testHandleCommandRecordsTheReviewAsTheCurrentUser(AssessmentStatus $status): void
     {
         $command = Cmd::create(['id' => 5, 'status' => $status->value]);
+        $this->givenAnalysisWithFlags($command, [NormalisedResult::FLAG_FAIL]);
 
+        // Guarded on the version that was read (7), so a concurrent change is not written over.
         $this->repoMap['DocumentAnalysis']
             ->expects('recordAssessmentStatus')
-            ->with(5, $status, $this->user)
+            ->with(5, $status, $this->user, 7)
             ->andReturn(1);
 
         $result = $this->sut->handleCommand($command);
@@ -88,17 +91,44 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
         ];
     }
 
-    /** No successful analysis with that id (missing, or not SUCCESS): nothing was written. */
-    public function testHandleCommandThrowsWhenNoSuccessfulAnalysisMatches(): void
+    /** An analysis that is not SUCCESS cannot be reviewed: nothing is written. */
+    public function testHandleCommandThrowsWhenTheAnalysisIsNotSuccessful(): void
     {
-        $this->repoMap['DocumentAnalysis']
-            ->expects('recordAssessmentStatus')
-            ->andReturn(0);
+        $command = Cmd::create(['id' => 5, 'status' => 'REJECTED']);
+        $this->givenAnalysisWithFlags($command, [NormalisedResult::FLAG_FAIL], DocumentAnalysisEntity::STATUS_ERROR);
+
+        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAssessmentStatus');
 
         $this->expectException(NotFoundException::class);
 
-        // Rejected, so the approval guard (which reads the analysis first) is not involved.
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'status' => 'REJECTED']));
+        $this->sut->handleCommand($command);
+    }
+
+    /**
+     * The write is guarded on the version that was read. If a check was changed, or the decision
+     * made, by someone else in between, it matches nothing: the caseworker is told to reload
+     * rather than having their decision recorded over a result they did not see. This is what
+     * stops an approval landing on a check another caseworker has just failed.
+     */
+    #[DataProvider('everyStatusProvider')]
+    public function testHandleCommandThrowsWhenTheAnalysisChangedWhileBeingReviewed(AssessmentStatus $status): void
+    {
+        $command = Cmd::create(['id' => 5, 'status' => $status->value]);
+        $this->givenAnalysisWithFlags($command, [NormalisedResult::FLAG_PASS]);
+
+        $this->repoMap['DocumentAnalysis']->expects('recordAssessmentStatus')->andReturn(0);
+
+        $this->expectException(BadRequestException::class);
+        $this->expectExceptionMessage('changed while it was being reviewed');
+
+        $this->sut->handleCommand($command);
+    }
+
+    public static function everyStatusProvider(): \Iterator
+    {
+        yield 'approved' => [AssessmentStatus::APPROVED];
+        yield 'rejected' => [AssessmentStatus::REJECTED];
+        yield 'pending' => [AssessmentStatus::PENDING];
     }
 
     public function testHandleCommandRefusesAnUnknownStatus(): void
@@ -117,7 +147,7 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
 
         $this->repoMap['DocumentAnalysis']
             ->expects('recordAssessmentStatus')
-            ->with(5, AssessmentStatus::APPROVED, $this->user)
+            ->with(5, AssessmentStatus::APPROVED, $this->user, 7)
             ->andReturn(1);
 
         $this->assertSame(5, $this->sut->handleCommand($command)->getId('documentAnalysis'));
@@ -155,8 +185,11 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
     /**
      * @param list<string> $flags
      */
-    private function givenAnalysisWithFlags(Cmd $command, array $flags): void
-    {
+    private function givenAnalysisWithFlags(
+        Cmd $command,
+        array $flags,
+        string $status = DocumentAnalysisEntity::STATUS_SUCCESS
+    ): void {
         $rows = [];
 
         foreach ($flags as $index => $flag) {
@@ -164,6 +197,8 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
         }
 
         $analysis = m::mock(DocumentAnalysisEntity::class);
+        $analysis->allows('getStatus')->andReturn($status);
+        $analysis->allows('getVersion')->andReturn(7);
         $analysis->allows('getResultNormalised')->andReturn(self::STORED);
         $analysis->allows('getAnnotations')->andReturn(null);
 

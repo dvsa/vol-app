@@ -29,7 +29,7 @@ final class GracePeriodTest extends QueryHandlerTestCase
         $query = GracePeriodsQuery::create(['id' => 1]);
 
         $mockEntity = m::mock(\Dvsa\Olcs\Api\Entity\Licence\GracePeriod::class);
-        $mockEntity->shouldReceive('serialize')->once()->andReturn(['unitKey' => 'unitVal']);
+        $mockEntity->shouldReceive('serialize')->once()->with(['gracePeriodType'])->andReturn(['unitKey' => 'unitVal']);
 
         $this->repoMap['GracePeriod']->shouldReceive('fetchUsingId')
             ->with($query)
