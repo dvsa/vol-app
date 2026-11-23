@@ -33,11 +33,14 @@ SELECT CONCAT(
 FROM information_schema.statistics i
 WHERE i.TABLE_SCHEMA = DATABASE()
   AND i.INDEX_NAME IN (
+    'ix_cases_read_audit_created_on', 'ix_application_read_audit_created_on',
     'uk_bus_reg_reg_no_variation_no_deleted_date', 'ix_bus_reg_read_audit_created_on',
+    'ix_continuation_traffic_area_id_year_month',
     'uk_event_history_type_event_code', 'ix_goods_disc_ceased_date', 'ix_goods_disc_issued_date',
     'ix_licence_read_audit_created_on', 'ix_licence_vehicle_vi_action',
-    'ix_organisation_read_audit_created_on', 'ix_person_family_name', 'ix_person_forename',
+    'ix_organisation_name', 'ix_organisation_read_audit_created_on', 'ix_person_family_name', 'ix_person_forename',
     'uk_postcode_enforcement_area_enforcement_area_id_postcode_id', 'uk_propose_to_revoke_case_id',
+    'uk_team_name', 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id',
     'uk_user_pid', 'uk_user_login_id', 'ix_user_team_id', 'ix_vehicle_vrm', 'ix_vehicle_vi_action'
   )
 GROUP BY i.TABLE_NAME, i.INDEX_NAME;
