@@ -30,7 +30,8 @@ export default {
     dark: "img/logo-dark.svg",
     alt: "Driver and Vehicle Standards Agency logo",
   },
-  favicon: "img/logo.svg",
+  // Just the crest, which turns white in dark mode so it shows on a dark tab bar.
+  favicon: "img/favicon.svg",
 
   navigation: buildNavigation(docsDir),
 
