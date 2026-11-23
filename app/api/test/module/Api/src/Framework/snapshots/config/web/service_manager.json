@@ -212,6 +212,7 @@
     "Dvsa\\Olcs\\Api\\Service\\EventBridge\\EventBridge": "Dvsa\\Olcs\\Api\\Service\\EventBridge\\EventBridgeFactory",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliser": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliserFactory",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisReviewOutcome": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisAnnotationOverlay": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\ApplicantProfileBuilder": "Dvsa\\Olcs\\Api\\Service\\Idp\\ApplicantProfileBuilderFactory",
     "Dvsa\\Olcs\\Api\\Service\\Publication\\PublicationGenerator": "Dvsa\\Olcs\\Api\\Service\\Publication\\PublicationGeneratorFactory",

@@ -131,6 +131,26 @@
     },
     "withoutTrailingSlash": "api/document/document_analysis/single/assessment-status/PUT"
   },
+  "api/document/document_analysis/single/override-flag/PUT": {
+    "request": "PUT /api/document/document_analysis/101/override-flag/",
+    "matches": "api/document/document_analysis/single/override-flag/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\OverrideDocumentAnalysisFlag",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/document_analysis/single/override-flag/PUT"
+  },
+  "api/document/document_analysis/single/override-pass-flag/PUT": {
+    "request": "PUT /api/document/document_analysis/101/override-pass-flag/",
+    "matches": "api/document/document_analysis/single/override-pass-flag/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\OverridePassedDocumentAnalysisFlag",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/document_analysis/single/override-pass-flag/PUT"
+  },
   "api/document/POST": {
     "request": "POST /api/document/",
     "matches": "api/document/POST",

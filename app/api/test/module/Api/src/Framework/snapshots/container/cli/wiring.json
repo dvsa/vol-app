@@ -57,6 +57,7 @@
     "Dvsa\\Olcs\\Api\\Service\\EventHistory\\Creator": "Dvsa\\Olcs\\Api\\Service\\EventHistory\\CreatorFactory",
     "Dvsa\\Olcs\\Api\\Service\\GovUkAccount\\GovUkAccountService": "Dvsa\\Olcs\\Api\\Service\\GovUkAccount\\GovUkAccountServiceFactory",
     "Dvsa\\Olcs\\Api\\Service\\Helper\\FormatAddress": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisAnnotationOverlay": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliser": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliserFactory",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisReviewOutcome": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator": "Laminas\\ServiceManager\\Factory\\InvokableFactory",

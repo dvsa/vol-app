@@ -115,6 +115,7 @@
       "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\GovUkAccount\\GovUkAccountService\" could not be created. Reason: Dvsa\\GovUkAccount\\Provider\\GovUkAccount configuration: option \"keys.private_key\" is not valid base64"
     },
     "Dvsa\\Olcs\\Api\\Service\\Helper\\FormatAddress": "Dvsa\\Olcs\\Api\\Service\\Helper\\FormatAddress",
+    "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisAnnotationOverlay": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisAnnotationOverlay",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliser": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliser",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisReviewOutcome": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisReviewOutcome",
     "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator",
@@ -836,7 +837,7 @@
     "CommandHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\CommandHandlerManager",
       "config_key": null,
-      "plugins": 916,
+      "plugins": 918,
       "not_created": {
         "Dvsa\\Olcs\\Api\\Domain\\Command\\Bus\\Ebsr\\ProcessRequestMap": {
           "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Ebsr\\S3Processor\" could not be created. Reason: Found 1 error while validating the input provided for the AssumeRole operation:"
@@ -1130,7 +1131,7 @@
     "ValidationHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\ValidationHandlerManager",
       "config_key": null,
-      "plugins": 1436,
+      "plugins": 1441,
       "not_created": []
     },
     "ValidatorManager": {
