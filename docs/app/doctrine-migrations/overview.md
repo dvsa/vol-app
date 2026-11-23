@@ -10,8 +10,8 @@ Previously, we used Liquibase for database migrations, which maintained its chan
 
 Doctrine Migrations configuration is managed through two files in the project root:
 
--   `migrations.php` - Configures migration settings
--   `migrations-db.php` - Configures database connection details
+- `migrations.php` - Configures migration settings
+- `migrations-db.php` - Configures database connection details
 
 These files automatically load the appropriate environment-specific configurations following our standard config loading process (global, local, environment-specific overrides etc).
 
@@ -113,18 +113,19 @@ Create a new branch, then:
 
 TBD - To be completed with input from app dev and platform team on best way to do first time run etc.
 
-:::tip
-
 ## Best Practices
 
--   Include both the up() and down() methods in your migrations
--   Test migrations both up and down locally before committing
--   Keep migrations atomic - one conceptual change per migration
--   Include meaningful descriptions in migration classes
--   Be aware of the differences between local and nonprod/prod datasets that might affect your migrations.
--   Use transactions where possible (controlled by `all_or_nothing` config)
--   Document complex migrations with clear comments
-    :::
+:::tip
+
+- Include both the up() and down() methods in your migrations
+- Test migrations both up and down locally before committing
+- Keep migrations atomic - one conceptual change per migration
+- Include meaningful descriptions in migration classes
+- Be aware of the differences between local and nonprod/prod datasets that might affect your migrations.
+- Use transactions where possible (controlled by `all_or_nothing` config)
+- Document complex migrations with clear comments
+
+:::
 
 ## Troubleshooting
 
@@ -150,9 +151,9 @@ composer dump-autoload
 
 Doctrine Migrations maintains its state in the `migrations` table with the following structure:
 
--   `version` - Migration version number (YYYYMMDDHHMMSS)
--   `executed_at` - When the migration was run
--   `execution_time` - How long the migration took to run
+- `version` - Migration version number (YYYYMMDDHHMMSS)
+- `executed_at` - When the migration was run
+- `execution_time` - How long the migration took to run
 
 You can view the migration history with:
 

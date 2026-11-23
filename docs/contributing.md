@@ -18,6 +18,8 @@ Refer to [ci-cd.md](./ci-cd.md) for more details.
 
 We run various coding standard tools via Git hooks (refer to `.lintstagedrc.mjs`).
 
+:::
+
 :::tip
 
 In urgent situations, you can skip Git hooks using the `--no-verify` flag during commits.
