@@ -1137,16 +1137,16 @@
     },
     {
       "name": "doctrine/migrations",
-      "version": "3.9.8",
+      "version": "3.9.9",
       "source": {
         "type": "git",
         "url": "https://github.com/doctrine/migrations.git",
-        "reference": "eb0b9ce3f999d720fa73037bbd06977ea34b76a0"
+        "reference": "5749e371aa864ce6578a8fa9167e5aa6e676ba6f"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/doctrine/migrations/zipball/eb0b9ce3f999d720fa73037bbd06977ea34b76a0",
-        "reference": "eb0b9ce3f999d720fa73037bbd06977ea34b76a0",
+        "url": "https://api.github.com/repos/doctrine/migrations/zipball/5749e371aa864ce6578a8fa9167e5aa6e676ba6f",
+        "reference": "5749e371aa864ce6578a8fa9167e5aa6e676ba6f",
         "shasum": ""
       },
       "require": {
@@ -1212,7 +1212,7 @@
       "keywords": ["database", "dbal", "migrations"],
       "support": {
         "issues": "https://github.com/doctrine/migrations/issues",
-        "source": "https://github.com/doctrine/migrations/tree/3.9.8"
+        "source": "https://github.com/doctrine/migrations/tree/3.9.9"
       },
       "funding": [
         {
@@ -1228,7 +1228,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-10-04T12:35:58+00:00"
+      "time": "2026-11-22T11:20:36+00:00"
     },
     {
       "name": "doctrine/orm",
@@ -2624,16 +2624,16 @@
     },
     {
       "name": "laminas/laminas-authentication",
-      "version": "2.19.0",
+      "version": "2.20.0",
       "source": {
         "type": "git",
         "url": "https://github.com/laminas/laminas-authentication.git",
-        "reference": "717b7a26e55f65a7c97325e49fa0b6fa2ea4c79a"
+        "reference": "c988c726da63662b946b7010d83a6f5cde3978e1"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-authentication/zipball/717b7a26e55f65a7c97325e49fa0b6fa2ea4c79a",
-        "reference": "717b7a26e55f65a7c97325e49fa0b6fa2ea4c79a",
+        "url": "https://api.github.com/repos/laminas/laminas-authentication/zipball/c988c726da63662b946b7010d83a6f5cde3978e1",
+        "reference": "c988c726da63662b946b7010d83a6f5cde3978e1",
         "shasum": ""
       },
       "require": {
@@ -2645,6 +2645,7 @@
         "zendframework/zend-authentication": "*"
       },
       "require-dev": {
+        "boundwize/structarmed": "^0.21.0",
         "laminas/laminas-coding-standard": "~3.1.0",
         "laminas/laminas-db": "^2.20.0",
         "laminas/laminas-http": "^2.19.0",
@@ -2653,7 +2654,7 @@
         "laminas/laminas-uri": "^2.12.0",
         "laminas/laminas-validator": "^2.64.1",
         "phpunit/phpunit": "^11.5.42",
-        "psalm/plugin-phpunit": "^0.19.5",
+        "psalm/plugin-phpunit": "^0.22.0",
         "vimeo/psalm": "^6.13.1"
       },
       "suggest": {
@@ -2685,11 +2686,11 @@
       },
       "funding": [
         {
-          "url": "https://funding.communitybridge.org/projects/laminas-project",
-          "type": "community_bridge"
+          "url": "https://crowdfunding.linuxfoundation.org/initiatives/laminas-project",
+          "type": "custom"
         }
       ],
-      "time": "2025-10-17T15:08:49+00:00"
+      "time": "2026-11-10T04:07:00+00:00"
     },
     {
       "name": "laminas/laminas-cli",
@@ -10897,16 +10898,16 @@
     },
     {
       "name": "brianium/paratest",
-      "version": "v7.29.0",
+      "version": "v7.30.0",
       "source": {
         "type": "git",
         "url": "https://github.com/paratestphp/paratest.git",
-        "reference": "2e4bbc8340be877d4f1a82f993a387e2c8c76272"
+        "reference": "1da6863b66deed9f23a0bab222e5d3c864f39e71"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/paratestphp/paratest/zipball/2e4bbc8340be877d4f1a82f993a387e2c8c76272",
-        "reference": "2e4bbc8340be877d4f1a82f993a387e2c8c76272",
+        "url": "https://api.github.com/repos/paratestphp/paratest/zipball/1da6863b66deed9f23a0bab222e5d3c864f39e71",
+        "reference": "1da6863b66deed9f23a0bab222e5d3c864f39e71",
         "shasum": ""
       },
       "require": {
@@ -10920,7 +10921,7 @@
         "phpunit/php-code-coverage": "^14.5.2",
         "phpunit/php-file-iterator": "^7.0.2",
         "phpunit/php-timer": "^9",
-        "phpunit/phpunit": "^13.4.7",
+        "phpunit/phpunit": "^13.4.8",
         "sebastian/environment": "^9.3.3",
         "symfony/console": "^7.4.20 || ^8.1.8",
         "symfony/process": "^7.4.19 || ^8.1.7"
@@ -10930,7 +10931,7 @@
         "ext-pcntl": "*",
         "ext-pcov": "*",
         "ext-posix": "*",
-        "phpstan/phpstan": "^2.3.5",
+        "phpstan/phpstan": "^2.3.7",
         "phpstan/phpstan-deprecation-rules": "^2.0.5",
         "phpstan/phpstan-phpunit": "^2.1.2",
         "phpstan/phpstan-strict-rules": "^2.1.1",
@@ -10962,7 +10963,7 @@
       "keywords": ["concurrent", "parallel", "phpunit", "testing"],
       "support": {
         "issues": "https://github.com/paratestphp/paratest/issues",
-        "source": "https://github.com/paratestphp/paratest/tree/v7.29.0"
+        "source": "https://github.com/paratestphp/paratest/tree/v7.30.0"
       },
       "funding": [
         {
@@ -10974,7 +10975,7 @@
           "type": "paypal"
         }
       ],
-      "time": "2026-11-14T20:49:33+00:00"
+      "time": "2026-11-23T07:40:24+00:00"
     },
     {
       "name": "carbonphp/carbon-doctrine-types",
