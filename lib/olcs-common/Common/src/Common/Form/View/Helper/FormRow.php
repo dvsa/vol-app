@@ -104,7 +104,6 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
         if (
             $type === 'multi_checkbox' || ($type === 'radio' && !$allowWrap)
             || $element->getAttribute('id') === 'security' || $allowWrap === false
-            || ($element instanceof Checkbox && !($element instanceof MultiCheckbox))
         ) {
             $wrap = false;
         }
