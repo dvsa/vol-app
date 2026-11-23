@@ -162,7 +162,7 @@ return [
             'title' => 'markup-table-th-action',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}',
-            'label-callback' => static fn($row) => 'Select letter section ' . ($row['name'] ?? '') . ', reference ' . $row['id'],
+            'label-callback' => static fn($row) => 'Select letter section ' . ($row['currentVersion']['name'] ?? $row['name'] ?? '') . ', reference ' . $row['id'],
         ],
     ],
 ];
