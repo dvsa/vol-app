@@ -46,9 +46,11 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
                 'remark' => 'Statement is over 2 months old',
                 'comment' => null,
                 'changed' => false,
+                'kept' => false,
                 'changedTo' => null,
                 'changedToTag' => null,
                 'changedBy' => null,
+                'changedOn' => null,
             ],
             $page['issues'][0]
         );
@@ -79,7 +81,38 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
         $this->assertSame('Ashley Young', $issue['changedBy']);
         $this->assertSame('Trading name, checked with Companies House', $issue['comment']);
         $this->assertTrue($issue['changed']);
+        $this->assertFalse($issue['kept']);
         $this->assertSame(0, $page['unchangedIssueCount']);
+    }
+
+    /** A "No" answer with a comment is a note: the flag stays as the analyser left it. */
+    public function testANoteKeepsTheFlagAsItIsAndCarriesTheComment(): void
+    {
+        $page = FinancialEvidenceAssessmentReview::mapFromAnalysis($this->givenAnalysis([
+            'name' => [
+                'flag' => 'fail',
+                'remark' => 'Name does not match',
+                'value' => 'Example Haulage',
+                'override' => [
+                    'originalFlag' => 'fail',
+                    'comment' => 'Checked manually, still a mismatch',
+                    'changedBy' => 'Ashley Young',
+                    'changedOn' => '2026-10-08 10:00:00',
+                ],
+            ],
+        ]));
+
+        $issue = $page['issues'][0];
+
+        $this->assertSame('FAIL', $issue['flag']);
+        $this->assertSame('govuk-tag--red', $issue['flagTag']);
+        $this->assertSame('FAIL', $issue['changedTo']);
+        $this->assertSame('govuk-tag--red', $issue['changedToTag']);
+        $this->assertSame('Checked manually, still a mismatch', $issue['comment']);
+        $this->assertFalse($issue['changed']);
+        $this->assertTrue($issue['kept']);
+        // Still unresolved: a note does not clear the issue.
+        $this->assertSame(1, $page['unchangedIssueCount']);
     }
 
     public function testValuesThatDoNotNameTheInfringingDataAreLeftOut(): void

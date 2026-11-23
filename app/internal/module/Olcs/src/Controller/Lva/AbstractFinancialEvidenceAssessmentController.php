@@ -353,10 +353,13 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * Change one issue to a pass. "No" changes nothing; "Yes" needs a reason of up to 1,000
-     * characters. An invalid form (no answer, or "Yes" without a usable reason) is shown again
-     * with its errors against the issue's fields. The API refuses a row that is not currently a
-     * fail or skipped, or an analysis already decided.
+     * Change one issue to a pass, or leave a note on it without changing its flag - and either
+     * answer can be revisited later, including a row changed earlier ("No" then undoes it).
+     *
+     * "Yes" needs a reason of up to 1,000 characters. "No" with nothing to say changes nothing on
+     * a row nobody has answered yet; with a reason, or on a row already answered, it is sent so
+     * the caseworker's note is saved or their earlier change undone. An invalid form (no answer,
+     * or "Yes" without a usable reason) is shown again with its errors against the issue's fields.
      */
     protected function processOverride(
         FormInterface $form,
@@ -382,18 +385,19 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             return $this->redirect()->refresh();
         }
 
-        if ($data['changeRecommendation'] !== 'Y') {
+        $issue = self::findByKey($page['issues'], (string)$data['row']);
+
+        if ($issue === null) {
+            $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
+
             return $this->redirect()->refresh();
         }
 
-        $changeable = array_column(
-            array_filter($page['issues'], static fn(array $issue): bool => !$issue['changed']),
-            'key'
-        );
+        $comment = trim((string)$data['comment']);
+        $changeToPass = $data['changeRecommendation'] === 'Y';
 
-        if (!in_array($data['row'], $changeable, true)) {
-            $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
-
+        if (!$changeToPass && $comment === '' && !($issue['changed'] || $issue['kept'])) {
+            // Nothing to change, nothing to undo and nothing to say.
             return $this->redirect()->refresh();
         }
 
@@ -401,12 +405,20 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             OverrideDocumentAnalysisFlag::create([
                 'id' => $analysisId,
                 'row' => $data['row'],
-                'comment' => $data['comment'],
+                'comment' => $comment,
+                'changeRecommendation' => $data['changeRecommendation'],
             ])
         );
 
         if ($response->isOk()) {
-            $this->flashMessengerHelper->addSuccessMessage('The recommendation has been changed to a pass');
+            $this->flashMessengerHelper->addSuccessMessage(
+                match (true) {
+                    $changeToPass => 'The recommendation has been changed to a pass',
+                    $issue['changed'] => 'The recommendation has been changed back to its original flag',
+                    $comment === '' => 'Your comment has been removed',
+                    default => 'Your comment has been saved',
+                }
+            );
         } else {
             $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');
         }
@@ -473,6 +485,18 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     protected function sectionRoute(): string
     {
         return sprintf(self::SECTION_ROUTE, $this->lva);
+    }
+
+    /** The entry of $list (one of the mapper's issues) whose 'key' matches, or null. */
+    private static function findByKey(array $list, string $key): ?array
+    {
+        foreach ($list as $item) {
+            if (($item['key'] ?? null) === $key) {
+                return $item;
+            }
+        }
+
+        return null;
     }
 
     protected function changeReviewUrl(int $analysisId): string

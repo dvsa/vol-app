@@ -612,7 +612,8 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->expects('handleCommand')
             ->with(m::on(static fn($c): bool => $c instanceof OverrideDocumentAnalysisFlag
-                && (int)$c->getId() === 9 && $c->getRow() === 'largeDeposit' && $c->getComment() === 'Checked by hand'))
+                && (int)$c->getId() === 9 && $c->getRow() === 'largeDeposit' && $c->getComment() === 'Checked by hand'
+                && $c->getChangeRecommendation() === 'Y'))
             ->andReturn($this->commandResponse(true, null));
         $response = $this->expectRedirectToRefresh($sut);
 
@@ -633,7 +634,8 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->override($sut, $post, true);
     }
 
-    public function testOverrideChoosingNoChangesNothing(): void
+    /** "No" with nothing to say on a row nobody has answered yet changes nothing, and nothing is sent. */
+    public function testOverrideChoosingNoOnAnUnansweredRowChangesNothing(): void
     {
         $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'N', 'comment' => ''];
 
@@ -643,6 +645,51 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->expectRedirectToRefresh($sut);
 
         $this->override($sut, $post, true);
+    }
+
+    /** A row changed earlier to a pass can be undone by answering "No" again. */
+    public function testChoosingNoOnARowChangedEarlierUndoesIt(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'N', 'comment' => ''];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('The recommendation has been changed back to its original flag');
+
+        $analysis = $this->assessedAnalysis(9, 'fail');
+        $analysis['resultNormalised']['rows']['name'] = [
+            'flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => [],
+            'override' => ['originalFlag' => 'fail', 'comment' => 'x', 'changedBy' => 'Jo', 'changedOn' => null],
+        ];
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverrideDocumentAnalysisFlag
+                && $c->getRow() === 'name' && $c->getChangeRecommendation() === 'N' && $c->getComment() === ''))
+            ->andReturn($this->commandResponse(true, null));
+        $response = $this->expectRedirectToRefresh($sut);
+
+        $this->assertSame($response, $this->override($sut, $post, true, $analysis));
+    }
+
+    /** A note left earlier (kept, not a real change) can have its comment removed the same way. */
+    public function testChoosingNoWithNoCommentOnAKeptNoteRemovesIt(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'N', 'comment' => ''];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('Your comment has been removed');
+
+        $analysis = $this->assessedAnalysis(9, 'fail');
+        $analysis['resultNormalised']['rows']['name'] = [
+            'flag' => 'fail', 'remark' => null, 'value' => null, 'checks' => [],
+            'override' => ['originalFlag' => 'fail', 'comment' => 'x', 'changedBy' => 'Jo', 'changedOn' => null],
+        ];
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')->andReturn($this->commandResponse(true, null));
+        $response = $this->expectRedirectToRefresh($sut);
+
+        $this->assertSame($response, $this->override($sut, $post, true, $analysis));
     }
 
     public static function overrideFieldErrorProvider(): \Iterator
@@ -704,31 +751,24 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
 
     public static function unchangeableRowProvider(): \Iterator
     {
-        yield 'already changed' => ['name'];
         yield 'not an issue' => ['bank'];
         yield 'unknown' => ['nonsense'];
     }
 
-    /** A row that is not an unchanged issue on this page (already changed, a pass, or made up) is not sent. */
+    /** A row that is not an issue on this page at all (a pass, or made up) is not sent. */
     #[DataProvider('unchangeableRowProvider')]
-    public function testOverrideOfARowThatCannotBeChangedSendsNothing(string $row): void
+    public function testOverrideOfARowNotOnThePageSendsNothing(string $row): void
     {
         $post = ['analysisId' => '9', 'row' => $row, 'changeRecommendation' => 'Y', 'comment' => 'x'];
         $flash = m::mock(FlashMessengerHelperService::class);
         $flash->expects('addErrorMessage')->with('This recommendation has already been changed');
-
-        $analysis = $this->assessedAnalysis(9, 'fail');
-        $analysis['resultNormalised']['rows']['name'] = [
-            'flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => [],
-            'override' => ['originalFlag' => 'fail', 'comment' => 'x', 'changedBy' => 'Jo', 'changedOn' => null],
-        ];
 
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
         $this->expectRedirectToRefresh($sut);
 
-        $this->override($sut, $post, true, $analysis);
+        $this->override($sut, $post, true);
     }
 
     // ---- processDecision (the refusals are covered above) ----

@@ -53,7 +53,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
     #[DataProvider('overridableProvider')]
     public function testRecordsTheChangeAsAnAnnotationAndLeavesTheResultAlone(string $flag): void
     {
-        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Checked by hand']);
+        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Checked by hand', 'changeRecommendation' => 'Y']);
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->with($command)
             ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
@@ -78,7 +78,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
 
     public function testKeepsEarlierAnnotationsOnOtherRows(): void
     {
-        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Because']);
+        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Because', 'changeRecommendation' => 'Y']);
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
             ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 4));
@@ -112,7 +112,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage(sprintf('Document analysis 5 is %s, not SUCCESS', $status));
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
     }
 
     public function testRefusesAnAnalysisWithNoAssessment(): void
@@ -124,10 +124,11 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('Document analysis 5 has no assessment to change');
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
     }
 
-    public function testRefusesARowThatIsAlreadyAPass(): void
+    /** The analyser's own flag is what is asked, not what any annotation has it read as now. */
+    public function testRefusesARowTheAnalyserDidNotFailOrSkip(): void
     {
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('pass'));
@@ -136,21 +137,85 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('Check name of document analysis 5 is not a fail or skipped');
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
     }
 
-    /** A row changed earlier reads as a pass once annotations are laid over it, so it cannot be changed twice. */
-    public function testRefusesARowAlreadyChangedByAnEarlierAnnotation(): void
+    /**
+     * A row changed earlier reads as a pass once annotations are laid over it, but the guard asks
+     * the analyser's own flag, so the caseworker can still revisit (and here, undo) their change.
+     */
+    public function testARowChangedEarlierCanStillBeRevisited(): void
     {
+        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N']);
+
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
-            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName()));
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 4));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => !isset($a['rows']['name'])), 4, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(['Document analysis 5 check name changed back to its original flag'], $result->getMessages());
+    }
+
+    /** "No" with a comment on a row changed earlier undoes the change, keeping the comment as a note. */
+    public function testUndoingAChangeWithACommentKeepsItAsANote(): void
+    {
+        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'Reconsidered', 'changeRecommendation' => 'N']);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 4));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static function (array $a): bool {
+                $row = $a['rows']['name'] ?? null;
+
+                return $row !== null && $row['flag'] === 'fail' && $row['originalFlag'] === 'fail'
+                    && $row['comment'] === 'Reconsidered';
+            }), 4, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(['Document analysis 5 check name changed back to its original flag'], $result->getMessages());
+    }
+
+    /** "No" with a comment on a row nobody has answered yet is saved as a note, the flag untouched. */
+    public function testANoteCanBeLeftWithoutChangingTheFlag(): void
+    {
+        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'Checked manually', 'changeRecommendation' => 'N']);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 2));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static function (array $a): bool {
+                $row = $a['rows']['name'] ?? null;
+
+                return $row !== null && $row['flag'] === 'fail' && $row['originalFlag'] === 'fail'
+                    && $row['comment'] === 'Checked manually';
+            }), 2, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(['Document analysis 5 check name comment saved'], $result->getMessages());
+    }
+
+    /** "No" with nothing to say on a row nobody has answered writes nothing at all. */
+    public function testNoWithNoCommentOnAnUnansweredRowWritesNothing(): void
+    {
+        $command = Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N']);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
         $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAnnotations');
 
-        $this->expectException(BadRequestException::class);
-        $this->expectExceptionMessage('is not a fail or skipped');
+        $result = $this->sut->handleCommand($command);
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
+        $this->assertSame(5, $result->getId('documentAnalysis'));
+        $this->assertSame(['Document analysis 5 check name left as it is'], $result->getMessages());
     }
 
     public function testRefusesAnUnknownRow(): void
@@ -161,7 +226,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
 
         $this->expectException(BadRequestException::class);
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'nonsense', 'comment' => 'x']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'nonsense', 'comment' => 'x', 'changeRecommendation' => 'Y']));
     }
 
     /** Someone else changed the row between the read and the version-guarded write. */
@@ -174,7 +239,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('changed while it was being reviewed');
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
+        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x', 'changeRecommendation' => 'Y']));
     }
 
     private function earlierAnnotationOnName(): array

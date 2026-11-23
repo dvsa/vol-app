@@ -26,15 +26,17 @@ use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\NormalisedResult;
  *         'changedOn' => '2026-10-08 10:00:00',
  *     ]]]
  *
- * Only a fail or a skipped row can be overridden, and only to a pass. An annotation that no
- * longer matches its row (for example the row is now a pass) is ignored rather than trusted.
+ * Only a fail or a skipped row can be annotated. Its flag can be changed to a pass, or left as
+ * it is with just a comment (a note, rather than a change) - the caseworker's answer can always
+ * be revisited, which changes the row back or replaces the note. An annotation that no longer
+ * matches its row (for example the row is now a pass) is ignored rather than trusted.
  */
 class AnalysisAnnotationOverlay
 {
     public const string KEY_ROWS = 'rows';
     public const string KEY_OVERRIDE = 'override';
 
-    /** The flags a caseworker may change; a pass needs no change. */
+    /** The flags a caseworker may annotate; a pass needs no change or note. */
     public const array OVERRIDABLE_FLAGS = [NormalisedResult::FLAG_FAIL, NormalisedResult::FLAG_SKIPPED];
 
     /**
@@ -55,18 +57,25 @@ class AnalysisAnnotationOverlay
                 continue;
             }
 
-            if (!in_array($rows[$key]['flag'] ?? null, self::OVERRIDABLE_FLAGS, true)) {
+            $rawFlag = $rows[$key]['flag'] ?? null;
+
+            if (!in_array($rawFlag, self::OVERRIDABLE_FLAGS, true)) {
                 continue;
             }
 
-            if (($annotation['flag'] ?? null) !== NormalisedResult::FLAG_PASS) {
+            //matrix below can be extended for other scenarios
+            $targetFlag = $annotation['flag'] ?? null;
+
+            // Either a genuine change (to a pass) or a note that leaves the row's own flag as it
+            // is; anything else no longer matches what this annotation claims to do.
+            if ($targetFlag !== NormalisedResult::FLAG_PASS && $targetFlag !== $rawFlag) {
                 continue;
             }
 
             $rows[$key] = array_merge($rows[$key], [
-                'flag' => NormalisedResult::FLAG_PASS,
+                'flag' => $targetFlag,
                 self::KEY_OVERRIDE => [
-                    'originalFlag' => $rows[$key]['flag'],
+                    'originalFlag' => $rawFlag,
                     'comment' => is_string($annotation['comment'] ?? null) ? $annotation['comment'] : null,
                     'changedBy' => is_string($annotation['changedBy']['name'] ?? null)
                         ? $annotation['changedBy']['name']
@@ -80,7 +89,9 @@ class AnalysisAnnotationOverlay
     }
 
     /**
-     * The annotations with one more row changed to a pass.
+     * The annotations with one row changed to $toFlag: a pass (the caseworker clears the issue)
+     * or the row's own original flag (the caseworker leaves it as it is, with a note, or undoes
+     * an earlier change back to what the analyser said).
      *
      * @param array<mixed>|null $annotations as stored
      *
@@ -89,6 +100,7 @@ class AnalysisAnnotationOverlay
     public function withOverride(
         ?array $annotations,
         string $row,
+        string $toFlag,
         string $originalFlag,
         string $comment,
         int $userId,
@@ -99,12 +111,42 @@ class AnalysisAnnotationOverlay
         $rows = is_array($annotations[self::KEY_ROWS] ?? null) ? $annotations[self::KEY_ROWS] : [];
 
         $rows[$row] = [
-            'flag' => NormalisedResult::FLAG_PASS,
+            'flag' => $toFlag,
             'originalFlag' => $originalFlag,
             'comment' => $comment,
             'changedBy' => ['id' => $userId, 'name' => $userName],
             'changedOn' => $changedOn->format('Y-m-d H:i:s'),
         ];
+
+        $annotations[self::KEY_ROWS] = $rows;
+
+        return $annotations;
+    }
+
+    /**
+     * Whether a row carries a caseworker's entry (a change or a note).
+     *
+     * @param array<mixed>|null $annotations as stored
+     */
+    public function hasRow(?array $annotations, string $row): bool
+    {
+        return is_array($annotations[self::KEY_ROWS][$row] ?? null);
+    }
+
+    /**
+     * The annotations with one row's entry taken away, which puts that row back exactly as the
+     * analyser left it: no change and no note.
+     *
+     * @param array<mixed>|null $annotations as stored
+     *
+     * @return array{rows: array<string, array>}
+     */
+    public function withoutRow(?array $annotations, string $row): array
+    {
+        $annotations = is_array($annotations) ? $annotations : [];
+        $rows = is_array($annotations[self::KEY_ROWS] ?? null) ? $annotations[self::KEY_ROWS] : [];
+
+        unset($rows[$row]);
 
         $annotations[self::KEY_ROWS] = $rows;
 
