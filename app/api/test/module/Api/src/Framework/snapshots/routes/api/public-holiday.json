@@ -1,0 +1,56 @@
+{
+  "api/public-holiday/single/GET": {
+    "request": "GET /api/public-holiday/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\PublicHoliday\\Get"
+    },
+    "matches": "api/public-holiday/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\PublicHoliday\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/public-holiday/single/GET"
+  },
+  "api/public-holiday/single/PUT": {
+    "request": "PUT /api/public-holiday/101/",
+    "matches": "api/public-holiday/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\PublicHoliday\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/public-holiday/single/PUT"
+  },
+  "api/public-holiday/single/DELETE": {
+    "request": "DELETE /api/public-holiday/101/",
+    "matches": "api/public-holiday/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\PublicHoliday\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/public-holiday/single/DELETE"
+  },
+  "api/public-holiday/GET": {
+    "request": "GET /api/public-holiday/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\PublicHoliday\\GetList"
+    },
+    "matches": "api/public-holiday/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\PublicHoliday\\GetList"
+    },
+    "withoutTrailingSlash": "api/public-holiday/GET"
+  },
+  "api/public-holiday/POST": {
+    "request": "POST /api/public-holiday/",
+    "matches": "api/public-holiday/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\PublicHoliday\\Create"
+    },
+    "withoutTrailingSlash": "api/public-holiday/POST"
+  }
+}

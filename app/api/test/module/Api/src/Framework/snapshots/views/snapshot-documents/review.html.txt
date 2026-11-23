@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" class="review">
+    
+    <head>
+    
+    <meta charset="utf-8">
+    
+    <title>Review your application replaced  - Vehicle Operator Licensing - GOV.UK</title><meta name="viewport" content="width&#x3D;device-width,&#x20;initial-scale&#x3D;1.0">
+<meta http-equiv="X-UA-Compatible" content="IE&#x3D;edge"><link href="&#x2F;styles&#x2F;print.css" media="screen,&#x20;print" rel="stylesheet" type="text&#x2F;css">    
+</head>
+    
+    <body>
+        
+        <div class="review-header">
+            <p>application-review-title-gv</p>
+            <h1>Test Haulage <&> Ltd OB1234567/1001</h1>
+            <a class="hide-print" href="javascript:window.print()">Print this page</a>
+        </div>
+        
+                    <div class="review-section">
+                <h2>
+                    1. review-type-of-licence                </h2>
+                <div class="read-only">
+    
+        <ul class="definition-list">
+                    <li class="definition-list__item">
+            <dt>Operator location</dt>
+        <dd>
+                        Great Britain &lt;&amp;&gt;                                </dd>
+    </li>
+                    <li class="definition-list__item extra-class">
+            <dt>Licence type</dt>
+        <dd>
+                        Standard                                </dd>
+    </li>
+                    <li class="definition-list__item">
+            <dt>Website</dt>
+        <dd>
+                        <a href="https://example.com/?a=1&b=2">Example &lt;&amp;&gt;</a>
+                                </dd>
+    </li>
+                    <li class="definition-list__item">
+            <dt>Raw</dt>
+        <dd>
+                        <em>not escaped</em>                         (suffix)        </dd>
+    </li>
+            </ul>
+    <ul class="definition-list">
+                    <li class="definition-list__item">
+    <p>Full content <&></p></li>
+                    <li class="definition-list__item">
+        <ul>
+                    <li>First <&></li>
+                    <li>Second</li>
+            </ul>
+    </li>
+            </ul>
+
+</div>
+            </div>
+                    <div class="review-section">
+                <h2>
+                    2. review-business-details                </h2>
+                <div class="read-only">
+    
+    <div class="read-only__header">
+    <h3 class="read-only__title">Business details <&></h3>
+</div>
+    <ul class="definition-list">
+                    <li class="definition-list__item">
+            <dt>Company name</dt>
+        <dd>
+                        Test Haulage &lt;&amp;&gt; Ltd                                </dd>
+    </li>
+            </ul>
+    
+    <p>Free text, printed raw <&></p>
+    
+    <p>Markup, printed raw</p>
+</div>
+            </div>
+                    <div class="review-section">
+                <h2>
+                    3. review-conditions-undertakings                </h2>
+                <div class="read-only">
+    
+    
+    <h2 class="heading-large">continuations.conditions-undertakings.licence</h2>
+
+            <ul class="list--bullet">
+    <li>The Public Passenger Vehicles Act of 1981 states that the operation of public service vehicles cannot be your main occupation. Your PSV Restricted licence was originally granted on the basis that you meet the relevant main occupation criteria.  This must remain the case for you to retain your licence.</li>
+    <li>A traffic commissioner can request evidence to prove that you still meet the criteria at any time. You are required to keep documents so you can prove that if asked.  The type of evidence can include, accounts, tax returns, P60, bank statements and financial records that separate PSV operation income and expenditure from income from your main occupation. You should also be able to demonstrate the time that you devote to both roles.</li>
+    <li>If you fail to continue to meet the criteria, you must either apply for a standard licence, or surrender your restricted licence. The failure to notify of a change in your circumstances regarding the main occupation could impact on an operator's good repute.</li>
+</ul>    
+
+    
+        <h4>continuations.conditions-undertakings.conditions</h4>
+
+        <ul class="list--bullet">
+                            <li>Licence condition &lt;&amp;&gt;</li>
+                    </ul>
+
+    
+    
+        <h4>continuations.conditions-undertakings.undertakings</h4>
+
+        <ul class="list--bullet">
+                            <li>Licence undertaking</li>
+                                        <li>The operator shall, during the life of the restricted licence, keep separate records of all time spent and the gross and net income earned monthly by them from all occupations ( with supporting detailed records from which these sums are derived) to enable the main occupation to be determined by the Traffic Commissioner at any time. Records shall be supported by primary evidence such as payslips, P60 documents, booking diaries, invoices and tachograph records. Copies of the records shall be made available to the DVSA or OTC officers on request.</li>
+<li>Should the operator no longer meet the requirements to hold a restricted licence then they will either surrender it or apply for standard licence.</li>
+                    </ul>
+
+    
+    <hr class="seperator"/>
+
+
+
+
+    <h2 class="heading-large">Operating centres(s)</h2>
+
+    
+                <h4>
+            1 Test Street Leeds LS1 1AA        </h4>
+
+                        <h5>continuations.conditions-undertakings.conditions</h5>
+                <ul class="list--bullet">
+                                            <li>Centre condition &lt;&amp;&gt;</li>
+                                    </ul>
+
+        
+                        <h5>continuations.conditions-undertakings.undertakings</h5>
+                <ul class="list--bullet">
+                                            <li>Centre undertaking</li>
+                                    </ul>
+        
+    
+
+</div>
+            </div>
+                    <div class="review-section">
+                <h2>
+                    review-sub-sections                </h2>
+                        <h3>Sub section <&></h3>
+        <hr>
+    <div class="read-only">
+    
+        <ul class="definition-list">
+                    <li class="definition-list__item">
+            <dt>One</dt>
+        <dd>
+                        1                                </dd>
+    </li>
+            </ul>
+
+</div>
+<div class="read-only">
+    
+        <ul class="definition-list">
+                    <li class="definition-list__item">
+            <dt>Two</dt>
+        <dd>
+                        2                                </dd>
+    </li>
+            </ul>
+
+</div>
+            </div>
+                    <div class="review-section">
+                <h2>
+                    5.                 </h2>
+                <div class="read-only">
+    
+    <div class="read-only__header">
+    <h3 class="read-only__title">Main item <&></h3>
+</div>
+    <ul class="definition-list">
+                    <li class="definition-list__item">
+            <dt>Three</dt>
+        <dd>
+                        3                                </dd>
+    </li>
+            </ul>
+
+</div>
+<div class="read-only">
+    
+        
+    <p>No items</p>
+    
+    
+</div>
+            </div>
+                
+        <p><a class="hide-print" href="javascript:window.print()">Print this page</a></p>
+        
+    </body>
+    
+</html>

@@ -1,0 +1,56 @@
+{
+  "api/impounding/GET": {
+    "request": "GET /api/impounding/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Impounding\\ImpoundingList"
+    },
+    "matches": "api/impounding/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Impounding\\ImpoundingList"
+    },
+    "withoutTrailingSlash": "api/impounding/GET"
+  },
+  "api/impounding/single/GET": {
+    "request": "GET /api/impounding/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Impounding\\Impounding"
+    },
+    "matches": "api/impounding/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Impounding\\Impounding",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/impounding/single/GET"
+  },
+  "api/impounding/single/PUT": {
+    "request": "PUT /api/impounding/101/",
+    "matches": "api/impounding/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Impounding\\UpdateImpounding",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/impounding/single/PUT"
+  },
+  "api/impounding/single/DELETE": {
+    "request": "DELETE /api/impounding/101/",
+    "matches": "api/impounding/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Impounding\\DeleteImpounding",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/impounding/single/DELETE"
+  },
+  "api/impounding/POST": {
+    "request": "POST /api/impounding/",
+    "matches": "api/impounding/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Impounding\\CreateImpounding"
+    },
+    "withoutTrailingSlash": "api/impounding/POST"
+  }
+}

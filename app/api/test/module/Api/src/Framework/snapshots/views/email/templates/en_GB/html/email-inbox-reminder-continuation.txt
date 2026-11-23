@@ -1,0 +1,6 @@
+email.inbox-reminder-continuation-html.body
+<p>Licence: [licNo &lt;&amp;&gt;] [operatorName &lt;&amp;&gt;]</p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Sign in to your account</a>
+</p>

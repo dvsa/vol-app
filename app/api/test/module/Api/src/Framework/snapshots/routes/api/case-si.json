@@ -1,0 +1,65 @@
+{
+  "api/case-si/create-response/POST": {
+    "request": "POST /api/case/si/create-response/",
+    "matches": "api/case-si/create-response/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\CreateResponse"
+    },
+    "withoutTrailingSlash": "api/case-si/create-response/POST"
+  },
+  "api/case-si/single/GET": {
+    "request": "GET /api/case/si/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Si\\Si"
+    },
+    "matches": "api/case-si/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Si\\Si",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/case-si/single/GET"
+  },
+  "api/case-si/single/PUT": {
+    "request": "PUT /api/case/si/101/",
+    "matches": "api/case-si/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\UpdateSi",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/case-si/single/PUT"
+  },
+  "api/case-si/single/DELETE": {
+    "request": "DELETE /api/case/si/101/",
+    "matches": "api/case-si/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\DeleteSi",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/case-si/single/DELETE"
+  },
+  "api/case-si/GET": {
+    "request": "GET /api/case/si/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Si\\SiList"
+    },
+    "matches": "api/case-si/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Si\\SiList"
+    },
+    "withoutTrailingSlash": "api/case-si/GET"
+  },
+  "api/case-si/POST": {
+    "request": "POST /api/case/si/",
+    "matches": "api/case-si/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\CreateSi"
+    },
+    "withoutTrailingSlash": "api/case-si/POST"
+  }
+}

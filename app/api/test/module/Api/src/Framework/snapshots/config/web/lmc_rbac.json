@@ -1,0 +1,18 @@
+{
+  "guard_manager": [],
+  "role_provider_manager": [],
+  "assertion_manager": [],
+  "identity_provider": "Dvsa\\Olcs\\Api\\Rbac\\IdentityProviderInterface",
+  "role_provider": {
+    "LmcRbacMvc\\Role\\ObjectRepositoryRoleProvider": {
+      "object_manager": "doctrine.entitymanager.orm_default",
+      "class_name": "Dvsa\\Olcs\\Api\\Entity\\User\\Role",
+      "role_name_property": "role"
+    }
+  },
+  "assertion_map": {
+    "can-update-licence-licence-type": "Dvsa\\Olcs\\Api\\Assertion\\Licence\\UpdateLicenceType",
+    "can-manage-user-selfserve": "Dvsa\\Olcs\\Api\\Assertion\\User\\ManageUserSelfserve",
+    "can-read-user-selfserve": "Dvsa\\Olcs\\Api\\Assertion\\User\\ReadUserSelfserve"
+  }
+}

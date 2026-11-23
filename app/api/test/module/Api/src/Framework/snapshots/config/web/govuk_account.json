@@ -1,0 +1,16 @@
+{
+  "discovery_endpoint": "1",
+  "client_id": "1",
+  "keys": {
+    "algorithm": "1",
+    "private_key": "1",
+    "public_key": "1"
+  },
+  "redirect_uri": {
+    "logged_in": "1/govuk-id/loggedin",
+    "logged_out": "1/govuk-id/loggedout"
+  },
+  "core_identity_did_document_url": "1",
+  "expected_core_identity_issuer": "1",
+  "proxy": "http://1"
+}

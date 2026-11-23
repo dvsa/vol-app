@@ -1,0 +1,15 @@
+{
+  "msi/valid-licence/GET": {
+    "request": "GET /msi/valid-licence/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Exists"
+    },
+    "matches": "msi/valid-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Exists",
+      "licNo": "101"
+    },
+    "withoutTrailingSlash": "msi/valid-licence/GET"
+  }
+}

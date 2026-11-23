@@ -1,0 +1,12 @@
+{
+  "api/letter-instance-issue/single/PUT": {
+    "request": "PUT /api/letter-instance-issue/101/",
+    "matches": "api/letter-instance-issue/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceIssue\\UpdateContent",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-instance-issue/single/PUT"
+  }
+}

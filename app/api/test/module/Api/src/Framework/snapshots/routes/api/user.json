@@ -1,0 +1,204 @@
+{
+  "api/user/roles/GET": {
+    "request": "GET /api/user/roles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\RoleList"
+    },
+    "matches": "api/user/roles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\RoleList"
+    },
+    "withoutTrailingSlash": "api/user/roles/GET"
+  },
+  "api/user/login/update-last-login/POST": {
+    "request": "POST /api/user/login/update-last-login/",
+    "matches": "api/user/login/update-last-login/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\UpdateUserLastLoginAt"
+    },
+    "withoutTrailingSlash": "api/user/login/update-last-login/POST"
+  },
+  "api/user/internal/single/GET": {
+    "request": "GET /api/user/internal/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\User"
+    },
+    "matches": "api/user/internal/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\User",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/user/internal/single/GET"
+  },
+  "api/user/internal/single/PUT": {
+    "request": "PUT /api/user/internal/101/",
+    "matches": "api/user/internal/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\UpdateUser",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/user/internal/single/PUT"
+  },
+  "api/user/internal/single/DELETE": {
+    "request": "DELETE /api/user/internal/101/",
+    "matches": "api/user/internal/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\DeleteUser",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/user/internal/single/DELETE"
+  },
+  "api/user/internal/GET": {
+    "request": "GET /api/user/internal/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserList"
+    },
+    "matches": "api/user/internal/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserList"
+    },
+    "withoutTrailingSlash": "api/user/internal/GET"
+  },
+  "api/user/internal/POST": {
+    "request": "POST /api/user/internal/",
+    "matches": "api/user/internal/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\CreateUser"
+    },
+    "withoutTrailingSlash": "api/user/internal/POST"
+  },
+  "api/user/internal-only/GET": {
+    "request": "GET /api/user/internal-only/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserListInternal"
+    },
+    "matches": "api/user/internal-only/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserListInternal"
+    },
+    "withoutTrailingSlash": "api/user/internal-only/GET"
+  },
+  "api/user/selfserve/register/POST": {
+    "request": "POST /api/user/selfserve/register/",
+    "matches": "api/user/selfserve/register/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\RegisterUserSelfserve"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/register/POST"
+  },
+  "api/user/selfserve/register/register-consultant-operator/POST": {
+    "request": "POST /api/user/selfserve/register/register-consultant-operator/",
+    "matches": "api/user/selfserve/register/register-consultant-operator/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\RegisterConsultantAndOperator"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/register/register-consultant-operator/POST"
+  },
+  "api/user/selfserve/remind-username/POST": {
+    "request": "POST /api/user/selfserve/remind-username/",
+    "matches": "api/user/selfserve/remind-username/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\RemindUsernameSelfserve"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/remind-username/POST"
+  },
+  "api/user/selfserve/agree-terms/POST": {
+    "request": "POST /api/user/selfserve/agree-terms/",
+    "matches": "api/user/selfserve/agree-terms/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\AgreeTerms"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/agree-terms/POST"
+  },
+  "api/user/selfserve/single/GET": {
+    "request": "GET /api/user/selfserve/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserSelfserve"
+    },
+    "matches": "api/user/selfserve/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserSelfserve",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/single/GET"
+  },
+  "api/user/selfserve/single/PUT": {
+    "request": "PUT /api/user/selfserve/101/",
+    "matches": "api/user/selfserve/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\UpdateUserSelfserve",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/single/PUT"
+  },
+  "api/user/selfserve/single/DELETE": {
+    "request": "DELETE /api/user/selfserve/101/",
+    "matches": "api/user/selfserve/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\DeleteUserSelfserve",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/single/DELETE"
+  },
+  "api/user/selfserve/GET": {
+    "request": "GET /api/user/selfserve/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserListSelfserve"
+    },
+    "matches": "api/user/selfserve/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\UserListSelfserve"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/GET"
+  },
+  "api/user/selfserve/POST": {
+    "request": "POST /api/user/selfserve/",
+    "matches": "api/user/selfserve/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\CreateUserSelfserve"
+    },
+    "withoutTrailingSlash": "api/user/selfserve/POST"
+  },
+  "api/user/operator-admin-for-organisation-has-logged-in/GET": {
+    "request": "GET /api/user/operator-admin-for-organisation-has-logged-in/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\OperatorAdminForOrganisationHasLoggedIn"
+    },
+    "matches": "api/user/operator-admin-for-organisation-has-logged-in/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\OperatorAdminForOrganisationHasLoggedIn"
+    },
+    "withoutTrailingSlash": "api/user/operator-admin-for-organisation-has-logged-in/GET"
+  },
+  "api/user/pid/single/GET": {
+    "request": "GET /api/user/pid/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\Pid"
+    },
+    "matches": "api/user/pid/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\Pid",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/user/pid/single/GET"
+  }
+}

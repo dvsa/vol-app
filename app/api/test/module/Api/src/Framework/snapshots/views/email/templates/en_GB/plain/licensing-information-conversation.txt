@@ -1,0 +1,4 @@
+Dear operator,
+
+You have a new message <&>
+Sign in to your account at [url <&>].

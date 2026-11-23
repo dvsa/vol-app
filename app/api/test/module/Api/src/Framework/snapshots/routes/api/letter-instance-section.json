@@ -1,0 +1,12 @@
+{
+  "api/letter-instance-section/single/PUT": {
+    "request": "PUT /api/letter-instance-section/101/",
+    "matches": "api/letter-instance-section/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceSection\\UpdateContent",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-instance-section/single/PUT"
+  }
+}

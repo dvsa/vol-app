@@ -1,0 +1,12 @@
+Your Vehicle Operator Licence [licNo &lt;&amp;&gt;] is due to expire on [continuationDate &lt;&amp;&gt;]
+If you don't continue with your licence it will automatically end after the expiry date.
+
+To continue your licence online you'll need to:
+    * review your current licence and ensure that it is up to date
+    * update your financial evidence (you'll need to know your average balance over the last three months, and details of other available finances)
+    * pay a fee of £401.50 by debit or credit card
+
+It is an offence to operate your vehicles without an operator's licence.
+
+Continue your licence
+[continueLicenceUrl &lt;&amp;&gt;]

@@ -1,0 +1,68 @@
+{
+  "api/feature-toggle/single/GET": {
+    "request": "GET /api/feature-toggle/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeatureToggle\\ById"
+    },
+    "matches": "api/feature-toggle/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeatureToggle\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/feature-toggle/single/GET"
+  },
+  "api/feature-toggle/single/PUT": {
+    "request": "PUT /api/feature-toggle/101/",
+    "matches": "api/feature-toggle/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\FeatureToggle\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/feature-toggle/single/PUT"
+  },
+  "api/feature-toggle/single/DELETE": {
+    "request": "DELETE /api/feature-toggle/101/",
+    "matches": "api/feature-toggle/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\FeatureToggle\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/feature-toggle/single/DELETE"
+  },
+  "api/feature-toggle/GET": {
+    "request": "GET /api/feature-toggle/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeatureToggle\\GetList"
+    },
+    "matches": "api/feature-toggle/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeatureToggle\\GetList"
+    },
+    "withoutTrailingSlash": "api/feature-toggle/GET"
+  },
+  "api/feature-toggle/POST": {
+    "request": "POST /api/feature-toggle/",
+    "matches": "api/feature-toggle/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\FeatureToggle\\Create"
+    },
+    "withoutTrailingSlash": "api/feature-toggle/POST"
+  },
+  "api/feature-toggle/check/GET": {
+    "request": "GET /api/feature-toggle/check",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeatureToggle\\IsEnabled"
+    },
+    "matches": "api/feature-toggle/check/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeatureToggle\\IsEnabled"
+    },
+    "withTrailingSlash": "api/feature-toggle/single/GET"
+  }
+}

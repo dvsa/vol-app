@@ -1,0 +1,56 @@
+{
+  "api/letter-appendix/single/GET": {
+    "request": "GET /api/letter-appendix/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\Get"
+    },
+    "matches": "api/letter-appendix/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-appendix/single/GET"
+  },
+  "api/letter-appendix/single/PUT": {
+    "request": "PUT /api/letter-appendix/101/",
+    "matches": "api/letter-appendix/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterAppendix\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-appendix/single/PUT"
+  },
+  "api/letter-appendix/single/DELETE": {
+    "request": "DELETE /api/letter-appendix/101/",
+    "matches": "api/letter-appendix/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterAppendix\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-appendix/single/DELETE"
+  },
+  "api/letter-appendix/GET": {
+    "request": "GET /api/letter-appendix/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\GetList"
+    },
+    "matches": "api/letter-appendix/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter-appendix/GET"
+  },
+  "api/letter-appendix/POST": {
+    "request": "POST /api/letter-appendix/",
+    "matches": "api/letter-appendix/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterAppendix\\Create"
+    },
+    "withoutTrailingSlash": "api/letter-appendix/POST"
+  }
+}

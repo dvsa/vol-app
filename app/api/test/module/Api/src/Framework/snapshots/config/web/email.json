@@ -1,0 +1,10 @@
+{
+  "from_name": "OLCS do not reply",
+  "from_email": "1",
+  "selfserve_uri": "1",
+  "internal_uri": "1",
+  "http": {
+    "adapter": "Laminas\\Http\\Client\\Adapter\\Curl"
+  },
+  "send_all_mail_to": "1"
+}

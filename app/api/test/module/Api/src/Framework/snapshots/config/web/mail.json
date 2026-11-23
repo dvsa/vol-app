@@ -1,0 +1,14 @@
+{
+  "dsn": "1",
+  "type": "\\Laminas\\Mail\\Transport\\Smtp",
+  "options": {
+    "name": "1",
+    "host": "1",
+    "port": "1",
+    "connection_config": {
+      "username": "null",
+      "password": "null",
+      "port": "1"
+    }
+  }
+}
