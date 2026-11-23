@@ -62,6 +62,9 @@ abstract class AbstractDeclarationController extends AbstractController
                 $form = $this->formHelper->createForm('TransportManagerApplicationDeclaration');
                 $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
                 $this->alterDeclarationForm($form);
+                if (!$form->has('content')) {
+                    $form->getInputFilter()->remove('content');
+                }
                 $form->setData((array) $this->getRequest()->getPost());
 
                 if (!$form->isValid()) {
