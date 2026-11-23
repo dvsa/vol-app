@@ -75,7 +75,7 @@ final class TemplateSelectionLabelTest extends TestCase
             ['Olcs', 'opposition', ['id' => 7, 'raisedDate' => '2025-01-01', 'opposer' => ['contactDetails' => ['person' => ['forename' => 'Sam', 'familyName' => 'Jones']]]], 'Select opposition from Sam Jones, 2025-01-01, reference 7'],
             ['Admin', 'admin-irhp-permit-stock', ['id' => 7, 'country' => ['countryDesc' => 'France'], 'validFrom' => '2025-01-01'], 'Select permit stock France, 2025-01-01, reference 7'],
             ['Admin', 'admin-irhp-permit-window', ['id' => 7, 'startDate' => '2025-01-01', 'endDate' => '2025-02-01'], 'Select permit window 2025-01-01 to 2025-02-01, reference 7'],
-            ['Admin', 'admin-printers-exceptions', ['id' => 7, 'printerName' => 'Office'], 'Select printer exception Office, reference 7'],
+            ['Admin', 'admin-printers-exceptions', ['id' => 7, 'printer' => ['printerName' => 'Office']], 'Select printer exception Office, reference 7'],
             ['Admin', 'task-alpha-split', ['id' => 7, 'letters' => 'A-C'], 'Select alpha split A-C, reference 7'],
             ['Olcs', 'prohibitionDefect', ['id' => 7, 'defectType' => 'Brakes'], 'Select defect Brakes, reference 7'],
             ['Olcs', 'publication', ['id' => 7, 'publication' => ['publicationNo' => '123']], 'Select publication 123, reference 7'],
