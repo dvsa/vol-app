@@ -56,7 +56,7 @@ return [
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}',
             'label-callback' => static fn($row) => 'Select printer exception '
-                . ($row['printerName'] ?? '') . ', reference ' . $row['id'],
+                . ($row['printer']['printerName'] ?? '') . ', reference ' . $row['id'],
         ],
     ]
 ];
