@@ -1,0 +1,15 @@
+/* docmd displays every image as a block. The language icons sit inline in headings and list
+   items (e.g. "### ![](./assets/languages/php.svg) PHP"), as they did under Docusaurus. */
+.main-content img[src*="assets/languages/"] {
+  display: inline-block;
+  height: 1.2em;
+  width: auto;
+  margin: 0 0.3em 0 0;
+  vertical-align: middle;
+}
+
+/* The DVSA logo's wordmark is unreadable at docmd's default 2.5rem. */
+.sidebar-header .logo-link img {
+  max-height: 4.5rem;
+  margin: 0;
+}

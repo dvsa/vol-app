@@ -117,7 +117,7 @@ If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to swi
 
     :::
 
-:::success
+:::tip
 
 All done!
 

@@ -48,12 +48,12 @@ Invokes Bedrock Data Automation against the Terraform-managed BDA project (custo
 - **Timeout**: 30 minutes.
 
 [//]: # "### 3. `context-gathering.asl.json` (future migration)"
-[//]: # "📊 **[Diagram](./diagrams/context-gathering.md)**"
+[//]: # "📊 **Diagram** (to add at ./diagrams/context-gathering.md)"
 [//]: #
 [//]: # "Looks up the applicant profile from DynamoDB."
 [//]: #
 [//]: # "### 4. `claude-analysis.asl.json` (future migration)"
-[//]: # "📊 **[Diagram](./diagrams/claude-analysis.md)**"
+[//]: # "📊 **Diagram** (to add at ./diagrams/claude-analysis.md)"
 [//]: #
 [//]: # "DVSA validation via Claude Opus 4.7 against the Bedrock managed prompt."
 [//]: #

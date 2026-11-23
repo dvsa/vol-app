@@ -10,8 +10,8 @@ on:
     - cron: 0 0 * * 1
 
 # The documentation site (https://dvsa.github.io/vol-app), built from website/. Its whole tree is
-# Docusaurus build tooling - webpack, loaders, the dev server - and none of it reaches a reader of
-# the published site or any deployed application.
+# docmd build tooling, and none of it reaches a deployed application. A few of docmd's own scripts
+# (search, theme switching, Mermaid) are served to readers of the published site.
 #
 # This lives apart from security-app.yaml so that a finding here fails the check - it shows red -
 # without blocking the application Docker builds, which gate on security-app's result. Nothing in
