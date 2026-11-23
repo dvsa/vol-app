@@ -235,13 +235,18 @@ services:
   aws-emulator:
     build:
       context: infra/docker/aws-emulator
+      args:
+        # latest unless you set a release (such as 1.0.588) in the root .env file; see the Dockerfile.
+        AWS_EMULATOR_VERSION: ${AWS_EMULATOR_VERSION:-latest}
     read_only: true
     cap_drop:
       - ALL
     security_opt:
       - no-new-privileges:true
     ports:
-      # Host loopback only: the emulator accepts any request signed with its own keys.
+      # Host loopback only, as the emulator accepts any request signed with its own keys. The other
+      # containers in this stack can still reach it, on this port and the ones it opens for resource
+      # endpoints.
       - "127.0.0.1:9297:9297"
     environment:
       EMULATOR_TELEMETRY: "off"
