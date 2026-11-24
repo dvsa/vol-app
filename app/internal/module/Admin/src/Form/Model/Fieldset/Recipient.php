@@ -33,7 +33,7 @@ class Recipient extends Base
 
     #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'A&D'])]
     #[Form\Type('OlcsCheckbox')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'sendNoticesProcs', 'context_values' => ['', 'N'], 'validators' => [['name' => 'Identical', 'options' => ['token' => 'Y', 'messages' => ['notSame' => 'Subscription details must be selected']]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'sendNoticesProcs', 'context_values' => ['', 'N'], 'validators' => [['name' => 'Identical', 'options' => ['token' => 'Y', 'messages' => ['notSame' => 'Subscription details must be selected']]]]])]
     public $sendAppDecision;
 
     #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'N&P'])]

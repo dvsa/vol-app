@@ -14,7 +14,6 @@ use InvalidArgumentException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
-use Ramsey\Uuid\Uuid;
 
 class AcquiredRightsClient
 {

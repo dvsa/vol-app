@@ -51,9 +51,12 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
+          # api's BatchJobTest reads the terraform, to check every Batch job's command line
           sparse-checkout: |
             app/${{ inputs.project }}
             lib
+            infra/terraform/environments
+            infra/terraform/modules/service
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:

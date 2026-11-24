@@ -1,0 +1,8 @@
+{
+  "host": "searchv6.1",
+  "port": "443",
+  "transport": "Https",
+  "curl": {
+    "81": false
+  }
+}

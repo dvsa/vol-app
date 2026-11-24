@@ -1,0 +1,8 @@
+Hello,
+
+One of your Vehicle Operator Licensing account users has forgotten their username.
+
+As the administrator, you’ll need to give them this information yourself. You can find it in the manage users area of your account.
+
+Your username is: [loginId <&>]
+Sign in at [url <&>]

@@ -1,0 +1,4 @@
+[
+  "Olcs\\Logging\\Mvc\\Listener\\LogRequest",
+  "Olcs\\Logging\\Mvc\\Listener\\LogError"
+]

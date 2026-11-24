@@ -1,0 +1,11 @@
+{
+  "msi/compliance-episode/POST": {
+    "request": "POST /msi/compliance-episode/",
+    "matches": "msi/compliance-episode/POST",
+    "params": {
+      "controller": "Api\\Xml",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\ComplianceEpisode"
+    },
+    "withoutTrailingSlash": "msi/compliance-episode/POST"
+  }
+}

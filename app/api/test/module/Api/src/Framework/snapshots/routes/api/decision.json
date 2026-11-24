@@ -1,0 +1,14 @@
+{
+  "api/decision/GET": {
+    "request": "GET /api/decision/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Decision\\DecisionList"
+    },
+    "matches": "api/decision/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Decision\\DecisionList"
+    },
+    "withoutTrailingSlash": "api/decision/GET"
+  }
+}

@@ -29,50 +29,50 @@ class StatementDetails extends CaseBase
     #[Form\Attributes(['placeholder' => ''])]
     #[Form\Options(['label' => 'Requestors first name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $requestorsForename = null;
 
     #[Form\Attributes(['placeholder' => ''])]
     #[Form\Options(['label' => 'Requestors last name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $requestorsFamilyName = null;
 
     #[Form\Attributes(['class' => '', 'id' => ''])]
     #[Form\Options(['label' => 'Requestor body'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 40])]
     public $requestorsBody = null;
 
     #[Form\Attributes(['id' => ''])]
     #[Form\Options(['label' => 'Date stopped', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
-    #[Form\Validator(['name' => 'DateCompare', 'options' => ['compare_to' => 'requestedDate', 'compare_to_label' => 'Date requested', 'operator' => 'lte']])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
+    #[Form\Validator('DateCompare', options: ['compare_to' => 'requestedDate', 'compare_to_label' => 'Date requested', 'operator' => 'lte'])]
     public $stoppedDate = null;
 
     #[Form\Attributes(['id' => ''])]
     #[Form\Options(['label' => 'Date requested', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $requestedDate = null;
 
     #[Form\Attributes(['id' => 'issuedDate'])]
     #[Form\Options(['label' => 'Issued date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
     #[Form\Required(false)]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     public $issuedDate = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => ''])]
@@ -104,7 +104,7 @@ class StatementDetails extends CaseBase
     #[Form\Attributes(['id' => '', 'class' => 'extra-long'])]
     #[Form\Options(['label' => 'Authorised decision', 'label_attributes' => ['class' => '']])]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     public $authorisersDecision = null;
 }

@@ -1,0 +1,55 @@
+{
+  "api/partner/single/GET": {
+    "request": "GET /api/partner/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\Partner"
+    },
+    "matches": "api/partner/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\Partner",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/partner/single/GET"
+  },
+  "api/partner/single/PUT": {
+    "request": "PUT /api/partner/101/",
+    "matches": "api/partner/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\UpdatePartner",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/partner/single/PUT"
+  },
+  "api/partner/GET": {
+    "request": "GET /api/partner/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\PartnerList"
+    },
+    "matches": "api/partner/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\User\\PartnerList"
+    },
+    "withoutTrailingSlash": "api/partner/GET"
+  },
+  "api/partner/POST": {
+    "request": "POST /api/partner/",
+    "matches": "api/partner/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\CreatePartner"
+    },
+    "withoutTrailingSlash": "api/partner/POST"
+  },
+  "api/partner/DELETE": {
+    "request": "DELETE /api/partner/",
+    "matches": "api/partner/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\User\\DeletePartner"
+    },
+    "withoutTrailingSlash": "api/partner/DELETE"
+  }
+}

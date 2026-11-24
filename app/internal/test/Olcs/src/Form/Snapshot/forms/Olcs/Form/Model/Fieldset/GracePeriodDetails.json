@@ -5,6 +5,23 @@
     {
       "flags": [],
       "spec": {
+        "name": "gracePeriodType",
+        "options": {
+          "label": "internal-licence-grace-periods-period-details-gracePeriodType",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "grace_period_type"
+        },
+        "attributes": {
+          "required": "required",
+          "id": "gracePeriodType"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
         "name": "startDate",
         "attributes": {
           "required": "required",
@@ -55,6 +72,10 @@
   ],
   "fieldsets": [],
   "input_filter": {
+    "gracePeriodType": {
+      "name": "gracePeriodType",
+      "required": true
+    },
     "startDate": {
       "name": "startDate",
       "required": true,

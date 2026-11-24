@@ -28,14 +28,14 @@ class IrfoStockControl
     #[Form\Options(['label' => 'Serial No - Start'])]
     #[Form\Type('Text')]
     #[Form\Validator('Digits')]
-    #[Form\Validator(['name' => 'GreaterThan', 'options' => ['min' => '0']])]
+    #[Form\Validator('GreaterThan', options: ['min' => '0'])]
     public $serialNoStart = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'small'])]
     #[Form\Options(['label' => 'Serial No - End'])]
     #[Form\Type('Text')]
     #[Form\Validator('Digits')]
-    #[Form\Validator(['name' => 'GreaterThan', 'options' => ['min' => '0']])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'serialNoStart', 'context_values' => [''], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => 'NumberCompare', 'options' => ['compare_to' => 'serialNoStart', 'operator' => 'gte', 'compare_to_label' => 'Serial No - Start', 'max_diff' => '100']]]]])]
+    #[Form\Validator('GreaterThan', options: ['min' => '0'])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'serialNoStart', 'context_values' => [''], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => 'NumberCompare', 'options' => ['compare_to' => 'serialNoStart', 'operator' => 'gte', 'compare_to_label' => 'Serial No - Start', 'max_diff' => '100']]]])]
     public $serialNoEnd = null;
 }

@@ -10,7 +10,6 @@ use Laminas\Form\FormElementManager;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Validator\ValidatorPluginManager;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,9 +34,6 @@ abstract class FormSpecificationSnapshotTestCase extends TestCase
     private const string UPDATE_COMMAND
         = 'UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter FormSpecificationSnapshotTest';
 
-    private const string LEGACY_ARGUMENTS_DEPRECATION
-        = '^Passing a single array to the constructor of Laminas\\\\Form\\\\Annotation\\\\\w+ is deprecated';
-
     /**
      * A file is a form model if it refers to the annotation namespace for anything other than a builder. That holds
      * for docblock annotations and PHP attributes alike, so it finds the same classes before and after a conversion.
@@ -54,13 +50,9 @@ abstract class FormSpecificationSnapshotTestCase extends TestCase
     abstract protected static function snapshotDirectory(): string;
 
     /**
-     * Laminas deprecated passing an annotation's arguments as a single array, which hundreds of forms still do. Only
-     * that deprecation is ignored; any other still fails the test.
-     *
      * @param class-string $formClass
      */
     #[DataProvider('formProvider')]
-    #[IgnoreDeprecations(self::LEGACY_ARGUMENTS_DEPRECATION)]
     public function testFormSpecificationMatchesSnapshot(string $formClass): void
     {
         $actual = self::encode(self::specificationOf($formClass));

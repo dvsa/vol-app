@@ -235,6 +235,10 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
                 continue;
             }
 
+            if ($doc->getMessagingMessage() !== null) {
+                continue;
+            }
+
             $doc->setMessagingConversation($message->getMessagingConversation());
             $doc->setMessagingMessage($message);
             $doc->setLicence($message->getMessagingConversation()->getRelatedLicence());

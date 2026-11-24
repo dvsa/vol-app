@@ -1,0 +1,15 @@
+{
+  "api_key": null,
+  "callback_token": null,
+  "proxy": null,
+  "email": {
+    "passthrough_templates": {
+      "en_GB": null,
+      "cy_GB": null
+    },
+    "test_dsn": null
+  },
+  "sms": {
+    "template_id": null
+  }
+}

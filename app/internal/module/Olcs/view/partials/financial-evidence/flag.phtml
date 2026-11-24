@@ -1,0 +1,25 @@
+<?php
+/**
+ * The flag of one financial evidence check, shown the same way wherever a check appears.
+ *
+ * When a caseworker has changed the check, this shows the flag the analyser gave it, greyed out
+ * as superseded; the flag it has now is shown with the caseworker's comment (see comment.phtml),
+ * as the designs draw it. Otherwise it shows the flag the check has.
+ *
+ * @var string|null $original   the analyser's flag label (PASS, FAIL, SKIPPED) when the caseworker
+ *                              changed it; null when the check reads as the analyser left it
+ * @var string|null $current    the flag label the check has now; null for a check with no flag
+ * @var string|null $currentTag the GOV.UK tag class for $current
+ */
+
+use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
+
+if ($current === null) {
+    return;
+}
+
+$changed = $original !== null;
+?>
+<strong class="govuk-tag <?php echo $this->escapeHtmlAttr($changed ? FinancialEvidenceAssessmentTab::FLAG_TAG_SUPERSEDED : (string)$currentTag); ?>">
+  <?php echo $this->escapeHtml($this->translate(FinancialEvidenceAssessmentTab::flagTranslationKey($changed ? $original : $current))); ?>
+</strong>
