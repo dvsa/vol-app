@@ -20,7 +20,7 @@ class RegisterConsultantAccount
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Filter('Laminas\Filter\StringToLower')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\UsernameCreate')]
-    #[Form\Validator(['name' => 'Olcs\Form\Validator\UniqueConsultantDetails'])]
+    #[Form\Validator('Olcs\Form\Validator\UniqueConsultantDetails')]
     public $loginId = null;
 
     #[Form\Attributes(['id' => 'forename', 'placeholder' => '', 'class' => 'medium', 'required' => false])]
@@ -43,7 +43,7 @@ class RegisterConsultantAccount
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\EmailAddress')]
     #[Form\Validator('Common\Form\Elements\Validators\EmailConfirm', options: ['token' => 'emailConfirm'])]
-    #[Form\Validator(['name' => 'Olcs\Form\Validator\UniqueConsultantDetails'])]
+    #[Form\Validator('Olcs\Form\Validator\UniqueConsultantDetails')]
     public $emailAddress = null;
 
     #[Form\Attributes(['class' => 'long'])]

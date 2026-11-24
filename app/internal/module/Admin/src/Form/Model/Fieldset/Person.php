@@ -19,14 +19,14 @@ class Person
     #[Form\Attributes(['placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'First name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $forename = null;
 
     #[Form\Attributes(['placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'Last name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $familyName = null;
 
@@ -35,7 +35,7 @@ class Person
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
+    #[Form\Filter('DateSelectNullifier')]
     public $birthDate = null;
 }

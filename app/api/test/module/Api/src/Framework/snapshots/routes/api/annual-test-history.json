@@ -1,0 +1,27 @@
+{
+  "api/annual-test-history/single/GET": {
+    "request": "GET /api/cases/101/annual-test-history/102/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\AnnualTestHistory"
+    },
+    "matches": "api/annual-test-history/single/GET",
+    "params": {
+      "case": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\AnnualTestHistory",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/annual-test-history/single/GET"
+  },
+  "api/annual-test-history/single/PUT": {
+    "request": "PUT /api/cases/101/annual-test-history/102/",
+    "matches": "api/annual-test-history/single/PUT",
+    "params": {
+      "case": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\UpdateAnnualTestHistory",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/annual-test-history/single/PUT"
+  }
+}

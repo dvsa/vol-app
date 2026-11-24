@@ -24,6 +24,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 #[ORM\Table(name: 'grace_period')]
 #[ORM\Index(name: 'ix_grace_period_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_grace_period_grace_period_type', columns: ['grace_period_type'])]
 #[ORM\Index(name: 'ix_grace_period_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_grace_period_licence_id', columns: ['licence_id'])]
 #[ORM\UniqueConstraint(name: 'uk_grace_period_olbs_key', columns: ['olbs_key'])]
@@ -116,6 +117,15 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
+
+    /**
+     * FK to ref_data grace_period_type. NULL if not recorded
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
+     */
+    #[ORM\JoinColumn(name: 'grace_period_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
+    protected $gracePeriodType;
 
     /**
      * Initialise the collections
@@ -359,6 +369,30 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
     public function getOlbsKey()
     {
         return $this->olbsKey;
+    }
+
+    /**
+     * Set the grace period type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $gracePeriodType new value being set
+     *
+     * @return static
+     */
+    public function setGracePeriodType($gracePeriodType)
+    {
+        $this->gracePeriodType = $gracePeriodType;
+
+        return $this;
+    }
+
+    /**
+     * Get the grace period type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getGracePeriodType()
+    {
+        return $this->gracePeriodType;
     }
 
     /**

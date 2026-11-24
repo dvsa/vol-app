@@ -1,0 +1,34 @@
+{
+  "api/operator/single/GET": {
+    "request": "GET /api/operator/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Operator\\BusinessDetails"
+    },
+    "matches": "api/operator/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Operator\\BusinessDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/operator/single/GET"
+  },
+  "api/operator/single/PUT": {
+    "request": "PUT /api/operator/101/",
+    "matches": "api/operator/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Operator\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/operator/single/PUT"
+  },
+  "api/operator/POST": {
+    "request": "POST /api/operator/",
+    "matches": "api/operator/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Operator\\Create"
+    },
+    "withoutTrailingSlash": "api/operator/POST"
+  }
+}

@@ -23,6 +23,6 @@ class DataRetentionExportOptions
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => 'DateCompare', 'options' => ['has_time' => false, 'compare_to' => 'startDate', 'operator' => 'gte', 'compare_to_label' => 'Start date']])]
+    #[Form\Validator('DateCompare', options: ['has_time' => false, 'compare_to' => 'startDate', 'operator' => 'gte', 'compare_to_label' => 'Start date'])]
     public $endDate = null;
 }

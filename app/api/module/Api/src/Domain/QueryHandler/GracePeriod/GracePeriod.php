@@ -23,7 +23,8 @@ class GracePeriod extends AbstractQueryHandler
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(
-            $this->getRepo()->fetchUsingId($query)
+            $this->getRepo()->fetchUsingId($query),
+            ['gracePeriodType']
         );
     }
 }

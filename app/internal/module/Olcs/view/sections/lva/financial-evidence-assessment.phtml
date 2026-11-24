@@ -12,7 +12,7 @@ $warningText = $hasDocuments
 <div class="govuk-warning-text">
   <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
   <strong class="govuk-warning-text__text">
-    <span class="govuk-visually-hidden">Warning</span>
+    <span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-warning-label')); ?></span>
     <?php echo $warningText; ?>
   </strong>
 </div>
@@ -24,6 +24,7 @@ $warningText = $hasDocuments
     // renders both its selected and unselected state; the internal theme's
     // views/internal/financial-evidence-assessment styles show the right one.
     ?>
+    <?php // Tab labels and statuses are translation keys (a tab labelled by its date translates to itself). ?>
     <?php foreach ($tabs as $index => $tab) : ?>
       <?php
       $itemClasses = 'govuk-tabs__list-item fea-tab';
@@ -32,13 +33,13 @@ $warningText = $hasDocuments
       ?>
       <li class="<?php echo $this->escapeHtmlAttr($itemClasses); ?>">
         <a class="govuk-tabs__tab" href="#<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
-          <span class="fea-tab__label"><?php echo $this->escapeHtml($tab['label']); ?></span>
+          <span class="fea-tab__label"><?php echo $this->escapeHtml($this->translate($tab['label'])); ?></span>
           <?php if ($tab['unselectedLabel'] !== null) : ?>
-            <span class="fea-tab__label--unselected"><?php echo $this->escapeHtml($tab['unselectedLabel']); ?></span>
+            <span class="fea-tab__label--unselected"><?php echo $this->escapeHtml($this->translate($tab['unselectedLabel'])); ?></span>
           <?php endif; ?>
           <?php // Hidden on the selected tab: its panel already shows the status next to the filename. ?>
           <strong class="govuk-tag govuk-!-margin-left-2 fea-tab__status <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
-            <?php echo $this->escapeHtml($tab['status']); ?>
+            <?php echo $this->escapeHtml($this->translate($tab['status'])); ?>
           </strong>
         </a>
       </li>
@@ -48,75 +49,101 @@ $warningText = $hasDocuments
   <?php foreach ($tabs as $index => $tab) : ?>
     <div class="govuk-tabs__panel<?php echo $index === 0 ? '' : ' govuk-tabs__panel--hidden'; ?>"
          id="<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
-      <h2 class="govuk-heading-m">Financial evidence assessment</h2>
+      <h2 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-heading')); ?></h2>
 
       <?php if ($tab['document'] !== null) : ?>
         <p class="govuk-body">
-          <strong>Filename:</strong>
+          <strong><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-filename')); ?></strong>
           <a class="govuk-link" href="<?php echo $this->url('getfile', ['identifier' => $tab['document']['id']]); ?>">
-            <?php echo $this->escapeHtml($tab['document']['name'] ?? 'Document'); ?>
+            <?php echo $this->escapeHtml($tab['document']['name'] ?? $this->translate('lva-financial-evidence-assessment-document-fallback-name')); ?>
           </a>
           <strong class="govuk-tag govuk-!-margin-left-4 <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
-            <?php echo $this->escapeHtml($tab['status']); ?>
+            <?php echo $this->escapeHtml($this->translate($tab['status'])); ?>
           </strong>
         </p>
       <?php endif; ?>
 
       <?php if (!$tab['hasAssessment']) : ?>
         <p class="govuk-body">
-          The analysis of this document produced no assessment. Refer to the original document.
+          <?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-no-assessment')); ?>
         </p>
       <?php else : ?>
         <table class="govuk-table">
-          <caption class="govuk-table__caption govuk-visually-hidden">Assessment of the document</caption>
+          <caption class="govuk-table__caption govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-table-caption')); ?></caption>
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th scope="col" class="govuk-table__header govuk-!-width-one-half">Information</th>
-              <th scope="col" class="govuk-table__header">Flag</th>
-              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Remark</span></th>
+              <th scope="col" class="govuk-table__header govuk-!-width-one-half"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-column-information')); ?></th>
+              <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-column-flag')); ?></th>
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-column-remark')); ?></span></th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            <?php foreach ($tab['rows'] as $row) : ?>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                  <?php echo $this->escapeHtml($row['label']); ?><?php if ($row['value'] !== null) : ?>:
-                    <span class="govuk-!-font-weight-regular"><?php echo $this->escapeHtml($row['value']); ?></span>
-                  <?php endif; ?>
-                </th>
-                <td class="govuk-table__cell">
-                  <?php if ($row['flag'] !== null) : ?>
-                    <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($row['flagTag']); ?>">
-                      <?php echo $this->escapeHtml($row['flag']); ?>
-                    </strong>
-                  <?php endif; ?>
-                </td>
-                <td class="govuk-table__cell">
-                  <?php if ($row['remark'] !== null) : ?>
-                    <?php echo $this->escapeHtml($row['remark']); ?>
-                  <?php endif; ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
+          <?php foreach ($tab['rows'] as $row) : ?>
+            <?php
+            // Set when a caseworker has answered this check: changed it (either way) or left a
+            // note on it. A change has an original flag different from the flag the row has now.
+            $override = $row['override'] ?? null;
+            $changed = $override !== null && $override['originalFlag'] !== $row['flag'];
+            ?>
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">
+                <?php echo $this->escapeHtml($this->translate($row['label'])); ?><?php if ($row['value'] !== null) : ?>:
+                  <span class="govuk-!-font-weight-regular"><?php echo $this->escapeHtml($row['value']); ?></span>
+                <?php endif; ?>
+              </th>
+              <td class="govuk-table__cell">
+                <?php // The analyser's flag, greyed out when a caseworker changed it (the new flag is with their comment). ?>
+                <?php echo $this->partial('partials/financial-evidence/flag', [
+                  'original' => $changed ? $override['originalFlag'] : null,
+                  'current' => $row['flag'],
+                  'currentTag' => $row['flagTag'],
+                ]); ?>
+              </td>
+              <td class="govuk-table__cell">
+                <?php
+                // This column shows one thing, as the design draws it: the caseworker's comment once
+                // they have answered the check (a change, or a note that keeps the flag), and
+                // otherwise the analyser's remark. The remark is still shown for every check on
+                // the change document review pages.
+                ?>
+                <?php if ($override !== null) : ?>
+                  <?php echo $this->partial('partials/financial-evidence/comment', [
+                    'tag' => $changed ? $row['flag'] : null,
+                    'tagClass' => $changed ? $row['flagTag'] : null,
+                    'comment' => $override['comment'],
+                    'author' => $override['changedBy'],
+                    'date' => $override['changedOn'],
+                    'answered' => true,
+                  ]); ?>
+                <?php elseif ($row['remark'] !== null) : ?>
+                  <?php echo $this->escapeHtml($row['remark']); ?>
+                <?php endif; ?>
+              </td>
+            </tr>
+          <?php endforeach; ?>
           </tbody>
         </table>
 
-        <h3 class="govuk-heading-s">Summary</h3>
+        <h3 class="govuk-heading-s"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-summary-heading')); ?></h3>
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Issues</dt>
+            <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-summary-issues')); ?></dt>
             <dd class="govuk-summary-list__value">
               <?php
               $issueCount = $tab['issueCount'];
-              echo $issueCount === 0
-                ? 'No issues found'
-                : sprintf('%d %s found', $issueCount, $issueCount === 1 ? 'issue' : 'issues');
+              // One translation key per case: no issues, one, or several (the count goes into
+              // the text with sprintf, so each language can place it where it belongs).
+              echo $this->escapeHtml(match (true) {
+                  $issueCount === 0 => $this->translate('lva-financial-evidence-assessment-issues-found-none'),
+                  $issueCount === 1 => sprintf($this->translate('lva-financial-evidence-assessment-issues-found-one'), $issueCount),
+                  default => sprintf($this->translate('lva-financial-evidence-assessment-issues-found-many'), $issueCount),
+              });
               ?>
             </dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Status</dt>
-            <dd class="govuk-summary-list__value"><?php echo $this->escapeHtml($tab['status']); ?></dd>
+            <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-summary-status')); ?></dt>
+            <dd class="govuk-summary-list__value"><?php echo $this->escapeHtml($this->translate($tab['status'])); ?></dd>
           </div>
         </dl>
       <?php endif; ?>
@@ -134,10 +161,14 @@ $warningText = $hasDocuments
           <?php if ($tab['canReview']) : ?>
             <?php echo $this->formElement($reviewForm->get('review')); ?>
           <?php endif; ?>
-          <?php // Placeholder: not wired to any command yet. ?>
-          <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-            Change document review
-          </button>
+          <?php // Opens the change document review page; offered for any analysis with an assessment, decided or not. ?>
+          <?php if ($tab['changeReviewUrl'] !== null) : ?>
+            <a href="<?php echo $this->escapeHtmlAttr($tab['changeReviewUrl']); ?>"
+               role="button" draggable="false"
+               class="govuk-button govuk-button--secondary" data-module="govuk-button">
+              <?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-document-review')); ?>
+            </a>
+          <?php endif; ?>
         </div>
       </form>
     </div>

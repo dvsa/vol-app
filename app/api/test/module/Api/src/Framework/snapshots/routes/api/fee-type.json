@@ -1,0 +1,73 @@
+{
+  "api/fee-type/single/GET": {
+    "request": "GET /api/fee-type/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\FeeType"
+    },
+    "matches": "api/fee-type/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\FeeType",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee-type/single/GET"
+  },
+  "api/fee-type/single/PUT": {
+    "request": "PUT /api/fee-type/101/",
+    "matches": "api/fee-type/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\FeeType\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee-type/single/PUT"
+  },
+  "api/fee-type/latest/GET": {
+    "request": "GET /api/fee-type/latest/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\GetLatestFeeType"
+    },
+    "matches": "api/fee-type/latest/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\GetLatestFeeType"
+    },
+    "withoutTrailingSlash": "api/fee-type/latest/GET"
+  },
+  "api/fee-type/fee-rates/GET": {
+    "request": "GET /api/fee-type/fee-rates/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeeType\\GetList"
+    },
+    "matches": "api/fee-type/fee-rates/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeeType\\GetList"
+    },
+    "withoutTrailingSlash": "api/fee-type/fee-rates/GET"
+  },
+  "api/fee-type/fee-types-distinct/GET": {
+    "request": "GET /api/fee-type/fee-types-distinct/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeeType\\GetDistinctList"
+    },
+    "matches": "api/fee-type/fee-types-distinct/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\FeeType\\GetDistinctList"
+    },
+    "withoutTrailingSlash": "api/fee-type/fee-types-distinct/GET"
+  },
+  "api/fee-type/GET": {
+    "request": "GET /api/fee-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\FeeTypeList"
+    },
+    "matches": "api/fee-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\FeeTypeList"
+    },
+    "withoutTrailingSlash": "api/fee-type/GET"
+  }
+}

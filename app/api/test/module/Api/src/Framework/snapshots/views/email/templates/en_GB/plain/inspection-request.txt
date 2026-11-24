@@ -1,0 +1,63 @@
+Result_Type=
+When replying to this sender, append to the subject line with:
+'S' (if Inspection is Satisfactory)
+'U' (if Inspection is Unsatisfactory)
+
+INSPECTION DETAILS for request ID 1001...
+Requested By:                   caseworker        (E-Mail - caseworker@example.com) 
+Date Requested:                 01/10/2026 09:30:00 
+Caseworker Notes...
+Please inspect <&> 
+
+Date Required:                  15/10/2026 00:00:00 
+Op Centre:                      1 Test Street <&> 
+                                Leeds 
+                                LS1 1AA 
+Request Type:                   New application 
+Licence No:                     OB1234567 
+Licence Type:                   Standard National 
+Authorised Vehicles:            5 
+Authorised Trailers:            2 
+
+#Centres on:                    1 
+Licence
+Expiry Date:                    31/03/2030 
+Operator ID:                    30 
+Operator Name                   Test Haulage <&> Ltd 
+Operator Email Address          operator@example.com 
+Address:                        1 Test Street <&> 
+                                Leeds 
+                                LS1 1AA 
+
+Contact Phone No(s)...
+0113 000 0000 (Business)
+
+Trading Name(s)...
+Test Trading <&>
+
+Transport Manager(s)...
+Jane Smith
+John Jones
+
+Maintenance...
+Maintained:                     Contracted Out 
+Inspection Periods...
+Vehicles:                       6 
+Trailers:                       8 
+
+Workshops/Garage Address(es)...
+Address:                        1 Test Street <&> 
+                                Leeds 
+                                LS1 1AA 
+
+Partners/Directors...
+Jane Smith <&>
+
+Associated Licences...
+        This Operator has no other associated licences.
+
+Application Details...
+1 Test Street <&>, Leeds...
+#Vehicles                       3 
+#Trailers                       1 
+Action                          Added

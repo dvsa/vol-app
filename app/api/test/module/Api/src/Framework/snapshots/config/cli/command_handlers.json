@@ -1,0 +1,20 @@
+{
+  "factories": {
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\RemoveReadAudit": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\RemoveReadAudit",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\CleanUpAbandonedVariations": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\CleanUpAbandonedVariations",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\CreateViExtractFiles": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\CreateViExtractFiles",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\SetViFlags": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\SetViFlags",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\DataGovUkExport": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\DataGovUkExport",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\DataDvaNiExport": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\DataDvaNiExport",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\CompaniesHouseVsOlcsDiffsExport": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\CompaniesHouseVsOlcsDiffsExport",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\Bus\\Expire": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\Bus\\Expire",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\Permits\\WithdrawUnpaidIrhp": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\Permits\\WithdrawUnpaidIrhp",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\LastTmLetter": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\LastTmLetter",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\FirstTmLetter": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\FirstTmLetter",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\Permits\\CloseExpiredWindows": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\Permits\\CloseExpiredWindows",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\Permits\\CancelUnsubmittedBilateral": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\Permits\\CancelUnsubmittedBilateral",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\Permits\\MarkExpiredPermits": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\Permits\\MarkExpiredPermits",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\Permits\\ResetPermitsTestData": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\Permits\\ResetPermitsTestData",
+    "Dvsa\\Olcs\\Cli\\Domain\\Command\\EntityGenerator\\GenerateEntities": "Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\EntityGenerator\\GenerateEntities"
+  }
+}

@@ -1,0 +1,294 @@
+<?php
+/**
+ * Change document review: the issues the automated analyser raised on one document, each with
+ * a form to change it to a pass, the checks that passed, and the caseworker's decision on the
+ * evidence. Layout follows the ticket design: issues, then passes, then the decision.
+ *
+ * Issues come from Olcs\Data\Mapper\FinancialEvidenceAssessmentReview as plain text and are
+ * escaped here (remarks are model-generated, comments are free text). The passes table is built
+ * by the table helper, whose formatters escape it. All forms post back to this page, which
+ * redirects after handling them.
+ *
+ * ?view=passes switches the whole page to showing only the passed checks, each as a table of its
+ * own (no disclosure: there is no judgement to defer here) with a form to change it to a fail
+ * instead (the reverse direction). A query flag is used rather than a route segment because the
+ * LVA section route's child route is shared by every section; adding a segment there would
+ * change every section's URL shape.
+ */
+
+use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
+
+?>
+<a class="govuk-back-link" href="<?php echo $this->escapeHtmlAttr($backUrl); ?>">Back</a>
+
+<?php // The passed-checks view is its own page in the VOL-7338 design: "Finance evidence review". ?>
+<h2 class="govuk-heading-s govuk-!-margin-bottom-2">
+  <?php echo $this->escapeHtml($this->translate($showPassOverride
+      ? 'lva-financial-evidence-assessment-pass-review-heading'
+      : 'lva-financial-evidence-assessment-change-review-heading')); ?>
+</h2>
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<?php // Shown on both views. The VOL-7338 design leaves it off the passed-checks page, but without ?>
+<?php // it nothing there says which document the checks belong to, so it is kept deliberately. ?>
+<h3 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-bank-statements')); ?></h3>
+
+<?php if ($document !== null) : ?>
+  <dl class="govuk-summary-list govuk-!-margin-bottom-8">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-finance-evidence')); ?></dt>
+      <dd class="govuk-summary-list__value">
+        <a class="govuk-link" href="<?php echo $this->escapeHtmlAttr($this->url('getfile', ['identifier' => $document['id']])); ?>">
+          <?php echo $this->escapeHtml($document['name'] ?? $this->translate('lva-financial-evidence-assessment-document-fallback-name')); ?>
+        </a>
+      </dd>
+    </div>
+  </dl>
+<?php endif; ?>
+
+<?php if (!$showPassOverride) : ?>
+  <?php foreach ($issues as $issue) : ?>
+    <?php $key = $this->escapeHtmlAttr($issue['key']); ?>
+    <h3 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-issue')); ?></h3>
+    <dl class="govuk-summary-list">
+      <?php // Only when the value names what failed; the mapper leaves it null otherwise. ?>
+      <?php if ($issue['value'] !== null) : ?>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate($issue['label'])); ?></dt>
+          <dd class="govuk-summary-list__value"><?php echo $this->escapeHtml($issue['value']); ?></dd>
+        </div>
+      <?php endif; ?>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-column-flag')); ?></dt>
+        <dd class="govuk-summary-list__value">
+          <?php // The analyser's flag, greyed out when a caseworker changed it (the new flag is with their comment). ?>
+          <?php echo $this->partial('partials/financial-evidence/flag', [
+            'original' => $issue['changed'] ? $issue['flag'] : null,
+            'current' => $issue['changed'] ? $issue['changedTo'] : $issue['flag'],
+            'currentTag' => $issue['changed'] ? $issue['changedToTag'] : $issue['flagTag'],
+          ]); ?>
+          <?php echo $this->escapeHtml((string)($issue['remark'] ?? '')); ?>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-comment')); ?></dt>
+        <dd class="govuk-summary-list__value">
+          <?php echo $this->partial('partials/financial-evidence/comment', [
+            'tag' => $issue['changed'] ? $issue['changedTo'] : null,
+            'tagClass' => $issue['changed'] ? $issue['changedToTag'] : null,
+            'comment' => $issue['comment'],
+            'author' => $issue['changedBy'],
+            'date' => $issue['changedOn'],
+            'answered' => $issue['changed'] || $issue['kept'],
+          ]); ?>
+        </dd>
+      </div>
+    </dl>
+
+    <?php if (!$issue['changed']) : ?>
+      <?php
+      // One override form serves every issue; only the row differs. Values are reset so one
+      // issue's input never shows against another, and ids are made unique per issue.
+      $overrideForm->get('analysisId')->setValue((string)$analysisId);
+      $overrideForm->get('row')->setValue($issue['key']);
+      $overrideForm->get('changeRecommendation')->setValue('N')->setAttribute('id', 'changeRecommendation-' . $issue['key']);
+      $overrideForm->get('comment')->setValue('')->setAttribute('id', 'comment-' . $issue['key']);
+      ?>
+      <?php // A native disclosure, as in the design; it works without JavaScript, unlike an accordion. ?>
+      <details class="govuk-details" id="change-<?php echo $key; ?>">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-recommendation-above')); ?></span>
+        </summary>
+        <div class="govuk-details__text">
+          <form method="post" novalidate>
+            <?php echo $this->formElement($overrideForm->get('security')); ?>
+            <?php echo $this->formElement($overrideForm->get('analysisId')); ?>
+            <?php echo $this->formElement($overrideForm->get('row')); ?>
+            <?php echo $this->formRow($overrideForm->get('changeRecommendation')); ?>
+            <?php echo $this->formRow($overrideForm->get('comment')); ?>
+            <div class="govuk-button-group">
+              <?php echo $this->formElement($overrideForm->get('saveOverride')); ?>
+            </div>
+          </form>
+        </div>
+      </details>
+    <?php endif; ?>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+  <?php endforeach; ?>
+
+  <?php if ($issues === []) : ?>
+    <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-no-issues-found')); ?></p>
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+  <?php endif; ?>
+
+  <h3 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-pass-issues')); ?></h3>
+  <p class="govuk-body">
+    <?php
+    // One translation key for one check and another for several, with the count placed by
+    // sprintf, so each language can word the sentence its own way.
+    echo $this->escapeHtml(sprintf(
+        $this->translate($passCount === 1
+            ? 'lva-financial-evidence-assessment-pass-issues-count-one'
+            : 'lva-financial-evidence-assessment-pass-issues-count-many'),
+        (int)$passCount
+    ));
+    ?>
+    <strong class="govuk-tag govuk-tag--green"><?php
+        echo $this->escapeHtml($this->translate(FinancialEvidenceAssessmentTab::flagTranslationKey(FinancialEvidenceAssessmentTab::FLAG_PASS)));
+    ?></strong>
+  </p>
+
+  <?php echo $passesTable->render(); ?>
+
+  <h3 class="govuk-heading-s"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-any-recommendations')); ?></h3>
+  <a href="<?php echo $this->escapeHtmlAttr($this->url(null, [], ['query' => ['view' => 'passes']], true)); ?>"
+     class="govuk-button govuk-button--secondary" data-module="govuk-button" role="button" draggable="false">
+    <?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-and-review')); ?>
+  </a>
+<?php else : ?>
+  <?php
+  // When a check's form is being shown again with errors, the form object holds what was posted
+  // and the messages. They are captured here (with each field's own class, which rendering an
+  // error changes), before the loop below reuses the one form for each check.
+  //
+  // The framework's "There is a problem" summary (formErrors()) is deliberately not rendered: the
+  // page returns to the check that was submitted, where the message sits against its field, so
+  // a summary at the top would be off-screen and only repeat it.
+  $passOverrideErrorRow = $passOverrideErrorRow ?? null;
+  $passOverrideBound = [];
+
+  foreach (['changeRecommendation', 'comment'] as $name) {
+      $element = $passOverrideForm->get($name);
+      $passOverrideBound[$name] = [$element->getValue(), $element->getMessages(), $element->getAttribute('class')];
+  }
+  ?>
+  <?php foreach ($passes as $pass) : ?>
+    <?php if (!$pass['flagged']) : continue; endif; ?>
+    <?php $key = $this->escapeHtmlAttr($pass['key']); ?>
+    <?php // The id is where this issue's form sends the browser back to (see the form below); ?>
+    <?php // tabindex lets it take focus there, so keyboard and screen reader users land on it too. ?>
+    <h3 class="govuk-heading-m" id="issue-<?php echo $key; ?>" tabindex="-1"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-issue')); ?></h3>
+    <dl class="govuk-summary-list">
+      <?php // Laid out as the VOL-7338 design draws it: the check's name against its value and flag, ?>
+      <?php // then the analyser's remarks, then the caseworker's comment. ?>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate($pass['label'])); ?></dt>
+        <dd class="govuk-summary-list__value">
+          <?php if ($pass['value'] !== null) : ?>
+            <?php echo $this->escapeHtml($pass['value']); ?>
+          <?php endif; ?>
+          <?php // The analyser's flag, greyed out when a caseworker changed it (the new flag is with their comment). ?>
+          <?php echo $this->partial('partials/financial-evidence/flag', [
+            'original' => $pass['changed'] ? $pass['flag'] : null,
+            'current' => $pass['changed'] ? $pass['changedTo'] : $pass['flag'],
+            'currentTag' => $pass['changed'] ? $pass['changedToTag'] : $pass['flagTag'],
+          ]); ?>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-remarks')); ?></dt>
+        <dd class="govuk-summary-list__value">
+          <?php // Model-generated text, so escaped; its own line breaks are kept (one point per line). ?>
+          <?php echo ($pass['remark'] ?? '') !== '' ? nl2br($this->escapeHtml($pass['remark'])) : '-'; ?>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-comment')); ?></dt>
+        <dd class="govuk-summary-list__value">
+          <?php echo $this->partial('partials/financial-evidence/comment', [
+            'tag' => $pass['changed'] ? $pass['changedTo'] : null,
+            'tagClass' => $pass['changed'] ? $pass['changedToTag'] : null,
+            'comment' => $pass['comment'],
+            'author' => $pass['changedBy'],
+            'date' => $pass['changedOn'],
+            'answered' => $pass['changed'] || $pass['kept'],
+          ]); ?>
+        </dd>
+      </div>
+    </dl>
+
+    <?php
+    // One pass-override form serves every pass; only the row differs. It is always shown, with
+    // the caseworker's saved answer on this check, so a typo can be fixed, the comment edited or
+    // the change undone (agreed with UX): "Yes" and their text on a check they changed to a fail,
+    // "No" and their note where one was left (a note is saved by answering "No"), and nothing
+    // selected on a check nobody has answered. "No" means the analyser's outcome stands: saving
+    // it on a changed check changes it back to a pass, and saving it with the box emptied removes
+    // the caseworker's entry altogether. Ids are made unique per pass.
+    $passOverrideForm->get('analysisId')->setValue((string)$analysisId);
+    $passOverrideForm->get('row')->setValue($pass['key']);
+    $passOverrideForm->get('changeRecommendation')
+        ->setValue($pass['changed'] ? 'Y' : ($pass['kept'] ? 'N' : null))
+        ->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
+    $passOverrideForm->get('comment')->setValue($pass['comment'] ?? '')->setAttribute('id', 'pass-comment-' . $pass['key']);
+
+    // One form instance serves every check. The check the caseworker just tried to save shows
+    // the form as it was posted (their values and the form's own error messages, captured above);
+    // every other check shows its saved answer with no messages.
+    //
+    // The field's class is put back too: formRow() marks a field in error by adding an error class
+    // to the element itself, which would otherwise stay on the shared element and colour every
+    // check drawn after the one in error.
+    foreach ($passOverrideBound as $name => [$value, $messages, $class]) {
+        $isErrorRow = $passOverrideErrorRow === $pass['key'];
+        $passOverrideForm->get($name)->setMessages($isErrorRow ? $messages : []);
+        $passOverrideForm->get($name)->setAttribute('class', $class);
+
+        if ($isErrorRow) {
+            $passOverrideForm->get($name)->setValue($value);
+        }
+    }
+    ?>
+    <?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>
+    <?php // Posting to this issue's anchor brings the page back to it, so the caseworker does not ?>
+    <?php // have to scroll down again to find the error (or the result) on a long page. ?>
+    <form method="post" novalidate action="#issue-<?php echo $key; ?>">
+      <?php echo $this->formElement($passOverrideForm->get('security')); ?>
+      <?php echo $this->formElement($passOverrideForm->get('analysisId')); ?>
+      <?php echo $this->formElement($passOverrideForm->get('row')); ?>
+      <?php // Each field in its own GOV.UK form group, which gives the spacing between them the design shows. ?>
+      <div class="govuk-form-group">
+        <?php echo $this->formRow($passOverrideForm->get('changeRecommendation')); ?>
+      </div>
+      <div class="govuk-form-group">
+        <?php echo $this->formRow($passOverrideForm->get('comment')); ?>
+      </div>
+      <div class="govuk-button-group">
+        <?php echo $this->formElement($passOverrideForm->get('savePassOverride')); ?>
+      </div>
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+  <?php endforeach; ?>
+
+  <?php if (array_filter($passes, static fn(array $pass): bool => $pass['flagged']) === []) : ?>
+    <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-no-passed-checks')); ?></p>
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+  <?php endif; ?>
+<?php endif; ?>
+
+<?php if ($showPassOverride) : ?>
+  <?php
+  // The passed-checks page ends with the way back to the overview (VOL-7338 AC3), where the
+  // decision on the evidence is made. Each check is saved by its own "Save and continue", so
+  // nothing is left to save here: this is a link, not a submit. The original design asked "Do
+  // you want to save the changes you have made?" with Yes and No above the button; UX agreed to
+  // drop the radios (they were made for another purpose) and label the button "Continue".
+  ?>
+  <a href="<?php echo $this->escapeHtmlAttr($this->url(null, [], [], true)); ?>"
+     class="govuk-button govuk-!-margin-top-6" data-module="govuk-button" role="button" draggable="false">
+    Continue
+  </a>
+<?php else : ?>
+  <form method="post" novalidate class="govuk-!-margin-top-6">
+    <?php echo $this->formElement($decisionForm->get('security')); ?>
+    <?php echo $this->formElement($decisionForm->get('analysisId')); ?>
+    <div class="govuk-form-group">
+      <?php echo $this->formRow($decisionForm->get('decision')); ?>
+    </div>
+    <div class="govuk-button-group">
+      <?php echo $this->formElement($decisionForm->get('saveDecision')); ?>
+    </div>
+  </form>
+<?php endif; ?>

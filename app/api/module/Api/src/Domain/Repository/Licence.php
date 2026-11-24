@@ -749,7 +749,7 @@ class Licence extends AbstractRepository
         $graceQb = $this->getEntityManager()->getRepository(GracePeriodEntity::class)->createQueryBuilder('gp');
         $graceQb->select('IDENTITY(gp.licence)');
 
-        //  And where there is no active period of grace for the licence or on a variation application for the licence
+        //  And where there is no active transport manager period of grace for the licence (one with no type counts as one)
         $graceQb->andWhere(
             $graceQb->expr()->andX(
                 $graceQb->expr()->lte(
@@ -759,6 +759,10 @@ class Licence extends AbstractRepository
                 $graceQb->expr()->gte(
                     'gp.endDate',
                     ':today'
+                ),
+                $graceQb->expr()->orX(
+                    $graceQb->expr()->isNull('gp.gracePeriodType'),
+                    $graceQb->expr()->eq('gp.gracePeriodType', ':tmGraceType')
                 )
             )
         );
@@ -799,6 +803,7 @@ class Licence extends AbstractRepository
             ->setTime(0, 0, 0, 0)
             ->format('Y-m-d');
         $qb->setParameter('today', $today);
+        $qb->setParameter('tmGraceType', GracePeriodEntity::TYPE_TM);
 
         $tomorrow = (new DateTime())
             ->add(new \DateInterval('P1D'))

@@ -1,0 +1,223 @@
+{
+  "LicencePublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\BusNote",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Publication\\PreviousLicencePublicationNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\TransportManagers",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceCancelled"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Text3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "ApplicationPublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Publication\\PreviousApplicationPublicationNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\ConditionUndertaking",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\Authorisations",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\TransportManagers",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Text3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Police"
+    ]
+  },
+  "VariationPublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Publication\\PreviousApplicationPublicationNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Variation\\ConditionUndertaking",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Variation\\OperatingCentres",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Variation\\Authorisations",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\People",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\TransportManagers"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Variation\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Variation\\Text3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Police"
+    ]
+  },
+  "Schedule41TruePublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Schedule41\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Police"
+    ]
+  },
+  "Schedule41UntruePublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\TransportManagers",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Variation\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Schedule41\\Text3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Police"
+    ]
+  },
+  "HearingPublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\PreviousHearingData",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Publication\\PreviousPublicationNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PiHearing\\HearingText1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "HearingDecision": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\PreviousHearingData",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Publication\\PreviousPublicationNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PiHearing\\DecisionText1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "TmHearingPublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Publication\\PreviousPublicationNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\TransportManager\\TransportManagerName",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\TransportManager\\Person"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PiHearing\\TmHearingText1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\TransportManager\\Police"
+    ]
+  },
+  "TmHearingDecision": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Publication\\PreviousPublicationNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\TransportManager\\TransportManagerName",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\TransportManager\\Person"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PiHearing\\TmHearingText1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\TransportManager\\Police"
+    ]
+  },
+  "BusGrantNew": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\BusReg\\ServiceDesignation",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\BusReg\\ServiceTypes",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\BusReg\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\BusReg\\GrantNewText3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "BusGrantVariation": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\BusReg\\ServiceDesignation",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\BusReg\\VariationReasons",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\BusReg\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\BusReg\\GrantVarText3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "BusGrantCancel": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\BusReg\\ServiceDesignation",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\BusReg\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\BusReg\\GrantCancelText3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "ImpoundingLicencePublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "ImpoundingApplicationPublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\People",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Police"
+    ]
+  },
+  "ImpoundingLicenceDecisionPublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\People",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Licence\\Police"
+    ]
+  },
+  "ImpoundingApplicationDecisionPublication": {
+    "context": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\Venue",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PiHearing\\HearingDate",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceNo",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Application\\People",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\Licence\\LicenceAddress"
+    ],
+    "process": [
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text1",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text2",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Impounding\\Text3",
+      "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\Application\\Police"
+    ]
+  }
+}

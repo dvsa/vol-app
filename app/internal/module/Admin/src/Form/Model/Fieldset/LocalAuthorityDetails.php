@@ -32,7 +32,7 @@ class LocalAuthorityDetails
     #[Form\Options(['label' => 'LTA Descriptive Name'])]
     #[Form\Type('Text')]
     #[Form\Required(true)]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $description = null;
 }

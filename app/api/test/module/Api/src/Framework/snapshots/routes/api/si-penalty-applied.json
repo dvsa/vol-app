@@ -1,0 +1,44 @@
+{
+  "api/si-penalty-applied/single/GET": {
+    "request": "GET /api/si-penalty-applied/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Si\\Applied\\Penalty"
+    },
+    "matches": "api/si-penalty-applied/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Si\\Applied\\Penalty",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/si-penalty-applied/single/GET"
+  },
+  "api/si-penalty-applied/single/PUT": {
+    "request": "PUT /api/si-penalty-applied/101/",
+    "matches": "api/si-penalty-applied/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\Applied\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/si-penalty-applied/single/PUT"
+  },
+  "api/si-penalty-applied/single/DELETE": {
+    "request": "DELETE /api/si-penalty-applied/101/",
+    "matches": "api/si-penalty-applied/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\Applied\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/si-penalty-applied/single/DELETE"
+  },
+  "api/si-penalty-applied/POST": {
+    "request": "POST /api/si-penalty-applied/",
+    "matches": "api/si-penalty-applied/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Si\\Applied\\Create"
+    },
+    "withoutTrailingSlash": "api/si-penalty-applied/POST"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "max_schema_errors": 10,
+  "compliance_episode": {
+    "xmlNs": "https://webgate.ec.testa.eu/move-hub/erru/",
+    "erruVersion": "1"
+  },
+  "cgr": {
+    "xmlNs": "https://webgate.ec.testa.eu/move-hub/erru/",
+    "erruVersion": "1"
+  },
+  "inr_service": {
+    "uri": "1",
+    "options": [],
+    "adapter": "Laminas\\Http\\Client\\Adapter\\Curl",
+    "oauth2": {
+      "client_id": "1",
+      "client_secret": "1",
+      "token_url": "1",
+      "scope": "1"
+    },
+    "service_name": "INR"
+  }
+}

@@ -1,0 +1,11 @@
+<p>Hello,</p>
+
+<p>You've been added to the Vehicle Operator Licensing service for [orgName &lt;&amp;&gt;].</p>
+
+<p>Your username is: [loginId &lt;&amp;&gt;]</p>
+
+<p>You'll receive a second email with a temporary password in the next two hours. If it doesn't arrive email notifications@vehicle-operator-licensing.service.gov.uk</p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Sign in</a>
+</p>

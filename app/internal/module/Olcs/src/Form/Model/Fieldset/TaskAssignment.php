@@ -13,7 +13,7 @@ class TaskAssignment
     #[Form\Attributes(['id' => 'assignedToTeam', 'placeholder' => ''])]
     #[Form\Options(['label' => 'tasks.data.team', 'service_name' => 'Olcs\Service\Data\Team', 'empty_option' => 'please-select', 'error-message' => 'Team and/or owner must be selected'])]
     #[Form\Validator('NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'assignedToUser', 'context_values' => [''], 'validators' => [['name' => 'Laminas\Validator\NotEmpty']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'assignedToUser', 'context_values' => [''], 'validators' => [['name' => 'Laminas\Validator\NotEmpty']]])]
     public $assignedToTeam = null;
 
     #[Form\Required(true)]

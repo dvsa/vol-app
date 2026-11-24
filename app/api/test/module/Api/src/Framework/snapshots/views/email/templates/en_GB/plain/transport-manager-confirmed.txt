@@ -1,0 +1,5 @@
+Hello,
+
+[operatorName <&>] has approved the details you submitted for Vehicle Operator Licence [licNo <&>]/[applicationId <&>].
+
+Sign into your account at [tmaUrl <&>]

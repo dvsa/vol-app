@@ -31,7 +31,7 @@ class PermitRangeDetails
     #[Form\Attributes(['id' => 'prefix'])]
     #[Form\Options(['label' => 'Permit Prefix', 'required' => 'false'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 7])]
     #[Form\Required(false)]
     public $prefix = null;

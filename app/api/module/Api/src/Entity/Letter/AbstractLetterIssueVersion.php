@@ -180,7 +180,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     protected $requiresInput = 0;
 
     /**
-     * Other issue: the caseworker writes the heading and may add their own to-dos (VOL-7735)
+     * Caseworker writes the heading and may add to-dos
      *
      * @var bool
      */

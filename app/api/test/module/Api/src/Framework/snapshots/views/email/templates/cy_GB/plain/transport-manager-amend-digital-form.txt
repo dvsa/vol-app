@@ -1,0 +1,12 @@
+Helô,
+
+Mae [organisation <&>] wedi'ch enwi fel Rheolwr Trafnidiaeth ar Drwydded Gweithredwr Cerbydau [reference <&>].
+
+Maent wedi adolygu'ch cais ac mae angen ichi ddiwygio neu wirio'ch manylion. Bydd angen ichi lofnodi'r datganiad eto ar ôl ichi adolygu neu ddiwygio'ch cais.
+
+I adolygu'r cais, mewngofnodwch ar-lein [signInLink <&>] gyda'ch enw defnyddiwr ([username <&>]) a'ch cyfrinair.
+
+Profi problemau?
+
+
+Am gyngor gwelwch y Canllaw cymorth ar gyfer Rheolwyr Trafnidiaeth http://www.doeni.gov.uk/index/information/foi/recent-releases/publications-details.htm?docid=9994 neu e-bostiwch ni notifications@vehicle-operator-licensing.service.gov.uk.

@@ -1,0 +1,69 @@
+{
+  "api/presiding-tc/user-list/GET": {
+    "request": "GET /api/presiding-tc/user-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\PresidingTc\\UserList"
+    },
+    "matches": "api/presiding-tc/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\PresidingTc\\ById",
+      "id": "user-list"
+    },
+    "withoutTrailingSlash": "api/presiding-tc/single/GET"
+  },
+  "api/presiding-tc/GET": {
+    "request": "GET /api/presiding-tc/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\PresidingTc\\GetList"
+    },
+    "matches": "api/presiding-tc/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\PresidingTc\\GetList"
+    },
+    "withoutTrailingSlash": "api/presiding-tc/GET"
+  },
+  "api/presiding-tc/POST": {
+    "request": "POST /api/presiding-tc/",
+    "matches": "api/presiding-tc/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\PresidingTc\\Create"
+    },
+    "withoutTrailingSlash": "api/presiding-tc/POST"
+  },
+  "api/presiding-tc/single/GET": {
+    "request": "GET /api/presiding-tc/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\PresidingTc\\ById"
+    },
+    "matches": "api/presiding-tc/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\PresidingTc\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/presiding-tc/single/GET"
+  },
+  "api/presiding-tc/single/PUT": {
+    "request": "PUT /api/presiding-tc/101/",
+    "matches": "api/presiding-tc/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\PresidingTc\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/presiding-tc/single/PUT"
+  },
+  "api/presiding-tc/single/DELETE": {
+    "request": "DELETE /api/presiding-tc/101/",
+    "matches": "api/presiding-tc/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\PresidingTc\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/presiding-tc/single/DELETE"
+  }
+}

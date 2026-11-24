@@ -25,7 +25,7 @@ class PublicInquiryRegisterDecisionMain
     #[Form\Type('DynamicSelect')]
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'chosen-select-large', 'multiple' => true, 'required' => false])]
     #[Form\Options(['label' => 'Decisions', 'service_name' => 'Olcs\Service\Data\PublicInquiryDecision', 'disable_inarray_validator' => false, 'use_groups' => true])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'decisionDate', 'contextValues' => [null], 'context_truth' => false, 'validators' => [['name' => 'NotEmpty']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'decisionDate', 'contextValues' => [null], 'context_truth' => false, 'validators' => [['name' => 'NotEmpty']]])]
     public $decisions = null;
 
     #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'Licence revoked at PI'])]
@@ -64,9 +64,9 @@ class PublicInquiryRegisterDecisionMain
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $decisionDate = null;
 
     #[Form\Attributes(['id' => ''])]
@@ -74,9 +74,9 @@ class PublicInquiryRegisterDecisionMain
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $notificationDate = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'js-definition-source chosen-select-large'])]

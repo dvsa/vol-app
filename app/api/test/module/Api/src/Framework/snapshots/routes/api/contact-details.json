@@ -1,0 +1,68 @@
+{
+  "api/contact-details/GET": {
+    "request": "GET /api/contact-details/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\ContactDetailsList"
+    },
+    "matches": "api/contact-details/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\ContactDetailsList"
+    },
+    "withoutTrailingSlash": "api/contact-details/GET"
+  },
+  "api/contact-details/phone-contact/single/GET": {
+    "request": "GET /api/contact-details/phone-contact/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\PhoneContact\\Get"
+    },
+    "matches": "api/contact-details/phone-contact/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\PhoneContact\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/contact-details/phone-contact/single/GET"
+  },
+  "api/contact-details/phone-contact/single/PUT": {
+    "request": "PUT /api/contact-details/phone-contact/101/",
+    "matches": "api/contact-details/phone-contact/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContactDetail\\PhoneContact\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/contact-details/phone-contact/single/PUT"
+  },
+  "api/contact-details/phone-contact/single/DELETE": {
+    "request": "DELETE /api/contact-details/phone-contact/101/",
+    "matches": "api/contact-details/phone-contact/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContactDetail\\PhoneContact\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/contact-details/phone-contact/single/DELETE"
+  },
+  "api/contact-details/phone-contact/GET": {
+    "request": "GET /api/contact-details/phone-contact/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\PhoneContact\\GetList"
+    },
+    "matches": "api/contact-details/phone-contact/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\PhoneContact\\GetList"
+    },
+    "withoutTrailingSlash": "api/contact-details/phone-contact/GET"
+  },
+  "api/contact-details/phone-contact/POST": {
+    "request": "POST /api/contact-details/phone-contact/",
+    "matches": "api/contact-details/phone-contact/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContactDetail\\PhoneContact\\Create"
+    },
+    "withoutTrailingSlash": "api/contact-details/phone-contact/POST"
+  }
+}

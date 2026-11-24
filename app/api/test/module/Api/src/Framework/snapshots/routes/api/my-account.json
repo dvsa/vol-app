@@ -1,0 +1,34 @@
+{
+  "api/my-account/internal/single/PUT": {
+    "request": "PUT /api/my-account/internal/101/",
+    "matches": "api/my-account/internal/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\MyAccount\\UpdateMyAccount",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/my-account/internal/single/PUT"
+  },
+  "api/my-account/selfserve/single/PUT": {
+    "request": "PUT /api/my-account/selfserve/101/",
+    "matches": "api/my-account/selfserve/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\MyAccount\\UpdateMyAccountSelfserve",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/my-account/selfserve/single/PUT"
+  },
+  "api/my-account/GET": {
+    "request": "GET /api/my-account/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\MyAccount\\MyAccount"
+    },
+    "matches": "api/my-account/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\MyAccount\\MyAccount"
+    },
+    "withoutTrailingSlash": "api/my-account/GET"
+  }
+}

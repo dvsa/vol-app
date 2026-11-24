@@ -19,7 +19,7 @@ class TmResponsibilities
     #[Form\Options(['label' => 'transport-manager.responsibilities.tm-type', 'category' => 'tm_type', 'fieldset-attributes' => ['class' => 'checkbox inline']])]
     #[Form\Type('DynamicRadio')]
     #[Form\Required(false)]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     #[Form\Flags(['priority' => -10])]
     public $tmType = null;
 
@@ -50,7 +50,7 @@ class TmResponsibilities
     #[Form\Options(['label' => 'transport-manager.responsibilities.additional-information', 'label_options' => ['disable_html_escape' => 'true']])]
     #[Form\Required(false)]
     #[Form\Filter('Laminas\Filter\StringTrim')]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 4000]])]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 4000])]
     #[Form\Flags(['priority' => -60])]
     public $additionalInformation;
 

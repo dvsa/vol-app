@@ -49,8 +49,8 @@ class InspectionRequestDetails
     #[Form\Options(['label' => 'Request date', 'render_delimiters' => false])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('Common\Form\Elements\Validators\DateNotInFuture')]
     public $requestDate = null;
@@ -59,18 +59,18 @@ class InspectionRequestDetails
     #[Form\Options(['label' => 'Due date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => 'Common\Form\Elements\Validators\InspectionRequestDueDate'])]
+    #[Form\Validator('Common\Form\Elements\Validators\InspectionRequestDueDate')]
     public $dueDate = null;
 
     #[Form\Attributes(['id' => 'returnDate'])]
     #[Form\Options(['label' => 'Return date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $returnDate = null;
 
@@ -84,8 +84,8 @@ class InspectionRequestDetails
     #[Form\Options(['label' => 'Investigation from', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $fromDate = null;
 
@@ -93,8 +93,8 @@ class InspectionRequestDetails
     #[Form\Options(['label' => 'Investigation to', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $toDate = null;
 

@@ -5,11 +5,16 @@ namespace Olcs\Controller\Messages;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Data\Mapper\DefaultMapper;
 use Common\FeatureToggle;
+use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Messaging\Conversation\Create;
 use Dvsa\Olcs\Transfer\Query\Messaging\ApplicationLicenceList\ByApplicationToOrganisation;
 use Dvsa\Olcs\Transfer\Query\Messaging\ApplicationLicenceList\ByLicenceToOrganisation;
 use Dvsa\Olcs\Transfer\Query\Messaging\ApplicationLicenceList\ByCaseToOrganisation;
 use Laminas\Mvc\MvcEvent;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -19,6 +24,8 @@ use RuntimeException;
 
 class AbstractCreateConversationController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface, MessagingControllerInterface
 {
+    use MessageAttachmentsTrait;
+
     protected $mapperClass = DefaultMapper::class;
 
     protected $createCommand = Create::class;
@@ -37,6 +44,33 @@ class AbstractCreateConversationController extends AbstractInternalController im
 
     protected string $application  = '';
     protected string $licence  = '';
+
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation,
+        protected FileUploadHelperService $uploadHelper
+    ) {
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
+
+    protected function alterFormForAdd($form, $initialData)
+    {
+        $form->get('correlationId')->setValue($this->getPostedCorrelationId() ?? $this->newCorrelationId());
+
+        if ($this->getRequest()->isPost() && $this->handleAttachmentPost($form, 'file')) {
+            $this->persist = false;
+        }
+
+        return $form;
+    }
+
+    #[\Override]
+    protected function mapFromForm($mapperClass, array $data)
+    {
+        return parent::mapFromForm($mapperClass, $data) + ['correlationId' => $this->getPostedCorrelationId()];
+    }
 
     #[\Override]
     public function getLeftView(): ViewModel

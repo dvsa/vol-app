@@ -23,8 +23,8 @@ class ErruPenalty extends CaseBase
     #[Form\Options(['label' => 'Start date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $startDate;
 
@@ -32,8 +32,8 @@ class ErruPenalty extends CaseBase
     #[Form\Options(['label' => 'End date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $endDate;
 
@@ -45,7 +45,7 @@ class ErruPenalty extends CaseBase
     #[Form\Options(['label' => 'Reason not imposed'])]
     #[Form\Required(false)]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 500])]
     public $reasonNotImposed;
 
