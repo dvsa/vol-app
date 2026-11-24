@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\CreateApplicationFee as CreateAppli
 use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee as CancelFeeCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\InterimCommunityLicencesTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -33,6 +34,8 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 abstract class AbstractUpdateInterim extends AbstractCommandHandler implements TransactionedInterface
 {
+    use InterimCommunityLicencesTrait;
+
     public const ERR_REQUIRED = 'Value is required and can\'t be empty';
     public const ERR_VALUE_BELOW_ONE = 'A value greater than 0 must be entered';
     public const ERR_VEHICLE_AUTHORITY_EXCEEDED = "The interim vehicle authority cannot exceed the total vehicle authority";
@@ -45,7 +48,7 @@ abstract class AbstractUpdateInterim extends AbstractCommandHandler implements T
 
     protected $repoServiceName = 'Application';
 
-    protected $extraRepos = ['GoodsDisc', 'Fee', 'LicenceVehicle'];
+    protected $extraRepos = ['GoodsDisc', 'Fee', 'LicenceVehicle', 'CommunityLic'];
 
     protected $allowZeroAuthVehicles = false;
 
@@ -76,37 +79,33 @@ abstract class AbstractUpdateInterim extends AbstractCommandHandler implements T
             ApplicationEntity::INTERIM_STATUS_REQUESTED
         ];
 
-        // If Requested
-        if ($currentStatusId === null || in_array($currentStatusId, $requestedOrGranted)) {
-            $this->processStatusRequested($application, $command);
-            return $this->result;
-        }
-
         // If Refused or Revoked, can only update status
         $refuseOrRevoke = [
             ApplicationEntity::INTERIM_STATUS_REFUSED,
             ApplicationEntity::INTERIM_STATUS_REVOKED
         ];
 
-        if (in_array($currentStatusId, $refuseOrRevoke)) {
+        if ($currentStatusId === null || in_array($currentStatusId, $requestedOrGranted)) {
+            $this->processStatusRequested($application, $command);
+        } elseif (in_array($currentStatusId, $refuseOrRevoke)) {
             $application->setInterimStatus($this->getRepo()->getRefdataReference($command->getStatus()));
             $this->getRepo()->save($application);
             $this->result->addMessage('Interim status updated');
-            return $this->result;
-        }
-
-        if ($currentStatusId === ApplicationEntity::INTERIM_STATUS_INFORCE) {
+        } elseif ($currentStatusId === ApplicationEntity::INTERIM_STATUS_INFORCE) {
             $this->maybeUnspecifyVehiclesAndCeaseDiscs($command->getStatus(), $application);
             $this->saveInterimData($application, $command, true);
-            return $this->result;
-        }
-
-        if (
+        } elseif (
             $currentStatusId === ApplicationEntity::INTERIM_STATUS_ENDED
             && $command->getStatus() !== ApplicationEntity::INTERIM_STATUS_ENDED
         ) {
             $this->saveInterimData($application, $command, true);
-            return $this->result;
+        }
+
+        if (
+            $currentStatusId !== ApplicationEntity::INTERIM_STATUS_INFORCE
+            && $application->getCurrentInterimStatus() === ApplicationEntity::INTERIM_STATUS_INFORCE
+        ) {
+            $this->processCommunityLicences($application);
         }
 
         return $this->result;
