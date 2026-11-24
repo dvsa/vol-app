@@ -148,6 +148,44 @@
           {
             "flags": [],
             "spec": {
+              "name": "subsidyTrafficAreas",
+              "attributes": {
+                "id": "trafficAreas",
+                "placeholder": "",
+                "multiple": "multiple",
+                "class": "chosen-select-large"
+              },
+              "options": {
+                "label": "TAOs providing subsidies",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\TrafficArea",
+                "use_groups": "false"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "subsidyLocalAuthorities",
+              "attributes": {
+                "id": "localAuthoritys",
+                "placeholder": "",
+                "multiple": "multiple",
+                "class": "chosen-select-large"
+              },
+              "options": {
+                "label": "Local authorities providing subsidies",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\LocalAuthority",
+                "use_groups": "true"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
               "name": "subsidised",
               "attributes": {
                 "id": "subsidised",
@@ -343,6 +381,24 @@
           }
         ]
       },
+      "subsidyTrafficAreas": {
+        "name": "subsidyTrafficAreas",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "subsidyLocalAuthorities": {
+        "name": "subsidyLocalAuthorities",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
       "subsidyDetail": {
         "name": "subsidyDetail",
         "required": false,
@@ -355,7 +411,7 @@
           {
             "name": "Laminas\\Validator\\StringLength",
             "options": {
-              "max": 255
+              "max": 1000
             }
           }
         ]

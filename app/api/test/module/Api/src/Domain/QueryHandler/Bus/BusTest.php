@@ -46,8 +46,11 @@ final class BusTest extends QueryHandlerTestCase
         $query = Qry::create(['id' => 111]);
 
         $bus = m::mock(BusReg::class)->makePartial();
-        $bus->shouldReceive('serialize')
-            ->andReturn(['foo']);
+        $bundle = [];
+        $bus->shouldReceive('serialize')->andReturnUsing(function (array $requested) use (&$bundle): array {
+            $bundle = $requested;
+            return ['foo'];
+        });
 
         $this->repoMap['Bus']->shouldReceive('fetchUsingId')
             ->with($query)
@@ -56,5 +59,7 @@ final class BusTest extends QueryHandlerTestCase
         $result = $this->sut->handleQuery($query);
 
         $this->assertEquals(['foo'], $result->serialize());
+        $this->assertContains('subsidyTrafficAreas', $bundle);
+        $this->assertContains('subsidyLocalAuthorities', $bundle);
     }
 }
