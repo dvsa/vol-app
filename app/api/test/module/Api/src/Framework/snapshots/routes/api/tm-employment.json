@@ -1,0 +1,55 @@
+{
+  "api/tm-employment/single/GET": {
+    "request": "GET /api/tm-employment/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmEmployment\\GetSingle"
+    },
+    "matches": "api/tm-employment/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmEmployment\\GetSingle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-employment/single/GET"
+  },
+  "api/tm-employment/single/PUT": {
+    "request": "PUT /api/tm-employment/101/",
+    "matches": "api/tm-employment/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmEmployment\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-employment/single/PUT"
+  },
+  "api/tm-employment/DELETE": {
+    "request": "DELETE /api/tm-employment/",
+    "matches": "api/tm-employment/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmEmployment\\DeleteList"
+    },
+    "withoutTrailingSlash": "api/tm-employment/DELETE"
+  },
+  "api/tm-employment/POST": {
+    "request": "POST /api/tm-employment/",
+    "matches": "api/tm-employment/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmEmployment\\Create"
+    },
+    "withoutTrailingSlash": "api/tm-employment/POST"
+  },
+  "api/tm-employment/GET": {
+    "request": "GET /api/tm-employment/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmEmployment\\GetList"
+    },
+    "matches": "api/tm-employment/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmEmployment\\GetList"
+    },
+    "withoutTrailingSlash": "api/tm-employment/GET"
+  }
+}

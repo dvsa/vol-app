@@ -1,0 +1,1 @@
+<p>Diolch am eich cais EBSR a dderbyniwyd ar [submissionDate &lt;&amp;&gt;] i dynnu'n    ôl y gwasanaeth bysiau dilynol.</p><p>[registrationNumber &lt;&amp;&gt;] - rhwng    [origin &lt;&amp;&gt;] a [destination &lt;&amp;&gt;] gyda'r rhif    gwasanaeth [lineName &lt;&amp;&gt;] wedi'i dynnu'n ôl.</p>

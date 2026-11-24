@@ -1,0 +1,44 @@
+{
+  "api/submission-section-comment/single/GET": {
+    "request": "GET /api/submission-section-comment/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\SubmissionSectionComment"
+    },
+    "matches": "api/submission-section-comment/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\SubmissionSectionComment",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission-section-comment/single/GET"
+  },
+  "api/submission-section-comment/single/PUT": {
+    "request": "PUT /api/submission-section-comment/101/",
+    "matches": "api/submission-section-comment/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\UpdateSubmissionSectionComment",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission-section-comment/single/PUT"
+  },
+  "api/submission-section-comment/single/DELETE": {
+    "request": "DELETE /api/submission-section-comment/101/",
+    "matches": "api/submission-section-comment/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\DeleteSubmissionSectionComment",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission-section-comment/single/DELETE"
+  },
+  "api/submission-section-comment/POST": {
+    "request": "POST /api/submission-section-comment/",
+    "matches": "api/submission-section-comment/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\CreateSubmissionSectionComment"
+    },
+    "withoutTrailingSlash": "api/submission-section-comment/POST"
+  }
+}

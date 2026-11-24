@@ -13,10 +13,10 @@ class EnvironmentalComplaint extends CaseBase
 {
     #[Form\Attributes(['id' => 'complaintDate'])]
     #[Form\Options(['label' => 'Complaint date', 'create_empty_option' => true, 'render_delimiters' => false])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     #[Form\Type('DateSelect')]
     public $complaintDate = null;
 
@@ -24,7 +24,7 @@ class EnvironmentalComplaint extends CaseBase
     #[Form\Type('TextArea')]
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'description', 'class' => 'extra-long', 'name' => 'description', 'required' => false])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     public $description = null;
 
@@ -37,20 +37,20 @@ class EnvironmentalComplaint extends CaseBase
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Affected centre', 'disable_inarray_validator' => false, 'context' => 'operatingCentre', 'service_name' => 'Common\Service\Data\LicenceOperatingCentre', 'use_groups' => 'false'])]
     #[Form\Type('DynamicSelect')]
-    #[Form\Filter(['name' => 'Common\Filter\NullToArray'])]
+    #[Form\Filter('Common\Filter\NullToArray')]
     public $operatingCentres;
 
     #[Form\Attributes(['id' => 'complainantForename', 'class' => 'medium', 'name' => 'complainantForename'])]
     #[Form\Options(['label' => 'Complainant first name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $complainantForename = null;
 
     #[Form\Attributes(['id' => 'complainantFamilyName', 'class' => 'medium', 'name' => 'complainantFamilyName'])]
     #[Form\Options(['label' => 'Complainant family name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $complainantFamilyName = null;
 }

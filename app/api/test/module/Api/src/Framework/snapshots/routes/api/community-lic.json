@@ -1,0 +1,109 @@
+{
+  "api/community-lic/single/GET": {
+    "request": "GET /api/community-lic/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CommunityLic\\CommunityLicence"
+    },
+    "matches": "api/community-lic/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CommunityLic\\CommunityLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/community-lic/single/GET"
+  },
+  "api/community-lic/list/GET": {
+    "request": "GET /api/community-lic/list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CommunityLic\\CommunityLicences"
+    },
+    "matches": "api/community-lic/list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CommunityLic\\CommunityLicences"
+    },
+    "withoutTrailingSlash": "api/community-lic/list/GET"
+  },
+  "api/community-lic/application/create/POST": {
+    "request": "POST /api/community-lic/application/create/",
+    "matches": "api/community-lic/application/create/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Application\\Create"
+    },
+    "withoutTrailingSlash": "api/community-lic/application/create/POST"
+  },
+  "api/community-lic/application/create-office-copy/POST": {
+    "request": "POST /api/community-lic/application/create-office-copy/",
+    "matches": "api/community-lic/application/create-office-copy/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Application\\CreateOfficeCopy"
+    },
+    "withoutTrailingSlash": "api/community-lic/application/create-office-copy/POST"
+  },
+  "api/community-lic/licence/create/POST": {
+    "request": "POST /api/community-lic/licence/create/",
+    "matches": "api/community-lic/licence/create/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Licence\\Create"
+    },
+    "withoutTrailingSlash": "api/community-lic/licence/create/POST"
+  },
+  "api/community-lic/licence/create-office-copy/POST": {
+    "request": "POST /api/community-lic/licence/create-office-copy/",
+    "matches": "api/community-lic/licence/create-office-copy/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Licence\\CreateOfficeCopy"
+    },
+    "withoutTrailingSlash": "api/community-lic/licence/create-office-copy/POST"
+  },
+  "api/community-lic/annul/POST": {
+    "request": "POST /api/community-lic/annul/",
+    "matches": "api/community-lic/annul/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Annul"
+    },
+    "withoutTrailingSlash": "api/community-lic/annul/POST"
+  },
+  "api/community-lic/restore/POST": {
+    "request": "POST /api/community-lic/restore/",
+    "matches": "api/community-lic/restore/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Restore"
+    },
+    "withoutTrailingSlash": "api/community-lic/restore/POST"
+  },
+  "api/community-lic/stop/POST": {
+    "request": "POST /api/community-lic/stop/",
+    "matches": "api/community-lic/stop/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Stop"
+    },
+    "withoutTrailingSlash": "api/community-lic/stop/POST"
+  },
+  "api/community-lic/reprint/POST": {
+    "request": "POST /api/community-lic/reprint/",
+    "matches": "api/community-lic/reprint/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\Reprint"
+    },
+    "withoutTrailingSlash": "api/community-lic/reprint/POST"
+  },
+  "api/community-lic/edit-suspension/single/PUT": {
+    "request": "PUT /api/community-lic/edit-suspension/101/",
+    "matches": "api/community-lic/edit-suspension/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CommunityLic\\EditSuspension",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/community-lic/edit-suspension/single/PUT"
+  }
+}

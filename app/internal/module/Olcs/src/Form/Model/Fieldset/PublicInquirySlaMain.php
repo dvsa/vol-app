@@ -15,18 +15,18 @@ class PublicInquirySlaMain extends Base
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $callUpLetterDate = null;
 
     #[Form\Options(['label' => 'Brief sent', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi', 'field' => 'briefToTcDate'])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $briefToTcDate = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'medium'])]
@@ -42,7 +42,7 @@ class PublicInquirySlaMain extends Base
     #[Form\Input('\Common\InputFilter\ContinueIfEmptyInput')]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_decision'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_decision'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]])]
     public $tcWrittenDecisionDate = null;
 
     #[Form\Options(['label' => 'Decision letter sent', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi', 'field' => 'decisionLetterSentDate'])]
@@ -52,7 +52,7 @@ class PublicInquirySlaMain extends Base
     #[Form\Input('\Common\InputFilter\ContinueIfEmptyInput')]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_decision'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_decision'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]])]
     public $decisionLetterSentDate = null;
 
     #[Form\Options(['label' => 'Date of written reason', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi', 'field' => 'tcWrittenReasonDate'])]
@@ -62,7 +62,7 @@ class PublicInquirySlaMain extends Base
     #[Form\Input('\Common\InputFilter\ContinueIfEmptyInput')]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_reason'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_reason'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]])]
     public $tcWrittenReasonDate = null;
 
     #[Form\Options(['label' => 'Written reason letter sent', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi', 'field' => 'writtenReasonLetterDate'])]
@@ -72,7 +72,7 @@ class PublicInquirySlaMain extends Base
     #[Form\Input('\Common\InputFilter\ContinueIfEmptyInput')]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_reason'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'writtenOutcome', 'context_values' => ['piwo_reason'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]])]
     public $writtenReasonLetterDate = null;
 
     #[Form\Options(['label' => 'Written decision letter sent', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi', 'field' => 'writtenDecisionLetterDate'])]
@@ -80,6 +80,6 @@ class PublicInquirySlaMain extends Base
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $writtenDecisionLetterDate = null;
 }

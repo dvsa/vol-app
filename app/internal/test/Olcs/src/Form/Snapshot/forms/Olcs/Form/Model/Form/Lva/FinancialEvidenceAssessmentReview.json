@@ -25,7 +25,7 @@
           "value": "accept"
         },
         "options": {
-          "label": "Accept document review"
+          "label": "lva-financial-evidence-assessment-accept-document-review"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
       }

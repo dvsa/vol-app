@@ -1,0 +1,12 @@
+<div class="signature-box">
+    <div class="signature-box__column">
+        <label for="" class="signature-box__label">Applicant's signature</label>
+        <input type="text" class="signature-box__input signature" disabled="disabled">
+        <label for="" class="signature-box__label">Full name in block capitals</label>
+        <input type="text" class="signature-box__input name" disabled="disabled">
+        <label for="" class="signature-box__label">Position in Company</label>
+        <input type="text" class="signature-box__input position" disabled="disabled">
+        <label for="" class="signature-box__label">Date</label>
+        <input type="text" class="signature-box__input date" disabled="disabled">
+    </div>
+</div>

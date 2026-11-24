@@ -68,8 +68,8 @@ class PermitStockDetails
     #[Form\Attributes(['id' => 'validFrom', 'placeholder' => '', 'class' => 'medium', 'data-container-class' => 'stockDates'])]
     #[Form\Options(['label' => 'Validity Period Start', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $validFrom = null;
 
@@ -77,8 +77,8 @@ class PermitStockDetails
     #[Form\Attributes(['id' => 'validTo', 'placeholder' => '', 'class' => 'medium', 'data-container-class' => 'stockDates'])]
     #[Form\Options(['label' => 'Validity Period End', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $validTo = null;
 

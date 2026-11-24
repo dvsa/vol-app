@@ -31,7 +31,7 @@ class ContactDetails
     #[Form\Options(['label' => 'contact-details-last-name'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
-    #[Form\Validator(['name' => '\Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 35])]
     public $lastName = null;
 

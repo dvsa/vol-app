@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\NormalisedResult;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
@@ -33,6 +34,7 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
             ->andReturn(NormalisedResult::fromRows(self::CURRENT_PAYLOAD['rows']));
         $normaliser->allows('fromStored')->with(null)->andReturnNull();
         $this->mockedSmServices[AnalysisResultNormaliser::class] = $normaliser;
+        $this->mockedSmServices[AnalysisAnnotationOverlay::class] = new AnalysisAnnotationOverlay();
 
         parent::setUp();
     }
@@ -142,6 +144,7 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
         $analysis->allows('getStatus')->andReturn(DocumentAnalysis::STATUS_SUCCESS);
         $analysis->allows('getAssessmentStatus')->andReturn('APPROVED');
         $analysis->allows('getResultNormalised')->andReturn(self::STORED_PAYLOAD);
+        $analysis->allows('getAnnotations')->andReturnNull();
         $analysis->allows('getErrorDetail')->andReturnNull();
         $analysis->allows('getCompletedAt')->with(true)->andReturn(new \DateTime('2026-03-05 09:00:00'));
 

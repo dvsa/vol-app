@@ -14,13 +14,13 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'Service number'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 70])]
     #[Form\Flags(['priority' => -10])]
     public $serviceNo = null;
 
     #[Form\Attributes(['class' => 'add-another'])]
-    #[Form\ComposedObject(['target_object' => 'Olcs\Form\Model\Fieldset\BusReg\OtherServices', 'is_collection' => true, 'options' => ['count' => 1, 'label' => 'Other Service numbers', 'hint' => 'markup-other-service-numbers-hint', 'hint_at_bottom' => true]])]
+    #[Form\ComposedObject('Olcs\Form\Model\Fieldset\BusReg\OtherServices', isCollection: true, options: ['count' => 1, 'label' => 'Other Service numbers', 'hint' => 'markup-other-service-numbers-hint', 'hint_at_bottom' => true])]
     #[Form\Flags(['priority' => -20])]
     public $otherServices = null;
 
@@ -28,7 +28,7 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'Start point'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 100])]
     #[Form\Flags(['priority' => -30])]
     public $startPoint = null;
@@ -37,7 +37,7 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'Finish point'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 100])]
     #[Form\Flags(['priority' => -40])]
     public $finishPoint = null;
@@ -46,7 +46,7 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'Via'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     #[Form\Flags(['priority' => -50])]
     public $via = null;
@@ -55,7 +55,7 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Required(false)]
     #[Form\Options(['label' => 'Service type', 'disable_inarray_validator' => false, 'service_name' => 'Olcs\Service\Data\BusServiceType', 'use_groups' => 'false'])]
     #[Form\Type('DynamicSelect')]
-    #[Form\Filter(['name' => 'Common\Filter\NullToArray'])]
+    #[Form\Filter('Common\Filter\NullToArray')]
     #[Form\Flags(['priority' => -60])]
     public $busServiceTypes = null;
 
@@ -63,7 +63,7 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'Other N&P details'])]
     #[Form\Required(false)]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 800])]
     #[Form\Flags(['priority' => -70])]
     public $otherDetails = null;
@@ -72,8 +72,8 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('Common\Form\Elements\Validators\DateNotInFuture')]
     #[Form\Flags(['priority' => -80])]
@@ -83,9 +83,9 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'Effective date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     #[Form\Flags(['priority' => -90])]
     public $effectiveDate = null;
 
@@ -93,9 +93,9 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Options(['label' => 'End date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     #[Form\Flags(['priority' => -100])]
     public $endDate = null;
 
@@ -105,7 +105,7 @@ class BusServiceNumberAndType extends BusRegDetails
     #[Form\Type('DateSelect')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     #[Form\Flags(['priority' => -100])]
     public $applicationCompleteDate = null;
 

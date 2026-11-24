@@ -1,0 +1,77 @@
+{
+  "api/task/GET": {
+    "request": "GET /api/task/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Task\\TaskList"
+    },
+    "matches": "api/task/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Task\\TaskList"
+    },
+    "withoutTrailingSlash": "api/task/GET"
+  },
+  "api/task/POST": {
+    "request": "POST /api/task/",
+    "matches": "api/task/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Task\\CreateTask"
+    },
+    "withoutTrailingSlash": "api/task/POST"
+  },
+  "api/task/single/GET": {
+    "request": "GET /api/task/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Task\\Task"
+    },
+    "matches": "api/task/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Task\\Task",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task/single/GET"
+  },
+  "api/task/single/PUT": {
+    "request": "PUT /api/task/101/",
+    "matches": "api/task/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Task\\UpdateTask",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task/single/PUT"
+  },
+  "api/task/single/details/GET": {
+    "request": "GET /api/task/101/details/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Task\\TaskDetails"
+    },
+    "matches": "api/task/single/details/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Task\\TaskDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task/single/details/GET"
+  },
+  "api/task/close/POST": {
+    "request": "POST /api/task/close/",
+    "matches": "api/task/close/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Task\\CloseTasks"
+    },
+    "withoutTrailingSlash": "api/task/close/POST"
+  },
+  "api/task/reassign/POST": {
+    "request": "POST /api/task/reassign/",
+    "matches": "api/task/reassign/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Task\\ReassignTasks"
+    },
+    "withoutTrailingSlash": "api/task/reassign/POST"
+  }
+}

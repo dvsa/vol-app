@@ -29,7 +29,7 @@ class InterimDetails
     #[Form\Options(['label' => 'internal.interim.form.interim_end', 'create_empty_option' => true, 'render_delimiters' => false, 'min_year_delta' => '-5', 'max_year_delta' => '+5'])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $interimEnd = null;
 

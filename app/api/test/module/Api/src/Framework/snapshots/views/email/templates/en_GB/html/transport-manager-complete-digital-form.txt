@@ -1,0 +1,17 @@
+<p>Hello,</p>
+<p>
+    [organisation &lt;&amp;&gt;] has named you as a Transport Manager on Vehicle Operator
+    Licence [reference &lt;&amp;&gt;].
+</p>
+<p>
+    Before we can consider their application, you’ll need to submit your details to us.
+</p>
+<p>
+    To do that <a href="[signInLink &lt;&amp;&gt;]">sign in online</a> with your username
+    ([username &lt;&amp;&gt;]) and password.
+</p>
+<p>
+    <b>Having problems?</b><br>
+        For advice see the <a href="https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1">Transport Manager help guide</a> or
+    <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">email us</a>.
+</p>

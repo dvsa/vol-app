@@ -1,0 +1,44 @@
+{
+  "api/retrieval-link/resolve/GET": {
+    "request": "GET /api/retrieval-link/resolve/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\RetrievalLink\\Resolve"
+    },
+    "matches": "api/retrieval-link/resolve/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\RetrievalLink\\Resolve"
+    },
+    "withoutTrailingSlash": "api/retrieval-link/resolve/GET"
+  },
+  "api/retrieval-link/download/GET": {
+    "request": "GET /api/retrieval-link/download/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\RetrievalLink\\Download"
+    },
+    "matches": "api/retrieval-link/download/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\RetrievalLink\\Download"
+    },
+    "withoutTrailingSlash": "api/retrieval-link/download/GET"
+  },
+  "api/retrieval-link/request-otp/POST": {
+    "request": "POST /api/retrieval-link/request-otp/",
+    "matches": "api/retrieval-link/request-otp/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\RetrievalLink\\RequestOtp"
+    },
+    "withoutTrailingSlash": "api/retrieval-link/request-otp/POST"
+  },
+  "api/retrieval-link/verify-otp/POST": {
+    "request": "POST /api/retrieval-link/verify-otp/",
+    "matches": "api/retrieval-link/verify-otp/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\RetrievalLink\\VerifyOtp"
+    },
+    "withoutTrailingSlash": "api/retrieval-link/verify-otp/POST"
+  }
+}

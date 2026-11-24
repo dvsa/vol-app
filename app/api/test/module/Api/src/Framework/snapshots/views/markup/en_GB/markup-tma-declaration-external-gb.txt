@@ -1,0 +1,4 @@
+<p>
+    <b>By submitting this form you are confirming your status as an internal transport manager, an external transport manager or both.</b>
+</p>
+tma-tm-declaration-drivers-administrationtma-tm-declaration-drivers-managementtma-tm-declaration-drivers-operationstma-tm-declaration-vehicle-administrationtma-tm-declaration-vehicle-managementtma-tm-declaration-licence-administrationtma-tm-declaration-internaltma-tm-declaration-externaltma-tm-declaration-warning

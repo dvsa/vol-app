@@ -15,8 +15,8 @@ class SearchAdvanced
     #[Form\Options(['label' => 'Address'])]
     #[Form\Required(false)]
     #[Form\Type('\Laminas\Form\Element\Textarea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringToLower'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Filter('Laminas\Filter\StringToLower')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 10, 'max' => 100])]
     public $address = null;
 

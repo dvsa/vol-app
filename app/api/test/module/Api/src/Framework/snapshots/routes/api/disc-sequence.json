@@ -1,0 +1,26 @@
+{
+  "api/disc-sequence/disc-prefixes/GET": {
+    "request": "GET /api/disc-sequence/disc-prefixes/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DiscSequence\\DiscPrefixes"
+    },
+    "matches": "api/disc-sequence/disc-prefixes/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DiscSequence\\DiscPrefixes"
+    },
+    "withoutTrailingSlash": "api/disc-sequence/disc-prefixes/GET"
+  },
+  "api/disc-sequence/discs-numbering/GET": {
+    "request": "GET /api/disc-sequence/discs-numbering/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DiscSequence\\DiscsNumbering"
+    },
+    "matches": "api/disc-sequence/discs-numbering/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DiscSequence\\DiscsNumbering"
+    },
+    "withoutTrailingSlash": "api/disc-sequence/discs-numbering/GET"
+  }
+}

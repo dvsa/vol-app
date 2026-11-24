@@ -14,9 +14,9 @@ class ProhibitionFields extends Base
     #[Form\Options(['label' => 'Prohibition date', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $prohibitionDate = null;
 
     #[Form\Attributes(['class' => '', 'id' => ''])]
@@ -38,11 +38,11 @@ class ProhibitionFields extends Base
     #[Form\Attributes(['required' => false, 'id' => 'clearedDate'])]
     #[Form\Options(['label' => 'Date cleared', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'prohibitionDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'prohibitionDate', 'compare_to_label' => 'Prohibition Date', 'operator' => 'gte']]]]])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'prohibitionDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'prohibitionDate', 'compare_to_label' => 'Prohibition Date', 'operator' => 'gte']]]])]
     public $clearedDate = null;
 
     #[Form\Attributes(['class' => 'medium', 'id' => ''])]

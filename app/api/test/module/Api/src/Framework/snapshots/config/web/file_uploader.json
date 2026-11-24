@@ -1,0 +1,7 @@
+{
+  "default": "ContentStore",
+  "config": {
+    "location": "documents",
+    "defaultPath": "[locale]/[doc_type_name]/[year]/[month]"
+  }
+}

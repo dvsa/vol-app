@@ -17,7 +17,7 @@ class IrfoDetails extends Base
     public $idHtml = null;
 
     #[Form\Attributes(['class' => 'add-another'])]
-    #[Form\ComposedObject(['target_object' => 'Common\Form\Model\Form\Lva\Fieldset\TradingNames', 'is_collection' => true, 'options' => ['count' => 1, 'label' => 'Trading names', 'hint' => 'markup-trading-name-hint', 'hint_at_bottom' => true]])]
+    #[Form\ComposedObject('Common\Form\Model\Form\Lva\Fieldset\TradingNames', isCollection: true, options: ['count' => 1, 'label' => 'Trading names', 'hint' => 'markup-trading-name-hint', 'hint_at_bottom' => true])]
     public $tradingNames = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'chosen-select-fixed'])]
@@ -28,6 +28,6 @@ class IrfoDetails extends Base
     public $irfoNationality = null;
 
     #[Form\Attributes(['class' => 'add-another'])]
-    #[Form\ComposedObject(['target_object' => 'Olcs\Form\Model\Fieldset\IrfoPartner', 'is_collection' => true, 'options' => ['count' => 1, 'label' => 'Partner details', 'hint' => 'markup-partner-detail-hint', 'hint_at_bottom' => true]])]
+    #[Form\ComposedObject('Olcs\Form\Model\Fieldset\IrfoPartner', isCollection: true, options: ['count' => 1, 'label' => 'Partner details', 'hint' => 'markup-partner-detail-hint', 'hint_at_bottom' => true])]
     public $irfoPartners = null;
 }

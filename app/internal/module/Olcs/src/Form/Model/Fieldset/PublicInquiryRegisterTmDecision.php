@@ -26,9 +26,9 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     #[Form\Attributes(['id' => 'decisionDate'])]
     #[Form\Options(['label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $decisionDate = null;
 
     #[Form\Required(true)]
@@ -48,9 +48,9 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     #[Form\Attributes(['id' => 'notificationDate'])]
     #[Form\Options(['label' => 'Date of notification', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Filter('DateSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $notificationDate = null;
 
     #[Form\Required(false)]

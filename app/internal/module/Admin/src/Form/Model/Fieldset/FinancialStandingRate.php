@@ -36,14 +36,14 @@ class FinancialStandingRate
     #[Form\Attributes(['id' => ''])]
     #[Form\Options(['short-label' => 'financial-standing-rate-element-firstVehicleRate-short', 'label' => 'financial-standing-rate-element-firstVehicleRate', 'label_attributes' => ['id' => 'label-firstVehicleRate']])]
     #[Form\Type('Text')]
-    #[Form\Validator(['name' => 'Dvsa\Olcs\Transfer\Validators\Money'])]
+    #[Form\Validator('Dvsa\Olcs\Transfer\Validators\Money')]
     public $firstVehicleRate = null;
 
     #[Form\Name('additionalVehicleRate')]
     #[Form\Attributes(['id' => ''])]
     #[Form\Options(['short-label' => 'financial-standing-rate-element-additionalVehicleRate-short', 'label' => 'financial-standing-rate-element-additionalVehicleRate', 'label_attributes' => ['id' => 'label-additionalVehicleRate']])]
     #[Form\Type('Text')]
-    #[Form\Validator(['name' => 'Dvsa\Olcs\Transfer\Validators\Money'])]
+    #[Form\Validator('Dvsa\Olcs\Transfer\Validators\Money')]
     public $additionalVehicleRate = null;
 
     #[Form\Name('effectiveFrom')]

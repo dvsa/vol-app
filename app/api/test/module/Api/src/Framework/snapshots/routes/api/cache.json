@@ -1,0 +1,14 @@
+{
+  "api/cache/GET": {
+    "request": "GET /api/cache/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cache\\ById"
+    },
+    "matches": "api/cache/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cache\\ById"
+    },
+    "withoutTrailingSlash": "api/cache/GET"
+  }
+}

@@ -15,7 +15,7 @@ class ProhibitionDefectMain extends Base
     #[Form\Attributes(['class' => 'extra-long', 'id' => 'defectType'])]
     #[Form\Options(['label' => 'Defect type'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 255])]
     public $defectType = null;
 
@@ -23,7 +23,7 @@ class ProhibitionDefectMain extends Base
     #[Form\Attributes(['class' => 'extra-long', 'id' => 'notes'])]
     #[Form\Options(['label' => 'Definition'])]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 1024])]
     public $notes = null;
 

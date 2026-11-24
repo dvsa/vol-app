@@ -12,7 +12,7 @@ class BusNoticePeriod
     #[Form\Required(true)]
     #[Form\Type('Text')]
     #[Form\Attributes(['class' => 'medium'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 70])]
     public $noticeArea = null;
 
@@ -20,7 +20,7 @@ class BusNoticePeriod
     #[Form\Required(true)]
     #[Form\Type('number')]
     #[Form\Attributes(['class' => 'small'])]
-    #[Form\Filter(['name' => 'Digits'])]
+    #[Form\Filter('Digits')]
     #[Form\Validator('Between', options: ['min' => 0, 'max' => 999])]
     public $standardPeriod = null;
 }

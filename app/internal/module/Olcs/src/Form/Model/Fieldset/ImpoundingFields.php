@@ -88,7 +88,7 @@ class ImpoundingFields
     #[Form\Options(['label' => 'Notes/ECMS number'])]
     #[Form\Required(false)]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     public $notes = null;
 }

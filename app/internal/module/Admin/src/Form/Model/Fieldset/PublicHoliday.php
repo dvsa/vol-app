@@ -23,7 +23,7 @@ class PublicHoliday
     #[Form\Type('DateSelect')]
     #[Form\Required(true)]
     #[Form\Options(['label' => 'Holiday Date:', 'create_empty_option' => true, 'max_year_delta' => '+5'])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $holidayDate = null;
 }

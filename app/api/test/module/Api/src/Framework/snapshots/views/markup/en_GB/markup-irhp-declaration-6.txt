@@ -1,0 +1,5 @@
+<ul class="govuk-list govuk-list--bullet">
+    <li>understand your vehicle must carry warning triangles when travelling in Europe</li>
+    <li>understand your drivers must carry the Certificate of Roadworthiness and the Certificate of Compliance for the entire outbound and return journey and present it to any competent authority or inspectors</li>
+    <li>are aware that Certificate of Roadworthiness will expire on the same day as the MOT certificate</li>
+</ul>

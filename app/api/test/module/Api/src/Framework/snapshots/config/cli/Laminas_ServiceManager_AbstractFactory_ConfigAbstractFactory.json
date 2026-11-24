@@ -1,0 +1,175 @@
+{
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\CacheClearCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\CleanUpAbandonedVariationsCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\RetrievalLinkPurgeCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\CompaniesHouseVsOlcsDiffsExportCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\ContinuationNotSoughtCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\CreatePsvLicenceSurrenderTasksCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\DataDvaNiExportCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\DataGovUkExportCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\DataRetentionCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\DatabaseMaintenanceCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\DigitalContinuationRemindersCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\DuplicateVehicleWarningCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\DuplicateVehicleRemovalCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\EnqueueCompaniesHouseCompareCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\ExpireBusRegistrationCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\FlagUrgentTasksCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\ImportUsersFromCsvCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\InspectionRequestEmailCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\InterimEndDateEnforcementCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\LastTmLetterCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\FirstTmLetterCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\LicenceStatusRulesCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\ProcessCommunityLicencesCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\ProcessInboxDocumentsCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\ProcessNtuCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\RemoveReadAuditCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Batch\\ResolvePaymentsCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Idp\\SweepStaleDocumentAnalysisCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Idp\\StoreDocumentAnalysisResultCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Permits\\CancelUnsubmittedBilateralCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Permits\\CloseExpiredWindowsCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Permits\\MarkExpiredPermitsCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Permits\\ResetPermitsTestDataCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Permits\\WithdrawUnpaidIrhpCommand": [
+    "CommandHandlerManager",
+    "QueryHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Queue\\ProcessQueueCommand": [
+    "CommandHandlerManager",
+    "config",
+    "Queue"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Queue\\CompanyProfileDlqSQSQueueCommand": [
+    "CommandHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Queue\\ProcessCompanyProfileSQSQueueCommand": [
+    "CommandHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Queue\\ProcessInsolvencySQSQueueCommand": [
+    "CommandHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Queue\\ProcessInsolvencyDlqSQSQueueCommand": [
+    "CommandHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Queue\\TransXChangeConsumerSQSQueueCommand": [
+    "CommandHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\EntityGenerator\\GenerateEntitiesCommand": [
+    "CommandHandlerManager"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Email\\NotifyHelloWorldCommand": [
+    "CommandHandlerManager",
+    "Dvsa\\Olcs\\Email\\Service\\TemplateRenderer"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Email\\RenderAllTemplatesCommand": [
+    "CommandHandlerManager",
+    "doctrine.entitymanager.orm_default",
+    "TemplateTwigRenderer"
+  ],
+  "Dvsa\\Olcs\\Cli\\Command\\Email\\ConvertToMarkdownCommand": [
+    "CommandHandlerManager",
+    "doctrine.entitymanager.orm_default",
+    "TemplateTwigRenderer"
+  ]
+}

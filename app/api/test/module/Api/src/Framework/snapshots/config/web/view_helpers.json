@@ -1,0 +1,48 @@
+{
+  "aliases": {
+    "countryCodeDataList": "Laminas\\I18n\\View\\Helper\\CountryCodeDataList",
+    "currencyformat": "Laminas\\I18n\\View\\Helper\\CurrencyFormat",
+    "currencyFormat": "Laminas\\I18n\\View\\Helper\\CurrencyFormat",
+    "CurrencyFormat": "Laminas\\I18n\\View\\Helper\\CurrencyFormat",
+    "dateformat": "Laminas\\I18n\\View\\Helper\\DateFormat",
+    "dateFormat": "Laminas\\I18n\\View\\Helper\\DateFormat",
+    "DateFormat": "Laminas\\I18n\\View\\Helper\\DateFormat",
+    "numberformat": "Laminas\\I18n\\View\\Helper\\NumberFormat",
+    "numberFormat": "Laminas\\I18n\\View\\Helper\\NumberFormat",
+    "NumberFormat": "Laminas\\I18n\\View\\Helper\\NumberFormat",
+    "plural": "Laminas\\I18n\\View\\Helper\\Plural",
+    "Plural": "Laminas\\I18n\\View\\Helper\\Plural",
+    "translate": "Laminas\\I18n\\View\\Helper\\Translate",
+    "Translate": "Laminas\\I18n\\View\\Helper\\Translate",
+    "translateplural": "Laminas\\I18n\\View\\Helper\\TranslatePlural",
+    "translatePlural": "Laminas\\I18n\\View\\Helper\\TranslatePlural",
+    "TranslatePlural": "Laminas\\I18n\\View\\Helper\\TranslatePlural",
+    "Zend\\I18n\\View\\Helper\\CurrencyFormat": "Laminas\\I18n\\View\\Helper\\CurrencyFormat",
+    "Zend\\I18n\\View\\Helper\\DateFormat": "Laminas\\I18n\\View\\Helper\\DateFormat",
+    "Zend\\I18n\\View\\Helper\\NumberFormat": "Laminas\\I18n\\View\\Helper\\NumberFormat",
+    "Zend\\I18n\\View\\Helper\\Plural": "Laminas\\I18n\\View\\Helper\\Plural",
+    "Zend\\I18n\\View\\Helper\\Translate": "Laminas\\I18n\\View\\Helper\\Translate",
+    "Zend\\I18n\\View\\Helper\\TranslatePlural": "Laminas\\I18n\\View\\Helper\\TranslatePlural",
+    "isGranted": "LmcRbacMvc\\View\\Helper\\IsGranted",
+    "hasRole": "LmcRbacMvc\\View\\Helper\\HasRole",
+    "htmlPurifier": "Soflomo\\Purifier\\PurifierViewHelper"
+  },
+  "factories": {
+    "Laminas\\I18n\\View\\Helper\\CountryCodeDataList": "Laminas\\I18n\\View\\Helper\\Container\\CountryCodeDataListFactory",
+    "Laminas\\I18n\\View\\Helper\\CurrencyFormat": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\View\\Helper\\DateFormat": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\View\\Helper\\NumberFormat": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\View\\Helper\\Plural": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\View\\Helper\\Translate": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\View\\Helper\\TranslatePlural": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "getPlaceholder": "Dvsa\\Olcs\\Utils\\View\\Factory\\Helper\\GetPlaceholderFactory",
+    "assetPath": "Dvsa\\Olcs\\Utils\\View\\Factory\\Helper\\AssetPathFactory",
+    "LmcRbacMvc\\View\\Helper\\IsGranted": "LmcRbacMvc\\Factory\\IsGrantedViewHelperFactory",
+    "LmcRbacMvc\\View\\Helper\\HasRole": "LmcRbacMvc\\Factory\\HasRoleViewHelperFactory",
+    "Soflomo\\Purifier\\PurifierViewHelper": "Soflomo\\Purifier\\Factory\\PurifierViewHelperFactory"
+  },
+  "invokables": {
+    "answerFormatter": "Dvsa\\Olcs\\Snapshot\\View\\Helper\\AnswerFormatter",
+    "emailStyle": "Dvsa\\Olcs\\Email\\View\\Helper\\EmailStyle"
+  }
+}
