@@ -168,7 +168,7 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
             ->andReturn('DECLARATIONS');
 
         $this->assertEquals(
@@ -244,7 +244,7 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
             ->andReturn('DECLARATIONS');
 
         $this->assertEquals(
@@ -334,7 +334,7 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
             ->andReturn('DECLARATIONS');
 
         $this->assertEquals(
@@ -415,7 +415,7 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
             ->andReturn('DECLARATIONS');
 
         $this->assertEquals(

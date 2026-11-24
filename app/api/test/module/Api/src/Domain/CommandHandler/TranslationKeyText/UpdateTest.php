@@ -49,7 +49,7 @@ final class UpdateTest extends AbstractCommandHandlerTestCase
             ->globally()
             ->ordered()
             ->once()
-            ->with($translatedText);
+            ->with($translatedText, null);
 
         $this->repoMap['TranslationKeyText']
             ->shouldReceive('save')

@@ -14,17 +14,27 @@ var OLCS = OLCS || {};
  * If that's what you're after, please use OLCS.formHandler instead
  */
 
-OLCS.submitForm = (function(document, $, undefined) {
-
+OLCS.submitForm = (function (document, $, undefined) {
   "use strict";
 
   return function submit(options) {
-
     var form = options.form;
+    if (
+      !options.editorjsFlushed &&
+      form.find(".editorjs-container").length &&
+      typeof OLCS.editorjsFlush === "function"
+    ) {
+      return OLCS.editorjsFlush().then(function () {
+        return submit(Object.assign({}, options, { editorjsFlushed: true }));
+      });
+    }
+
     var success = options.success;
-    var error = options.error || function(/*jqXHR, status, err*/) {
-      // no-op
-    };
+    var error =
+      options.error ||
+      function (/*jqXHR, status, err*/) {
+        // no-op
+      };
     var disableOnSubmit = options.disable !== undefined ? options.disable : true;
 
     // cache the form data before we disable it, otherwise
@@ -38,8 +48,8 @@ OLCS.submitForm = (function(document, $, undefined) {
     if (disableOnSubmit) {
       enabledElements = form.find(":input").not(":disabled");
       enabledElements.attr({
-        "disabled"    : true,
-        "aria-hidden" : true
+        disabled: true,
+        "aria-hidden": true,
       });
     }
 
@@ -47,17 +57,14 @@ OLCS.submitForm = (function(document, $, undefined) {
       if (options.complete) {
         options.complete();
       }
-      if (disableOnSubmit  && !OLCS.stopEnableButton) {
+      if (disableOnSubmit && !OLCS.stopEnableButton) {
         enabledElements.removeAttr("disabled", "aria-hidden");
       }
     }
 
     url = form.attr("action");
     if (!url) {
-      OLCS.logger.debug(
-        "form has no action attribute, using current path",
-        "submitForm"
-      );
+      OLCS.logger.debug("form has no action attribute, using current path", "submitForm");
       url = window.location.pathname;
     }
 
@@ -79,8 +86,7 @@ OLCS.submitForm = (function(document, $, undefined) {
       keepModalOpen: options.keepModalOpen || false,
       error: error,
       complete: complete,
-      preloaderType: preloaderType
+      preloaderType: preloaderType,
     });
   };
-
-}(document, window.jQuery));
+})(document, window.jQuery);

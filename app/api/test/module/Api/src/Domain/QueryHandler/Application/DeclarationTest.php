@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Application\Declaration;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationUndertakingsReviewService;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\VariationUndertakingsReviewService;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
 use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepo;
@@ -50,6 +51,7 @@ final class DeclarationTest extends QueryHandlerTestCase
             'FeesHelperService' => m::mock(FeesHelperService::class),
             'SectionAccessService' => m::mock(SectionAccessService::class),
             'Review\ApplicationUndertakings' => m::mock(ApplicationUndertakingsReviewService::class),
+            'Review\VariationUndertakings' => m::mock(VariationUndertakingsReviewService::class),
             SmsNumberCapture::class => new SmsNumberCapture($this->toggleService),
             AuthorizationService::class => m::mock(AuthorizationService::class),
         ];
@@ -96,10 +98,16 @@ final class DeclarationTest extends QueryHandlerTestCase
             ->andReturn([$mockFee])
             ->once();
 
-        $mockApplication->shouldReceive('serialize')->twice()->andReturn(['foo' => 'bar']);
+        $mockApplication->expects('serialize')
+            ->with(['licence' => ['organisation' => ['type']], 'applicationCompletion'])
+            ->andReturn(['foo' => 'bar']);
+        $mockApplication->expects('serialize')
+            ->with(['licence' => ['licenceType']])
+            ->andReturn(['foo' => 'bar']);
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('isVariation')->withNoArgs()->andReturn(true);
         $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnFalse();
 
         $this->mockedSmServices['FeesHelperService']
@@ -116,8 +124,8 @@ final class DeclarationTest extends QueryHandlerTestCase
             ->once()
             ->getMock();
 
-        $this->mockedSmServices['Review\ApplicationUndertakings']
-            ->shouldReceive('getMarkup')
+        $this->mockedSmServices['Review\VariationUndertakings']
+            ->shouldReceive('getLongTextMarkup')
             ->with(['foo' => 'bar', 'isGoods' => true, 'isInternal' => false])
             ->once()
             ->andReturn('markup')
@@ -179,6 +187,7 @@ final class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('isVariation')->withNoArgs()->andReturn(false);
         $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
@@ -196,7 +205,7 @@ final class DeclarationTest extends QueryHandlerTestCase
             ->getMock();
 
         $this->mockedSmServices['Review\ApplicationUndertakings']
-            ->shouldReceive('getMarkup')
+            ->shouldReceive('getLongTextMarkup')
             ->with(['foo' => 'bar', 'isGoods' => true, 'isInternal' => false])
             ->once()
             ->andReturn('markup')
@@ -305,6 +314,7 @@ final class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('isVariation')->withNoArgs()->andReturn(false);
         $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
@@ -322,7 +332,7 @@ final class DeclarationTest extends QueryHandlerTestCase
             ->getMock();
 
         $this->mockedSmServices['Review\ApplicationUndertakings']
-            ->shouldReceive('getMarkup')
+            ->shouldReceive('getLongTextMarkup')
             ->with(['foo' => 'bar', 'isGoods' => true, 'isInternal' => false])
             ->once()
             ->andReturn('markup')
@@ -433,6 +443,7 @@ final class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('isVariation')->withNoArgs()->andReturn(false);
         $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
@@ -450,7 +461,7 @@ final class DeclarationTest extends QueryHandlerTestCase
             ->getMock();
 
         $this->mockedSmServices['Review\ApplicationUndertakings']
-            ->shouldReceive('getMarkup')
+            ->shouldReceive('getLongTextMarkup')
             ->with(['foo' => 'bar', 'isGoods' => true, 'isInternal' => false])
             ->once()
             ->andReturn('markup')
@@ -546,6 +557,7 @@ final class DeclarationTest extends QueryHandlerTestCase
         $mockApplication->shouldReceive('canHaveInterimLicence')->with()->once()->andReturn(true);
         $mockApplication->shouldReceive('isLicenceUpgrade')->with()->once()->andReturn('yyy');
         $mockApplication->shouldReceive('isGoods')->with()->once()->andReturn(true);
+        $mockApplication->expects('isVariation')->withNoArgs()->andReturn(false);
         $mockApplication->expects('showPeriodOfGraceQuestion')->andReturnTrue();
 
         $this->mockedSmServices['FeesHelperService']
@@ -563,7 +575,7 @@ final class DeclarationTest extends QueryHandlerTestCase
             ->getMock();
 
         $this->mockedSmServices['Review\ApplicationUndertakings']
-            ->shouldReceive('getMarkup')
+            ->shouldReceive('getLongTextMarkup')
             ->with(['foo' => 'bar', 'isGoods' => true, 'isInternal' => false])
             ->once()
             ->andReturn('markup')
@@ -616,7 +628,7 @@ final class DeclarationTest extends QueryHandlerTestCase
         $this->repoMap['SystemParameter']->shouldReceive('fetchValue')->andReturn(false);
         $this->mockedSmServices['FeesHelperService']->shouldReceive('getTotalOutstandingFeeAmountForApplication')->andReturn(0);
         $this->mockedSmServices['SectionAccessService']->shouldReceive('getAccessibleSections')->andReturn([]);
-        $this->mockedSmServices['Review\ApplicationUndertakings']->shouldReceive('getMarkup')->andReturn('markup');
+        $this->mockedSmServices['Review\ApplicationUndertakings']->shouldReceive('getLongTextMarkup')->andReturn('markup');
 
         $data = $this->sut->handleQuery($query)->serialize();
 

@@ -43,9 +43,134 @@ final class VariationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationUndertakingsReviewService($abstractReviewServiceServices);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerLongTextMarkup')]
+    public function testGetLongTextMarkup(array $data, string $key): void
+    {
+        $this->mockTranslator->expects('translate')->with($key)->andReturn('managed wording');
+
+        self::assertSame('managed wording', $this->sut->getLongTextMarkup($data));
+    }
+
+    public static function providerLongTextMarkup(): \Iterator
+    {
+        yield 'goods GB standard' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_HGV],
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL]],
+                'niFlag' => 'N',
+            ],
+            'markup-variation-declaration-goods-gb-standard',
+        ];
+        yield 'goods NI LGV' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_LGV],
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
+                'niFlag' => 'Y',
+            ],
+            'markup-variation-declaration-goods-ni-lgv',
+        ];
+        yield 'goods NI upgrade' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_HGV],
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED]],
+                'niFlag' => 'Y',
+            ],
+            'markup-variation-declaration-goods-ni-upgrade',
+        ];
+        yield 'PSV restricted' => [
+            [
+                'isGoods' => false,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+                'niFlag' => 'N',
+            ],
+            'markup-variation-declaration-psv-restricted',
+        ];
+    }
+
+    public function testGetLongTextMarkupFallsBackToThePartialsWhenThereIsNoContent(): void
+    {
+        $data = [
+            'isGoods' => false,
+            'isInternal' => false,
+            'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+            'niFlag' => 'N',
+        ];
+
+        $this->mockTranslator->expects('translate')
+            ->with('markup-variation-declaration-psv-restricted')
+            ->andReturn('markup-variation-declaration-psv-restricted');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_PSV430')
+            ->andReturn('partial wording%s%s%s');
+
+        self::assertSame('partial wording', $this->sut->getLongTextMarkup($data));
+    }
+
+    public function testGetConfigFromDataUsesTheManagedWordingWhenNotInternal(): void
+    {
+        $data = [
+            'isGoods' => false,
+            'isInternal' => false,
+            'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+            'niFlag' => 'N',
+        ];
+
+        $this->mockTranslator->expects('translate')
+            ->with('markup-variation-declaration-psv-restricted')
+            ->andReturn('managed wording');
+
+        self::assertSame(['markup' => 'managed wording'], $this->sut->getConfigFromData($data));
+    }
+
+    public function testGetConfigFromDataKeepsThePartialsWhenInternal(): void
+    {
+        $data = [
+            'isGoods' => false,
+            'isInternal' => true,
+            'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+            'licence' => ['organisation' => ['type' => ['id' => 'org_t_rc']]],
+            'niFlag' => 'N',
+        ];
+
+        $this->mockTranslator->shouldReceive('translate')
+            ->with('markup-variation-declaration-psv-restricted')
+            ->andReturn('managed wording');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_PSV430')
+            ->andReturn('partial wording [%s] [%s] [%s]');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_PSV430-declare')
+            ->andReturn('declare');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_signature')
+            ->andReturn('signature [%s] [%s]');
+        $this->mockTranslator->expects('translate')
+            ->with('undertakings_directors_signature')
+            ->andReturn('directors');
+        $this->mockTranslator->expects('translate')
+            ->with('markup-application_undertakings_signature_address_gb')
+            ->andReturn('address');
+
+        self::assertSame(
+            ['markup' => 'partial wording [declare] [signature [directors] [address]] []'],
+            $this->sut->getConfigFromData($data)
+        );
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData(mixed $data, mixed $expected): void
     {
+        // No managed wording yet, so the long text key falls back to the partials
+        $this->mockTranslator->shouldReceive('translate')
+            ->with(m::pattern('/^markup-variation-declaration-/'))
+            ->andReturnArg(0);
+
         $this->mockTranslator->shouldReceive('translate')
             ->with('markup-application_undertakings_PSV430')
             ->andReturn('PSV430-translated [%s] [%s] [%s]');
@@ -138,6 +263,7 @@ final class VariationUndertakingsReviewServiceTest extends MockeryTestCase
                     'id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
                 ],
                 'isInternal' => false,
+                'niFlag' => 'N',
             ],
             [
                 'markup' => 'PSV430-translated [] [] []'
@@ -150,6 +276,7 @@ final class VariationUndertakingsReviewServiceTest extends MockeryTestCase
                     'id' => Licence::LICENCE_TYPE_RESTRICTED
                 ],
                 'isInternal' => false,
+                'niFlag' => 'N',
             ],
             [
                 'markup' => 'PSV430-translated [] [] []'
@@ -162,6 +289,7 @@ final class VariationUndertakingsReviewServiceTest extends MockeryTestCase
                     'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
                 ],
                 'isInternal' => false,
+                'niFlag' => 'N',
             ],
             [
                 'markup' => 'PSV430-translated [] [] [PSV430-standard-translated]'
@@ -174,6 +302,7 @@ final class VariationUndertakingsReviewServiceTest extends MockeryTestCase
                     'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
                 ],
                 'isInternal' => false,
+                'niFlag' => 'N',
             ],
             [
                 'markup' => 'PSV430-translated [] [] [PSV430-standard-translated]'
