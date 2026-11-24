@@ -10,6 +10,7 @@ use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Types;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\SchemaIntrospectorInterface;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
@@ -218,6 +219,23 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     }
 
     /**
+     * DBAL 4.6 introspects MySQL's DATE, DATETIME, TIMESTAMP, TIME and YEAR columns as the
+     * `_immutable` types. The entities map them to the mutable types and hydrate \DateTime,
+     * and DefaultTypeHandler has no entry for the immutable names, so without this every
+     * date column would regenerate as a string property and lose its asDateTime accessor.
+     */
+    private static function toMutableTypeName(string $type): string
+    {
+        return match ($type) {
+            Types::DATE_IMMUTABLE => Types::DATE_MUTABLE,
+            Types::DATETIME_IMMUTABLE => Types::DATETIME_MUTABLE,
+            Types::DATETIMETZ_IMMUTABLE => Types::DATETIMETZ_MUTABLE,
+            Types::TIME_IMMUTABLE => Types::TIME_MUTABLE,
+            default => $type,
+        };
+    }
+
+    /**
      * Convert Doctrine Column to our ColumnMetadata
      */
     private function convertColumn(Column $column, ?Table $table = null): ColumnMetadata
@@ -243,7 +261,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             }
         }
 
-        $type = \Doctrine\DBAL\Types\Type::lookupName($column->getType());
+        $type = self::toMutableTypeName(\Doctrine\DBAL\Types\Type::lookupName($column->getType()));
 
         // DBAL models precision/scale as first-class column properties, but
         // DefaultTypeHandler reads precision from length and scale from options, so

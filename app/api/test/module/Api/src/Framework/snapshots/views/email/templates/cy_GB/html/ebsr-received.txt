@@ -1,0 +1,9 @@
+<p>Diolch am eich cais EBSR a dderbyniwyd ar  [submissionDate &lt;&amp;&gt;] am y
+    gwasanaeth bysiau dilynol - [registrationNumber &lt;&amp;&gt;] - rhwng
+    [origin &lt;&amp;&gt;] a [destination &lt;&amp;&gt;] gyda'r
+    rhif gwasanaeth [lineName &lt;&amp;&gt;] i ddod i effaith ar
+    [startDate &lt;&amp;&gt;].</p>
+
+<p>Derbyniwyd eich cais a chaiff ei brosesu cyn gynted â phosibl. Rydym wedi copïo'r e-bost hwn i'r
+    awdurdodau lleol dilynol:
+    [localAuthoritys &lt;&amp;&gt;].</p>

@@ -1,0 +1,56 @@
+{
+  "api/defect/GET": {
+    "request": "GET /api/defect/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\DefectList"
+    },
+    "matches": "api/defect/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\DefectList"
+    },
+    "withoutTrailingSlash": "api/defect/GET"
+  },
+  "api/defect/POST": {
+    "request": "POST /api/defect/",
+    "matches": "api/defect/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Prohibition\\Defect\\Create"
+    },
+    "withoutTrailingSlash": "api/defect/POST"
+  },
+  "api/defect/single/GET": {
+    "request": "GET /api/defect/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\Defect"
+    },
+    "matches": "api/defect/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\Defect",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/defect/single/GET"
+  },
+  "api/defect/single/PUT": {
+    "request": "PUT /api/defect/101/",
+    "matches": "api/defect/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Prohibition\\Defect\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/defect/single/PUT"
+  },
+  "api/defect/single/DELETE": {
+    "request": "DELETE /api/defect/101/",
+    "matches": "api/defect/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Prohibition\\Defect\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/defect/single/DELETE"
+  }
+}

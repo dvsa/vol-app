@@ -1,0 +1,26 @@
+<p>
+    Section 12(1)(b) of the Transport Act 1985 (as amended) requires all applicants for special restricted public
+    service vehicle operators licences to state in their application that they propose to provide a registered local bus
+    service. You are therefore making the following declaration when submitting this application
+</p>
+<p>
+    I confirm that I propose to use one or more licensed taxis or private hire vehicles (PHVs) to provide a local
+    service.
+    I hereby apply for a special restricted public service vehicle operator's licence. I declare that:
+</p>
+<ul class="list--bullet">
+    <li>
+        The statements made in this application are true. I understand that it is an offence to make a false
+        declaration;
+    </li>
+    <li>The applicant is the holder of the taxi or private hire vehicle licence(s) listed in this application;</li>
+    <li>
+        Every vehicle used under the special restricted PSV operator’s licence shall be one for which the applicant
+        holds a taxi or private hire vehicle licence;
+    </li>
+    <li>
+        No vehicle shall be used under the special restricted PSV operator’s licence otherwise than for the purpose of
+        providing a local service with one or more stopping places within the area that granted the relevant licence
+        for that vehicle.
+    </li>
+</ul>

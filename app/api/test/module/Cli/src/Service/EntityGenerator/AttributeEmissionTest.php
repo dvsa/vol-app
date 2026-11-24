@@ -488,6 +488,35 @@ final class AttributeEmissionTest extends MockeryTestCase
     }
 
     /**
+     * cf. goods_disc.issued_date. DBAL 4.6 introspects MySQL's date and time columns as the
+     * `_immutable` types; the entities map them to the mutable ones, so regeneration has to
+     * fold them back or every date column becomes a string property.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIntrospectedDateTimeTypes')]
+    public function testImmutableDateTimeTypesAreIntrospectedAsMutable(string $introspected, string $expected): void
+    {
+        $introspector = (new \ReflectionClass(Doctrine3SchemaIntrospector::class))->newInstanceWithoutConstructor();
+        $column = new \Doctrine\DBAL\Schema\Column('issued_date', \Doctrine\DBAL\Types\Type::getType($introspected));
+
+        $metadata = (new \ReflectionMethod(Doctrine3SchemaIntrospector::class, 'convertColumn'))
+            ->invoke($introspector, $column);
+
+        $this->assertSame($expected, $metadata->getType());
+    }
+
+    public static function dpIntrospectedDateTimeTypes(): array
+    {
+        return [
+            'date' => ['date_immutable', 'date'],
+            'datetime' => ['datetime_immutable', 'datetime'],
+            'datetimetz' => ['datetimetz_immutable', 'datetimetz'],
+            'time' => ['time_immutable', 'time'],
+            'mutable type left alone' => ['datetime', 'datetime'],
+            'other type left alone' => ['string', 'string'],
+        ];
+    }
+
+    /**
      * Whichever type the platform resolves an ENUM to, it is flattened back to a plain string
      * property backed by class constants - under DBAL 4 that arrives here as `enum` rather
      * than the `string` testZeroLengthIsNotEmitted covers.

@@ -14,6 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class GracePeriod extends AbstractGracePeriod
 {
+    public const string TYPE_CATEGORY = 'grace_period_type';
+    public const string TYPE_FINANCE = 'gpt_finance';
+    public const string TYPE_TM = 'gpt_tm';
+
     protected $isActive = false;
 
     public function isActive($today = 'now')

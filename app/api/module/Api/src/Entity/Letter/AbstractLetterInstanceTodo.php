@@ -67,7 +67,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     protected $letterInstanceIssue;
 
     /**
-     * LetterTodoVersion, null for a caseworker-written to-do (VOL-7735)
+     * NULL for a caseworker-written to-do
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion|null
      */
@@ -227,7 +227,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Set the letter todo version
      *
-     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion|null $letterTodoVersion new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion $letterTodoVersion new value being set
      *
      * @return static
      */
@@ -241,7 +241,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * Get the letter todo version
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion|null
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
      */
     public function getLetterTodoVersion()
     {

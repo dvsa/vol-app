@@ -1,0 +1,14 @@
+<p>Thank you for your EBSR application received on [submissionDate &lt;&amp;&gt;] for the
+   following local bus service - [registrationNumber &lt;&amp;&gt;] - between
+   [origin &lt;&amp;&gt;] and [destination &lt;&amp;&gt;] with
+    service number [lineName &lt;&amp;&gt;].</p>
+
+<p>Your application for short notice under the Traffic Commissioners discretionary powers has been refused, therefore
+   you must give the full notice period until you can start, change or cancel your service. If you do not, you could face
+   disciplinary action by the Traffic Commissioner.</p>
+
+<p>The revised effective date will be [startDate &lt;&amp;&gt;].<br />
+    If you are in any doubt, please ring your usual caseworker or e-mail:
+    <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">notifications@vehicle-operator-licensing.service.gov.uk</a><br />
+    We have copied this e-mail to the following local authorities:
+    [localAuthoritys &lt;&amp;&gt;].</p>

@@ -1,0 +1,56 @@
+{
+  "api/environmental-complaint/GET": {
+    "request": "GET /api/environmental-complaint/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\EnvironmentalComplaint\\EnvironmentalComplaintList"
+    },
+    "matches": "api/environmental-complaint/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\EnvironmentalComplaint\\EnvironmentalComplaintList"
+    },
+    "withoutTrailingSlash": "api/environmental-complaint/GET"
+  },
+  "api/environmental-complaint/single/GET": {
+    "request": "GET /api/environmental-complaint/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\EnvironmentalComplaint\\EnvironmentalComplaint"
+    },
+    "matches": "api/environmental-complaint/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\EnvironmentalComplaint\\EnvironmentalComplaint",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/environmental-complaint/single/GET"
+  },
+  "api/environmental-complaint/single/PUT": {
+    "request": "PUT /api/environmental-complaint/101/",
+    "matches": "api/environmental-complaint/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\EnvironmentalComplaint\\UpdateEnvironmentalComplaint",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/environmental-complaint/single/PUT"
+  },
+  "api/environmental-complaint/single/DELETE": {
+    "request": "DELETE /api/environmental-complaint/101/",
+    "matches": "api/environmental-complaint/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\EnvironmentalComplaint\\DeleteEnvironmentalComplaint",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/environmental-complaint/single/DELETE"
+  },
+  "api/environmental-complaint/POST": {
+    "request": "POST /api/environmental-complaint/",
+    "matches": "api/environmental-complaint/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\EnvironmentalComplaint\\CreateEnvironmentalComplaint"
+    },
+    "withoutTrailingSlash": "api/environmental-complaint/POST"
+  }
+}

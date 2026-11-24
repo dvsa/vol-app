@@ -1,0 +1,168 @@
+{
+  "api/cases/single/GET": {
+    "request": "GET /api/cases/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Cases"
+    },
+    "matches": "api/cases/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Cases",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/GET"
+  },
+  "api/cases/single/PUT": {
+    "request": "PUT /api/cases/101/",
+    "matches": "api/cases/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\UpdateCase",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/PUT"
+  },
+  "api/cases/single/DELETE": {
+    "request": "DELETE /api/cases/101/",
+    "matches": "api/cases/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\DeleteCase",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/DELETE"
+  },
+  "api/cases/single/close/PUT": {
+    "request": "PUT /api/cases/101/close/",
+    "matches": "api/cases/single/close/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\CloseCase",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/close/PUT"
+  },
+  "api/cases/single/reopen/PUT": {
+    "request": "PUT /api/cases/101/reopen/",
+    "matches": "api/cases/single/reopen/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\ReopenCase",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/reopen/PUT"
+  },
+  "api/cases/single/opposition-dates/GET": {
+    "request": "GET /api/cases/101/opposition-dates/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\CasesWithOppositionDates"
+    },
+    "matches": "api/cases/single/opposition-dates/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\CasesWithOppositionDates",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/opposition-dates/GET"
+  },
+  "api/cases/single/licence/GET": {
+    "request": "GET /api/cases/101/licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\CasesWithLicence"
+    },
+    "matches": "api/cases/single/licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\CasesWithLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/licence/GET"
+  },
+  "api/cases/single/conviction-note/PUT": {
+    "request": "PUT /api/cases/101/conviction-note/",
+    "matches": "api/cases/single/conviction-note/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\UpdateConvictionNote",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/conviction-note/PUT"
+  },
+  "api/cases/single/prohibition-note/PUT": {
+    "request": "PUT /api/cases/101/prohibition-note/",
+    "matches": "api/cases/single/prohibition-note/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\UpdateProhibitionNote",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/prohibition-note/PUT"
+  },
+  "api/cases/single/penalties-note/PUT": {
+    "request": "PUT /api/cases/101/penalties-note/",
+    "matches": "api/cases/single/penalties-note/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\UpdatePenaltiesNote",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/cases/single/penalties-note/PUT"
+  },
+  "api/cases/POST": {
+    "request": "POST /api/cases/",
+    "matches": "api/cases/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\CreateCase"
+    },
+    "withoutTrailingSlash": "api/cases/POST"
+  },
+  "api/cases/by-transport-manager/GET": {
+    "request": "GET /api/cases/by-transport-manager/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ByTransportManager"
+    },
+    "matches": "api/cases/by-transport-manager/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ByTransportManager"
+    },
+    "withoutTrailingSlash": "api/cases/by-transport-manager/GET"
+  },
+  "api/cases/by-licence/GET": {
+    "request": "GET /api/cases/by-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ByLicence"
+    },
+    "matches": "api/cases/by-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ByLicence"
+    },
+    "withoutTrailingSlash": "api/cases/by-licence/GET"
+  },
+  "api/cases/by-application/GET": {
+    "request": "GET /api/cases/by-application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ByApplication"
+    },
+    "matches": "api/cases/by-application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ByApplication"
+    },
+    "withoutTrailingSlash": "api/cases/by-application/GET"
+  },
+  "api/cases/report/open/GET": {
+    "request": "GET /api/cases/report/open/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Report\\OpenList"
+    },
+    "matches": "api/cases/report/open/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Report\\OpenList"
+    },
+    "withoutTrailingSlash": "api/cases/report/open/GET"
+  }
+}

@@ -7,6 +7,8 @@ namespace Dvsa\OlcsTest\Api\Service\Ebsr;
 use Dvsa\Olcs\Api\Service\Ebsr\S3Processor;
 use Dvsa\Olcs\Api\Service\Ebsr\S3ProcessorFactory;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -25,9 +27,14 @@ final class S3ProcessorFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
     }
 
     /**
+     * In its own process: the overload mock replaces \Aws\Sts\StsClient for the rest of the process, and
+     * cannot be created at all once any earlier test has loaded the real class.
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testInvoke(): void
     {
         $mockSl = m::mock(ContainerInterface::class);

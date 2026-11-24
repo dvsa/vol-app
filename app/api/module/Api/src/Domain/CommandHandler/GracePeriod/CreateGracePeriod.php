@@ -33,6 +33,7 @@ final class CreateGracePeriod extends AbstractCommandHandler
             ->getReference(Licence::class, $command->getLicence());
 
         $gracePeriod = new GracePeriod();
+        $gracePeriod->setGracePeriodType($this->getRepo()->fetchType($command->getGracePeriodType()));
         $gracePeriod->setStartDate(new \DateTime($command->getStartDate()));
         $gracePeriod->setEndDate(new \DateTime($command->getEndDate()));
         $gracePeriod->setDescription($command->getDescription());
