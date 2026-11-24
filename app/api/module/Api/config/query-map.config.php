@@ -738,6 +738,8 @@ return [
     TransferQuery\Messaging\ApplicationLicenceList\ByApplicationToOrganisation::class => QueryHandler\Messaging\ApplicationLicenceList\ByApplicationToOrganisation::class,
     TransferQuery\Messaging\ApplicationLicenceList\ByCaseToOrganisation::class        => QueryHandler\Messaging\ApplicationLicenceList\ByCaseToOrganisation::class,
     TransferQuery\Messaging\Subjects\All::class                                       => QueryHandler\Messaging\Subjects\All::class,
+    TransferQuery\Messaging\Subjects\GetList::class                                  => QueryHandler\Messaging\Subjects\GetList::class,
+    TransferQuery\Messaging\Subjects\ById::class                                     => QueryHandler\Messaging\Subjects\ById::class,
     TransferQuery\Messaging\Messages\UnreadCountByOrganisationAndUser::class          => QueryHandler\Messaging\Message\UnreadCountByOrganisationAndRoles::class,
     TransferQuery\Messaging\Messages\UnreadCountByLicenceAndRoles::class              => QueryHandler\Messaging\Message\UnreadCountByLicenceAndRoles::class,
 

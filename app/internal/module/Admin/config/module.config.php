@@ -1094,6 +1094,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-message-categories' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' =>
+                                'message-categories[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|delete|edit)'
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\MessagingSubjectController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-presiding-tcs' => [
                         'type' => 'Segment',
                         'options' => [
@@ -1167,6 +1181,7 @@ return [
             Admin\Controller\MyDetailsController::class => Admin\Controller\MyDetailsControllerFactory::class,
             Admin\Controller\PartnerController::class => Admin\Controller\PartnerControllerFactory::class,
             Admin\Controller\PaymentProcessingFeesController::class => Admin\Controller\PaymentProcessingFeesControllerFactory::class,
+            Admin\Controller\MessagingSubjectController::class => Admin\Controller\MessagingSubjectControllerFactory::class,
             Admin\Controller\PermitsController::class => Admin\Controller\PermitsControllerFactory::class,
             Admin\Controller\PermitsReportController::class => Admin\Controller\PermitsReportControllerFactory::class,
             Admin\Controller\PiReportController::class => Admin\Controller\PiReportControllerFactory::class,

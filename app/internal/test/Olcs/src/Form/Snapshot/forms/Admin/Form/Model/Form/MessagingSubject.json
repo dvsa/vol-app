@@ -1,0 +1,213 @@
+{
+  "name": "messaging-subject",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": {
+          "class": "table__form"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "attributes": {
+                "placeholder": "",
+                "class": "long",
+                "required": "required"
+              },
+              "options": {
+                "label": "Description"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "category",
+              "attributes": {
+                "id": "category",
+                "placeholder": "",
+                "required": "required"
+              },
+              "options": {
+                "label": "Category",
+                "service_name": "Olcs\\Service\\Data\\Category",
+                "context": {
+                  "isTaskCategory": "Y"
+                },
+                "empty_option": "Please select"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "subCategory",
+              "attributes": {
+                "id": "subCategory",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Sub-category",
+                "service_name": "Olcs\\Service\\Data\\SubCategory",
+                "context": {
+                  "isTaskCategory": "Y"
+                },
+                "empty_option": "Not applicable"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isActive",
+              "options": {
+                "label": "Active",
+                "checked_value": "1",
+                "unchecked_value": "0"
+              },
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "",
+                "id": "isActive"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "details": {
+      "description": {
+        "name": "description",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 249
+            }
+          }
+        ]
+      },
+      "category": {
+        "name": "category",
+        "required": true
+      },
+      "subCategory": {
+        "name": "subCategory",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

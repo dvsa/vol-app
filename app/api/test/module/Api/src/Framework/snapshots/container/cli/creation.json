@@ -837,7 +837,7 @@
     "CommandHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\CommandHandlerManager",
       "config_key": null,
-      "plugins": 918,
+      "plugins": 921,
       "not_created": {
         "Dvsa\\Olcs\\Api\\Domain\\Command\\Bus\\Ebsr\\ProcessRequestMap": {
           "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Ebsr\\S3Processor\" could not be created. Reason: Found 1 error while validating the input provided for the AssumeRole operation:"
@@ -1079,7 +1079,7 @@
     "QueryHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\QueryHandlerManager",
       "config_key": null,
-      "plugins": 506,
+      "plugins": 508,
       "not_created": {
         "Dvsa\\Olcs\\Api\\Domain\\Query\\DataRetention\\Postcheck": {
           "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Domain\\Query\\DataRetention\\Postcheck\" could not be created. Reason: An exception occurred in the driver: SQLSTATE[HY000] [2002] No such file or directory"
@@ -1131,7 +1131,7 @@
     "ValidationHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\ValidationHandlerManager",
       "config_key": null,
-      "plugins": 1441,
+      "plugins": 1446,
       "not_created": []
     },
     "ValidatorManager": {

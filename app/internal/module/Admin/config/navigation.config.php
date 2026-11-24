@@ -372,6 +372,12 @@ return [
                     'route' => 'admin-dashboard/task-allocation-rules',
                 ],
                 [
+                    'label' => 'Message categories',
+                    'class' => 'govuk-link--no-visited-state',
+                    'id' => 'admin-dashboard/message-categories',
+                    'route' => 'admin-dashboard/admin-message-categories',
+                ],
+                [
                     'label' => 'Content Management',
                     'id' => 'admin-dashboard/content-management',
                     'class' => 'govuk-link--no-visited-state',
