@@ -1,0 +1,8 @@
+Helô,
+
+Fe'ch ychwanegwyd at y gwasanaeth Trwyddedu Gweithredwyr Cerbydau ar gyfer [orgName <&>].
+
+Eich enw defnyddiwr yw: [loginId <&>]
+Byddwch yn derbyn ail e-bost gyda chyfrinair dros dro yn y ddwy awr nesaf. Os na fydd yn cyrraedd e-bostiwch notifications@vehicle-operator-licensing.service.gov.uk
+
+Mewngofnodi [url <&>]

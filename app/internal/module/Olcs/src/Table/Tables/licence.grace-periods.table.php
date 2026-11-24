@@ -46,6 +46,10 @@ return [
             'formatter' => Date::class
         ],
         [
+            'title' => 'licence.grace-periods.table.gracePeriodType',
+            'name' => 'gracePeriodType'
+        ],
+        [
             'title' => 'licence.grace-periods.table.description',
             'name' => 'description'
         ],

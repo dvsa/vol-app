@@ -1,0 +1,7 @@
+Helô,
+
+Mae [tmFullName <&>] wedi cyflwyno eu manylion ar gyfer y cais [licNo <&>]/[applicationId <&>].
+
+I'w hadolygu mewngofnodwch i'ch cyfrif.
+
+Adolygu'r cais [tmaUrl <&>].

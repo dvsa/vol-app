@@ -1,0 +1,4 @@
+The following licences with fees due between [startDate <&>] and [endDate <&>] have been set to CNS:
+
+OB1234567 North East of England <&>
+PD7654321 Wales

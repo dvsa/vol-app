@@ -1,0 +1,427 @@
+{
+  "api/irhp-application/single/GET": {
+    "request": "GET /api/irhp-application/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ById"
+    },
+    "matches": "api/irhp-application/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-application/single/GET"
+  },
+  "api/irhp-application/single/countries/PUT": {
+    "request": "PUT /api/irhp-application/101/countries/",
+    "matches": "api/irhp-application/single/countries/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\UpdateCountries",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-application/single/countries/PUT"
+  },
+  "api/irhp-application/single/period/PUT": {
+    "request": "PUT /api/irhp-application/101/period/",
+    "matches": "api/irhp-application/single/period/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\UpdatePeriod",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-application/single/period/PUT"
+  },
+  "api/irhp-application/single/question-answer/GET": {
+    "request": "GET /api/irhp-application/101/question-answer/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\QuestionAnswer"
+    },
+    "matches": "api/irhp-application/single/question-answer/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\QuestionAnswer",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-application/single/question-answer/GET"
+  },
+  "api/irhp-application/single/available-licences/GET": {
+    "request": "GET /api/irhp-application/101/available-licences/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\AvailableLicences"
+    },
+    "matches": "api/irhp-application/single/available-licences/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\AvailableLicences",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-application/single/available-licences/GET"
+  },
+  "api/irhp-application/POST": {
+    "request": "POST /api/irhp-application/",
+    "matches": "api/irhp-application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\Create"
+    },
+    "withoutTrailingSlash": "api/irhp-application/POST"
+  },
+  "api/irhp-application/update-multiple-no-of-permits/PUT": {
+    "request": "PUT /api/irhp-application/update-multiple-no-of-permits/",
+    "matches": "api/irhp-application/update-multiple-no-of-permits/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\UpdateMultipleNoOfPermits"
+    },
+    "withoutTrailingSlash": "api/irhp-application/update-multiple-no-of-permits/PUT"
+  },
+  "api/irhp-application/update-declaration/PUT": {
+    "request": "PUT /api/irhp-application/update-declaration/",
+    "matches": "api/irhp-application/update-declaration/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\UpdateDeclaration"
+    },
+    "withoutTrailingSlash": "api/irhp-application/update-declaration/PUT"
+  },
+  "api/irhp-application/update-check-answers/PUT": {
+    "request": "PUT /api/irhp-application/update-check-answers/",
+    "matches": "api/irhp-application/update-check-answers/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\UpdateCheckAnswers"
+    },
+    "withoutTrailingSlash": "api/irhp-application/update-check-answers/PUT"
+  },
+  "api/irhp-application/submit-application/PUT": {
+    "request": "PUT /api/irhp-application/submit-application/",
+    "matches": "api/irhp-application/submit-application/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\SubmitApplication"
+    },
+    "withoutTrailingSlash": "api/irhp-application/submit-application/PUT"
+  },
+  "api/irhp-application/max-stock-permits/GET": {
+    "request": "GET /api/irhp-application/max-stock-permits/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\MaxStockPermits"
+    },
+    "matches": "api/irhp-application/max-stock-permits/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\MaxStockPermits"
+    },
+    "withoutTrailingSlash": "api/irhp-application/max-stock-permits/GET"
+  },
+  "api/irhp-application/max-stock-permits-by-application/GET": {
+    "request": "GET /api/irhp-application/max-stock-permits-by-application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\MaxStockPermitsByApplication"
+    },
+    "matches": "api/irhp-application/max-stock-permits-by-application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\MaxStockPermitsByApplication"
+    },
+    "withoutTrailingSlash": "api/irhp-application/max-stock-permits-by-application/GET"
+  },
+  "api/irhp-application/fee-breakdown/GET": {
+    "request": "GET /api/irhp-application/fee-breakdown/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\FeeBreakdown"
+    },
+    "matches": "api/irhp-application/fee-breakdown/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\FeeBreakdown"
+    },
+    "withoutTrailingSlash": "api/irhp-application/fee-breakdown/GET"
+  },
+  "api/irhp-application/fee-per-permit/GET": {
+    "request": "GET /api/irhp-application/fee-per-permit/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\FeePerPermit"
+    },
+    "matches": "api/irhp-application/fee-per-permit/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\FeePerPermit"
+    },
+    "withoutTrailingSlash": "api/irhp-application/fee-per-permit/GET"
+  },
+  "api/irhp-application/internal-applications-summary/GET": {
+    "request": "GET /api/irhp-application/internal-applications-summary/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\InternalApplicationsSummary"
+    },
+    "matches": "api/irhp-application/internal-applications-summary/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\InternalApplicationsSummary"
+    },
+    "withoutTrailingSlash": "api/irhp-application/internal-applications-summary/GET"
+  },
+  "api/irhp-application/selfserve-applications-summary/GET": {
+    "request": "GET /api/irhp-application/selfserve-applications-summary/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\SelfserveApplicationsSummary"
+    },
+    "matches": "api/irhp-application/selfserve-applications-summary/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\SelfserveApplicationsSummary"
+    },
+    "withoutTrailingSlash": "api/irhp-application/selfserve-applications-summary/GET"
+  },
+  "api/irhp-application/selfserve-issued-permits-summary/GET": {
+    "request": "GET /api/irhp-application/selfserve-issued-permits-summary/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\SelfserveIssuedPermitsSummary"
+    },
+    "matches": "api/irhp-application/selfserve-issued-permits-summary/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\SelfserveIssuedPermitsSummary"
+    },
+    "withoutTrailingSlash": "api/irhp-application/selfserve-issued-permits-summary/GET"
+  },
+  "api/irhp-application/bilateral-metadata/GET": {
+    "request": "GET /api/irhp-application/bilateral-metadata/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\BilateralMetadata"
+    },
+    "matches": "api/irhp-application/bilateral-metadata/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\BilateralMetadata"
+    },
+    "withoutTrailingSlash": "api/irhp-application/bilateral-metadata/GET"
+  },
+  "api/irhp-application/bilateral-country-accessible/GET": {
+    "request": "GET /api/irhp-application/bilateral-country-accessible/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\BilateralCountryAccessible"
+    },
+    "matches": "api/irhp-application/bilateral-country-accessible/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\BilateralCountryAccessible"
+    },
+    "withoutTrailingSlash": "api/irhp-application/bilateral-country-accessible/GET"
+  },
+  "api/irhp-application/cancel-application/POST": {
+    "request": "POST /api/irhp-application/cancel-application/",
+    "matches": "api/irhp-application/cancel-application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\CancelApplication"
+    },
+    "withoutTrailingSlash": "api/irhp-application/cancel-application/POST"
+  },
+  "api/irhp-application/terminate/POST": {
+    "request": "POST /api/irhp-application/terminate/",
+    "matches": "api/irhp-application/terminate/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\Terminate"
+    },
+    "withoutTrailingSlash": "api/irhp-application/terminate/POST"
+  },
+  "api/irhp-application/withdraw/POST": {
+    "request": "POST /api/irhp-application/withdraw/",
+    "matches": "api/irhp-application/withdraw/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\Withdraw"
+    },
+    "withoutTrailingSlash": "api/irhp-application/withdraw/POST"
+  },
+  "api/irhp-application/revive-from-withdrawn/PUT": {
+    "request": "PUT /api/irhp-application/revive-from-withdrawn/",
+    "matches": "api/irhp-application/revive-from-withdrawn/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\ReviveFromWithdrawn"
+    },
+    "withoutTrailingSlash": "api/irhp-application/revive-from-withdrawn/PUT"
+  },
+  "api/irhp-application/revive-from-unsuccessful/PUT": {
+    "request": "PUT /api/irhp-application/revive-from-unsuccessful/",
+    "matches": "api/irhp-application/revive-from-unsuccessful/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\ReviveFromUnsuccessful"
+    },
+    "withoutTrailingSlash": "api/irhp-application/revive-from-unsuccessful/PUT"
+  },
+  "api/irhp-application/grant/PUT": {
+    "request": "PUT /api/irhp-application/grant/",
+    "matches": "api/irhp-application/grant/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\Grant"
+    },
+    "withoutTrailingSlash": "api/irhp-application/grant/PUT"
+  },
+  "api/irhp-application/reset-to-not-yet-submitted-from-valid/PUT": {
+    "request": "PUT /api/irhp-application/reset-to-not-yet-submitted-from-valid/",
+    "matches": "api/irhp-application/reset-to-not-yet-submitted-from-valid/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\ResetToNotYetSubmittedFromValid"
+    },
+    "withoutTrailingSlash": "api/irhp-application/reset-to-not-yet-submitted-from-valid/PUT"
+  },
+  "api/irhp-application/reset-to-not-yet-submitted-from-cancelled/PUT": {
+    "request": "PUT /api/irhp-application/reset-to-not-yet-submitted-from-cancelled/",
+    "matches": "api/irhp-application/reset-to-not-yet-submitted-from-cancelled/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\ResetToNotYetSubmittedFromCancelled"
+    },
+    "withoutTrailingSlash": "api/irhp-application/reset-to-not-yet-submitted-from-cancelled/PUT"
+  },
+  "api/irhp-application/full/POST": {
+    "request": "POST /api/irhp-application/full/",
+    "matches": "api/irhp-application/full/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\CreateFull"
+    },
+    "withoutTrailingSlash": "api/irhp-application/full/POST"
+  },
+  "api/irhp-application/full/PUT": {
+    "request": "PUT /api/irhp-application/full/",
+    "matches": "api/irhp-application/full/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\UpdateFull"
+    },
+    "withoutTrailingSlash": "api/irhp-application/full/PUT"
+  },
+  "api/irhp-application/application-step/GET": {
+    "request": "GET /api/irhp-application/application-step/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ApplicationStep"
+    },
+    "matches": "api/irhp-application/application-step/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ApplicationStep"
+    },
+    "withoutTrailingSlash": "api/irhp-application/application-step/GET"
+  },
+  "api/irhp-application/submit-application-step/PUT": {
+    "request": "PUT /api/irhp-application/submit-application-step/",
+    "matches": "api/irhp-application/submit-application-step/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\SubmitApplicationStep"
+    },
+    "withoutTrailingSlash": "api/irhp-application/submit-application-step/PUT"
+  },
+  "api/irhp-application/application-path/GET": {
+    "request": "GET /api/irhp-application/application-path/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ApplicationPath"
+    },
+    "matches": "api/irhp-application/application-path/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ApplicationPath"
+    },
+    "withoutTrailingSlash": "api/irhp-application/application-path/GET"
+  },
+  "api/irhp-application/submit-application-path/PUT": {
+    "request": "PUT /api/irhp-application/submit-application-path/",
+    "matches": "api/irhp-application/submit-application-path/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\SubmitApplicationPath"
+    },
+    "withoutTrailingSlash": "api/irhp-application/submit-application-path/PUT"
+  },
+  "api/irhp-application/documents/GET": {
+    "request": "GET /api/irhp-application/documents/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\Documents"
+    },
+    "matches": "api/irhp-application/documents/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\Documents"
+    },
+    "withoutTrailingSlash": "api/irhp-application/documents/GET"
+  },
+  "api/irhp-application/update-candidate-permit-selection/PUT": {
+    "request": "PUT /api/irhp-application/update-candidate-permit-selection/",
+    "matches": "api/irhp-application/update-candidate-permit-selection/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpApplication\\UpdateCandidatePermitSelection"
+    },
+    "withoutTrailingSlash": "api/irhp-application/update-candidate-permit-selection/PUT"
+  },
+  "api/irhp-application/answers-summary/GET": {
+    "request": "GET /api/irhp-application/answers-summary/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\AnswersSummary"
+    },
+    "matches": "api/irhp-application/answers-summary/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\AnswersSummary"
+    },
+    "withoutTrailingSlash": "api/irhp-application/answers-summary/GET"
+  },
+  "api/irhp-application/permits-available/GET": {
+    "request": "GET /api/irhp-application/permits-available/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\PermitsAvailable"
+    },
+    "matches": "api/irhp-application/permits-available/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\PermitsAvailable"
+    },
+    "withoutTrailingSlash": "api/irhp-application/permits-available/GET"
+  },
+  "api/irhp-application/application-path-list/GET": {
+    "request": "GET /api/irhp-application/application-path-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ApplicationPathGroupList"
+    },
+    "matches": "api/irhp-application/application-path-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\ApplicationPathGroupList"
+    },
+    "withoutTrailingSlash": "api/irhp-application/application-path-list/GET"
+  },
+  "api/irhp-application/ranges-by-application/GET": {
+    "request": "GET /api/irhp-application/ranges-by-application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\RangesByIrhpApplication"
+    },
+    "matches": "api/irhp-application/ranges-by-application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\RangesByIrhpApplication"
+    },
+    "withoutTrailingSlash": "api/irhp-application/ranges-by-application/GET"
+  },
+  "api/irhp-application/get-grantability/GET": {
+    "request": "GET /api/irhp-application/get-grantability/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\GetGrantability"
+    },
+    "matches": "api/irhp-application/get-grantability/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpApplication\\GetGrantability"
+    },
+    "withoutTrailingSlash": "api/irhp-application/get-grantability/GET"
+  }
+}

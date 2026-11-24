@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Factory\Messages;
 
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -29,7 +30,8 @@ class ConversationMessagesControllerFactory implements FactoryInterface
             $formHelper,
             $flashMessenger,
             $navigation,
-            $scriptsFactory
+            $scriptsFactory,
+            $container->get(FileUploadHelperService::class)
         );
     }
 }

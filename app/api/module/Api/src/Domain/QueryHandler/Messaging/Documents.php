@@ -30,10 +30,14 @@ class Documents extends AbstractQueryHandler implements ToggleRequiredInterface,
     #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
-        $documentIds = $this->getCache()->getCustomItem(CacheEncryption::GENERIC_STORAGE_IDENTIFIER, $query->getCorrelationId()) ?: [];
-        $documentsRepo = $this->getRepo(Document::class);
-        $documents = $documentsRepo->fetchUnassignedListForUser($this->getUser()->getId());
-        $documents = array_values(array_filter($documents, fn($document) => in_array($document->getId(), $documentIds)));
+        $correlationId = $query->getCorrelationId();
+        $documentIds = $correlationId
+            ? ($this->getCache()->getCustomItem(CacheEncryption::GENERIC_STORAGE_IDENTIFIER, $correlationId) ?: [])
+            : [];
+        $documents = $this->getRepo(Document::class)->fetchUnassignedByIdsForUser(
+            $documentIds,
+            $this->getUser()->getId(),
+        );
 
         return $this->resultList($documents);
     }

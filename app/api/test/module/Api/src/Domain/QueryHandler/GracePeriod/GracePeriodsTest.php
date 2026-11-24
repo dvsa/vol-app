@@ -30,7 +30,7 @@ final class GracePeriodsTest extends QueryHandlerTestCase
         $query = GracePeriodsQuery::create(['licence' => 1]);
 
         $mockEntity = m::mock(\Dvsa\Olcs\Api\Entity\Licence\GracePeriod ::class);
-        $mockEntity->shouldReceive('serialize')->once()->andReturn('unit_SERIALIZED');
+        $mockEntity->shouldReceive('serialize')->once()->with(['gracePeriodType'])->andReturn('unit_SERIALIZED');
 
         $this->repoMap['GracePeriod']
             ->shouldReceive('fetchList')

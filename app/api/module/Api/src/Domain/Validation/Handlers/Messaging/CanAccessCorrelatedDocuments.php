@@ -27,6 +27,10 @@ class CanAccessCorrelatedDocuments extends AbstractHandler implements CacheAware
     #[\Override]
     public function isValid($dto)
     {
+        if (!$dto->getCorrelationId()) {
+            return true;
+        }
+
         $documentIds = $this->getCache()->getCustomItem(
             CacheEncryption::GENERIC_STORAGE_IDENTIFIER,
             $dto->getCorrelationId(),

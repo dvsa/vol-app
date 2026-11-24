@@ -1,0 +1,221 @@
+{
+  "api/messaging/documents/GET": {
+    "request": "GET /api/messaging/documents/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Documents"
+    },
+    "matches": "api/messaging/documents/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Documents"
+    },
+    "withoutTrailingSlash": "api/messaging/documents/GET"
+  },
+  "api/messaging/fileuploads/enable/POST": {
+    "request": "POST /api/messaging/fileuploads/enable/",
+    "matches": "api/messaging/fileuploads/enable/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\EnableFileUpload"
+    },
+    "withoutTrailingSlash": "api/messaging/fileuploads/enable/POST"
+  },
+  "api/messaging/fileuploads/disable/POST": {
+    "request": "POST /api/messaging/fileuploads/disable/",
+    "matches": "api/messaging/fileuploads/disable/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\DisableFileUpload"
+    },
+    "withoutTrailingSlash": "api/messaging/fileuploads/disable/POST"
+  },
+  "api/messaging/conversations/POST": {
+    "request": "POST /api/messaging/conversations/",
+    "matches": "api/messaging/conversations/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Conversation\\Create"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/POST"
+  },
+  "api/messaging/conversations/by-licence/GET": {
+    "request": "GET /api/messaging/conversations/by-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByLicence"
+    },
+    "matches": "api/messaging/conversations/by-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByLicence"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/by-licence/GET"
+  },
+  "api/messaging/conversations/by-organisation/GET": {
+    "request": "GET /api/messaging/conversations/by-organisation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByOrganisation"
+    },
+    "matches": "api/messaging/conversations/by-organisation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByOrganisation"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/by-organisation/GET"
+  },
+  "api/messaging/conversations/by-case-to-licence/GET": {
+    "request": "GET /api/messaging/conversations/by-case-to-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByCaseToLicence"
+    },
+    "matches": "api/messaging/conversations/by-case-to-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByCaseToLicence"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/by-case-to-licence/GET"
+  },
+  "api/messaging/conversations/by-application-to-licence/GET": {
+    "request": "GET /api/messaging/conversations/by-application-to-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByApplicationToLicence"
+    },
+    "matches": "api/messaging/conversations/by-application-to-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Conversations\\ByApplicationToLicence"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/by-application-to-licence/GET"
+  },
+  "api/messaging/conversations/close/POST": {
+    "request": "POST /api/messaging/conversations/close/",
+    "matches": "api/messaging/conversations/close/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Conversation\\Close"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/close/POST"
+  },
+  "api/messaging/conversations/disable/POST": {
+    "request": "POST /api/messaging/conversations/disable/",
+    "matches": "api/messaging/conversations/disable/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Conversation\\Disable"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/disable/POST"
+  },
+  "api/messaging/conversations/enable/POST": {
+    "request": "POST /api/messaging/conversations/enable/",
+    "matches": "api/messaging/conversations/enable/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Conversation\\Enable"
+    },
+    "withoutTrailingSlash": "api/messaging/conversations/enable/POST"
+  },
+  "api/messaging/messages/POST": {
+    "request": "POST /api/messaging/messages/",
+    "matches": "api/messaging/messages/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Message\\Create"
+    },
+    "withoutTrailingSlash": "api/messaging/messages/POST"
+  },
+  "api/messaging/messages/by-conversation/GET": {
+    "request": "GET /api/messaging/messages/by-conversation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\ByConversation"
+    },
+    "matches": "api/messaging/messages/by-conversation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\ByConversation"
+    },
+    "withoutTrailingSlash": "api/messaging/messages/by-conversation/GET"
+  },
+  "api/messaging/messages/unread-count-by-organisation-and-user/GET": {
+    "request": "GET /api/messaging/messages/unread-count-by-organisation-and-user/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\UnreadCountByOrganisationAndUser"
+    },
+    "matches": "api/messaging/messages/unread-count-by-organisation-and-user/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\UnreadCountByOrganisationAndUser"
+    },
+    "withoutTrailingSlash": "api/messaging/messages/unread-count-by-organisation-and-user/GET"
+  },
+  "api/messaging/messages/unread-count-by-licence-and-roles/GET": {
+    "request": "GET /api/messaging/messages/unread-count-by-licence-and-roles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\UnreadCountByLicenceAndRoles"
+    },
+    "matches": "api/messaging/messages/unread-count-by-licence-and-roles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\UnreadCountByLicenceAndRoles"
+    },
+    "withoutTrailingSlash": "api/messaging/messages/unread-count-by-licence-and-roles/GET"
+  },
+  "api/messaging/subjects/all/GET": {
+    "request": "GET /api/messaging/subjects/all/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\All"
+    },
+    "matches": "api/messaging/subjects/all/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\All"
+    },
+    "withoutTrailingSlash": "api/messaging/subjects/all/GET"
+  },
+  "api/messaging/application-licence-list/by-organisation/GET": {
+    "request": "GET /api/messaging/application-licence-list/by-organisation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByOrganisation"
+    },
+    "matches": "api/messaging/application-licence-list/by-organisation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByOrganisation"
+    },
+    "withoutTrailingSlash": "api/messaging/application-licence-list/by-organisation/GET"
+  },
+  "api/messaging/application-licence-list/by-licence-to-organisation/GET": {
+    "request": "GET /api/messaging/application-licence-list/by-licence-to-organisation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByLicenceToOrganisation"
+    },
+    "matches": "api/messaging/application-licence-list/by-licence-to-organisation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByLicenceToOrganisation"
+    },
+    "withoutTrailingSlash": "api/messaging/application-licence-list/by-licence-to-organisation/GET"
+  },
+  "api/messaging/application-licence-list/by-application-to-organisation/GET": {
+    "request": "GET /api/messaging/application-licence-list/by-application-to-organisation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByApplicationToOrganisation"
+    },
+    "matches": "api/messaging/application-licence-list/by-application-to-organisation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByApplicationToOrganisation"
+    },
+    "withoutTrailingSlash": "api/messaging/application-licence-list/by-application-to-organisation/GET"
+  },
+  "api/messaging/application-licence-list/by-case-to-organisation/GET": {
+    "request": "GET /api/messaging/application-licence-list/by-case-to-organisation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByCaseToOrganisation"
+    },
+    "matches": "api/messaging/application-licence-list/by-case-to-organisation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByCaseToOrganisation"
+    },
+    "withoutTrailingSlash": "api/messaging/application-licence-list/by-case-to-organisation/GET"
+  }
+}

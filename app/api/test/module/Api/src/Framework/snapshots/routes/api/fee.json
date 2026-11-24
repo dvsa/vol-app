@@ -1,0 +1,98 @@
+{
+  "api/fee/single/GET": {
+    "request": "GET /api/fee/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\Fee"
+    },
+    "matches": "api/fee/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\Fee",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee/single/GET"
+  },
+  "api/fee/single/PUT": {
+    "request": "PUT /api/fee/101/",
+    "matches": "api/fee/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Fee\\UpdateFee",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee/single/PUT"
+  },
+  "api/fee/single/approve-waive/PUT": {
+    "request": "PUT /api/fee/101/approve-waive/",
+    "matches": "api/fee/single/approve-waive/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Fee\\ApproveWaive",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee/single/approve-waive/PUT"
+  },
+  "api/fee/single/recommend-waive/PUT": {
+    "request": "PUT /api/fee/101/recommend-waive/",
+    "matches": "api/fee/single/recommend-waive/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Fee\\RecommendWaive",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee/single/recommend-waive/PUT"
+  },
+  "api/fee/single/reject-waive/PUT": {
+    "request": "PUT /api/fee/101/reject-waive/",
+    "matches": "api/fee/single/reject-waive/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Fee\\RejectWaive",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee/single/reject-waive/PUT"
+  },
+  "api/fee/single/refund-fee/PUT": {
+    "request": "PUT /api/fee/101/refund-fee/",
+    "matches": "api/fee/single/refund-fee/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Fee\\RefundFee",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/fee/single/refund-fee/PUT"
+  },
+  "api/fee/GET": {
+    "request": "GET /api/fee/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\FeeList"
+    },
+    "matches": "api/fee/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\FeeList"
+    },
+    "withoutTrailingSlash": null
+  },
+  "api/fee/POST": {
+    "request": "POST /api/fee/",
+    "matches": "api/fee/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Fee\\CreateFee"
+    },
+    "withoutTrailingSlash": null
+  },
+  "api/fee/interim-refunds/GET": {
+    "request": "GET /api/fee/interim-refunds/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\InterimRefunds"
+    },
+    "matches": "api/fee/interim-refunds/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Fee\\InterimRefunds"
+    },
+    "withoutTrailingSlash": "api/fee/interim-refunds/GET"
+  }
+}

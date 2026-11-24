@@ -1,0 +1,11 @@
+<p>Helô,</p>
+
+<p>Fe'ch ychwanegwyd at y gwasanaeth Trwyddedu Gweithredwyr Cerbydau ar gyfer [orgName &lt;&amp;&gt;].</p>
+
+<p>Eich enw defnyddiwr yw: [loginId &lt;&amp;&gt;]</p>
+
+<p>Byddwch yn derbyn ail e-bost gyda chyfrinair dros dro yn y ddwy awr nesaf. Os na fydd yn cyrraedd e-bostiwch notifications@vehicle-operator-licensing.service.gov.uk</p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Mewngofnodi</a>
+</p>

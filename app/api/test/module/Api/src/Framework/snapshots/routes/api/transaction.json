@@ -1,0 +1,57 @@
+{
+  "api/transaction/by-reference/GET": {
+    "request": "GET /api/transaction/ref/OLCS-01-AB/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Transaction\\TransactionByReference"
+    },
+    "matches": "api/transaction/by-reference/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Transaction\\TransactionByReference",
+      "reference": "OLCS-01-AB"
+    },
+    "withoutTrailingSlash": "api/transaction/by-reference/GET"
+  },
+  "api/transaction/by-reference/POST": {
+    "request": "POST /api/transaction/ref/OLCS-01-AB/",
+    "matches": "api/transaction/by-reference/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Transaction\\CompleteTransaction",
+      "reference": "OLCS-01-AB"
+    },
+    "withoutTrailingSlash": "api/transaction/by-reference/POST"
+  },
+  "api/transaction/single/GET": {
+    "request": "GET /api/transaction/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Transaction\\Transaction"
+    },
+    "matches": "api/transaction/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Transaction\\Transaction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transaction/single/GET"
+  },
+  "api/transaction/single/reverse/PUT": {
+    "request": "PUT /api/transaction/101/reverse/",
+    "matches": "api/transaction/single/reverse/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Transaction\\ReverseTransaction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transaction/single/reverse/PUT"
+  },
+  "api/transaction/pay-outstanding-fees/POST": {
+    "request": "POST /api/transaction/pay-outstanding-fees/",
+    "matches": "api/transaction/pay-outstanding-fees/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Transaction\\PayOutstandingFees"
+    },
+    "withoutTrailingSlash": "api/transaction/pay-outstanding-fees/POST"
+  }
+}

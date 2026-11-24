@@ -1,0 +1,8 @@
+{
+  "rest": {
+    "uri": "http://localhost:8080/nysiis-/nysiis/convert",
+    "options": {
+      "timeout": 5
+    }
+  }
+}

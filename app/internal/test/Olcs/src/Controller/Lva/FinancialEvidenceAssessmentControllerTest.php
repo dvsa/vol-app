@@ -9,14 +9,20 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Document\AcceptDocumentAnalysisReview;
+use Dvsa\Olcs\Transfer\Command\Document\OverrideDocumentAnalysisFlag;
+use Dvsa\Olcs\Transfer\Command\Document\OverridePassedDocumentAnalysisFlag;
+use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus;
 use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\ElementInterface;
 use Laminas\Form\Form;
 use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\Redirect;
+use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\Session\Container;
 use Laminas\Stdlib\Parameters;
@@ -29,7 +35,11 @@ use Olcs\Controller\Lva\Application\FinancialEvidenceAssessmentController as App
 use Olcs\Controller\Lva\Factory\Controller\FinancialEvidenceAssessmentControllerFactory;
 use Olcs\Controller\Lva\Licence\FinancialEvidenceAssessmentController as LicenceController;
 use Olcs\Controller\Lva\Variation\FinancialEvidenceAssessmentController as VariationController;
+use Olcs\Data\Mapper\FinancialEvidenceAssessmentReview as ReviewPageMapper;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
+use Olcs\Form\Model\Form\Lva\FinancialEvidenceDecision;
+use Olcs\Form\Model\Form\Lva\FinancialEvidenceIssueOverride;
+use Olcs\Form\Model\Form\Lva\FinancialEvidencePassOverride;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 
@@ -108,7 +118,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
 
         $this->assertTrue($view->getVariable('hasDocuments'));
         $this->assertSame(['latest', 'analysis-1', 'analysis-3'], array_column($tabs, 'id'));
-        $this->assertSame(['Latest', '02/01/2026', 'Unknown date'], array_column($tabs, 'label'));
+        $this->assertSame(['lva-financial-evidence-assessment-tab-latest', '02/01/2026', 'lva-financial-evidence-assessment-tab-unknown-date'], array_column($tabs, 'label'));
         // Only the latest tab swaps its label: it reads as its date like the others once deselected.
         $this->assertSame(['02/02/2026', null, null], array_column($tabs, 'unselectedLabel'));
         $this->assertSame('02/02/2026', $tabs[0]['date']);
@@ -133,8 +143,8 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
 
         $tabs = $sut->indexAction()->getVariable('tabs');
 
-        $this->assertSame('Latest', $tabs[0]['label']);
-        $this->assertSame('Unknown date', $tabs[0]['unselectedLabel']);
+        $this->assertSame('lva-financial-evidence-assessment-tab-latest', $tabs[0]['label']);
+        $this->assertSame('lva-financial-evidence-assessment-tab-unknown-date', $tabs[0]['unselectedLabel']);
     }
 
     /**
@@ -162,6 +172,12 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
                         'rows' => [
                             'bank' => ['flag' => null, 'remark' => null, 'value' => 'Example Bank', 'checks' => []],
                             'name' => ['flag' => 'fail', 'remark' => 'Wrong entity.', 'value' => 'Someone', 'checks' => []],
+                            // A flagged row missing from the payload reads as skipped (an issue), so the rest pass.
+                            'authenticity' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'statementDate' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'statementPeriod' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'averageFunds' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'largeDeposit' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
                         ],
                     ],
                 ],
@@ -214,11 +230,11 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     public static function assessmentStatusProvider(): \Iterator
     {
         // A decided review cannot be accepted again; anything undecided still can.
-        yield 'approved' => ['APPROVED', 'Approved', 'govuk-tag--green', false];
-        yield 'rejected' => ['REJECTED', 'Rejected', 'govuk-tag--red', false];
-        yield 'pending' => ['PENDING', 'Pending', 'govuk-tag--grey', true];
-        yield 'not reviewed' => [null, 'Unknown', 'govuk-tag--grey', true];
-        yield 'unrecognised' => ['SOMETHING_ELSE', 'Unknown', 'govuk-tag--grey', true];
+        yield 'approved' => ['APPROVED', 'lva-financial-evidence-assessment-status-approved', 'govuk-tag--green', false];
+        yield 'rejected' => ['REJECTED', 'lva-financial-evidence-assessment-status-rejected', 'govuk-tag--red', false];
+        yield 'pending' => ['PENDING', 'lva-financial-evidence-assessment-status-pending', 'govuk-tag--grey', true];
+        yield 'not reviewed' => [null, 'lva-financial-evidence-assessment-status-unknown', 'govuk-tag--grey', true];
+        yield 'unrecognised' => ['SOMETHING_ELSE', 'lva-financial-evidence-assessment-status-unknown', 'govuk-tag--grey', true];
     }
 
     #[DataProvider('assessmentStatusProvider')]
@@ -271,7 +287,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     public function testAcceptSendsOnlyTheAnalysisIdAndReportsTheApiOutcome(string $class): void
     {
         $flashMessenger = m::mock(FlashMessengerHelperService::class);
-        $flashMessenger->expects('addSuccessMessage')->with('Document review accepted: the document is approved');
+        $flashMessenger->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-accepted-approved');
 
         $post = [
             'analysisId' => '9',
@@ -304,21 +320,21 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             true,
             'APPROVED',
             'addSuccessMessage',
-            'Document review accepted: the document is approved',
+            'lva-financial-evidence-assessment-message-accepted-approved',
         ];
         yield 'rejected' => [
             true,
             'REJECTED',
             'addWarningMessage',
-            'Document review accepted: the document is rejected because one or more checks did not pass',
+            'lva-financial-evidence-assessment-message-accepted-rejected',
         ];
-        yield 'api refused it' => [false, null, 'addErrorMessage', 'The document review could not be recorded'];
-        yield 'api reported no outcome' => [true, null, 'addErrorMessage', 'The document review could not be recorded'];
+        yield 'api refused it' => [false, null, 'addErrorMessage', 'lva-financial-evidence-assessment-message-review-not-recorded'];
+        yield 'api reported no outcome' => [true, null, 'addErrorMessage', 'lva-financial-evidence-assessment-message-review-not-recorded'];
         yield 'api reported an outcome this app does not know' => [
             true,
             'SOMETHING_ELSE',
             'addErrorMessage',
-            'The document review could not be recorded',
+            'lva-financial-evidence-assessment-message-review-not-recorded',
         ];
     }
 
@@ -361,7 +377,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     public function testAcceptWithoutAnAssessmentSendsNothing(): void
     {
         $flashMessenger = m::mock(FlashMessengerHelperService::class);
-        $flashMessenger->expects('addErrorMessage')->with('This document has no assessment to review');
+        $flashMessenger->expects('addErrorMessage')->with('lva-financial-evidence-assessment-message-no-assessment');
 
         $post = ['analysisId' => '9', 'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_ACCEPT];
 
@@ -402,6 +418,46 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertSame($response, $sut->indexAction());
     }
 
+    /**
+     * The API's refusal to approve is recognised by its error key, whatever text comes with it,
+     * and shown through this page's own translation key, which says what to do next.
+     */
+    public static function approvalRefusalProvider(): \Iterator
+    {
+        yield 'api wording' => ['Wording from the API', AbstractFinancialEvidenceAssessmentController::MSG_UNCHANGED_ISSUES];
+        yield 'no usable wording' => [['unexpected' => 'shape'], AbstractFinancialEvidenceAssessmentController::MSG_UNCHANGED_ISSUES];
+    }
+
+    #[DataProvider('approvalRefusalProvider')]
+    public function testRefusedApprovalShowsWhatToDoNext(mixed $apiMessage, string $expected): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addErrorMessage')->with($expected);
+
+        $response = $this->decide(
+            $flashMessenger,
+            $this->refusal([AbstractFinancialEvidenceAssessmentController::ERR_UNCHANGED_ISSUES => $apiMessage])
+        );
+
+        $this->assertInstanceOf(Response::class, $response);
+    }
+
+    public function testOtherRefusalsReadAsNotRecorded(): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addErrorMessage')->with('lva-financial-evidence-assessment-message-decision-not-recorded');
+
+        $this->decide($flashMessenger, $this->refusal(['SOMETHING_ELSE' => 'Not for the caseworker']));
+    }
+
+    public function testTheRefusalIsShownThroughItsTranslationKey(): void
+    {
+        $this->assertSame(
+            'lva-financial-evidence-assessment-error-unchanged-issues',
+            AbstractFinancialEvidenceAssessmentController::MSG_UNCHANGED_ISSUES
+        );
+    }
+
     #[DataProvider('contextProvider')]
     public function testFactoryCreatesEachContext(string $class, string $scopeKey): void
     {
@@ -413,6 +469,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $container->allows('get')->with(RestrictionHelperService::class)->andReturn(m::mock(RestrictionHelperService::class));
         $container->allows('get')->with(FlashMessengerHelperService::class)->andReturn(m::mock(FlashMessengerHelperService::class));
         $container->expects('get')->with(FormHelperService::class)->andReturn($formHelper);
+        $container->allows('get')->with(TableFactory::class)->andReturn(m::mock(TableFactory::class));
         $container->allows('get')->with('navigation')->andReturn([]);
 
         $controller = (new FinancialEvidenceAssessmentControllerFactory())($container, $class);
@@ -445,29 +502,705 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         (new FinancialEvidenceAssessmentControllerFactory())(m::mock(ContainerInterface::class), \stdClass::class);
     }
 
+    // ---- changeReviewAction ----
+
+    public function testChangeReviewForAnAnalysisNotOnThePageGoesBackToTheTabs(): void
+    {
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addUnknownError');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('params')->with('child_id')->andReturn('9');
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->expects('handleQuery')->andReturn($this->okResponse([$this->assessedAnalysis(8, 'fail')]));
+        $response = new Response();
+        $sut->expects('redirectToIndex')->andReturn($response);
+
+        $this->assertSame($response, $sut->changeReviewAction());
+    }
+
+    public function testChangeReviewWithoutAnAssessmentGoesBackToTheTabs(): void
+    {
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('lva-financial-evidence-assessment-message-no-assessment');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('params')->with('child_id')->andReturn('9');
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->expects('handleQuery')->andReturn($this->okResponse([
+            ['id' => 9, 'documentId' => 12, 'documentDate' => null, 'resultNormalised' => null],
+        ]));
+        $response = new Response();
+        $sut->expects('redirectToIndex')->andReturn($response);
+
+        $this->assertSame($response, $sut->changeReviewAction());
+    }
+
+    public function testChangeReviewShowsIssuesPassesAndBothForms(): void
+    {
+        $analysisIdElement = m::mock(ElementInterface::class);
+        $analysisIdElement->expects('setValue')->with('9');
+        $decisionForm = m::mock(Form::class);
+        $decisionForm->expects('get')->with('analysisId')->andReturn($analysisIdElement);
+        $overrideForm = m::mock(Form::class);
+        $passOverrideForm = m::mock(Form::class);
+
+        $formHelper = m::mock(FormHelperService::class);
+        $formHelper->expects('createForm')->with(FinancialEvidenceIssueOverride::class, true, false)->andReturn($overrideForm);
+        $formHelper->expects('createForm')->with(FinancialEvidencePassOverride::class, true, false)->andReturn($passOverrideForm);
+        $formHelper->expects('createForm')->with(FinancialEvidenceDecision::class, true, false)->andReturn($decisionForm);
+
+        $analysis = $this->assessedAnalysis(9, 'fail');
+        $expectedPage = ReviewPageMapper::mapFromAnalysis($analysis);
+
+        $tableFactory = m::mock(TableFactory::class);
+        $tableFactory->expects('prepareTable')
+            ->with('financial-evidence-assessment-passes', $expectedPage['passes'])
+            ->andReturn('rendered-table');
+
+        $url = m::mock(Url::class);
+        $url->expects('fromRoute')
+            ->with('lva-application/financial_evidence_assessment', [], [], true)
+            ->andReturn('/back');
+
+        $sut = $this->createSut(ApplicationController::class, null, null, $formHelper, $tableFactory);
+        $sut->allows('params')->with('child_id')->andReturn('9');
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->allows('getRequest')->andReturn(new Request());
+        $sut->expects('handleQuery')->andReturn($this->okResponse([$analysis]));
+        $sut->expects('url')->andReturn($url);
+        $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
+
+        $view = $sut->changeReviewAction();
+
+        $this->assertSame('sections/lva/financial-evidence-assessment-change-review', $view->getTemplate());
+        $this->assertSame(9, $view->getVariable('analysisId'));
+        $this->assertSame($expectedPage['issues'], $view->getVariable('issues'));
+        $this->assertSame($expectedPage['passes'], $view->getVariable('passes'));
+        $this->assertSame($expectedPage['passCount'], $view->getVariable('passCount'));
+        $this->assertSame('rendered-table', $view->getVariable('passesTable'));
+        $this->assertFalse($view->getVariable('showPassOverride'));
+        $this->assertSame($overrideForm, $view->getVariable('overrideForm'));
+        $this->assertSame($passOverrideForm, $view->getVariable('passOverrideForm'));
+        $this->assertSame($decisionForm, $view->getVariable('decisionForm'));
+        $this->assertSame('/back', $view->getVariable('backUrl'));
+    }
+
+    /** ?view=passes switches the page to showing the passes with their own change-to-fail forms. */
+    public function testChangeReviewWithViewPassesQuerySetsShowPassOverride(): void
+    {
+        $analysisIdElement = m::mock(ElementInterface::class);
+        $analysisIdElement->allows('setValue')->andReturnSelf();
+        $decisionForm = m::mock(Form::class);
+        $decisionForm->allows('get')->with('analysisId')->andReturn($analysisIdElement);
+
+        $formHelper = m::mock(FormHelperService::class);
+        $formHelper->expects('createForm')->with(FinancialEvidenceIssueOverride::class, true, false)->andReturn(m::mock(Form::class));
+        $formHelper->expects('createForm')->with(FinancialEvidencePassOverride::class, true, false)->andReturn(m::mock(Form::class));
+        $formHelper->expects('createForm')->with(FinancialEvidenceDecision::class, true, false)->andReturn($decisionForm);
+
+        $tableFactory = m::mock(TableFactory::class);
+        $tableFactory->allows('prepareTable')->andReturn('rendered-table');
+
+        $request = new Request();
+        $request->setQuery(new Parameters(['view' => 'passes']));
+
+        $sut = $this->createSut(ApplicationController::class, null, null, $formHelper, $tableFactory);
+        $sut->allows('params')->with('child_id')->andReturn('9');
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->allows('getRequest')->andReturn($request);
+        $sut->expects('handleQuery')->andReturn($this->okResponse([$this->assessedAnalysis(9, 'fail')]));
+        $sut->expects('url')->andReturn(m::mock(Url::class)->allows('fromRoute')->andReturn('/back')->getMock());
+        $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
+
+        $view = $sut->changeReviewAction();
+
+        $this->assertTrue($view->getVariable('showPassOverride'));
+    }
+
+    /** A post that names neither of the page's three buttons sends nothing. */
+    public function testChangeReviewPostWithNeitherButtonSendsNothing(): void
+    {
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addUnknownError');
+
+        $formHelper = m::mock(FormHelperService::class);
+        $formHelper->allows('createForm')->andReturn(m::mock(Form::class));
+
+        $sut = $this->createSut(ApplicationController::class, $flash, null, $formHelper);
+        $sut->allows('params')->with('child_id')->andReturn('9');
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->allows('getRequest')->andReturn($this->postRequest(['analysisId' => '9']));
+        $sut->expects('handleQuery')->andReturn($this->okResponse([$this->assessedAnalysis(9, 'fail')]));
+        $sut->shouldNotReceive('handleCommand');
+        $response = $this->expectRedirectBackToChangeReview($sut);
+
+        $this->assertSame($response, $sut->changeReviewAction());
+    }
+
+    // ---- processOverride ----
+
+    public function testOverrideSendsTheRowAndReasonAndReportsSuccess(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => 'Checked by hand'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-changed-to-pass');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverrideDocumentAnalysisFlag
+                && (int)$c->getId() === 9 && $c->getRow() === 'largeDeposit' && $c->getComment() === 'Checked by hand'
+                && $c->getChangeRecommendation() === 'Y'))
+            ->andReturn($this->commandResponse(true, null));
+        $response = $this->expectRedirectBackToChangeReview($sut);
+
+        $this->assertSame($response, $this->override($sut, $post, true));
+    }
+
+    public function testOverrideRefusedByTheApiReadsAsNotRecorded(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => 'Because'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('lva-financial-evidence-assessment-message-change-not-recorded');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')->andReturn($this->commandResponse(false, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->override($sut, $post, true);
+    }
+
+    public function testOverrideChoosingNoChangesNothing(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'N', 'comment' => ''];
+
+        $sut = $this->createSut(ApplicationController::class);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->override($sut, $post, true);
+    }
+
+    /** "No" with a reason still given is saved as a note: the flag is not changed. */
+    public function testOverrideChoosingNoWithAReasonSavesANote(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'N', 'comment' => 'Just a note'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-comment-saved');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverrideDocumentAnalysisFlag
+                && $c->getComment() === 'Just a note' && $c->getChangeRecommendation() === 'N'))
+            ->andReturn($this->commandResponse(true, null));
+        $response = $this->expectRedirectBackToChangeReview($sut);
+
+        $this->assertSame($response, $this->override($sut, $post, true));
+    }
+
+    public function testOverrideWithoutAReasonAsksForOne(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('lva-financial-evidence-assessment-error-issue-reason-required');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->override($sut, $post, true);
+    }
+
+    /** A skipped check (nothing was found to assess) does not need a reason to change it. */
+    public function testOverrideWithoutAReasonOnASkippedCheckIsAllowed(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-changed-to-pass');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverrideDocumentAnalysisFlag && $c->getComment() === ''))
+            ->andReturn($this->commandResponse(true, null));
+        $response = $this->expectRedirectBackToChangeReview($sut);
+
+        $this->assertSame($response, $this->override($sut, $post, true, $this->assessedAnalysis(9, 'skipped')));
+    }
+
+    public function testOverrideWithAnInvalidFormThatIsNotAMissingReasonReadsAsUnknownError(): void
+    {
+        $post = ['analysisId' => 'x', 'row' => 'largeDeposit', 'changeRecommendation' => 'N'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addUnknownError');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->override($sut, $post, false);
+    }
+
+    /** The posted analysis must be the one the page was opened for. */
+    public function testOverrideForAnotherAnalysisSendsNothing(): void
+    {
+        $post = ['analysisId' => '10', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => 'x'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addUnknownError');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->override($sut, $post, true);
+    }
+
+    public static function unchangeableRowProvider(): \Iterator
+    {
+        yield 'already changed' => ['name'];
+        yield 'not an issue' => ['bank'];
+        yield 'unknown' => ['nonsense'];
+    }
+
+    /** A row that is not an unchanged issue on this page (already changed, a pass, or made up) is not sent. */
+    #[DataProvider('unchangeableRowProvider')]
+    public function testOverrideOfARowThatCannotBeChangedSendsNothing(string $row): void
+    {
+        $post = ['analysisId' => '9', 'row' => $row, 'changeRecommendation' => 'Y', 'comment' => 'x'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('lva-financial-evidence-assessment-message-already-changed');
+
+        $analysis = $this->assessedAnalysis(9, 'fail');
+        $analysis['resultNormalised']['rows']['name'] = [
+            'flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => [],
+            'override' => ['originalFlag' => 'fail', 'comment' => 'x', 'changedBy' => 'Jo', 'changedOn' => null],
+        ];
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->override($sut, $post, true, $analysis);
+    }
+
+    // ---- processPassOverride ----
+
+    public function testPassOverrideSendsTheRowAndReasonAndReportsSuccess(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => 'Checked by hand'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-changed-to-fail');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && (int)$c->getId() === 9 && $c->getRow() === 'largeDeposit' && $c->getComment() === 'Checked by hand'
+                && $c->getChangeRecommendation() === 'Y'))
+            ->andReturn($this->commandResponse(true, null));
+        $response = $this->expectRedirectBackToChangeReview($sut);
+
+        $this->assertSame($response, $this->passOverride($sut, $post, true));
+    }
+
+    public function testPassOverrideRefusedByTheApiReadsAsNotRecorded(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => 'Because'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('lva-financial-evidence-assessment-message-change-not-recorded');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')->andReturn($this->commandResponse(false, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true);
+    }
+
+    public function testPassOverrideChoosingNoChangesNothing(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'N', 'comment' => ''];
+
+        $sut = $this->createSut(ApplicationController::class);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true);
+    }
+
+    /** "No" with a reason still given is saved as a note: the flag is not changed. */
+    public function testPassOverrideChoosingNoWithAReasonSavesANote(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'N', 'comment' => 'Just a note'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-comment-saved');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && $c->getComment() === 'Just a note' && $c->getChangeRecommendation() === 'N'))
+            ->andReturn($this->commandResponse(true, null));
+        $response = $this->expectRedirectBackToChangeReview($sut);
+
+        $this->assertSame($response, $this->passOverride($sut, $post, true));
+    }
+
+    /**
+     * The form holds every rule the caseworker can fall foul of, with its message. When it does
+     * not validate on the fields they fill in, nothing is flashed, nothing is sent and the page
+     * is not redirected: it is drawn again for that check, with the form's own messages.
+     */
+    #[DataProvider('caseworkerFieldProvider')]
+    public function testPassOverrideShowsTheFormsOwnErrorsOnTheCheck(array $messages): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''];
+
+        $sut = $this->createSut(ApplicationController::class, m::mock(FlashMessengerHelperService::class));
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $sut->shouldNotReceive('redirect');
+
+        $this->assertNull($this->passOverride($sut, $post, false, null, $this->reviewForm($post, false, $messages)));
+        $this->assertSame('largeDeposit', $this->passOverrideErrorRow($sut));
+    }
+
+    public static function caseworkerFieldProvider(): \Iterator
+    {
+        yield 'no answer' => [['changeRecommendation' => ['lva-financial-evidence-assessment-error-answer-required']]];
+        yield 'no reason' => [['comment' => ['lva-financial-evidence-assessment-error-reason-required']]];
+        yield 'too long' => [['comment' => ['lva-financial-evidence-assessment-error-comment-too-long']]];
+        yield 'both fields' => [['changeRecommendation' => ['x'], 'comment' => ['y']]];
+    }
+
+    /**
+     * An invalid form the caseworker cannot put right reads as an unknown error: a hidden field
+     * with a bad value or an expired security token (alone or alongside a field error), or a row
+     * that is not one of the page's passed checks, which has no form to show the message on.
+     */
+    #[DataProvider('brokenFormProvider')]
+    public function testPassOverrideWithABrokenFormReadsAsUnknownError(string $row, array $messages): void
+    {
+        $post = ['analysisId' => '9', 'row' => $row, 'changeRecommendation' => 'Y', 'comment' => ''];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addUnknownError');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $response = $this->expectRedirectBackToChangeReview($sut);
+
+        $this->assertSame($response, $this->passOverride($sut, $post, false, null, $this->reviewForm($post, false, $messages)));
+        $this->assertNull($this->passOverrideErrorRow($sut));
+    }
+
+    public static function brokenFormProvider(): \Iterator
+    {
+        yield 'a hidden field' => ['largeDeposit', ['analysisId' => ['not digits']]];
+        yield 'the security token' => ['largeDeposit', ['security' => ['expired']]];
+        yield 'a hidden field as well as a visible one' => ['largeDeposit', ['row' => ['x'], 'comment' => ['y']]];
+        yield 'no messages at all' => ['largeDeposit', []];
+        yield 'a row that is not a passed check' => ['bank', ['comment' => ['lva-financial-evidence-assessment-error-reason-required']]];
+        yield 'a made-up row' => ['nonsense', ['comment' => ['lva-financial-evidence-assessment-error-reason-required']]];
+    }
+
+    /** The posted analysis must be the one the page was opened for. */
+    public function testPassOverrideForAnotherAnalysisSendsNothing(): void
+    {
+        $post = ['analysisId' => '10', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => 'x'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addUnknownError');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true);
+    }
+
+    /**
+     * The answer on a passed check can be revisited (agreed with UX): the form stays on a check
+     * already changed to a fail, so "Yes" again is sent and replaces the comment.
+     */
+    public function testPassOverrideOnACheckAlreadyChangedUpdatesTheComment(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'Y', 'comment' => 'A better reason'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-changed-to-fail');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && $c->getRow() === 'name' && $c->getChangeRecommendation() === 'Y'
+                && $c->getComment() === 'A better reason'))
+            ->andReturn($this->commandResponse(true, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true, $this->analysisWithNameChangedToAFail());
+    }
+
+    /** "No" on a check that was changed to a fail changes it back to a pass. */
+    public function testPassOverrideChoosingNoOnAChangedCheckChangesItBack(): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'N', 'comment' => 'Changed in error'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with('lva-financial-evidence-assessment-message-changed-back-to-pass');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && $c->getRow() === 'name' && $c->getChangeRecommendation() === 'N'
+                && $c->getComment() === 'Changed in error'))
+            ->andReturn($this->commandResponse(true, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true, $this->analysisWithNameChangedToAFail());
+    }
+
+    /**
+     * "No" means the analyser's outcome stands. With nothing typed on a check the caseworker has
+     * already answered, that is sent, and the API deletes their entry: a change to a fail is
+     * undone, a note is removed.
+     */
+    #[DataProvider('answeredCheckProvider')]
+    public function testPassOverrideChoosingNoWithNothingTypedClearsAnAnsweredCheck(string $flag, string $message): void
+    {
+        $post = ['analysisId' => '9', 'row' => 'name', 'changeRecommendation' => 'N', 'comment' => '  '];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with($message);
+
+        $analysis = $this->analysisWithNameChangedToAFail();
+        $analysis['resultNormalised']['rows']['name']['flag'] = $flag;
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
+                && $c->getRow() === 'name' && $c->getChangeRecommendation() === 'N' && $c->getComment() === ''))
+            ->andReturn($this->commandResponse(true, null));
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true, $analysis);
+    }
+
+    public static function answeredCheckProvider(): \Iterator
+    {
+        yield 'changed to a fail' => ['fail', 'lva-financial-evidence-assessment-message-changed-back-to-pass'];
+        // The same override with the flag left as a pass is a note.
+        yield 'a note' => ['pass', 'lva-financial-evidence-assessment-message-comment-removed'];
+    }
+
+    /** Every flagged check passed by the analyser, with "name" since changed to a fail by a caseworker. */
+    private function analysisWithNameChangedToAFail(): array
+    {
+        $analysis = $this->assessedAnalysis(9, 'pass');
+        $analysis['resultNormalised']['rows']['name'] = [
+            'flag' => 'fail', 'remark' => null, 'value' => null, 'checks' => [],
+            'override' => ['originalFlag' => 'pass', 'comment' => 'First reason', 'changedBy' => 'Jo', 'changedOn' => null],
+        ];
+
+        return $analysis;
+    }
+
+    public static function unchangeablePassRowProvider(): \Iterator
+    {
+        yield 'not a pass' => ['statementDate'];
+        yield 'not flagged' => ['bank'];
+        yield 'unknown' => ['nonsense'];
+    }
+
+    /** A row that is not a currently-passing flagged row on this page is not sent. */
+    #[DataProvider('unchangeablePassRowProvider')]
+    public function testPassOverrideOfARowThatCannotBeChangedSendsNothing(string $row): void
+    {
+        $post = ['analysisId' => '9', 'row' => $row, 'changeRecommendation' => 'Y', 'comment' => 'x'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('lva-financial-evidence-assessment-message-already-changed');
+
+        // A mix of a fail (statementDate, an issue not a pass) and passes, so only the genuine
+        // flagged passes (not statementDate, bank or made-up rows) are changeable.
+        $analysis = $this->assessedAnalysis(9, 'pass');
+        $analysis['resultNormalised']['rows']['statementDate'] = [
+            'flag' => 'fail', 'remark' => null, 'value' => null, 'checks' => [],
+        ];
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        $this->passOverride($sut, $post, true, $analysis);
+    }
+
+    // ---- processDecision (the refusals are covered above) ----
+
+    public function testDecisionWithoutASelectionAsksForOne(): void
+    {
+        $post = ['analysisId' => '9', 'saveDecision' => 'decide'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addErrorMessage')->with('lva-financial-evidence-assessment-error-decision-required');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, false), 9);
+    }
+
+    public function testDecisionForAnotherAnalysisSendsNothing(): void
+    {
+        $post = ['analysisId' => '10', 'decision' => 'APPROVED', 'saveDecision' => 'decide'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addUnknownError');
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $this->expectRedirectBackToChangeReview($sut);
+
+        (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9);
+    }
+
+    public static function decisionProvider(): \Iterator
+    {
+        yield 'approved' => ['APPROVED', 'lva-financial-evidence-assessment-message-evidence-accepted'];
+        yield 'rejected' => ['REJECTED', 'lva-financial-evidence-assessment-message-evidence-rejected'];
+    }
+
+    /** A recorded decision ends the review, so the caseworker goes back to the tabs. */
+    #[DataProvider('decisionProvider')]
+    public function testARecordedDecisionReportsItAndReturnsToTheTabs(string $decision, string $message): void
+    {
+        $post = ['analysisId' => '9', 'decision' => $decision, 'saveDecision' => 'decide'];
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->expects('addSuccessMessage')->with($message);
+
+        $sut = $this->createSut(ApplicationController::class, $flash);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($c): bool => $c instanceof UpdateDocumentAnalysisAssessmentStatus
+                && (int)$c->getId() === 9 && $c->getStatus() === $decision))
+            ->andReturn($this->commandResponse(true, $decision));
+        $response = new Response();
+        $sut->expects('redirectToIndex')->andReturn($response);
+
+        $this->assertSame(
+            $response,
+            (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9)
+        );
+    }
+
+    // ---- status mapping and routes ----
+
+    public static function statusProvider(): \Iterator
+    {
+        yield 'approved' => ['APPROVED', 'lva-financial-evidence-assessment-status-approved', 'govuk-tag--green'];
+        yield 'rejected' => ['REJECTED', 'lva-financial-evidence-assessment-status-rejected', 'govuk-tag--red'];
+        yield 'pending' => ['PENDING', 'lva-financial-evidence-assessment-status-pending', 'govuk-tag--grey'];
+        yield 'unknown' => [null, 'lva-financial-evidence-assessment-status-unknown', 'govuk-tag--grey'];
+    }
+
+    #[DataProvider('statusProvider')]
+    public function testStatusMapsToALabelAndATagColour(?string $status, string $label, string $tag): void
+    {
+        $sut = $this->createSut(ApplicationController::class);
+        $enum = $status === null ? null : AssessmentStatus::from($status);
+
+        $this->assertSame($label, (new \ReflectionMethod($sut, 'mapStatus'))->invoke($sut, $enum));
+        $this->assertSame($tag, (new \ReflectionMethod($sut, 'mapStatusTagClass'))->invoke($sut, $enum));
+    }
+
+    public static function sectionRouteProvider(): \Iterator
+    {
+        yield 'licence' => [LicenceController::class, 'lva-licence/financial_evidence_assessment'];
+        yield 'application' => [ApplicationController::class, 'lva-application/financial_evidence_assessment'];
+        yield 'variation' => [VariationController::class, 'lva-variation/financial_evidence_assessment'];
+    }
+
+    #[DataProvider('sectionRouteProvider')]
+    public function testSectionRouteFollowsTheLvaContext(string $class, string $route): void
+    {
+        $sut = $this->createSut($class);
+
+        $this->assertSame($route, (new \ReflectionMethod($sut, 'sectionRoute'))->invoke($sut));
+    }
+
+    /** Runs processOverride for analysis 9 against $analysis (default: every flagged row failing). */
+    private function override(m\MockInterface $sut, array $post, bool $formIsValid, ?array $analysis = null): mixed
+    {
+        $page = ReviewPageMapper::mapFromAnalysis($analysis ?? $this->assessedAnalysis(9, 'fail'));
+
+        return (new \ReflectionMethod($sut, 'processOverride'))
+            ->invoke($sut, $this->reviewForm($post, $formIsValid), 9, $page);
+    }
+
+    /** Runs processPassOverride for analysis 9 against $analysis (default: every flagged row passing). */
+    private function passOverride(
+        m\MockInterface $sut,
+        array $post,
+        bool $formIsValid,
+        ?array $analysis = null,
+        ?Form $form = null
+    ): mixed {
+        $page = ReviewPageMapper::mapFromAnalysis($analysis ?? $this->assessedAnalysis(9, 'pass'));
+
+        return (new \ReflectionMethod($sut, 'processPassOverride'))
+            ->invoke($sut, $form ?? $this->reviewForm($post, $formIsValid), 9, $page);
+    }
+
+    /** The passed check whose form the controller has marked to be shown again with errors, if any. */
+    private function passOverrideErrorRow(m\MockInterface $sut): ?string
+    {
+        return (new \ReflectionProperty(AbstractFinancialEvidenceAssessmentController::class, 'passOverrideErrorRow'))
+            ->getValue($sut);
+    }
+
     /**
      * @param class-string<AbstractFinancialEvidenceAssessmentController> $class
      */
     private function createSut(
         string $class,
         ?FlashMessengerHelperService $flashMessenger = null,
-        ?Form $reviewForm = null
+        ?Form $reviewForm = null,
+        ?FormHelperService $formHelper = null,
+        ?TableFactory $tableFactory = null
     ): AbstractFinancialEvidenceAssessmentController|m\MockInterface {
         // The review form comes from the form helper, which adds its CSRF element.
-        $formHelper = m::mock(FormHelperService::class);
-        $formHelper->allows('createForm')
-            ->with(FinancialEvidenceAssessmentReview::class, true, false)
-            ->andReturn($reviewForm ?? m::mock(Form::class));
+        if ($formHelper === null) {
+            $formHelper = m::mock(FormHelperService::class);
+            $formHelper->allows('createForm')
+                ->with(FinancialEvidenceAssessmentReview::class, true, false)
+                ->andReturn($reviewForm ?? m::mock(Form::class));
+        }
 
-        return m::mock($class, [
+        $sut = m::mock($class, [
             m::mock(NiTextTranslation::class),
             m::mock(AuthorizationService::class),
             new StringHelperService(),
             m::mock(RestrictionHelperService::class),
             $flashMessenger ?? m::mock(FlashMessengerHelperService::class),
             $formHelper,
+            $tableFactory ?? m::mock(TableFactory::class),
             [],
         ])->makePartial()->shouldAllowMockingProtectedMethods();
+
+        // Building the link needs the router, which a unit test has none of; the route is config.
+        $sut->allows('changeReviewUrl')->andReturnUsing(static fn(int $id): string => '/change-review/' . $id);
+
+        return $sut;
     }
 
     /**
@@ -499,7 +1232,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
      *
      * @param array<string, mixed> $post
      */
-    private function reviewForm(array $post, bool $isValid): Form|m\MockInterface
+    private function reviewForm(array $post, bool $isValid, array $messages = []): Form|m\MockInterface
     {
         $form = m::mock(Form::class);
         $form->expects('setData')->with(m::on(
@@ -507,6 +1240,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         ));
         $form->allows('isValid')->andReturn($isValid);
         $form->allows('getData')->andReturn($post);
+        $form->allows('getMessages')->andReturn($messages);
 
         return $form;
     }
@@ -533,6 +1267,22 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         return $response;
     }
 
+    /**
+     * The pass/fail/decision post handlers redirect back to this page rather than refreshing,
+     * so that the ?view=passes query flag (dropped by refresh()) survives the round trip.
+     *
+     * @param array<string, string> $query expected query to carry, e.g. ['view' => 'passes']
+     */
+    private function expectRedirectBackToChangeReview(m\MockInterface $sut, array $query = []): Response
+    {
+        $response = new Response();
+        $redirect = m::mock(Redirect::class);
+        $redirect->expects('toRoute')->with(null, [], ['query' => $query], true)->andReturn($response);
+        $sut->expects('redirect')->andReturn($redirect);
+
+        return $response;
+    }
+
     /** The API's response to AcceptDocumentAnalysisReview: the decided status travels in the result's flags. */
     private function commandResponse(bool $ok, ?string $assessmentStatus): CqrsResponse
     {
@@ -552,6 +1302,37 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $response = m::mock(CqrsResponse::class);
         $response->allows('isOk')->andReturnTrue();
         $response->allows('getResult')->andReturn(['analyses' => $analyses]);
+
+        return $response;
+    }
+
+    /**
+     * Post an approval for analysis 9 through processDecision and return its redirect.
+     */
+    private function decide(FlashMessengerHelperService $flashMessenger, CqrsResponse $apiResponse): Response
+    {
+        $post = ['analysisId' => '9', 'decision' => 'APPROVED', 'saveDecision' => 'decide'];
+
+        $sut = $this->createSut(ApplicationController::class, $flashMessenger);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($command): bool => $command instanceof UpdateDocumentAnalysisAssessmentStatus
+                && (int)$command->getId() === 9 && $command->getStatus() === 'APPROVED'))
+            ->andReturn($apiResponse);
+        $redirectResponse = $this->expectRedirectBackToChangeReview($sut);
+
+        $result = (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9);
+        $this->assertSame($redirectResponse, $result);
+
+        return $result;
+    }
+
+    /** A refused command, with the API's messages keyed as it sends them. */
+    private function refusal(array $messages): CqrsResponse
+    {
+        $response = m::mock(CqrsResponse::class);
+        $response->allows('isOk')->andReturnFalse();
+        $response->allows('getResult')->andReturn(['messages' => $messages]);
 
         return $response;
     }

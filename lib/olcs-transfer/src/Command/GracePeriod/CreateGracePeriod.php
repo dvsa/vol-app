@@ -27,6 +27,13 @@ final class CreateGracePeriod extends AbstractCommand
      * @var string
      */
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 32])]
+    protected $gracePeriodType;
+
+    /**
+     * @var string
+     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $startDate;
 
     /**
@@ -48,6 +55,14 @@ final class CreateGracePeriod extends AbstractCommand
     public function getLicence()
     {
         return $this->licence;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGracePeriodType()
+    {
+        return $this->gracePeriodType;
     }
 
     /**

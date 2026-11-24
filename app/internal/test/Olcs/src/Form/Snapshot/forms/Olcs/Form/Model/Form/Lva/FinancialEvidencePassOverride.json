@@ -1,0 +1,171 @@
+{
+  "name": "financial-evidence-pass-override",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "analysisId",
+        "type": "Hidden",
+        "attributes": {
+          "required": "required"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "row",
+        "type": "Hidden",
+        "attributes": {
+          "required": "required"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "changeRecommendation",
+        "attributes": {
+          "required": "required",
+          "radios_wrapper_attributes": {
+            "class": "govuk-radios--standard govuk-radios--inline"
+          }
+        },
+        "type": "Radio",
+        "options": {
+          "label": "lva-financial-evidence-assessment-pass-change-outcome",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "fieldset-attributes": {
+            "class": "govuk-fieldset"
+          },
+          "legend-attributes": {
+            "class": "govuk-fieldset__legend govuk-fieldset__legend--s"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "comment",
+        "attributes": {
+          "required": false,
+          "class": "extra-long"
+        },
+        "type": "TextArea",
+        "options": {
+          "label": "lva-financial-evidence-assessment-pass-more-detail"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "savePassOverride",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "value": "override-fail"
+        },
+        "options": {
+          "label": "Save and continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "analysisId": {
+      "name": "analysisId",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    },
+    "row": {
+      "name": "row",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\InArray",
+          "options": {
+            "haystack": [
+              "authenticity",
+              "name",
+              "statementDate",
+              "statementPeriod",
+              "averageFunds",
+              "largeDeposit"
+            ],
+            "strict": true
+          }
+        }
+      ]
+    },
+    "changeRecommendation": {
+      "name": "changeRecommendation",
+      "required": true,
+      "error_message": "lva-financial-evidence-assessment-error-answer-required"
+    },
+    "comment": {
+      "name": "comment",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "changeRecommendation",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "lva-financial-evidence-assessment-error-reason-required"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 1000,
+            "messages": {
+              "stringLengthTooLong": "lva-financial-evidence-assessment-error-comment-too-long"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

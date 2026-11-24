@@ -1,0 +1,14 @@
+{
+  "api/dvla-search/vehicle/GET": {
+    "request": "GET /api/dvla-search/vehicle//",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DvlaSearch\\Vehicle"
+    },
+    "matches": "api/dvla-search/vehicle/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DvlaSearch\\Vehicle"
+    },
+    "withoutTrailingSlash": "api/dvla-search/vehicle/GET"
+  }
+}

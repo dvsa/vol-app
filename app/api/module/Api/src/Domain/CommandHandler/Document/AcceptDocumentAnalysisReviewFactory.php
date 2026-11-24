@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
+use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisReviewOutcome;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -24,6 +25,7 @@ class AcceptDocumentAnalysisReviewFactory implements FactoryInterface
         $instance = new AcceptDocumentAnalysisReview(
             $container->get(AnalysisResultNormaliser::class),
             $container->get(AnalysisReviewOutcome::class),
+            $container->get(AnalysisAnnotationOverlay::class),
         );
 
         return $instance->__invoke($container, $requestedName, $options);

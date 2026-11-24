@@ -1,0 +1,68 @@
+{
+  "api/processing/history/GET": {
+    "request": "GET /api/processing/history/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Processing\\History"
+    },
+    "matches": "api/processing/history/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Processing\\History"
+    },
+    "withoutTrailingSlash": "api/processing/history/GET"
+  },
+  "api/processing/note/GET": {
+    "request": "GET /api/processing/note/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Processing\\NoteList"
+    },
+    "matches": "api/processing/note/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Processing\\NoteList"
+    },
+    "withoutTrailingSlash": "api/processing/note/GET"
+  },
+  "api/processing/note/POST": {
+    "request": "POST /api/processing/note/",
+    "matches": "api/processing/note/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Processing\\Note\\Create"
+    },
+    "withoutTrailingSlash": "api/processing/note/POST"
+  },
+  "api/processing/note/single/GET": {
+    "request": "GET /api/processing/note/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Processing\\Note"
+    },
+    "matches": "api/processing/note/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Processing\\Note",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/processing/note/single/GET"
+  },
+  "api/processing/note/single/PUT": {
+    "request": "PUT /api/processing/note/101/",
+    "matches": "api/processing/note/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Processing\\Note\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/processing/note/single/PUT"
+  },
+  "api/processing/note/single/DELETE": {
+    "request": "DELETE /api/processing/note/101/",
+    "matches": "api/processing/note/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Processing\\Note\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/processing/note/single/DELETE"
+  }
+}

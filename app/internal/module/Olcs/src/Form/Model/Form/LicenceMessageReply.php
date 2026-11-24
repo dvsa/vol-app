@@ -21,6 +21,10 @@ class LicenceMessageReply
     #[Form\Type('Hidden')]
     public ?Hidden $id = null;
 
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
+    public ?Hidden $correlationId = null;
+
     #[Form\Attributes(['value' => 'reply'])]
     #[Form\Type('Hidden')]
     public ?Hidden $action = null;

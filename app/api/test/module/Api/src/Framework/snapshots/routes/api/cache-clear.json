@@ -1,0 +1,11 @@
+{
+  "api/cache-clear/POST": {
+    "request": "POST /api/cache-clear/",
+    "matches": "api/cache-clear/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cache\\Clear"
+    },
+    "withoutTrailingSlash": "api/cache-clear/POST"
+  }
+}

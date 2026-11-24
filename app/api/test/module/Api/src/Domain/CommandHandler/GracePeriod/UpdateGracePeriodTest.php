@@ -16,6 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository\GracePeriod as GracePeriodRepo;
 use Dvsa\Olcs\Api\Domain\CommandHandler\GracePeriod\UpdateGracePeriod;
 use Dvsa\Olcs\Api\Entity\Licence\GracePeriod;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod as Cmd;
 
 /**
@@ -41,10 +42,18 @@ final class UpdateGracePeriodTest extends AbstractCommandHandlerTestCase
             'id' => 1,
             'startDate' => '2015-01-01',
             'endDate' => '2015-01-02',
-            'description' => 'description'
+            'description' => 'description',
+            'gracePeriodType' => GracePeriod::TYPE_FINANCE,
         ];
 
         $command = Cmd::create($data);
+
+        $type = new RefData(GracePeriod::TYPE_FINANCE);
+        $this->repoMap['GracePeriod']
+            ->shouldReceive('fetchType')
+            ->once()
+            ->with(GracePeriod::TYPE_FINANCE)
+            ->andReturn($type);
 
         $this->repoMap['GracePeriod']
             ->shouldReceive('fetchById')
@@ -57,6 +66,9 @@ final class UpdateGracePeriodTest extends AbstractCommandHandlerTestCase
                     ->once()
                     ->shouldReceive('setDescription')
                     ->once()
+                    ->shouldReceive('setGracePeriodType')
+                    ->once()
+                    ->with($type)
                     ->shouldReceive('getId')
                     ->once()
                     ->getMock()

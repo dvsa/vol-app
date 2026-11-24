@@ -518,7 +518,11 @@ return [
     TransferCommand\Document\AcceptDocumentAnalysisReview::class
         => CommandHandler\Document\AcceptDocumentAnalysisReviewFactory::class,
     TransferCommand\Document\UpdateDocumentAnalysisAssessmentStatus::class
-        => CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus::class,
+        => CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatusFactory::class,
+    TransferCommand\Document\OverrideDocumentAnalysisFlag::class
+        => CommandHandler\Document\OverrideDocumentAnalysisFlagFactory::class,
+    TransferCommand\Document\OverridePassedDocumentAnalysisFlag::class
+        => CommandHandler\Document\OverridePassedDocumentAnalysisFlagFactory::class,
 
     // Transfer - DocumentTemplate
     TransferCommand\DocTemplate\Create::class => CommandHandler\DocTemplate\Create::class,

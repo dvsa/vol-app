@@ -1,0 +1,11 @@
+{
+  "api/goods-vehicles/disc/reprint/POST": {
+    "request": "POST /api/goods-vehicles/disc/reprint/",
+    "matches": "api/goods-vehicles/disc/reprint/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Vehicle\\ReprintDisc"
+    },
+    "withoutTrailingSlash": "api/goods-vehicles/disc/reprint/POST"
+  }
+}

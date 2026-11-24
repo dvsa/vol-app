@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>File upload harness</title>
+  </head>
+  <body>
+    <div class="js-body">
+      <form id="message" method="post" action="http://localhost:9/upload">
+        <input type="hidden" name="correlationId" value="0123456789abcdef0123456789abcdef01234567" />
+        <input type="hidden" name="security" id="security" value="token" />
+        <textarea name="reply"></textarea>
+
+        <fieldset class="file-uploader" data-group="file">
+          <ul class="attach-action__list">
+            <li class="attach-action">
+              <label class="attach-action__label">
+                Attach file(s)
+                <input type="file" name="file[file]" class="attach-action__input" />
+              </label>
+            </li>
+          </ul>
+          <button type="submit" name="file[upload]" class="js-upload" id="upload">Upload</button>
+        </fieldset>
+
+        <button type="submit" name="send" id="send">Send message</button>
+        <button type="submit" name="locked" id="locked" disabled>Not available</button>
+      </form>
+
+      <form id="section" method="post" action="http://localhost:9/upload">
+        <fieldset class="file-uploader" data-group="attachments">
+          <ul class="attach-action__list">
+            <li class="attach-action">
+              <label class="attach-action__label">
+                Attach file(s)
+                <input type="file" name="attachments[file]" class="attach-action__input" />
+              </label>
+            </li>
+          </ul>
+          <button type="submit" name="attachments[upload]" class="js-upload">Upload</button>
+        </fieldset>
+
+        <button type="submit" name="save" id="save">Save</button>
+      </form>
+    </div>
+
+    <script src="../../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../../assets/_js/components/logger.js"></script>
+    <script src="../../assets/_js/components/eventEmitter.js"></script>
+    <script src="../../assets/_js/components/formHelper.js"></script>
+    <script src="../../assets/_js/components/normaliseResponse.js"></script>
+    <script src="../../assets/_js/components/fileUpload.js"></script>
+    <script>
+      OLCS.fileUpload({ multiple: true });
+      OLCS.eventEmitter.emit("render");
+    </script>
+  </body>
+</html>
