@@ -56,6 +56,17 @@ fieldset,
   }
 } // fieldset
 
+.date-time-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+
+  .govuk-date-input__item .govuk-form-group {
+    margin-bottom: 0;
+  }
+}
+
 .field {
   @if $app == "internal" {
     margin-bottom: $gutter-two-thirds;
