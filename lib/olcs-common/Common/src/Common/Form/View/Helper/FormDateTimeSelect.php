@@ -160,7 +160,9 @@ class FormDateTimeSelect extends LaminasFormDateTimeSelect
     {
         $inputHelper = $this->getInputHelper();
 
+        $element->setAttribute('type', 'text');
         $element->setAttribute('maxlength', $maxLength);
+        $element->setAttribute('inputmode', 'numeric');
 
         return $inputHelper->render($element);
     }

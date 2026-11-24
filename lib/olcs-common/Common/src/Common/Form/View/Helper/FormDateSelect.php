@@ -125,8 +125,10 @@ class FormDateSelect extends LaminasFormDateSelect
     protected function renderInput($element, $maxLength)
     {
         $inputHelper = $this->getInputHelper();
+        $element->setAttribute('type', 'text');
         $element->setAttribute('maxlength', $maxLength);
         $element->setAttribute('class', 'govuk-input govuk-date-input__input govuk-input--width-' . $maxLength);
+        $element->setAttribute('inputmode', 'numeric');
 
         return $inputHelper->render($element);
     }
