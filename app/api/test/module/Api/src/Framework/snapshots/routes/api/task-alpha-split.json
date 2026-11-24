@@ -1,0 +1,65 @@
+{
+  "api/task-alpha-split/GET": {
+    "request": "GET /api/task-alpha-split/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAlphaSplit\\GetList"
+    },
+    "matches": "api/task-alpha-split/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAlphaSplit\\GetList"
+    },
+    "withoutTrailingSlash": "api/task-alpha-split/GET"
+  },
+  "api/task-alpha-split/DELETE": {
+    "request": "DELETE /api/task-alpha-split/",
+    "matches": "api/task-alpha-split/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TaskAlphaSplit\\DeleteList"
+    },
+    "withoutTrailingSlash": "api/task-alpha-split/DELETE"
+  },
+  "api/task-alpha-split/POST": {
+    "request": "POST /api/task-alpha-split/",
+    "matches": "api/task-alpha-split/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TaskAlphaSplit\\Create"
+    },
+    "withoutTrailingSlash": "api/task-alpha-split/POST"
+  },
+  "api/task-alpha-split/single/GET": {
+    "request": "GET /api/task-alpha-split/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAlphaSplit\\Get"
+    },
+    "matches": "api/task-alpha-split/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAlphaSplit\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task-alpha-split/single/GET"
+  },
+  "api/task-alpha-split/single/PUT": {
+    "request": "PUT /api/task-alpha-split/101/",
+    "matches": "api/task-alpha-split/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TaskAlphaSplit\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task-alpha-split/single/PUT"
+  },
+  "api/task-alpha-split/single/DELETE": {
+    "request": "DELETE /api/task-alpha-split/101/",
+    "matches": "api/task-alpha-split/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TaskAlphaSplit\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task-alpha-split/single/DELETE"
+  }
+}

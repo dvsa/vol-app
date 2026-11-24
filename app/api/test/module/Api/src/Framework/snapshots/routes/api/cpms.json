@@ -1,0 +1,46 @@
+{
+  "api/cpms/report/GET": {
+    "request": "GET /api/cpms/report/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cpms\\ReportList"
+    },
+    "matches": "api/cpms/report/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cpms\\ReportList"
+    },
+    "withoutTrailingSlash": "api/cpms/report/GET"
+  },
+  "api/cpms/report/POST": {
+    "request": "POST /api/cpms/report/",
+    "matches": "api/cpms/report/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cpms\\RequestReport"
+    },
+    "withoutTrailingSlash": "api/cpms/report/POST"
+  },
+  "api/cpms/report/named-single/GET": {
+    "request": "GET /api/cpms/report/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cpms\\ReportStatus"
+    },
+    "matches": "api/cpms/report/named-single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cpms\\ReportStatus",
+      "reference": "101"
+    },
+    "withoutTrailingSlash": "api/cpms/report/named-single/GET"
+  },
+  "api/cpms/report/named-single/PUT": {
+    "request": "PUT /api/cpms/report/101/",
+    "matches": "api/cpms/report/named-single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cpms\\DownloadReport",
+      "reference": "101"
+    },
+    "withoutTrailingSlash": "api/cpms/report/named-single/PUT"
+  }
+}

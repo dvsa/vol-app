@@ -1,0 +1,44 @@
+{
+  "api/change-of-entity/single/GET": {
+    "request": "GET /api/change-of-entity/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ChangeOfEntity\\ChangeOfEntity"
+    },
+    "matches": "api/change-of-entity/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ChangeOfEntity\\ChangeOfEntity",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/change-of-entity/single/GET"
+  },
+  "api/change-of-entity/single/PUT": {
+    "request": "PUT /api/change-of-entity/101/",
+    "matches": "api/change-of-entity/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ChangeOfEntity\\UpdateChangeOfEntity",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/change-of-entity/single/PUT"
+  },
+  "api/change-of-entity/single/DELETE": {
+    "request": "DELETE /api/change-of-entity/101/",
+    "matches": "api/change-of-entity/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ChangeOfEntity\\DeleteChangeOfEntity",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/change-of-entity/single/DELETE"
+  },
+  "api/change-of-entity/POST": {
+    "request": "POST /api/change-of-entity/",
+    "matches": "api/change-of-entity/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ChangeOfEntity\\CreateChangeOfEntity"
+    },
+    "withoutTrailingSlash": "api/change-of-entity/POST"
+  }
+}

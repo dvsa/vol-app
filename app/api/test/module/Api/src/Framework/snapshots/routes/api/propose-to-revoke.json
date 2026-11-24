@@ -1,0 +1,34 @@
+{
+  "api/propose-to-revoke/case/GET": {
+    "request": "GET /api/propose-to-revoke/case/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ProposeToRevoke\\ProposeToRevokeByCase"
+    },
+    "matches": "api/propose-to-revoke/case/GET",
+    "params": {
+      "case": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\ProposeToRevoke\\ProposeToRevokeByCase"
+    },
+    "withoutTrailingSlash": "api/propose-to-revoke/case/GET"
+  },
+  "api/propose-to-revoke/POST": {
+    "request": "POST /api/propose-to-revoke/",
+    "matches": "api/propose-to-revoke/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\ProposeToRevoke\\CreateProposeToRevoke"
+    },
+    "withoutTrailingSlash": "api/propose-to-revoke/POST"
+  },
+  "api/propose-to-revoke/single/PUT": {
+    "request": "PUT /api/propose-to-revoke/101/",
+    "matches": "api/propose-to-revoke/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\ProposeToRevoke\\UpdateProposeToRevoke",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/propose-to-revoke/single/PUT"
+  }
+}

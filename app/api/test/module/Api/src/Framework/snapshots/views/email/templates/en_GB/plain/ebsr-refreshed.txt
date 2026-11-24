@@ -1,0 +1,7 @@
+Thank you for your EBSR Data Refresh submission received on [submissionDate <&>] for the following local bus service - [registrationNumber <&>] - between [origin <&>] and [destination <&>] with service number [lineName <&>] to come into effect on [startDate <&>].
+
+Your submission has been accepted and our existing manual records have now been updated with the Electronic Bus Service Registration (EBSR) file.
+
+We have copied this e-mail to the following local authorities: [localAuthoritys <&>].
+
+You will find a copy of the PDF version of the registered particulars in your document area. Please check the contents and let us know if there are any discrepancies so we can correct them as quickly as possible.

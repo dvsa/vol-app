@@ -1,0 +1,122 @@
+{
+  "api/submission/GET": {
+    "request": "GET /api/submission/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\SubmissionList"
+    },
+    "matches": "api/submission/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\SubmissionList"
+    },
+    "withoutTrailingSlash": "api/submission/GET"
+  },
+  "api/submission/single/GET": {
+    "request": "GET /api/submission/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\Submission"
+    },
+    "matches": "api/submission/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\Submission",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission/single/GET"
+  },
+  "api/submission/single/PUT": {
+    "request": "PUT /api/submission/101/",
+    "matches": "api/submission/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\UpdateSubmission",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission/single/PUT"
+  },
+  "api/submission/single/DELETE": {
+    "request": "DELETE /api/submission/101/",
+    "matches": "api/submission/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\DeleteSubmission",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission/single/DELETE"
+  },
+  "api/submission/single/close/PUT": {
+    "request": "PUT /api/submission/101/close/",
+    "matches": "api/submission/single/close/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\CloseSubmission",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission/single/close/PUT"
+  },
+  "api/submission/single/reopen/PUT": {
+    "request": "PUT /api/submission/101/reopen/",
+    "matches": "api/submission/single/reopen/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\ReopenSubmission",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission/single/reopen/PUT"
+  },
+  "api/submission/single/store/POST": {
+    "request": "POST /api/submission/101/store/",
+    "matches": "api/submission/single/store/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\StoreSubmissionSnapshot",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission/single/store/POST"
+  },
+  "api/submission/refresh/PUT": {
+    "request": "PUT /api/submission/refresh/",
+    "matches": "api/submission/refresh/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\RefreshSubmissionSections"
+    },
+    "withoutTrailingSlash": "api/submission/refresh/PUT"
+  },
+  "api/submission/filter/PUT": {
+    "request": "PUT /api/submission/filter/",
+    "matches": "api/submission/filter/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\FilterSubmissionSections"
+    },
+    "withoutTrailingSlash": "api/submission/filter/PUT"
+  },
+  "api/submission/assign/PUT": {
+    "request": "PUT /api/submission/assign/",
+    "matches": "api/submission/assign/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\AssignSubmission"
+    },
+    "withoutTrailingSlash": "api/submission/assign/PUT"
+  },
+  "api/submission/information-complete/PUT": {
+    "request": "PUT /api/submission/information-complete/",
+    "matches": "api/submission/information-complete/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\InformationCompleteSubmission"
+    },
+    "withoutTrailingSlash": "api/submission/information-complete/PUT"
+  },
+  "api/submission/POST": {
+    "request": "POST /api/submission/",
+    "matches": "api/submission/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\CreateSubmission"
+    },
+    "withoutTrailingSlash": "api/submission/POST"
+  }
+}
