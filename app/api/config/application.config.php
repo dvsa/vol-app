@@ -20,7 +20,6 @@ return [
         'Dvsa\Olcs\Db',
         'LmcRbacMvc',
         'Dvsa\Olcs\Transfer',
-        'Dvsa\Olcs\AcquiredRights',
         'Dvsa\Olcs\Api',
         'Dvsa\Olcs\Scanning',
         'Soflomo\Purifier',

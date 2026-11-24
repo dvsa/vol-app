@@ -164,8 +164,6 @@
     "ApiRouter": "Dvsa\\Olcs\\Transfer\\Router\\RouterFactory",
     "Dvsa\\Olcs\\Transfer\\Service\\CacheEncryption": "Dvsa\\Olcs\\Transfer\\Service\\CacheEncryptionFactory",
     "Dvsa\\Olcs\\Transfer\\Util\\Annotation\\AnnotationBuilder": "Dvsa\\Olcs\\Transfer\\Util\\Annotation\\AnnotationBuilderFactory",
-    "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClient": "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClientFactory",
-    "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsService": "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsServiceFactory",
     "Dvsa\\Olcs\\Api\\Service\\Retrieval\\TokenGenerator": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
     "Dvsa\\Olcs\\Api\\Service\\Retrieval\\OtpService": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
     "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalPolicyResolver": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalPolicyResolverFactory",

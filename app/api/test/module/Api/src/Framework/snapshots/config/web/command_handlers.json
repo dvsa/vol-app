@@ -536,7 +536,7 @@
     "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\Delete": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\Delete",
     "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\Create": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\Create",
     "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\UpdateStatus": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\UpdateStatus",
-    "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\UpdateDetails": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\UpdateDetailsFactory",
+    "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\UpdateDetails": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\UpdateDetails",
     "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\CreateForResponsibilities": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\CreateForResponsibilities",
     "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\UpdateForResponsibilities": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\UpdateForResponsibilities",
     "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\DeleteForResponsibilities": "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\DeleteForResponsibilities",

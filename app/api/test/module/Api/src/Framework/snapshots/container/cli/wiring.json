@@ -26,8 +26,6 @@
     "DomainValidatorManager": "Dvsa\\Olcs\\Api\\Domain\\ValidatorManagerFactory",
     "Dvsa\\Authentication\\Cognito\\Client": "(object Dvsa\\Olcs\\Auth\\Client\\CognitoClientFactory)",
     "Dvsa\\Authentication\\Ldap\\Client": "Dvsa\\Olcs\\Auth\\Client\\LdapClientFactory",
-    "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClient": "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClientFactory",
-    "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsService": "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsServiceFactory",
     "Dvsa\\Olcs\\Address\\Service\\Address": "Dvsa\\Olcs\\Address\\Service\\AddressFactory",
     "Dvsa\\Olcs\\Api\\Domain\\Logger\\EntityAccessLogger": "Dvsa\\Olcs\\Api\\Domain\\Logger\\EntityAccessLoggerFactory",
     "Dvsa\\Olcs\\Api\\Domain\\Util\\SlaCalculatorInterface": "Dvsa\\Olcs\\Api\\Domain\\Util\\SlaCalculatorFactory",

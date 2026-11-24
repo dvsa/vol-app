@@ -74,50 +74,6 @@
     },
     {
       "flags": {
-        "priority": -50
-      },
-      "spec": {
-        "name": "certificateHtml",
-        "attributes": {
-          "value": "markup-lva-tm-details-details-certificateHtml"
-        },
-        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
-      }
-    },
-    {
-      "flags": {
-        "priority": -70
-      },
-      "spec": {
-        "name": "lgvAcquiredRightsHtml",
-        "attributes": {
-          "value": "markup-lva-tm-details-details-lgvAcquiredRightsHtml"
-        },
-        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
-      }
-    },
-    {
-      "flags": {
-        "priority": -80
-      },
-      "spec": {
-        "name": "lgvAcquiredRightsReferenceNumber",
-        "type": "Text",
-        "attributes": {
-          "id": "lgv-acquired-rights-ref-number",
-          "class": "medium"
-        },
-        "options": {
-          "label": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber",
-          "label_attributes": {
-            "class": "legend"
-          },
-          "hint": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-hint"
-        }
-      }
-    },
-    {
-      "flags": {
         "priority": -90
       },
       "spec": {
@@ -288,29 +244,6 @@
         ]
       },
       "type": "Laminas\\InputFilter\\InputFilter"
-    },
-    "lgvAcquiredRightsReferenceNumber": {
-      "name": "lgvAcquiredRightsReferenceNumber",
-      "required": false,
-      "filters": [
-        {
-          "name": "Laminas\\Filter\\StringTrim"
-        }
-      ],
-      "validators": [
-        {
-          "name": "\\Laminas\\Validator\\StringLength",
-          "options": {
-            "min": 7,
-            "max": 7,
-            "messages": {
-              "stringLengthInvalid": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
-              "stringLengthTooShort": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
-              "stringLengthTooLong": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length"
-            }
-          }
-        }
-      ]
     }
   }
 }

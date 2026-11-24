@@ -1345,7 +1345,6 @@
     "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\UpdateStatus": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Handlers\\Misc\\CanAccessTmaWithId",
     "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\Submit": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Handlers\\Misc\\CanAccessTmaWithId",
     "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\UpdateDetails": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Handlers\\Misc\\CanAccessTmaWithId",
-    "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\TransportManagerApplication\\UpdateDetailsFactory": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Handlers\\Misc\\CanAccessTmaWithId",
     "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\Variation\\TransportManagerDeleteDelta": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Handlers\\Misc\\CanAccessApplicationWithId",
     "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\Tm\\CheckRepute": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Handlers\\Misc\\IsInternalEdit",
     "Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\Tm\\CheckReputeFactory": "Dvsa\\Olcs\\Api\\Domain\\Validation\\Handlers\\Misc\\IsInternalEdit",

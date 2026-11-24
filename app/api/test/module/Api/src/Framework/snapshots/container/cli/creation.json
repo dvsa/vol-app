@@ -69,8 +69,6 @@
       ]
     },
     "Dvsa\\Contracts\\Auth\\OAuthClientInterface": "Dvsa\\Authentication\\Cognito\\Client",
-    "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClient": "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClient",
-    "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsService": "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsService",
     "Dvsa\\Olcs\\Address\\Service\\Address": "Dvsa\\Olcs\\Address\\Service\\Address",
     "Dvsa\\Olcs\\Api\\Domain\\Logger\\EntityAccessLogger": "Dvsa\\Olcs\\Api\\Domain\\Logger\\EntityAccessLogger",
     "Dvsa\\Olcs\\Api\\Domain\\Util\\SlaCalculatorInterface": "Dvsa\\Olcs\\Api\\Domain\\Util\\SlaCalculator",
@@ -1131,7 +1129,7 @@
     "ValidationHandlerManager": {
       "class": "Dvsa\\Olcs\\Api\\Domain\\ValidationHandlerManager",
       "config_key": null,
-      "plugins": 1441,
+      "plugins": 1440,
       "not_created": []
     },
     "ValidatorManager": {
