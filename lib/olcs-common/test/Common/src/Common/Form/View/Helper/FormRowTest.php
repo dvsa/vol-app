@@ -179,8 +179,8 @@ final class FormRowTest extends MockeryTestCase
 
         // Assert
         $this->assertSame(
-            '<p id="test-hint" class="hint govuk-hint">Hint</p>' .
-            '<div class="govuk-form-group"><div class="govuk-checkboxes govuk-checkboxes--small"></div></div>',
+            '<div class="field "><p id="test-hint" class="hint govuk-hint">Hint</p>' .
+            '<div class="govuk-form-group"><div class="govuk-checkboxes govuk-checkboxes--small"></div></div></div>',
             $result
         );
     }
@@ -210,8 +210,8 @@ final class FormRowTest extends MockeryTestCase
 
         // Assert
         $this->assertSame(
-            '<p id="test-hint" class="hint govuk-hint">Hint</p>' .
-            '<div class="govuk-form-group"><div class="govuk-checkboxes"></div></div>',
+            '<div class="field "><p id="test-hint" class="hint govuk-hint">Hint</p>' .
+            '<div class="govuk-form-group"><div class="govuk-checkboxes"></div></div></div>',
             $result
         );
     }
