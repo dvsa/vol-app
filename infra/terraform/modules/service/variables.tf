@@ -108,6 +108,12 @@ variable "batch" {
   })
 }
 
+variable "slack_alerts_sns_topic_arn" {
+  type        = string
+  description = "SNS topic ARN for Slack-visible critical alerts"
+  default     = null
+}
+
 variable "dva_ni_export_s3uri" {
   type        = string
   description = "The S3 URI for the DVA NI export bucket, sourced from SSM parameters"

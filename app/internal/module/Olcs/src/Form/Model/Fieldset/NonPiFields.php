@@ -29,7 +29,7 @@ class NonPiFields extends CaseBase
     #[Form\Attributes(['id' => 'hearingDate'])]
     #[Form\Options(['label' => 'Meeting date', 'create_empty_option' => true, 'render_delimiters' => true, 'field' => 'hearingDate'])]
     #[Form\Filter('DateTimeSelectNullifier')]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d H:i:s'])]
     public $hearingDate;
 
@@ -45,7 +45,7 @@ class NonPiFields extends CaseBase
     #[Form\Attributes(['class' => 'medium', 'id' => 'venueOther', 'required' => false])]
     #[Form\Options(['label' => 'Meeting venue other'])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'venue', 'context_values' => ['other'], 'allow_empty' => true, 'validators' => [['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'venue', 'context_values' => ['other'], 'allow_empty' => true, 'validators' => [['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]]]])]
     public $venueOther;
 
     #[Form\Required(false)]

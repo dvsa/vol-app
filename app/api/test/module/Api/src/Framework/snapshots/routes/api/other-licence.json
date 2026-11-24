@@ -1,0 +1,101 @@
+{
+  "api/other-licence/single/GET": {
+    "request": "GET /api/other-licence/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\OtherLicence\\OtherLicence"
+    },
+    "matches": "api/other-licence/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\OtherLicence\\OtherLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/other-licence/single/GET"
+  },
+  "api/other-licence/single/PUT": {
+    "request": "PUT /api/other-licence/101/",
+    "matches": "api/other-licence/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\UpdateOtherLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/other-licence/single/PUT"
+  },
+  "api/other-licence/single/tma/PUT": {
+    "request": "PUT /api/other-licence/101/tma/",
+    "matches": "api/other-licence/single/tma/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\UpdateForTma",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/other-licence/single/tma/PUT"
+  },
+  "api/other-licence/POST": {
+    "request": "POST /api/other-licence/",
+    "matches": "api/other-licence/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\CreateOtherLicence"
+    },
+    "withoutTrailingSlash": "api/other-licence/POST"
+  },
+  "api/other-licence/DELETE": {
+    "request": "DELETE /api/other-licence/",
+    "matches": "api/other-licence/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\DeleteOtherLicence"
+    },
+    "withoutTrailingSlash": "api/other-licence/DELETE"
+  },
+  "api/other-licence/GET": {
+    "request": "GET /api/other-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\OtherLicence\\GetList"
+    },
+    "matches": "api/other-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\OtherLicence\\GetList"
+    },
+    "withoutTrailingSlash": "api/other-licence/GET"
+  },
+  "api/other-licence/previous-licence/POST": {
+    "request": "POST /api/other-licence/previous-licence/",
+    "matches": "api/other-licence/previous-licence/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\CreatePreviousLicence"
+    },
+    "withoutTrailingSlash": "api/other-licence/previous-licence/POST"
+  },
+  "api/other-licence/tma/POST": {
+    "request": "POST /api/other-licence/tma/",
+    "matches": "api/other-licence/tma/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\CreateForTma"
+    },
+    "withoutTrailingSlash": "api/other-licence/tma/POST"
+  },
+  "api/other-licence/tml/POST": {
+    "request": "POST /api/other-licence/tml/",
+    "matches": "api/other-licence/tml/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\CreateForTml"
+    },
+    "withoutTrailingSlash": "api/other-licence/tml/POST"
+  },
+  "api/other-licence/transport-manager/POST": {
+    "request": "POST /api/other-licence/transport-manager/",
+    "matches": "api/other-licence/transport-manager/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OtherLicence\\CreateForTm"
+    },
+    "withoutTrailingSlash": "api/other-licence/transport-manager/POST"
+  }
+}

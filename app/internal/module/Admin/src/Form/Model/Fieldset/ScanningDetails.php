@@ -25,13 +25,13 @@ class ScanningDetails
     #[Form\Attributes(['id' => 'other_description', 'placeholder' => ''])]
     #[Form\Options(['label' => 'scanning.data.description'])]
     #[Form\Type('Text')]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     public $otherDescription = null;
 
     #[Form\Attributes(['id' => 'entity_identifier', 'placeholder' => ''])]
     #[Form\Options(['label' => 'scanning.data.entity'])]
     #[Form\Type('Text')]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     public $entityIdentifier = null;
 
     #[Form\Attributes(['id' => 'back_scan'])]
@@ -44,9 +44,9 @@ class ScanningDetails
     #[Form\Attributes(['id' => 'received_date'])]
     #[Form\Options(['label' => 'scanning.data.received_date', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => 'received_date'])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $dateReceived = null;
 }

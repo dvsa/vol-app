@@ -1,0 +1,358 @@
+{
+  "api/bus/POST": {
+    "request": "POST /api/bus/",
+    "matches": "api/bus/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\CreateBus",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/POST"
+  },
+  "api/bus/single/GET": {
+    "request": "GET /api/bus/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusReg"
+    },
+    "matches": "api/bus/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/GET"
+  },
+  "api/bus/single/DELETE": {
+    "request": "DELETE /api/bus/101/",
+    "matches": "api/bus/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\DeleteBus",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/DELETE"
+  },
+  "api/bus/single/txc-inbox/GET": {
+    "request": "GET /api/bus/101/txc-inbox/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\BusRegWithTxcInbox"
+    },
+    "matches": "api/bus/single/txc-inbox/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\BusRegWithTxcInbox",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/txc-inbox/GET"
+  },
+  "api/bus/single/variation/POST": {
+    "request": "POST /api/bus/101/variation/",
+    "matches": "api/bus/single/variation/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\CreateVariation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/variation/POST"
+  },
+  "api/bus/single/cancellation/POST": {
+    "request": "POST /api/bus/101/cancellation/",
+    "matches": "api/bus/single/cancellation/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\CreateCancellation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/cancellation/POST"
+  },
+  "api/bus/single/stops/PUT": {
+    "request": "PUT /api/bus/101/stops/",
+    "matches": "api/bus/single/stops/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\UpdateStops",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/stops/PUT"
+  },
+  "api/bus/single/quality/PUT": {
+    "request": "PUT /api/bus/101/quality/",
+    "matches": "api/bus/single/quality/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\UpdateQualitySchemes",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/quality/PUT"
+  },
+  "api/bus/single/service-details/PUT": {
+    "request": "PUT /api/bus/101/service-details/",
+    "matches": "api/bus/single/service-details/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\UpdateServiceDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/service-details/PUT"
+  },
+  "api/bus/single/service-register/PUT": {
+    "request": "PUT /api/bus/101/service-register/",
+    "matches": "api/bus/single/service-register/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\UpdateServiceRegister",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/service-register/PUT"
+  },
+  "api/bus/single/ta/PUT": {
+    "request": "PUT /api/bus/101/ta/",
+    "matches": "api/bus/single/ta/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\UpdateTaAuthority",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/ta/PUT"
+  },
+  "api/bus/single/short-notice/GET": {
+    "request": "GET /api/bus/101/short-notice/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\ShortNoticeByBusReg"
+    },
+    "matches": "api/bus/single/short-notice/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\ShortNoticeByBusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/short-notice/GET"
+  },
+  "api/bus/single/short-notice/PUT": {
+    "request": "PUT /api/bus/101/short-notice/",
+    "matches": "api/bus/single/short-notice/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\UpdateShortNotice",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/short-notice/PUT"
+  },
+  "api/bus/single/decision/GET": {
+    "request": "GET /api/bus/101/decision/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegDecision"
+    },
+    "matches": "api/bus/single/decision/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegDecision",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/decision/GET"
+  },
+  "api/bus/single/decision/reset/PUT": {
+    "request": "PUT /api/bus/101/decision/reset/",
+    "matches": "api/bus/single/decision/reset/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\ResetBusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/decision/reset/PUT"
+  },
+  "api/bus/single/decision/admin-cancel/PUT": {
+    "request": "PUT /api/bus/101/decision/admin-cancel/",
+    "matches": "api/bus/single/decision/admin-cancel/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\AdminCancelBusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/decision/admin-cancel/PUT"
+  },
+  "api/bus/single/decision/withdraw/PUT": {
+    "request": "PUT /api/bus/101/decision/withdraw/",
+    "matches": "api/bus/single/decision/withdraw/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\WithdrawBusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/decision/withdraw/PUT"
+  },
+  "api/bus/single/decision/refuse/PUT": {
+    "request": "PUT /api/bus/101/decision/refuse/",
+    "matches": "api/bus/single/decision/refuse/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\RefuseBusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/decision/refuse/PUT"
+  },
+  "api/bus/single/decision/refuse-by-short-notice/PUT": {
+    "request": "PUT /api/bus/101/decision/refuse-by-short-notice/",
+    "matches": "api/bus/single/decision/refuse-by-short-notice/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\RefuseBusRegByShortNotice",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/decision/refuse-by-short-notice/PUT"
+  },
+  "api/bus/single/decision/grant/PUT": {
+    "request": "PUT /api/bus/101/decision/grant/",
+    "matches": "api/bus/single/decision/grant/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\GrantBusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/decision/grant/PUT"
+  },
+  "api/bus/single/request-map/POST": {
+    "request": "POST /api/bus/101/request-map/",
+    "matches": "api/bus/single/request-map/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\Ebsr\\RequestMap",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/request-map/POST"
+  },
+  "api/bus/single/print/reg-letter/POST": {
+    "request": "POST /api/bus/101/print/reg-letter/",
+    "matches": "api/bus/single/print/reg-letter/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\PrintLetter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/bus/single/print/reg-letter/POST"
+  },
+  "api/bus/queue-ebsr-packs/POST": {
+    "request": "POST /api/bus/queue-ebsr-packs/",
+    "matches": "api/bus/queue-ebsr-packs/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\Ebsr\\QueuePacks",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/queue-ebsr-packs/POST"
+  },
+  "api/bus/organisation-unprocessed-ebsr-list/GET": {
+    "request": "GET /api/bus/organisation-unprocessed-ebsr-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\OrganisationUnprocessedList"
+    },
+    "matches": "api/bus/organisation-unprocessed-ebsr-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\OrganisationUnprocessedList",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/organisation-unprocessed-ebsr-list/GET"
+  },
+  "api/bus/notice-period-create/POST": {
+    "request": "POST /api/bus/notice-period-create/",
+    "matches": "api/bus/notice-period-create/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\CreateNoticePeriod",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/notice-period-create/POST"
+  },
+  "api/bus/notice-period-list/GET": {
+    "request": "GET /api/bus/notice-period-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusNoticePeriodList"
+    },
+    "matches": "api/bus/notice-period-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusNoticePeriodList",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/notice-period-list/GET"
+  },
+  "api/bus/registration-history-list/GET": {
+    "request": "GET /api/bus/registration-history-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\RegistrationHistoryList"
+    },
+    "matches": "api/bus/registration-history-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\RegistrationHistoryList",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/registration-history-list/GET"
+  },
+  "api/bus/paginated-registration-history-list/GET": {
+    "request": "GET /api/bus/paginated-registration-history-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\PaginatedRegistrationHistoryList"
+    },
+    "matches": "api/bus/paginated-registration-history-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\PaginatedRegistrationHistoryList",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/paginated-registration-history-list/GET"
+  },
+  "api/bus/service-type-list/GET": {
+    "request": "GET /api/bus/service-type-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusServiceTypeList"
+    },
+    "matches": "api/bus/service-type-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusServiceTypeList",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/service-type-list/GET"
+  },
+  "api/bus/browse/GET": {
+    "request": "GET /api/bus/browse/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegBrowseList"
+    },
+    "matches": "api/bus/browse/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegBrowseList",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/browse/GET"
+  },
+  "api/bus/browse/context-list/GET": {
+    "request": "GET /api/bus/browse/context-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegBrowseContextList"
+    },
+    "matches": "api/bus/browse/context-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegBrowseContextList",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/browse/context-list/GET"
+  },
+  "api/bus/browse/export/GET": {
+    "request": "GET /api/bus/browse/export/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegBrowseExport"
+    },
+    "matches": "api/bus/browse/export/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\BusRegBrowseExport",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/bus/browse/export/GET"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "api/stay/GET": {
+    "request": "GET /api/stay/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\StayList"
+    },
+    "matches": "api/stay/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\StayList"
+    },
+    "withoutTrailingSlash": "api/stay/GET"
+  },
+  "api/stay/single/GET": {
+    "request": "GET /api/stay/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\Stay"
+    },
+    "matches": "api/stay/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\Stay",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/stay/single/GET"
+  },
+  "api/stay/single/PUT": {
+    "request": "PUT /api/stay/101/",
+    "matches": "api/stay/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Hearing\\UpdateStay",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/stay/single/PUT"
+  },
+  "api/stay/POST": {
+    "request": "POST /api/stay/",
+    "matches": "api/stay/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Hearing\\CreateStay"
+    },
+    "withoutTrailingSlash": "api/stay/POST"
+  }
+}

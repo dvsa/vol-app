@@ -1,0 +1,6 @@
+<ul class="govuk-list govuk-list--bullet">
+    <li>have read and agree to follow <a href="https://www.gov.uk/guidance/international-authorisations-and-permits-for-road-haulage" target="_blank">the rules on how to use Multilateral permits<span class="govuk-visually-hidden">(link opens in a new window)</span></a></li>
+    <li>will comply fully with the conditions of use under which the permit may be used</li>
+    <li>will carry the permit for the entire outbound and return journey and present it to any competent authority or inspectors</li>
+    <li>understand that one permit is required for each vehicle you intend to use to transport goods to and from any EU or EEA country</li>
+</ul>

@@ -1,0 +1,7 @@
+<p>Annwyl weithredwr,</p>
+
+<p>You have a new message <&></p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Mewngofnodi i'ch cyfrif</a>
+</p>

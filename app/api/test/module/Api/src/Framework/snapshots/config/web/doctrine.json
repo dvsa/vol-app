@@ -1,0 +1,129 @@
+{
+  "types": {
+    "yesno": "Dvsa\\Olcs\\Api\\Entity\\Types\\YesNoType",
+    "yesnonull": "Dvsa\\Olcs\\Api\\Entity\\Types\\YesNoNullType",
+    "date": "Dvsa\\Olcs\\Api\\Entity\\Types\\DateType",
+    "datetime": "Dvsa\\Olcs\\Api\\Entity\\Types\\DateTimeType",
+    "encrypted_string": "Dvsa\\Olcs\\Api\\Entity\\Types\\EncryptedStringType"
+  },
+  "driver": {
+    "EntityDriver": {
+      "class": "Doctrine\\ORM\\Mapping\\Driver\\AttributeDriver",
+      "paths": [
+        "{app}/module/Api/config/../src/Entity"
+      ]
+    },
+    "translatable_metadata_driver": {
+      "class": "Doctrine\\ORM\\Mapping\\Driver\\AttributeDriver",
+      "paths": [
+        "vendor/gedmo/doctrine-extensions/src/Translatable/Entity"
+      ]
+    },
+    "orm_default": {
+      "class": "Doctrine\\Persistence\\Mapping\\Driver\\MappingDriverChain",
+      "drivers": {
+        "Dvsa\\Olcs\\Api\\Entity": "EntityDriver",
+        "Gedmo\\Translatable\\Entity": "translatable_metadata_driver"
+      }
+    }
+  },
+  "event_manager": {
+    "orm_default": {
+      "subscribers": [
+        "Dvsa\\Olcs\\Api\\Listener\\OlcsEntityListener",
+        "Gedmo\\SoftDeleteable\\SoftDeleteableListener",
+        "Gedmo\\Translatable\\TranslatableListener",
+        "Dvsa\\Olcs\\Api\\Mvc\\OlcsBlameableListener"
+      ]
+    }
+  },
+  "configuration": {
+    "orm_default": {
+      "filters": {
+        "soft-deleteable": "Gedmo\\SoftDeleteable\\Filter\\SoftDeleteableFilter"
+      },
+      "datetime_functions": {
+        "date": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "time": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "timestamp": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "convert_tz": "Oro\\ORM\\Query\\AST\\Functions\\DateTime\\ConvertTz"
+      },
+      "numeric_functions": {
+        "timestampdiff": "Oro\\ORM\\Query\\AST\\Functions\\Numeric\\TimestampDiff",
+        "dayofyear": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "dayofmonth": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "dayofweek": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "week": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "day": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "hour": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "minute": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "month": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "quarter": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "second": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "year": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "sign": "Oro\\ORM\\Query\\AST\\Functions\\Numeric\\Sign",
+        "pow": "Oro\\ORM\\Query\\AST\\Functions\\Numeric\\Pow"
+      },
+      "string_functions": {
+        "md5": "Oro\\ORM\\Query\\AST\\Functions\\SimpleFunction",
+        "group_concat": "Oro\\ORM\\Query\\AST\\Functions\\String\\GroupConcat",
+        "cast": "Oro\\ORM\\Query\\AST\\Functions\\Cast",
+        "concat_ws": "Oro\\ORM\\Query\\AST\\Functions\\String\\ConcatWs",
+        "replace": "Oro\\ORM\\Query\\AST\\Functions\\String\\Replace",
+        "date_format": "Oro\\ORM\\Query\\AST\\Functions\\String\\DateFormat",
+        "ifnull": "DoctrineExtensions\\Query\\Mysql\\IfNull"
+      },
+      "metadata_cache": "redis",
+      "query_cache": "redis",
+      "result_cache": "redis",
+      "hydration_cache": "redis"
+    }
+  },
+  "entity_manager": {
+    "orm_default": {
+      "connection": "orm_default",
+      "configuration": "orm_default",
+      "event_manager": "orm_default"
+    }
+  },
+  "cache": {
+    "redis": {
+      "class": "doctrine-cache"
+    }
+  },
+  "connection": {
+    "orm_default": {
+      "driver_class": "Doctrine\\DBAL\\Driver\\PDO\\MySQL\\Driver",
+      "params": {
+        "host": "olcsdb-rds.1",
+        "port": "3306",
+        "user": "olcsapi",
+        "password": "1",
+        "dbname": "OLCS_RDS_OLCSDB"
+      }
+    },
+    "export": {
+      "driver_class": "Doctrine\\DBAL\\Driver\\PDO\\MySQL\\Driver",
+      "configuration": "orm_default",
+      "event_manager": "orm_default",
+      "params": {
+        "host": "olcsdb-rds.1",
+        "port": "3306",
+        "user": "olcsapi",
+        "password": "1",
+        "dbname": "OLCS_RDS_OLCSDB"
+      }
+    }
+  },
+  "migrations": {
+    "em": "default",
+    "orm_default": {
+      "directory": "data/Migrations",
+      "namespace": "Migrations",
+      "table": "migrations",
+      "column": "version",
+      "all_or_nothing": true,
+      "check_database_platform": true
+    }
+  }
+}

@@ -24,8 +24,8 @@ class SlaTargetDate extends Base
 
     #[Form\Options(['label' => 'Received/Agreed date', 'create_empty_option' => false, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $agreedDate = null;
 
@@ -33,21 +33,21 @@ class SlaTargetDate extends Base
     #[Form\Options(['label' => 'Sent date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => '\Common\Form\Elements\Validators\DateNotInFuture'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'agreedDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'agreedDate', 'compare_to_label' => 'Agreed date', 'operator' => 'gte']]]]])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'agreedDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'agreedDate', 'compare_to_label' => 'Agreed date', 'operator' => 'gte']]]])]
     public $sentDate = null;
 
     #[Form\Attributes(['id' => 'targetDate'])]
     #[Form\Options(['label' => 'Target date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateSelectNullifier')]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'agreedDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompareWithInterval', 'options' => ['compare_to' => 'agreedDate', 'compare_to_label' => 'Agreed date', 'interval_label' => '5 working days', 'date_interval' => 'P5D', 'operator' => 'gt']]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'agreedDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompareWithInterval', 'options' => ['compare_to' => 'agreedDate', 'compare_to_label' => 'Agreed date', 'interval_label' => '5 working days', 'date_interval' => 'P5D', 'operator' => 'gt']]]])]
     public $targetDate = null;
 
     #[Form\Type('Radio')]
@@ -59,7 +59,7 @@ class SlaTargetDate extends Base
     #[Form\Options(['label' => 'Notes'])]
     #[Form\Required(false)]
     #[Form\Type('TextArea')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     public $notes = null;
 }

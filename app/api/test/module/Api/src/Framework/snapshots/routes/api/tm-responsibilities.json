@@ -1,0 +1,100 @@
+{
+  "api/tm-responsibilities/transport-manager/named-single/GET": {
+    "request": "GET /api/tm-responsibilities/transport-manager/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmResponsibilities\\TmResponsibilitiesList"
+    },
+    "matches": "api/tm-responsibilities/transport-manager/named-single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmResponsibilities\\TmResponsibilitiesList",
+      "transportManager": "101"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager/named-single/GET"
+  },
+  "api/tm-responsibilities/transport-manager-application/single/GET": {
+    "request": "GET /api/tm-responsibilities/transport-manager-application/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\GetForResponsibilities"
+    },
+    "matches": "api/tm-responsibilities/transport-manager-application/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\GetForResponsibilities",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager-application/single/GET"
+  },
+  "api/tm-responsibilities/transport-manager-application/single/PUT": {
+    "request": "PUT /api/tm-responsibilities/transport-manager-application/101/",
+    "matches": "api/tm-responsibilities/transport-manager-application/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\UpdateForResponsibilities",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager-application/single/PUT"
+  },
+  "api/tm-responsibilities/transport-manager-application/POST": {
+    "request": "POST /api/tm-responsibilities/transport-manager-application/",
+    "matches": "api/tm-responsibilities/transport-manager-application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\CreateForResponsibilities"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager-application/POST"
+  },
+  "api/tm-responsibilities/transport-manager-application/DELETE": {
+    "request": "DELETE /api/tm-responsibilities/transport-manager-application/",
+    "matches": "api/tm-responsibilities/transport-manager-application/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\DeleteForResponsibilities"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager-application/DELETE"
+  },
+  "api/tm-responsibilities/transport-manager-licence/single/GET": {
+    "request": "GET /api/tm-responsibilities/transport-manager-licence/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerLicence\\GetForResponsibilities"
+    },
+    "matches": "api/tm-responsibilities/transport-manager-licence/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerLicence\\GetForResponsibilities",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager-licence/single/GET"
+  },
+  "api/tm-responsibilities/transport-manager-licence/single/PUT": {
+    "request": "PUT /api/tm-responsibilities/transport-manager-licence/101/",
+    "matches": "api/tm-responsibilities/transport-manager-licence/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerLicence\\UpdateForResponsibilities",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager-licence/single/PUT"
+  },
+  "api/tm-responsibilities/transport-manager-licence/DELETE": {
+    "request": "DELETE /api/tm-responsibilities/transport-manager-licence/",
+    "matches": "api/tm-responsibilities/transport-manager-licence/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerLicence\\DeleteForResponsibilities"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/transport-manager-licence/DELETE"
+  },
+  "api/tm-responsibilities/documents/GET": {
+    "request": "GET /api/tm-responsibilities/documents/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmResponsibilities\\GetDocumentsForResponsibilities"
+    },
+    "matches": "api/tm-responsibilities/documents/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmResponsibilities\\GetDocumentsForResponsibilities"
+    },
+    "withoutTrailingSlash": "api/tm-responsibilities/documents/GET"
+  }
+}

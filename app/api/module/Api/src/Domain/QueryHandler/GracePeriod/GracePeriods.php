@@ -28,7 +28,7 @@ class GracePeriods extends AbstractQueryHandler
         $repo = $this->getRepo();
 
         return [
-            'result' => $this->resultList($repo->fetchList($query, Query::HYDRATE_OBJECT)),
+            'result' => $this->resultList($repo->fetchList($query, Query::HYDRATE_OBJECT), ['gracePeriodType']),
             'count' => $repo->fetchCount($query),
         ];
     }

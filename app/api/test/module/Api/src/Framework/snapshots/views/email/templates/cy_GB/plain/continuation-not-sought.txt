@@ -1,0 +1,4 @@
+Mae'r trwyddedau canlynol sydd â ffioedd yn ddyledus rhwng [startDate <&>] a [endDate <&>] wedi'u gosod i CNS:
+
+OB1234567 North East of England <&>
+PD7654321 Wales

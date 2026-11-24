@@ -22,13 +22,13 @@ class Checks
     #[Form\Attributes(['class' => 'surrenderChecks__checkbox js-surrender-checks-digitalSignature'])]
     #[Form\Options(['label' => 'Digital signature has been checked', 'label_options' => ['label_position' => 'append']])]
     #[Form\Required(true)]
-    #[Form\Validator(['name' => 'GreaterThan', 'options' => ['min' => 0, 'messages' => ['notGreaterThan' => 'You must confirm the digital signature has been checked']]])]
+    #[Form\Validator('GreaterThan', options: ['min' => 0, 'messages' => ['notGreaterThan' => 'You must confirm the digital signature has been checked']])]
     public $digitalSignature = null;
 
     #[Form\Type('Checkbox')]
     #[Form\Attributes(['class' => 'surrenderChecks__checkbox js-surrender-checks-ecms'])]
     #[Form\Options(['label' => 'ECMS has been checked', 'label_options' => ['label_position' => 'append']])]
     #[Form\Required(true)]
-    #[Form\Validator(['name' => 'GreaterThan', 'options' => ['min' => 0, 'messages' => ['notGreaterThan' => 'You must confirm ECMS has been checked']]])]
+    #[Form\Validator('GreaterThan', options: ['min' => 0, 'messages' => ['notGreaterThan' => 'You must confirm ECMS has been checked']])]
     public $ecms = null;
 }

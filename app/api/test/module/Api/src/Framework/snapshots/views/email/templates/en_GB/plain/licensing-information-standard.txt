@@ -1,0 +1,5 @@
+Dear operator,
+
+Important documentation relating to your Operator's Licence [licNo <&>] [operatorName <&>] has been placed in your Self Service correspondence inbox.
+
+Sign in to your account at [url <&>].

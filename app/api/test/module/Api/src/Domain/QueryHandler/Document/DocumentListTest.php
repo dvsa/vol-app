@@ -25,7 +25,7 @@ final class DocumentListTest extends QueryHandlerTestCase
 
     public function testHandleQuery(): void
     {
-        $query = Qry::create(['format' => 'FOO', 'application' => 1]);
+        $query = Qry::create(['format' => 'FOO', 'application' => 1, 'hideUnsubmittedApplicationDocs' => 'Y']);
 
         $mockDocument = m::mock(BundleSerializableInterface::class)
             ->shouldReceive('serialize')
@@ -43,11 +43,18 @@ final class DocumentListTest extends QueryHandlerTestCase
                     $this->assertNull($query->getIsExternal());
                     $this->assertNull($query->getShowDocs());
                     $this->assertNull($query->getFormat());
+                    $this->assertSame('Y', $query->getHideUnsubmittedApplicationDocs());
 
                     return true;
                 }
             )
-            ->shouldReceive('fetchDistinctListExtensions')->once()->andReturn(['RTF', 'DOCX']);
+            ->shouldReceive('fetchDistinctListExtensions')->once()->andReturnUsing(
+                function (Qry $query) {
+                    $this->assertSame('Y', $query->getHideUnsubmittedApplicationDocs());
+
+                    return ['RTF', 'DOCX'];
+                }
+            );
 
         $this->assertEquals(
             [

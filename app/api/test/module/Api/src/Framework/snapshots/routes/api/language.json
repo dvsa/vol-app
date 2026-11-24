@@ -1,0 +1,14 @@
+{
+  "api/language/GET": {
+    "request": "GET /api/language/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Language\\GetList"
+    },
+    "matches": "api/language/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Language\\GetList"
+    },
+    "withoutTrailingSlash": "api/language/GET"
+  }
+}

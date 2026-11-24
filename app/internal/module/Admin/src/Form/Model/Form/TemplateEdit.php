@@ -47,7 +47,7 @@ class TemplateEdit
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'source', 'placeholder' => 'Add markup here', 'class' => 'extra-long'])]
     #[Form\Options(['label' => 'Template Markup'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 65535])]
     public $source;
 

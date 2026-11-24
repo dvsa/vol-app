@@ -1,0 +1,32 @@
+{
+  "api/sla-target-date/POST": {
+    "request": "POST /api/sla-target-date/",
+    "matches": "api/sla-target-date/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\CreateSlaTargetDate"
+    },
+    "withoutTrailingSlash": "api/sla-target-date/POST"
+  },
+  "api/sla-target-date/GET": {
+    "request": "GET /api/sla-target-date/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\SlaTargetDate"
+    },
+    "matches": "api/sla-target-date/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\SlaTargetDate"
+    },
+    "withoutTrailingSlash": "api/sla-target-date/GET"
+  },
+  "api/sla-target-date/PUT": {
+    "request": "PUT /api/sla-target-date/",
+    "matches": "api/sla-target-date/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\UpdateSlaTargetDate"
+    },
+    "withoutTrailingSlash": "api/sla-target-date/PUT"
+  }
+}

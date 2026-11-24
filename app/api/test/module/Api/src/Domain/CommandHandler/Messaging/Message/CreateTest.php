@@ -8,10 +8,13 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendNewMessageNotificationToOperators;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Messaging\Message\Create as CreateMessageHandler;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\Conversation as ConversationRepo;
+use Dvsa\Olcs\Api\Domain\Repository\Document as DocumentRepo;
 use Dvsa\Olcs\Api\Domain\Repository\Message as MessageRepo;
 use Dvsa\Olcs\Api\Domain\Repository\MessageContent as MessageContentRepo;
 use Dvsa\Olcs\Api\Domain\Repository\Task as TaskRepo;
+use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Messaging\MessagingContent;
 use Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation;
@@ -20,6 +23,7 @@ use Dvsa\Olcs\Api\Entity\Task\Task;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
+use Dvsa\Olcs\Transfer\Service\CacheEncryption;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
@@ -30,6 +34,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     {
         $this->mockedSmServices = [
             AuthorizationService::class => m::mock(AuthorizationService::class),
+            CacheEncryption::class => m::mock(CacheEncryption::class),
         ];
 
         $this->sut = new CreateMessageHandler();
@@ -37,6 +42,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->mockRepo(MessageRepo::class, MessageRepo::class);
         $this->mockRepo(MessageContentRepo::class, MessageContentRepo::class);
         $this->mockRepo(TaskRepo::class, TaskRepo::class);
+        $this->mockRepo(DocumentRepo::class, DocumentRepo::class);
 
         parent::setUp();
     }
@@ -305,6 +311,83 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
 
         $this->assertArrayHasKey('id', $result->toArray());
+    }
+
+    public function testUploadsAreAttachedOnceAndOnlyWhenTheSenderUploadedThem(): void
+    {
+        $this->mockCurrentUserIsInternal(true);
+
+        $correlationId = str_repeat('a', 40);
+        $senderId = 291;
+
+        $sender = m::mock(User::class);
+        $sender->allows('getId')->andReturn($senderId);
+        $this->mockedSmServices[AuthorizationService::class]->allows('getIdentity->getUser')->andReturn($sender);
+
+        $licence = m::mock(Licence::class);
+        $licence->allows('getId')->andReturn(7);
+
+        $task = m::mock(Task::class);
+        $task->allows('setDescription');
+        $task->allows('setActionDate');
+        $task->allows('getId')->andReturn(1);
+        $task->allows('getDescription')->andReturn(CreateMessageHandler::TASK_DESCRIPTION_ON_INTERNAL_REPLY);
+        $task->allows('getActionDate')->andReturn(new \DateTimeImmutable());
+        $task->allows('getLicence')->andReturn($licence);
+        $task->allows('getApplication')->andReturn(null);
+
+        $conversation = m::mock(MessagingConversation::class);
+        $conversation->allows('getId')->andReturn(1);
+        $conversation->allows('getIsClosed')->andReturn(0);
+        $conversation->allows('getIsArchived')->andReturn(0);
+        $conversation->allows('getTask')->andReturn($task);
+        $conversation->allows('getRelatedLicence')->andReturn($licence);
+
+        $this->repoMap[ConversationRepo::class]->allows('fetchById')->with(1)->andReturn($conversation);
+        $this->repoMap[MessageContentRepo::class]->allows('save');
+        $this->repoMap[MessageRepo::class]->allows('save');
+        $this->repoMap[TaskRepo::class]->allows('save');
+        $this->expectedSideEffect(SendNewMessageNotificationToOperators::class, ['id' => 7], new Result());
+
+        $this->mockedSmServices[CacheEncryption::class]
+            ->expects('getCustomItem')
+            ->with(CacheEncryption::GENERIC_STORAGE_IDENTIFIER, $correlationId)
+            ->andReturn([11, 12, 13, 14]);
+
+        $waiting = $this->uploadedBy($senderId, null);
+        $waiting->expects('setMessagingConversation')->with($conversation);
+        $waiting->expects('setMessagingMessage')->with(m::type(MessagingMessage::class));
+        $waiting->expects('setLicence')->with($licence);
+        $waiting->expects('setApplication')->with(null);
+
+        $alreadySent = $this->uploadedBy($senderId, m::mock(MessagingMessage::class));
+        $alreadySent->expects('setMessagingMessage')->never();
+        $alreadySent->expects('setMessagingConversation')->never();
+
+        $someoneElses = $this->uploadedBy($senderId + 1, null);
+        $someoneElses->expects('setMessagingMessage')->never();
+
+        $this->repoMap[DocumentRepo::class]->expects('fetchById')->with(11)->andReturn($waiting);
+        $this->repoMap[DocumentRepo::class]->expects('fetchById')->with(12)->andReturn($alreadySent);
+        $this->repoMap[DocumentRepo::class]->expects('fetchById')->with(13)->andReturn($someoneElses);
+        $this->repoMap[DocumentRepo::class]->expects('fetchById')->with(14)->andThrow(new NotFoundException());
+        $this->repoMap[DocumentRepo::class]->expects('saveOnFlush')->once()->with($waiting);
+        $this->repoMap[DocumentRepo::class]->expects('flushAll')->once();
+
+        $this->sut->handleCommand(CreateMessageCommand::create([
+            'conversation'   => 1,
+            'messageContent' => 'This is a test!',
+            'correlationId'  => $correlationId,
+        ]));
+    }
+
+    private function uploadedBy(int $userId, ?MessagingMessage $attachedTo): m\MockInterface
+    {
+        $document = m::mock(Document::class);
+        $document->allows('getCreatedBy->getId')->andReturn($userId);
+        $document->allows('getMessagingMessage')->andReturn($attachedTo);
+
+        return $document;
     }
 
     public function testCannotAddMessageToClosedConversation(): void

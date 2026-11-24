@@ -1,0 +1,6 @@
+{
+  "extensions": {
+    "external": "doc,docb,docm,docx,ppt,pptx,pptm,pps,ppsm,ppsx,sldx,sldm,xls,xlsb,xlsx,xlsm,xlw,odt,ods,odp,odt,odm,odg,odp,ods,odi,odg,txt,csv,rtf,xml,pdf,log,xml,json,djvu,xps,oxps,jpeg,jpg,png,tif,tiff,gif,jfif,bmp,webp,emf,dwg,dxf,wmf,zip,7z",
+    "internal": "doc,docb,docm,docx,ppt,pptx,pptm,pps,ppsm,ppsx,sldx,sldm,xls,xlsb,xlsx,xlsm,xlw,odt,ods,odp,odt,odm,odg,odp,ods,odi,odg,txt,csv,rtf,xml,pdf,log,xml,json,djvu,xps,oxps,jpeg,jpg,png,tif,tiff,gif,jfif,bmp,webp,emf,dwg,dxf,wmf,zip,7z,scan,eml,mp2,mp3,m4a,3gp,wav,aif,aiff,flac,ogg,wma,ape,aac,amr,webm,ac3"
+  }
+}
