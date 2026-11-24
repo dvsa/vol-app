@@ -16,7 +16,7 @@ trait DescriptionOptional
      * @var String
      */
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
-    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 512])]
     #[Transfer\Optional]
     protected $description;
 

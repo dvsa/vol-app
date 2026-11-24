@@ -26,12 +26,24 @@ class TranslationKey extends AbstractRepository
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query instanceof GetList) {
+            if ($query->getFormat() !== null) {
+                $qb->andWhere($this->alias . '.format = :format')
+                    ->setParameter('format', $query->getFormat());
+            }
+
+            if ($query->getMarkupOnly()) {
+                $qb->andWhere($this->alias . '.translationKey LIKE :markupPrefix')
+                    ->setParameter('markupPrefix', 'markup-%');
+            }
+
             if ($query->getTranslationSearch() != null) {
-                $qb->orWhere($this->alias . '.id LIKE :translationSearch')
-                    ->orWhere($this->alias . '.description LIKE :translationSearch')
-                    ->orWhere($this->alias . '.translationKey LIKE :translationSearch')
-                    ->leftJoin($this->alias . '.translationKeyTexts', 'tkt')
-                    ->orWhere('tkt.translatedText LIKE :translationSearch')
+                $qb->leftJoin($this->alias . '.translationKeyTexts', 'tkt')
+                    ->andWhere($qb->expr()->orX(
+                        $this->alias . '.id LIKE :translationSearch',
+                        $this->alias . '.description LIKE :translationSearch',
+                        $this->alias . '.translationKey LIKE :translationSearch',
+                        'tkt.translatedText LIKE :translationSearch',
+                    ))
                     ->setParameter('translationSearch', '%' . $query->getTranslationSearch() . '%');
             }
         }

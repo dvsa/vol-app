@@ -17,10 +17,21 @@
     {
       "flags": [],
       "spec": {
+        "name": "format",
+        "type": "Hidden",
+        "attributes": {
+          "id": "format",
+          "value": "text"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
         "name": "translationKey",
         "attributes": {
           "id": "translationKey",
-          "data-container-class": "translationKeyContainer js-hidden"
+          "data-container-class": "newTranslationKeyContainer js-hidden"
         },
         "options": {
           "label": "New Translation Key"
@@ -34,7 +45,7 @@
         "name": "description",
         "attributes": {
           "id": "description",
-          "data-container-class": "translationKeyContainer js-hidden"
+          "data-container-class": "translationDescriptionContainer js-hidden"
         },
         "options": {
           "label": "Description"
