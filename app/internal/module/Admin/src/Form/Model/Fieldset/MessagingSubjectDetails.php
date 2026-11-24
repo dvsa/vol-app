@@ -31,8 +31,8 @@ class MessagingSubjectDetails
     public $category = null;
 
     #[Form\Attributes(['id' => 'subCategory', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'Sub-category', 'service_name' => 'Olcs\Service\Data\SubCategory', 'context' => ['isTaskCategory' => 'Y'], 'empty_option' => 'Not applicable'])]
-    #[Form\Required(false)]
+    #[Form\Options(['label' => 'Sub-category', 'service_name' => 'Olcs\Service\Data\SubCategory', 'context' => ['isTaskCategory' => 'Y'], 'empty_option' => 'Please select'])]
+    #[Form\Required(true)]
     #[Form\Type('DynamicSelect')]
     public $subCategory = null;
 

@@ -93,7 +93,6 @@
       },
       "subCategory": {
         "class": "Laminas\\InputFilter\\Input",
-        "allowEmpty": true,
         "filterChain": {
           "class": "Laminas\\Filter\\FilterChain",
           "filters": [
@@ -105,7 +104,6 @@
             }
           ]
         },
-        "required": false,
         "validatorChain": {
           "class": "Laminas\\Validator\\ValidatorChain",
           "validators": [

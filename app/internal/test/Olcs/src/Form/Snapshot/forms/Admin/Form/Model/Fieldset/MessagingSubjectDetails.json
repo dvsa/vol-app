@@ -45,7 +45,8 @@
         "name": "subCategory",
         "attributes": {
           "id": "subCategory",
-          "placeholder": ""
+          "placeholder": "",
+          "required": "required"
         },
         "options": {
           "label": "Sub-category",
@@ -53,7 +54,7 @@
           "context": {
             "isTaskCategory": "Y"
           },
-          "empty_option": "Not applicable"
+          "empty_option": "Please select"
         },
         "type": "DynamicSelect"
       }
@@ -120,7 +121,7 @@
     },
     "subCategory": {
       "name": "subCategory",
-      "required": false
+      "required": true
     }
   }
 }

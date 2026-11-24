@@ -24,8 +24,8 @@ class MessagingSubjectController extends AbstractInternalController
      */
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
-        'addAction' => ['forms/selected-category-subcategory-filtering'],
-        'editAction' => ['forms/selected-category-subcategory-filtering'],
+        'addAction' => ['forms/messaging-subject'],
+        'editAction' => ['forms/messaging-subject'],
     ];
 
     protected $tableName = 'admin-messaging-subjects';
@@ -55,6 +55,20 @@ class MessagingSubjectController extends AbstractInternalController
         protected SubCategory $subCategoryDataService
     ) {
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
+
+    /**
+     * A failed add re-renders with the posted category, so only list its sub-categories
+     */
+    public function alterFormForAdd(Form $form, $formData)
+    {
+        $post = $this->params()->fromPost();
+
+        if (isset($post['details']['category'])) {
+            $this->subCategoryDataService->setCategory($post['details']['category']);
+        }
+
+        return $form;
     }
 
     /**

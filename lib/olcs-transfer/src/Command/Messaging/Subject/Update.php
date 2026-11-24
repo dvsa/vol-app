@@ -5,7 +5,7 @@ namespace Dvsa\Olcs\Transfer\Command\Messaging\Subject;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Category;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\FieldType\Traits\SubCategoryOptional;
+use Dvsa\Olcs\Transfer\FieldType\Traits\SubCategory;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Version;
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
@@ -16,7 +16,7 @@ final class Update extends AbstractCommand
     use Identity;
     use Version;
     use Category;
-    use SubCategoryOptional;
+    use SubCategory;
 
     // the conversation subject is "<description> query" and has to fit in 255
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
