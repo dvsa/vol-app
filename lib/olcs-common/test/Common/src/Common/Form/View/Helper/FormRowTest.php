@@ -168,12 +168,21 @@ final class FormRowTest extends MockeryTestCase
         $this->setUpSut();
         $element = $this->setUpElement(\Common\Form\Elements\InputFilters\SingleCheckbox::class);
         $element->setLabelOption('always_wrap', true);
+        $this->viewHelperPluginManager()->setService(
+            'formcheckbox',
+            static fn() => '<div class="govuk-form-group"><div class="govuk-checkboxes govuk-checkboxes--small"></div></div>'
+        );
+        $this->viewHelperPluginManager()->get('form_element')->setView($this->phpRenderer());
 
         // Execute
         $result = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertMatchesRegularExpression('/^<div class="field "><label>(.*)<\/label>(.*)<\/div>$/', $result);
+        $this->assertSame(
+            '<div class="field "><p id="test-hint" class="hint govuk-hint">Hint</p>' .
+            '<div class="govuk-form-group"><div class="govuk-checkboxes govuk-checkboxes--small"></div></div></div>',
+            $result
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -190,12 +199,21 @@ final class FormRowTest extends MockeryTestCase
                 ],
             ]
         );
+        $this->viewHelperPluginManager()->setService(
+            'formcheckbox',
+            static fn() => '<div class="govuk-form-group"><div class="govuk-checkboxes"></div></div>'
+        );
+        $this->viewHelperPluginManager()->get('form_element')->setView($this->phpRenderer());
 
         // Execute
         $result = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertMatchesRegularExpression('/^<div class="field "><label for="test">(.*)<\/label>(.*)<\/div>$/', $result);
+        $this->assertSame(
+            '<div class="field "><p id="test-hint" class="hint govuk-hint">Hint</p>' .
+            '<div class="govuk-form-group"><div class="govuk-checkboxes"></div></div></div>',
+            $result
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]

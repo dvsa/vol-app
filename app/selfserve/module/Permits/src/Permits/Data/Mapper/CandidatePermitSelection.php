@@ -70,7 +70,7 @@ class CandidatePermitSelection implements MapperInterface
                         'options' => [
                             'label' => '<span class="govuk-visually-hidden">Select permit ' . $index . '</span>',
                             'label_attributes' => [
-                                'class' => 'form-control form-control--checkbox form-control--advanced'
+                                'class' => 'govuk-label govuk-checkboxes__label'
                             ],
                             'label_options' => [
                                 'disable_html_escape' => true

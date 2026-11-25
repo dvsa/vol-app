@@ -39,7 +39,9 @@ if (isset($this->form)) {
                 ?>
                 <?php if (isset($this->form)): ?>
                     <?php
-                    echo $this->form($this->form);
+                    echo isset($this->formPartial)
+                        ? $this->partial($this->formPartial, ['form' => $this->form])
+                        : $this->form($this->form);
                     ?>
                 <?php endif; ?>
 

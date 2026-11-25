@@ -18,7 +18,7 @@ class VehiclesDeclarationsMainUndertakings
     #[Form\Type('Common\Form\Elements\Types\HtmlTranslated')]
     public $recordsText;
 
-    #[Form\Options(['label' => 'form.checkbox-comply-requirements', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'use_hidden_element' => false])]
+    #[Form\Options(['label' => 'form.checkbox-comply-requirements', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'use_hidden_element' => false, 'error-message' => 'checkbox.error.psv-occupation-records'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $psvOccupationRecordsConfirmation;
 
@@ -26,7 +26,7 @@ class VehiclesDeclarationsMainUndertakings
     #[Form\Type('Common\Form\Elements\Types\HtmlTranslated')]
     public $incomeText;
 
-    #[Form\Options(['label' => 'form.checkbox-comply-requirements', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'use_hidden_element' => false])]
+    #[Form\Options(['label' => 'form.checkbox-comply-requirements', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N', 'must_be_value' => 'Y', 'use_hidden_element' => false, 'error-message' => 'checkbox.error.psv-income-records'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $psvIncomeRecordsConfirmation;
 

@@ -62,12 +62,12 @@
               "name": "inPossession",
               "type": "OlcsCheckbox",
               "attributes": {
-                "class": "govuk-checkboxes__item"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "licence.surrender.current_discs.in_possession.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "checked_value": "Y",
                 "unchecked_value": "N"
@@ -121,12 +121,12 @@
               "name": "lost",
               "type": "OlcsCheckbox",
               "attributes": {
-                "class": "govuk-checkboxes__item"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "licence.surrender.operator_licence.lost.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "checked_value": "Y",
                 "unchecked_value": "N"
@@ -196,12 +196,12 @@
               "name": "stolen",
               "type": "OlcsCheckbox",
               "attributes": {
-                "class": "govuk-checkboxes__item"
+                "class": "govuk-checkboxes__input"
               },
               "options": {
                 "label": "licence.surrender.operator_licence.stolen.label",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--confirm"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "checked_value": "Y",
                 "unchecked_value": "N"

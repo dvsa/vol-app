@@ -47,9 +47,10 @@
           "unchecked_value": "N",
           "label": "application_vehicle-safety_safety.application.safetyConfirmation",
           "label_attributes": {
-            "class": "form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           },
-          "must_be_value": "Y"
+          "must_be_value": "Y",
+          "error-message": "checkbox.error.safety-confirmation"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }

@@ -39,7 +39,7 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
      */
     protected $classMap = [
         RadioHorizontal::class => 'formRadioHorizontal',
-        CheckboxAdvanced::class => 'formCheckboxAdvanced',
+        CheckboxAdvanced::class => 'formRow',
         RadioVertical::class => 'formRadioVertical',
         AbstractInputSearch::class => FormInputSearch::class,
     ];
@@ -221,6 +221,10 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
                 if (! $element instanceof LabelAwareInterface || ! $element->getLabelOption('disable_html_escape')) {
                     $escapeHtmlHelper = $this->getEscapeHtmlHelper();
                     $label = $escapeHtmlHelper($label);
+                }
+
+                if ($element->getOption('legend-as-page-heading') === true) {
+                    $label = sprintf('<h1 class="govuk-fieldset__heading">%s</h1>', $label);
                 }
 
                 $legendAttributesString = $this->createAttributesString($element->getLabelAttributes());

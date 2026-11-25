@@ -230,7 +230,7 @@
                 "unchecked_value": "0",
                 "label": "Hidden from Self Serve?",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
                 "must_be_value": "1"
               },

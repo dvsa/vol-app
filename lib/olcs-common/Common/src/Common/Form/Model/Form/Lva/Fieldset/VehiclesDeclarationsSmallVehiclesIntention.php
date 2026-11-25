@@ -23,7 +23,7 @@ class VehiclesDeclarationsSmallVehiclesIntention
     #[Form\Required(false)]
     #[Form\AllowEmpty(false)]
     #[Form\Input('Common\InputFilter\ContinueIfEmptyInput')]
-    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.smallVehiclesConfirmation', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
+    #[Form\Options(['label' => 'application_vehicle-safety_undertakings.smallVehiclesConfirmation', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $psvSmallVhlConfirmation;
 }

@@ -16,7 +16,7 @@
           "unchecked_value": "N",
           "label": "continuations.conditions-undertakings.confirmation",
           "label_attributes": {
-            "class": "form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "must_be_value": "Y",
           "not_checked_message": "continuations.conditions-undertakings.confirmation.error"

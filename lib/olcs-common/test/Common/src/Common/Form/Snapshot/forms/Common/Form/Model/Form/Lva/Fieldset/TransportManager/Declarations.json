@@ -76,7 +76,8 @@
         "options": {
           "checked_value": "Y",
           "unchecked_value": "N",
-          "must_be_value": "Y"
+          "must_be_value": "Y",
+          "error-message": "checkbox.error.tm-declaration"
         },
         "attributes": {
           "data-container-class": "confirm checkbox"

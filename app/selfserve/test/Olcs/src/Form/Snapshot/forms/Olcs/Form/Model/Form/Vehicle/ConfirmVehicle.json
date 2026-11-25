@@ -2,7 +2,7 @@
   "name": "ConfirmVehicle",
   "attributes": {
     "method": "post",
-    "id": "vehicle-add"
+    "id": "vehicle-add-confirmation"
   },
   "elements": [
     {

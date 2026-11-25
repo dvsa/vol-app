@@ -64,11 +64,11 @@ The model is forced to call the `submit_quality_check` tool, whose schema lives 
 including the six summary categories and their definitions, are in `bank-statement-checks.json`
 beside it. The output has:
 
-| Key | Contents |
-|---|---|
-| `core_checks` | One entry per FI check (`FI01`–`FI10`, `FI16`): `result` (`Pass`, `Fail` or `Skipped`), `workingOut` and `remark`. |
+| Key                 | Contents                                                                                                                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `core_checks`       | One entry per FI check (`FI01`–`FI10`, `FI16`): `result` (`Pass`, `Fail` or `Skipped`), `workingOut` and `remark`.                                                                                            |
 | `statement_details` | Facts read from the statement: bank name and address, account holder name, issue date, period start and end, the 4-balance average and the number of large deposits. `null` when not shown or not determined. |
-| `category_remarks` | One caseworker-facing sentence per summary category. |
+| `category_remarks`  | One caseworker-facing sentence per summary category.                                                                                                                                                          |
 
 `metadata.schemaVersion` says which shape a stored report has. Reports written before the stamp
 existed carry no `schemaVersion` and have `core_checks` only; the normaliser reads both.
@@ -77,17 +77,32 @@ existed carry no `schemaVersion` and have `core_checks` only; the normaliser rea
 
 ```json
 {
-  "version": 1,
-  "rows": {
-    "bank":            { "flag": null,   "remark": null,  "value": "Example Bank", "checks": {} },
-    "bankAddress":     { "flag": null,   "remark": null,  "value": "1 Example Street", "checks": {} },
-    "authenticity":    { "flag": "pass", "remark": "...", "value": null, "checks": { "FI01": { "result": "pass", "remark": "..." }, "FI03": {}, "FI04": {} } },
-    "name":            { "flag": "pass", "remark": "...", "value": "Example Haulage Ltd", "checks": { "FI06": {}, "FI07": {}, "FI08": {} } },
-    "statementDate":   { "flag": "fail", "remark": "...", "value": "2026-08-31", "checks": { "FI10": {} } },
-    "statementPeriod": { "flag": "pass", "remark": "...", "value": { "start": "2026-08-01", "end": "2026-08-31" }, "checks": { "FI05": {} } },
-    "averageFunds":    { "flag": "pass", "remark": "...", "value": 15321.5, "checks": { "FI09": {}, "FI02": {} } },
-    "largeDeposit":    { "flag": "fail", "remark": "...", "value": 2, "checks": { "FI16": {} } }
-  }
+    "version": 1,
+    "rows": {
+        "bank": { "flag": null, "remark": null, "value": "Example Bank", "checks": {} },
+        "bankAddress": { "flag": null, "remark": null, "value": "1 Example Street", "checks": {} },
+        "authenticity": {
+            "flag": "pass",
+            "remark": "...",
+            "value": null,
+            "checks": { "FI01": { "result": "pass", "remark": "..." }, "FI03": {}, "FI04": {} }
+        },
+        "name": {
+            "flag": "pass",
+            "remark": "...",
+            "value": "Example Haulage Ltd",
+            "checks": { "FI06": {}, "FI07": {}, "FI08": {} }
+        },
+        "statementDate": { "flag": "fail", "remark": "...", "value": "2026-08-31", "checks": { "FI10": {} } },
+        "statementPeriod": {
+            "flag": "pass",
+            "remark": "...",
+            "value": { "start": "2026-08-01", "end": "2026-08-31" },
+            "checks": { "FI05": {} }
+        },
+        "averageFunds": { "flag": "pass", "remark": "...", "value": 15321.5, "checks": { "FI09": {}, "FI02": {} } },
+        "largeDeposit": { "flag": "fail", "remark": "...", "value": 2, "checks": { "FI16": {} } }
+    }
 }
 ```
 
@@ -112,16 +127,16 @@ existed carry no `schemaVersion` and have `core_checks` only; the normaliser rea
 
 ## Where things live
 
-| Concern | Location |
-|---|---|
-| Rules, categories, tool schema, prompt | `infra/terraform/modules/idp/config/`, `infra/terraform/modules/idp/main.tf` |
-| Report metadata stamp | `infra/terraform/modules/idp/state-machines/ai-analysis.asl.json` (`BuildAnalysisReport`) |
-| Normaliser | `app/api/module/Api/src/Service/Idp/AnalysisResultNormaliser/`: `AnalysisResultNormaliser` (entry point), `NormalisedResult` (the current shape, owns `VERSION`), `ReportMapper` (report to current shape), `Version/` (one mapper per superseded version) |
-| Storage | `app/api/module/Api/src/Domain/CommandHandler/Document/StoreDocumentAnalysisResult.php`, `Repository/DocumentAnalysis::recordSuccess()` |
-| Query | `app/api/module/Api/src/Domain/QueryHandler/Document/DocumentAnalysisList.php` |
-| Review | `app/api/module/Api/src/Domain/CommandHandler/Document/AcceptDocumentAnalysisReview.php`, `app/api/module/Api/src/Service/Idp/AnalysisReviewOutcome.php` |
-| Tab content | `app/internal/module/Olcs/src/Data/Mapper/FinancialEvidenceAssessmentTab.php`, `view/sections/lva/financial-evidence-assessment.phtml` |
-| Schema | `document_analysis` and `document_analysis_hist` in olcs-etl |
+| Concern                                | Location                                                                                                                                                                                                                                                   |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rules, categories, tool schema, prompt | `infra/terraform/modules/idp/config/`, `infra/terraform/modules/idp/main.tf`                                                                                                                                                                               |
+| Report metadata stamp                  | `infra/terraform/modules/idp/state-machines/ai-analysis.asl.json` (`BuildAnalysisReport`)                                                                                                                                                                  |
+| Normaliser                             | `app/api/module/Api/src/Service/Idp/AnalysisResultNormaliser/`: `AnalysisResultNormaliser` (entry point), `NormalisedResult` (the current shape, owns `VERSION`), `ReportMapper` (report to current shape), `Version/` (one mapper per superseded version) |
+| Storage                                | `app/api/module/Api/src/Domain/CommandHandler/Document/StoreDocumentAnalysisResult.php`, `Repository/DocumentAnalysis::recordSuccess()`                                                                                                                    |
+| Query                                  | `app/api/module/Api/src/Domain/QueryHandler/Document/DocumentAnalysisList.php`                                                                                                                                                                             |
+| Review                                 | `app/api/module/Api/src/Domain/CommandHandler/Document/AcceptDocumentAnalysisReview.php`, `app/api/module/Api/src/Service/Idp/AnalysisReviewOutcome.php`                                                                                                   |
+| Tab content                            | `app/internal/module/Olcs/src/Data/Mapper/FinancialEvidenceAssessmentTab.php`, `view/sections/lva/financial-evidence-assessment.phtml`                                                                                                                     |
+| Schema                                 | `document_analysis` and `document_analysis_hist` in olcs-etl                                                                                                                                                                                               |
 
 Changing the FI-to-category mapping or the payload shape means bumping
 `NormalisedResult::VERSION`, changing `ReportMapper` to produce the new shape, and adding a

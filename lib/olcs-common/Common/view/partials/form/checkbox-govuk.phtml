@@ -1,0 +1,19 @@
+<?php
+/** @var Laminas\Form\Element\Checkbox $element */
+$element = $this->element;
+$id = $element->getAttribute('id');
+?>
+<div class="govuk-form-group">
+    <div class="govuk-checkboxes<?= $this->small ? ' govuk-checkboxes--small' : '' ?>" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+            <?= $this->input ?>
+            <?= $this->formLabel($element, $this->translate($element->getLabel())) ?>
+        </div>
+        <?php if ($this->content) { ?>
+            <div class="govuk-checkboxes__conditional<?= $element->isChecked() ? '' : ' govuk-checkboxes__conditional--hidden' ?> help__text"
+                 id="<?= $this->escapeHtmlAttr($id) ?>-hidden">
+                <?= $this->partial($this->content, ['data' => $this->data]) ?>
+            </div>
+        <?php } ?>
+    </div>
+</div>

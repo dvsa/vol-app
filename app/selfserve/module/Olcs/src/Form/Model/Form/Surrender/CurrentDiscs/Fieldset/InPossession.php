@@ -7,8 +7,8 @@ use Laminas\Form\Annotation as Form;
 class InPossession
 {
     #[Form\Type('OlcsCheckbox')]
-    #[Form\Attributes(['class' => 'govuk-checkboxes__item'])]
-    #[Form\Options(['label' => 'licence.surrender.current_discs.in_possession.label', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--confirm'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
+    #[Form\Attributes(['class' => 'govuk-checkboxes__input'])]
+    #[Form\Options(['label' => 'licence.surrender.current_discs.in_possession.label', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'checked_value' => 'Y', 'unchecked_value' => 'N'])]
     public $inPossession = null;
 
     #[Form\ComposedObject('Olcs\Form\Model\Form\Surrender\CurrentDiscs\Fieldset\InPossessionInfo')]

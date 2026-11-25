@@ -4,6 +4,8 @@ namespace Common\Form\View\Helper;
 
 use Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\InputFilters\ActionLink;
+use Laminas\Form\Element\Checkbox;
+use Laminas\Form\Element\MultiCheckbox;
 use Common\Form\Elements\InputFilters\NoRender;
 use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Common\Form\Elements\Types\Table;
@@ -220,6 +222,10 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
 
     protected function renderRow(ElementInterface $element): string
     {
+        if ($element instanceof Checkbox && !($element instanceof MultiCheckbox)) {
+            return $this->getElementHelper()->render($element);
+        }
+
         $labelHelper         = $this->getLabelHelper();
         $elementHelper       = $this->getElementHelper();
 

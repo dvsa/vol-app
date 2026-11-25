@@ -59,9 +59,10 @@
                 "unchecked_value": "N",
                 "label": "application_operating-centres_authorisation-sub-action.data.permission",
                 "label_attributes": {
-                  "class": "form-control form-control--checkbox form-control--advanced"
+                  "class": "govuk-label govuk-checkboxes__label"
                 },
-                "must_be_value": "Y"
+                "must_be_value": "Y",
+                "error-message": "checkbox.error.operating-centre-permission"
               },
               "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
             }

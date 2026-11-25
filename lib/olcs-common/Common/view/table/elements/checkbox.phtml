@@ -1,1 +1,9 @@
-<input type="checkbox" name="id[]" value="{{id}}"/>
+<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+        <input id="table-checkbox-{{id}}" class="govuk-checkboxes__input" type="checkbox" name="id[]" value="{{id}}" />
+        <label class="govuk-label govuk-checkboxes__label" for="table-checkbox-{{id}}">
+            <span class="govuk-visually-hidden">Select row</span>
+        </label>
+    </div>
+
+</div>

@@ -7,7 +7,6 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -30,7 +29,6 @@ class CurrentDiscsControllerFactory implements FactoryInterface
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $scriptFactory = $container->get(ScriptFactory::class);
-        return new CurrentDiscsController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper, $scriptFactory);
+        return new CurrentDiscsController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 }

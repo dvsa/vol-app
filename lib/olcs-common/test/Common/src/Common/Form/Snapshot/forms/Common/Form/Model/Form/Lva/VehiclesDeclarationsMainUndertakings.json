@@ -31,12 +31,13 @@
         "options": {
           "label": "form.checkbox-comply-requirements",
           "label_attributes": {
-            "class": "govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "checked_value": "Y",
           "unchecked_value": "N",
           "must_be_value": "Y",
-          "use_hidden_element": false
+          "use_hidden_element": false,
+          "error-message": "checkbox.error.psv-occupation-records"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }
@@ -58,12 +59,13 @@
         "options": {
           "label": "form.checkbox-comply-requirements",
           "label_attributes": {
-            "class": "govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced"
+            "class": "govuk-label govuk-checkboxes__label"
           },
           "checked_value": "Y",
           "unchecked_value": "N",
           "must_be_value": "Y",
-          "use_hidden_element": false
+          "use_hidden_element": false,
+          "error-message": "checkbox.error.psv-income-records"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
       }

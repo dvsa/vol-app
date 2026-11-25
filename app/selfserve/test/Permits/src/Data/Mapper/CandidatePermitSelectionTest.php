@@ -97,7 +97,7 @@ final class CandidatePermitSelectionTest extends TestCase
             'options' => [
                 'label' => '<span class="govuk-visually-hidden">Select permit 1</span>',
                 'label_attributes' => [
-                    'class' => 'form-control form-control--checkbox form-control--advanced'
+                    'class' => 'govuk-label govuk-checkboxes__label'
                 ],
                 'label_options' => [
                     'disable_html_escape' => true
@@ -131,7 +131,7 @@ final class CandidatePermitSelectionTest extends TestCase
             'options' => [
                 'label' => '<span class="govuk-visually-hidden">Select permit 2</span>',
                 'label_attributes' => [
-                    'class' => 'form-control form-control--checkbox form-control--advanced'
+                    'class' => 'govuk-label govuk-checkboxes__label'
                 ],
                 'label_options' => [
                     'disable_html_escape' => true
@@ -165,7 +165,7 @@ final class CandidatePermitSelectionTest extends TestCase
             'options' => [
                 'label' => '<span class="govuk-visually-hidden">Select permit 3</span>',
                 'label_attributes' => [
-                    'class' => 'form-control form-control--checkbox form-control--advanced'
+                    'class' => 'govuk-label govuk-checkboxes__label'
                 ],
                 'label_options' => [
                     'disable_html_escape' => true

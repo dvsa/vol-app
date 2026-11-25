@@ -54,21 +54,21 @@ class PermitRangeDetails
 
     #[Form\Name('cabotage')]
     #[Form\Attributes(['id' => 'cabotage'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'Cabotage', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'must_be_value' => 'Yes'])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'Cabotage', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'must_be_value' => 'Yes'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     #[Form\Required(false)]
     public $cabotage = null;
 
     #[Form\Name('ssReserve')]
     #[Form\Attributes(['id' => 'reserve'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'Reserve', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'must_be_value' => 'Yes'])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'Reserve', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'must_be_value' => 'Yes'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     #[Form\Required(false)]
     public $ssReserve = null;
 
     #[Form\Name('lostReplacement')]
     #[Form\Attributes(['id' => 'lostReplacement'])]
-    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'Lost and Replacement', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced'], 'must_be_value' => 'Yes'])]
+    #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'Lost and Replacement', 'label_attributes' => ['class' => 'govuk-label govuk-checkboxes__label'], 'must_be_value' => 'Yes'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     #[Form\Required(false)]
     public $lostReplacement = null;

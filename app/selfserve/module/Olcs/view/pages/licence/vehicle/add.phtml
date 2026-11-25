@@ -1,6 +1,7 @@
 <?php
 $formErrors = '';
 if (isset($this->form)) {
+    $this->form->get('security')->setAttribute('id', 'vehicle-add-search-security');
     $this->form->prepare();
     $formErrors = $this->formErrors($this->form);
 }
@@ -51,7 +52,10 @@ if (isset($this->form)) {
                             'makeRowHeading' => $this->translate('licence.vehicle.add.result.make'),
                         ],
                     ]); ?>
-                    <?php $this->confirmationForm->prepare(); ?>
+                    <?php
+                    $this->confirmationForm->get('security')->setAttribute('id', 'vehicle-add-confirmation-security');
+                    $this->confirmationForm->prepare();
+                    ?>
                     <?php echo $this->form($this->confirmationForm); ?>
                 <?php endif; ?>
 

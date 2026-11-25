@@ -43,7 +43,7 @@
         "options": {
           "label": "auth.login.declaration-read.label",
           "label_attributes": {
-            "class": "form-control form-control--checkbox form-control--confirm full-width"
+            "class": "govuk-label govuk-checkboxes__label full-width"
           },
           "use_hidden_element": false,
           "checked_value": "Y",

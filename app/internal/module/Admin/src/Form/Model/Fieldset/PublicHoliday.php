@@ -17,7 +17,7 @@ class PublicHoliday
     #[Form\Type('MultiCheckbox')]
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'areas', 'name' => 'areas'])]
-    #[Form\Options(['label' => 'Area:', 'value_options' => ['isEngland' => 'England', 'isWales' => 'Wales', 'isScotland' => 'Scotland', 'isNi' => 'Northern Ireland']])]
+    #[Form\Options(['label' => 'Area:', 'value_options' => ['isEngland' => 'England', 'isWales' => 'Wales', 'isScotland' => 'Scotland', 'isNi' => 'Northern Ireland'], 'error-message' => 'checkbox.error.public-holiday-areas'])]
     public $areas;
 
     #[Form\Type('DateSelect')]
