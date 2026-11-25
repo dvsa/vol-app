@@ -30,17 +30,22 @@
         "name": "changeRecommendation",
         "attributes": {
           "required": "required",
-          "value": "N"
+          "radios_wrapper_attributes": {
+            "class": "govuk-radios--standard govuk-radios--inline"
+          }
         },
         "type": "Radio",
         "options": {
           "label": "lva-financial-evidence-assessment-issue-change-to-pass",
           "value_options": {
-            "N": "No",
-            "Y": "Yes"
+            "Y": "Yes",
+            "N": "No"
           },
           "fieldset-attributes": {
-            "class": "inline"
+            "class": "govuk-fieldset"
+          },
+          "legend-attributes": {
+            "class": "govuk-fieldset__legend govuk-fieldset__legend--s"
           }
         }
       }
@@ -49,12 +54,13 @@
       "flags": [],
       "spec": {
         "name": "comment",
+        "attributes": {
+          "required": false,
+          "class": "extra-long"
+        },
         "type": "TextArea",
         "options": {
           "label": "lva-financial-evidence-assessment-issue-reason"
-        },
-        "attributes": {
-          "class": "extra-long"
         }
       }
     },
@@ -112,10 +118,12 @@
     },
     "changeRecommendation": {
       "name": "changeRecommendation",
-      "required": true
+      "required": true,
+      "error_message": "lva-financial-evidence-assessment-error-answer-required"
     },
     "comment": {
       "name": "comment",
+      "required": true,
       "filters": [
         {
           "name": "Laminas\\Filter\\StringTrim"
@@ -123,9 +131,51 @@
       ],
       "validators": [
         {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "changeRecommendation",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "ValidateIf",
+                "options": {
+                  "context_field": "analyserFlag",
+                  "context_values": [
+                    "SKIPPED"
+                  ],
+                  "context_truth": false,
+                  "allow_empty": false,
+                  "validators": [
+                    {
+                      "name": "Laminas\\Validator\\NotEmpty",
+                      "options": {
+                        "messages": {
+                          "isEmpty": "lva-financial-evidence-assessment-error-reason-required"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
           "name": "Laminas\\Validator\\StringLength",
           "options": {
-            "max": 1000
+            "max": 1000,
+            "messages": {
+              "stringLengthTooLong": "lva-financial-evidence-assessment-error-comment-too-long"
+            }
           }
         }
       ]

@@ -146,11 +146,24 @@
             "allow_empty": false,
             "validators": [
               {
-                "name": "Laminas\\Validator\\NotEmpty",
+                "name": "ValidateIf",
                 "options": {
-                  "messages": {
-                    "isEmpty": "lva-financial-evidence-assessment-error-reason-required"
-                  }
+                  "context_field": "analyserFlag",
+                  "context_values": [
+                    "SKIPPED"
+                  ],
+                  "context_truth": false,
+                  "allow_empty": false,
+                  "validators": [
+                    {
+                      "name": "Laminas\\Validator\\NotEmpty",
+                      "options": {
+                        "messages": {
+                          "isEmpty": "lva-financial-evidence-assessment-error-reason-required"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             ]

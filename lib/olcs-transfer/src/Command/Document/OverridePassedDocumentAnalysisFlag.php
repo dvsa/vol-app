@@ -29,15 +29,8 @@ final class OverridePassedDocumentAnalysisFlag extends AbstractCommand
 {
     use Identity;
 
-    /** The flagged rows of the normalised result; bank and bank address carry no flag. */
-    public const array ROWS = [
-        'authenticity',
-        'name',
-        'statementDate',
-        'statementPeriod',
-        'averageFunds',
-        'largeDeposit',
-    ];
+    /** The flagged rows of the normalised result; the same rows either direction can change. */
+    public const array ROWS = OverrideDocumentAnalysisFlag::ROWS;
 
     /**
      * @var string

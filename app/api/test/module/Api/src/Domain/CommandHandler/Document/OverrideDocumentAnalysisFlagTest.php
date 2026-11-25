@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\OverrideDocumentAnalysisFlag;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
 use Dvsa\Olcs\Api\Entity\User\User;
@@ -166,18 +167,139 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
     }
 
-    /** A row changed earlier reads as a pass once annotations are laid over it, so it cannot be changed twice. */
-    public function testRefusesARowAlreadyChangedByAnEarlierAnnotation(): void
+    /**
+     * The caseworker's answer can be revisited: which rows can be answered is asked of the
+     * analyser's own flag, so a row already changed to a pass is still theirs to edit. "Y" again
+     * keeps it a pass and replaces the comment.
+     */
+    public function testYesOnARowAlreadyChangedToAPassUpdatesTheComment(): void
     {
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
-            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName()));
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => $a['rows']['name']['flag'] === 'pass'
+                && $a['rows']['name']['originalFlag'] === 'fail'
+                && $a['rows']['name']['comment'] === 'A better reason'), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'A better reason', 'changeRecommendation' => 'Y'])
+        );
+
+        $this->assertSame(['Document analysis 5 check name changed to pass'], $result->getMessages());
+    }
+
+    /** "N" on a row that was changed to a pass changes it back to the flag the analyser gave it. */
+    public function testNoOnARowChangedToAPassChangesItBack(): void
+    {
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => $a['rows']['name']['flag'] === 'fail'
+                && $a['rows']['name']['originalFlag'] === 'fail'
+                && $a['rows']['name']['comment'] === 'Changed in error'), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'Changed in error', 'changeRecommendation' => 'N'])
+        );
+
+        $this->assertSame(['Document analysis 5 check name changed back to fail'], $result->getMessages());
+    }
+
+    /**
+     * "N" with nothing to say deletes the caseworker's entry for the row, so it reads exactly as
+     * the analyser left it: a change is undone and a note removed alike. Other rows' entries are kept.
+     */
+    #[DataProvider('existingEntryProvider')]
+    public function testNoWithNoCommentDeletesTheCaseworkersEntryForTheRow(string $entryFlag, string $message): void
+    {
+        $annotations = $this->earlierAnnotationOnName();
+        $annotations['rows']['name']['flag'] = $entryFlag;
+        $annotations['rows']['largeDeposit'] = $annotations['rows']['name'];
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $annotations, 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => array_keys($a['rows']) === ['largeDeposit']), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N'])
+        );
+
+        $this->assertSame([$message], $result->getMessages());
+    }
+
+    public static function existingEntryProvider(): \Iterator
+    {
+        yield 'a change to a pass' => ['pass', 'Document analysis 5 check name changed back to fail'];
+        yield 'a note' => ['fail', 'Document analysis 5 check name comment removed'];
+    }
+
+    /** Nothing to delete and nothing to say: nothing is written, so the version is not bumped. */
+    public function testNoWithNoCommentOnARowNobodyHasAnsweredWritesNothing(): void
+    {
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
         $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAnnotations');
 
-        $this->expectException(BadRequestException::class);
-        $this->expectExceptionMessage('is not a fail or skipped');
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'N'])
+        );
 
-        $this->sut->handleCommand(Cmd::create(['id' => 5, 'row' => 'name', 'comment' => 'x']));
+        $this->assertSame(['Document analysis 5 check name left as it is'], $result->getMessages());
+    }
+
+    /** Changing a genuine fail to a pass needs a reason, whoever the caller is. */
+    #[DataProvider('noReasonProvider')]
+    public function testYesWithoutAReasonOnAFailIsRefused(string $comment): void
+    {
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAnnotations');
+
+        try {
+            $this->sut->handleCommand(
+                Cmd::create(['id' => 5, 'row' => 'name', 'comment' => $comment, 'changeRecommendation' => 'Y'])
+            );
+            $this->fail('Expected the change to be refused for want of a reason');
+        } catch (ValidationException $e) {
+            $this->assertSame(
+                [OverrideDocumentAnalysisFlag::ERR_REASON_REQUIRED => OverrideDocumentAnalysisFlag::MSG_REASON_REQUIRED],
+                $e->getMessages()
+            );
+        }
+    }
+
+    public static function noReasonProvider(): \Iterator
+    {
+        yield 'empty' => [''];
+        yield 'only spaces' => ['   '];
+    }
+
+    /** A skipped check was never assessed, so changing it to a pass needs no reason. */
+    public function testYesWithoutAReasonOnASkippedCheckIsAllowed(): void
+    {
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('skipped'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static fn(array $a): bool => $a['rows']['name']['flag'] === 'pass'
+                && $a['rows']['name']['originalFlag'] === 'skipped'
+                && $a['rows']['name']['comment'] === ''), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand(
+            Cmd::create(['id' => 5, 'row' => 'name', 'comment' => '', 'changeRecommendation' => 'Y'])
+        );
+
+        $this->assertSame(['Document analysis 5 check name changed to pass'], $result->getMessages());
     }
 
     public function testRefusesAnUnknownRow(): void
