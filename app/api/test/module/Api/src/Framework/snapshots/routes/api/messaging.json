@@ -158,6 +158,60 @@
     },
     "withoutTrailingSlash": "api/messaging/messages/unread-count-by-licence-and-roles/GET"
   },
+  "api/messaging/subjects/GET": {
+    "request": "GET /api/messaging/subjects/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\GetList"
+    },
+    "matches": "api/messaging/subjects/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\GetList"
+    },
+    "withoutTrailingSlash": "api/messaging/subjects/GET"
+  },
+  "api/messaging/subjects/POST": {
+    "request": "POST /api/messaging/subjects/",
+    "matches": "api/messaging/subjects/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Subject\\Create"
+    },
+    "withoutTrailingSlash": "api/messaging/subjects/POST"
+  },
+  "api/messaging/subjects/single/GET": {
+    "request": "GET /api/messaging/subjects/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\ById"
+    },
+    "matches": "api/messaging/subjects/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/messaging/subjects/single/GET"
+  },
+  "api/messaging/subjects/single/PUT": {
+    "request": "PUT /api/messaging/subjects/101/",
+    "matches": "api/messaging/subjects/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Subject\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/messaging/subjects/single/PUT"
+  },
+  "api/messaging/subjects/single/DELETE": {
+    "request": "DELETE /api/messaging/subjects/101/",
+    "matches": "api/messaging/subjects/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Messaging\\Subject\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/messaging/subjects/single/DELETE"
+  },
   "api/messaging/subjects/all/GET": {
     "request": "GET /api/messaging/subjects/all/",
     "query": {

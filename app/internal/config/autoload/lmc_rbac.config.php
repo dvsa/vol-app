@@ -78,6 +78,7 @@ return [
             'admin-dashboard/admin-fee-rates*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-bus-registration*' => [RefData::PERMISSION_INTERNAL_EDIT],
             'admin-dashboard/admin-presiding-tcs*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-message-categories*' => [RefData::PERMISSION_SYSTEM_ADMIN],
 
             // All Internal users can see your account, to change their details, password etc
             'admin-dashboard/admin-your-account*' => [RefData::PERMISSION_INTERNAL_VIEW],

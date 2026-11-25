@@ -478,6 +478,8 @@
     "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByApplicationToOrganisation": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Messaging\\ApplicationLicenceList\\ByApplicationToOrganisation",
     "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\ApplicationLicenceList\\ByCaseToOrganisation": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Messaging\\ApplicationLicenceList\\ByCaseToOrganisation",
     "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\All": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Messaging\\Subjects\\All",
+    "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\GetList": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Messaging\\Subjects\\GetList",
+    "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Subjects\\ById": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Messaging\\Subjects\\ById",
     "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\UnreadCountByOrganisationAndUser": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Messaging\\Message\\UnreadCountByOrganisationAndRoles",
     "Dvsa\\Olcs\\Transfer\\Query\\Messaging\\Messages\\UnreadCountByLicenceAndRoles": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Messaging\\Message\\UnreadCountByLicenceAndRoles",
     "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\Get": "Dvsa\\Olcs\\Api\\Domain\\QueryHandler\\Letter\\LetterType\\Get",
