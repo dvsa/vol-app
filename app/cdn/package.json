@@ -8,6 +8,7 @@
     "build:production": "npm run build:grunt:production",
     "build:staging": "npm run build:grunt:staging",
     "start": "./node_modules/grunt-cli/bin/grunt serve",
+    "pretest": "grunt svg_sprite",
     "test": "playwright test --config=test/playwright.config.js",
     "assets:save": "node tools/asset-snapshot.mjs save",
     "assets:compare": "node tools/asset-snapshot.mjs compare"
