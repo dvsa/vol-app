@@ -15,7 +15,6 @@ use Doctrine\DBAL\ParameterType;
  */
 class DataGovUk
 {
-    
     // Session value as mySQL uses GROUP_CONCAT, which silently truncates at the default of 1024 bytes.
     public const int GROUP_CONCAT_MAX_LEN = 1000000;
 
