@@ -15,12 +15,8 @@ use Doctrine\DBAL\ParameterType;
  */
 class DataGovUk
 {
-    /**
-     * Session value for MySQL group_concat_max_len.
-     *
-     * Views used by these exports (e.g. licence_operating_centre_address_view) build columns
-     * with GROUP_CONCAT, which MySQL silently truncates at the default of 1024 bytes.
-     */
+    
+    // Session value as mySQL uses GROUP_CONCAT, which silently truncates at the default of 1024 bytes.
     public const int GROUP_CONCAT_MAX_LEN = 1000000;
 
     /**
@@ -112,10 +108,6 @@ class DataGovUk
         return $stmt->executeQuery();
     }
 
-    /**
-     * Raise group_concat_max_len for this connection's session so GROUP_CONCAT
-     * columns in the export views are not truncated at the MySQL default (1024 bytes)
-     */
     private function raiseGroupConcatMaxLen(): void
     {
         $this->conn->executeStatement(
