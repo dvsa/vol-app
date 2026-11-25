@@ -1,0 +1,11 @@
+{
+  "api/vehicle/section26/PUT": {
+    "request": "PUT /api/vehicle/section26/",
+    "matches": "api/vehicle/section26/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Vehicle\\UpdateSection26"
+    },
+    "withoutTrailingSlash": "api/vehicle/section26/PUT"
+  }
+}

@@ -1,0 +1,6 @@
+    <li>
+        In respect of each operating centre specified, that the number of vehicles and the number of trailers kept there
+        will not exceed the maximum numbers authorised at each operating centre (which will be noted on the licence);
+    </li>
+    <li>An unauthorised operating centre is not used;</li>
+

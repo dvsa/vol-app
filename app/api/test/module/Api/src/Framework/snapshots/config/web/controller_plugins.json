@@ -1,0 +1,11 @@
+{
+  "factories": {
+    "LmcRbacMvc\\Mvc\\Controller\\Plugin\\IsGranted": "LmcRbacMvc\\Factory\\IsGrantedPluginFactory"
+  },
+  "aliases": {
+    "isGranted": "LmcRbacMvc\\Mvc\\Controller\\Plugin\\IsGranted"
+  },
+  "invokables": {
+    "response": "Dvsa\\Olcs\\Api\\Mvc\\Controller\\Plugin\\Response"
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    
+    <title>Conversation Archive - Vehicle Operator Licensing - GOV.UK</title><meta name="viewport" content="width&#x3D;device-width,&#x20;initial-scale&#x3D;1.0">
+<meta http-equiv="X-UA-Compatible" content="IE&#x3D;edge"><link href="&#x2F;styles&#x2F;print.css" media="screen,&#x20;print" rel="stylesheet" type="text&#x2F;css">    
+</head>
+<body>
+<div class="printable">
+  <div class="printable__header">
+    <h1>Licence query &lt;&amp;&gt;</h1>
+    <a class="hide-print" href="javascript:window.print()">Print this page</a>
+  </div>
+
+  <caption class="govuk-table__caption govuk-table__caption--m">
+    2 messages  </caption>
+
+      <div class="govuk-!-margin-bottom-6">
+  <div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">
+        operator &lt;&amp;&gt;      </h2>
+      <h2 class="govuk-summary-card__title govuk-summary-card__date">
+        Thursday 15 January 2026 at 10:00am      </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+      <p class="govuk-body">
+                First line &lt;&amp;&gt;<br />
+Second line                          <hr/>
+                        </p>
+    </div>
+  </div>
+</div>
+      <div class="govuk-!-margin-bottom-6">
+  <div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">
+        Jane Smith &lt;&amp;&gt;      </h2>
+      <h2 class="govuk-summary-card__title govuk-summary-card__date">
+        Monday 1 June 2026 at 17:45pm      </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+      <p class="govuk-body">
+                Reply from the caseworker                  <p class="govuk-caption-m">
+            Jane Smith &lt;&amp;&gt;            <br/>
+            Caseworker Team
+          </p>
+                          <hr/>
+                      <p>
+              <em>
+                Read by operator &lt;&amp;&gt; on Tuesday 2 June 2026 at 09:15am              </em>
+            </p>
+                        </p>
+    </div>
+  </div>
+</div>
+  </div>
+</body>
+</html>

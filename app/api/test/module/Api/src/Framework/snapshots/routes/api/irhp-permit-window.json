@@ -1,0 +1,80 @@
+{
+  "api/irhp-permit-window/single/GET": {
+    "request": "GET /api/irhp-permit-window/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\ById"
+    },
+    "matches": "api/irhp-permit-window/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-window/single/GET"
+  },
+  "api/irhp-permit-window/single/PUT": {
+    "request": "PUT /api/irhp-permit-window/101/",
+    "matches": "api/irhp-permit-window/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitWindow\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-window/single/PUT"
+  },
+  "api/irhp-permit-window/single/DELETE": {
+    "request": "DELETE /api/irhp-permit-window/101/",
+    "matches": "api/irhp-permit-window/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitWindow\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-window/single/DELETE"
+  },
+  "api/irhp-permit-window/GET": {
+    "request": "GET /api/irhp-permit-window/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\GetList"
+    },
+    "matches": "api/irhp-permit-window/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\GetList"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-window/GET"
+  },
+  "api/irhp-permit-window/POST": {
+    "request": "POST /api/irhp-permit-window/",
+    "matches": "api/irhp-permit-window/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitWindow\\Create"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-window/POST"
+  },
+  "api/irhp-permit-window/open-by-country/GET": {
+    "request": "GET /api/irhp-permit-window/open-by-country/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\OpenByCountry"
+    },
+    "matches": "api/irhp-permit-window/open-by-country/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\OpenByCountry"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-window/open-by-country/GET"
+  },
+  "api/irhp-permit-window/open-by-type/GET": {
+    "request": "GET /api/irhp-permit-window/open-by-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\OpenByType"
+    },
+    "matches": "api/irhp-permit-window/open-by-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitWindow\\OpenByType"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-window/open-by-type/GET"
+  }
+}

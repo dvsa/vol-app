@@ -1,0 +1,3 @@
+Thank you for your EBSR application received on [submissionDate <&>] for the following local bus service - [registrationNumber <&>] - between [origin <&>] and [destination <&>] with service number [lineName <&>] to come into effect on [startDate <&>].
+
+Your application has been received and will be processed as soon as possible. We have copied this e-mail to the following local authorities: [localAuthoritys <&>].

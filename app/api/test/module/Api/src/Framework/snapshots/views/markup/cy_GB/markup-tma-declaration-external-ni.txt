@@ -1,0 +1,33 @@
+<p>
+    <b>Trwy gyflwyno’r ffurlfen hon rydych yn cadarnhau eich statws fel rheolwr trafnidiaeth mewnol, rheolwr trafnidiaeth allanol neu’r ddau.</b>
+</p>
+
+<p>Rwy’n cadarnhau:</p>
+<ul class="list--bullet">
+    <li>Fy mod yn preswylio yn y Gymuned Ewropeaidd;</li>
+    <li>Byddaf yn cyflawni fy nhasgau er budd deiliad y drwydded/yr ymgeisydd yn unig;</li>
+    <li>Dim ond ar gyfer uchafswm o 4 gweithredwr y byddaf yn rheolwr trafnidiaeth gyda chyfanswm fflyd ar y cyd o 50 o gerbydau a awdurdodwyd; a</li>
+    <li>Mae gennyf gontract gyda deiliad y drwydded/ymgeisydd sy’n nodi pa dasgau sy’n rhaid i mi eu cyflawni fel rheolwr trafnidiaeth. Mae’r rhain yn cynnwys:
+        <ul class="list--bullet">
+            <li>Gwneud trefniadau i sicrhau bod gyrwyr yn cydymffurfio â rheolau oriau gyrwyr a thacograff ac â chyfyngiadau cyflymder;</li>
+            <li>Gwneud trefniadau i sicrhau bod y cerbydau yn cael eu cynnal a’u cadw yn briodol, gan gynnwys arolygu cerbydau ar yr amser priodol a’r gweithredu i gywiro unrhyw ddiffygion a ddarganfyddir;</li>
+            <li>Adrodd a chofnodi diffygion cerbydau gan yrwyr;</li>
+            <li>Dull llunio a chywirdeb yr holl gofnodion, y mae’n rhaid eu cadw am gyfnod o ddim llai na 15 mis;</li>
+            <li>Gwneud trefniadau i sicrhau na fydd y cerbyd/cerbydau yn cael eu gorlwytho;</li>
+            <li>Sicrhau bod y cerbydau a awdurdodwyd yn cael eu cadw yn y ganolfan/canolfannau gweithredu a awdurdodwyd pan na fyddant yn cael eu defnyddio;</li>
+            <li>Pan fydd hynny’n addas, hysbysu’r comisiynydd traffig perthnasol (yn ysgrifenedig) o’r holl erlyniadau a chollfarnau yn ymwneud â’r gweithredwr, y gyrwyr a fi cyn pen 28 diwrnod o’r gwrandawiad llys;</li>
+            <li>Hysbysu’r comisiynydd traffig perthnasol o’m hymddiswyddiad; ac</li>
+            <li>Unrhyw swyddogaeth sydd gennyf o ran:
+                <ul class="list--bullet">
+                    <li>Dilysu contractau a dogfennau;</li>
+                    <li>Cyfrifyddu sylfaenol;</li>
+                    <li>Unrhyw swyddogaeth arall mewn gweithdrefnau diogelwch.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<p>
+    <b>Os byddaf yn methu â bodloni unrhyw un o’r gofynion rwy’n deall y gallai comisiynydd traffig fy anghymhwyso rhag bod yn rheolwr trafnidiaeth mewn unrhyw wlad yn yr Undeb Ewropeaidd.</b>
+</p>

@@ -1,0 +1,13 @@
+{
+  "factories": {
+    "Doctrine\\Migrations\\DependencyFactory": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\CurrentCommand": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\ExecuteCommand": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\GenerateCommand": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\LatestCommand": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\ListCommand": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\MigrateCommand": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\StatusCommand": "(closure)",
+    "Doctrine\\Migrations\\Tools\\Console\\Command\\VersionCommand": "(closure)"
+  }
+}

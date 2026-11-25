@@ -1,0 +1,8 @@
+<p>Annwyl weithredwr,</p>
+
+<p>Rhoddwyd dogfennaeth bwysig ynghylch eich 
+    Trwydded Gweithredwr&rsquo; [licNo &lt;&amp;&gt;] [operatorName &lt;&amp;&gt;]    yn eich mewnflwch gohebiaeth Hunan Wasanaeth.</p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Mewngofnodi i'ch cyfrif</a>
+</p>

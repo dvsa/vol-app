@@ -1,0 +1,5 @@
+{
+  "factories": {
+    "Dvsa\\Olcs\\Api\\Service\\Translator\\TranslationLoader": "Dvsa\\Olcs\\Api\\Service\\Translator\\TranslationLoaderFactory"
+  }
+}

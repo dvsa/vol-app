@@ -1,0 +1,14 @@
+{
+  "api/category/GET": {
+    "request": "GET /api/category/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Category\\GetList"
+    },
+    "matches": "api/category/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Category\\GetList"
+    },
+    "withoutTrailingSlash": "api/category/GET"
+  }
+}

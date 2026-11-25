@@ -1,0 +1,13 @@
+{
+  "answerFormatter": "Dvsa\\Olcs\\Snapshot\\View\\Helper\\AnswerFormatter",
+  "assetPath": "Dvsa\\Olcs\\Utils\\View\\Helper\\AssetPath",
+  "doctype": "Laminas\\View\\Helper\\Doctype (HTML5)",
+  "escapeHtml": "Laminas\\View\\Helper\\EscapeHtml",
+  "headLink": "Laminas\\View\\Helper\\HeadLink",
+  "headMeta": "Laminas\\View\\Helper\\HeadMeta",
+  "headScript": "Laminas\\View\\Helper\\HeadScript",
+  "headTitle": "Laminas\\View\\Helper\\HeadTitle",
+  "htmlPurifier": "Soflomo\\Purifier\\PurifierViewHelper",
+  "partial": "Laminas\\View\\Helper\\Partial",
+  "translate": "Laminas\\I18n\\View\\Helper\\Translate"
+}

@@ -1,0 +1,14 @@
+{
+  "api/bus-reg-search-view/GET": {
+    "request": "GET /api/bus-reg-search-view/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\SearchViewList"
+    },
+    "matches": "api/bus-reg-search-view/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\SearchViewList"
+    },
+    "withoutTrailingSlash": "api/bus-reg-search-view/GET"
+  }
+}

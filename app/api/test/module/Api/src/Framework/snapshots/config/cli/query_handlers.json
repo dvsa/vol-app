@@ -1,0 +1,5 @@
+{
+  "factories": {
+    "Dvsa\\Olcs\\Cli\\Domain\\Query\\Util\\GetDbValue": "Dvsa\\Olcs\\Cli\\Domain\\QueryHandler\\Util\\GetDbValue"
+  }
+}

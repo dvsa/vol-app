@@ -1,0 +1,27 @@
+{
+  "api/irhp-permit-type/single/GET": {
+    "request": "GET /api/irhp-permit-type/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitType\\ById"
+    },
+    "matches": "api/irhp-permit-type/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitType\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-type/single/GET"
+  },
+  "api/irhp-permit-type/GET": {
+    "request": "GET /api/irhp-permit-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitType\\GetList"
+    },
+    "matches": "api/irhp-permit-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitType\\GetList"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-type/GET"
+  }
+}

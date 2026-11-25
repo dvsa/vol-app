@@ -1,0 +1,12 @@
+Hello,
+
+[organisation <&>] has named you as a Transport Manager on Vehicle Operator Licence [reference <&>].
+
+They have reviewed your application and need you to amend or check your details. You will need to sign the declaration again once you have reviewed or amended your application.
+
+To review the application sign in online [signInLink <&>] with your username ([username <&>]) and password.
+
+Having problems?
+
+
+For advice see the Transport Manager help guide http://www.doeni.gov.uk/index/information/foi/recent-releases/publications-details.htm?docid=9994 or email us at notifications@vehicle-operator-licensing.service.gov.uk.

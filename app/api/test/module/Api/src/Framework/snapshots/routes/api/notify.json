@@ -1,0 +1,11 @@
+{
+  "api/notify/delivery-status/POST": {
+    "request": "POST /api/notify/delivery-status/",
+    "matches": "api/notify/delivery-status/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Notify\\UpdateDeliveryStatus"
+    },
+    "withoutTrailingSlash": "api/notify/delivery-status/POST"
+  }
+}

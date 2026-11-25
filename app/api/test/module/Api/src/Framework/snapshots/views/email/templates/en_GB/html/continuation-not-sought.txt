@@ -1,0 +1,14 @@
+<p>
+  The following licences with fees due between [startDate &lt;&amp;&gt;]  and [endDate &lt;&amp;&gt;] have been set to CNS:
+</p>
+
+<table>
+      <tr>
+      <td width="125">OB1234567</td>
+      <td>North East of England &lt;&amp;&gt;</td>
+    </tr>
+      <tr>
+      <td width="125">PD7654321</td>
+      <td>Wales</td>
+    </tr>
+  </table>
