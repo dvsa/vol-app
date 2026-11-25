@@ -1134,6 +1134,12 @@ return [
         CommandHandler\Messaging\Conversation\Disable::class,
     TransferCommand\Messaging\Conversation\Enable::class       =>
         CommandHandler\Messaging\Conversation\Enable::class,
+    TransferCommand\Messaging\Subject\Create::class =>
+        CommandHandler\Messaging\Subject\Create::class,
+    TransferCommand\Messaging\Subject\Update::class =>
+        CommandHandler\Messaging\Subject\Update::class,
+    TransferCommand\Messaging\Subject\Delete::class =>
+        CommandHandler\Messaging\Subject\Delete::class,
     TransferCommand\Messaging\DisableFileUpload::class =>
         CommandHandler\Messaging\DisableFileUpload::class,
     TransferCommand\Messaging\EnableFileUpload::class =>
