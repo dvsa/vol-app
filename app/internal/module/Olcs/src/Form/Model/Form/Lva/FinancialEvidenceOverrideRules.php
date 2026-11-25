@@ -7,22 +7,12 @@ namespace Olcs\Form\Model\Form\Lva;
 use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 
 /**
- * The rules shared by the two forms a caseworker answers a check with on the change document
- * review page: FinancialEvidenceIssueOverride (a failed or skipped check to a pass) and
- * FinancialEvidencePassOverride (a passed check to a fail). Both ask the same question of the
- * same fields, so the rules, their limits and their wording live here once and both forms
- * refer to them from their attributes.
+ * Rules shared by FinancialEvidenceIssueOverride and FinancialEvidencePassOverride: an answer is
+ * required; "Yes" needs a reason unless the analyser skipped the check; the comment is at most
+ * 1,000 characters either way (the limit the API's commands also apply).
  *
- * - An answer is required: neither Yes nor No is selected until the caseworker chooses.
- * - "Yes" needs a reason, unless the analyser skipped the check (it was never assessed, so there
- *   is no outcome to overturn). "No" means the analyser's outcome stands and needs none.
- * - The text is at most 1,000 characters, whichever answer is given - the same limit the API's
- *   commands apply.
- *
- * Whether the check was skipped is not something the caseworker posts: the controller adds the
- * check's analyser flag to the form's data, under CONTEXT_ANALYSER_FLAG, from the page it built.
- *
- * Messages are translation keys; the text is in the translations database.
+ * The analyser flag is added to the form's data by the controller under CONTEXT_ANALYSER_FLAG,
+ * since it is not something the caseworker posts.
  */
 final class FinancialEvidenceOverrideRules
 {
@@ -48,8 +38,7 @@ final class FinancialEvidenceOverrideRules
     ];
 
     /**
-     * Options for the comment's ValidateIf validator: on "Yes", and unless the check was skipped,
-     * the comment must not be empty.
+     * On "Yes", and unless the check was skipped, the comment must not be empty.
      */
     public const array REASON_REQUIRED = [
         'context_field' => 'changeRecommendation',

@@ -18,27 +18,9 @@ use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\NormalisedResult;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 
 /**
- * A caseworker's answer on one check of a successful analysis: change it (to the subclass's
- * target flag), or leave the analyser's outcome standing, with or without a note.
- *
- * Both directions work the same way, so they share this:
- *
- * - The change is recorded as an annotation; the analyser's result is left as it was.
- * - Which checks can be answered is asked of the analyser's own flag, not of the check as it
- *   reads now, so a check the caseworker has already changed is still theirs to edit or undo.
- * - "Y" changes the check to the target flag (or keeps it there and replaces the comment).
- * - "N" means the analyser's outcome stands, which changes a check already changed back. With a
- *   comment the comment is kept as a note; with none the caseworker's entry for the check is
- *   deleted altogether, and if there is none nothing is written.
- * - "Y" needs a reason, unless the analyser skipped the check: overturning a genuine pass or
- *   fail must have something on record to say why. That is refused with a ValidationException
- *   keyed ERR_REASON_REQUIRED, whoever the caller is.
- *
- * The analysis may be changed whether or not it has been decided. The caseworker's name is
- * captured now, so the change reads the same however the user record changes later.
- *
- * An analysis that does not exist is a 404 (fetchUsingId). One that exists but cannot take the
- * change is a 400, as AcceptDocumentAnalysisReview does.
+ * A caseworker's answer on one check of a successful analysis: change it to the subclass's
+ * target flag, or leave the analyser's outcome standing, with or without a note. The change is
+ * stored as an annotation over the analyser's result, and can be revisited or undone later.
  */
 abstract class AbstractOverrideDocumentAnalysisFlag extends AbstractCommandHandler implements AuthAwareInterface
 {
@@ -108,9 +90,8 @@ abstract class AbstractOverrideDocumentAnalysisFlag extends AbstractCommandHandl
         $change = (string)$command->getChangeRecommendation() === 'Y';
         $comment = trim((string)$command->getComment());
 
-        // The form asks for a reason too; this is the same rule for any other caller. The
-        // command's own validation cannot make the comment required, because "N" with no
-        // comment is a real request (it removes the caseworker's entry).
+        // "N" with no comment is valid (it clears the entry), so the command cannot make the
+        // comment required itself; a reason is only required when changing a genuine pass/fail.
         if ($change && $comment === '' && $analyserFlag !== NormalisedResult::FLAG_SKIPPED) {
             throw new ValidationException([static::ERR_REASON_REQUIRED => static::MSG_REASON_REQUIRED]);
         }
@@ -121,7 +102,6 @@ abstract class AbstractOverrideDocumentAnalysisFlag extends AbstractCommandHandl
         $this->result->addId('documentAnalysis', $analysisId);
 
         if ($clears && !$this->overlay->hasRow($annotations, $rowKey)) {
-            // Nothing there to take away either, so nothing is written and the version is not bumped.
             $this->result->addMessage(sprintf('Document analysis %d check %s left as it is', $analysisId, $rowKey));
 
             return $this->result;
