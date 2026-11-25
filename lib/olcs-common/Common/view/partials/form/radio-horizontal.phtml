@@ -37,38 +37,24 @@ if ($describedBy !== '') {
             <?php echo $errors ?>
         <?php endif; ?>
 
-        <div class="radio-button__container radio-button__container--inline">
-            <?php echo $this->formRadioOption($radioElement, 'Y') ?>
-        </div>
-        <div class="radio-button__container radio-button__container--inline">
-            <?php echo $this->formRadioOption($radioElement, 'N') ?>
-        </div>
-
         <?php
-        if ($element->has('yesContent'))  {
-            echo $this->render(
-                'partials/form/radio-content',
-                array_merge(
-                    $this->vars()->getArrayCopy(),
-                    [
-                        'element' => $element->get('yesContent'),
-                        'id' => $radioElement->getValueOptions()['Y']['attributes']['id'] .'_content',
-                    ]
-                )
-            );
+        $radioElement = clone $radioElement;
+        $valueOptions = $radioElement->getValueOptions();
+        foreach (['Y' => 'yesContent', 'N' => 'noContent'] as $key => $contentName) {
+            if ($element->has($contentName)) {
+                $valueOption = $valueOptions[$key];
+                if (is_scalar($valueOption)) {
+                    $valueOption = ['value' => $key, 'label' => $valueOption];
+                }
+                $valueOption['conditional_content'] = $valueOption['conditional_content'] ?? $element->get($contentName);
+                $valueOptions[$key] = $valueOption;
+            }
         }
-        if ($element->has('noContent'))  {
-            echo $this->render(
-                'partials/form/radio-content',
-                array_merge(
-                    $this->vars()->getArrayCopy(),
-                    [
-                        'element' => $element->get('noContent'),
-                        'id' => $radioElement->getValueOptions()['N']['attributes']['id'] .'_content',
-                    ]
-                )
-            );
-        }
+        $radioElement->setValueOptions($valueOptions);
+        $wrapperAttributes = $radioElement->getAttribute('radios_wrapper_attributes') ?? [];
+        $wrapperAttributes['class'] = trim(($wrapperAttributes['class'] ?? '') . ' govuk-radios--inline');
+        $radioElement->setAttribute('radios_wrapper_attributes', $wrapperAttributes);
+        echo $this->formRadio($radioElement);
         ?>
     </fieldset>
 </div>

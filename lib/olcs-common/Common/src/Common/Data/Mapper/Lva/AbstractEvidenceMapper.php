@@ -17,30 +17,22 @@ abstract class AbstractEvidenceMapper implements MapperInterface
     #[\Override]
     public static function mapFromResult(array $data): array
     {
-        $uploadNow = null;
-        $uploadLater = null;
-
-        // switch / case do not distinguish 0 and null so need to use this trick
-        switch (true) {
-            case $data[self::EVIDENCE_FIELD] === RefData::AD_UPLOAD_NOW:
-                $uploadNow = RefData::AD_UPLOAD_NOW;
-                break;
-            case $data[self::EVIDENCE_FIELD] === RefData::AD_UPLOAD_LATER:
-                $uploadLater = RefData::AD_UPLOAD_LATER;
-                break;
-            default:
-                $uploadNow = RefData::AD_UPLOAD_NOW;
-        }
-
-        $evidenceFieldset = [
-            'uploadNowRadio' => $uploadNow,
-            'uploadLaterRadio' => $uploadLater,
-        ];
+        $evidenceUploadType = filter_var(
+            $data[static::EVIDENCE_FIELD] ?? null,
+            FILTER_VALIDATE_INT
+        );
+        $uploadChoice = in_array(
+            $evidenceUploadType,
+            [RefData::AD_UPLOAD_NOW, RefData::AD_UPLOAD_LATER],
+            true
+        ) ? $evidenceUploadType : null;
 
         return [
             'id'       => $data['id'],
             'version'  => $data['version'],
-            'evidence' => $evidenceFieldset
+            'evidence' => [
+                'uploadNowRadio' => $uploadChoice,
+            ],
         ];
     }
 
@@ -82,6 +74,35 @@ abstract class AbstractEvidenceMapper implements MapperInterface
         return $data;
     }
 
+    protected static function mapFromPostAsSingleChoice(array $data): array
+    {
+        if ($data === []) {
+            return [];
+        }
+
+        $postUploadChoice = filter_var(
+            $data['evidence']['uploadNow'] ?? null,
+            FILTER_VALIDATE_INT
+        );
+        $uploadChoice = in_array(
+            $postUploadChoice,
+            [RefData::AD_UPLOAD_NOW, RefData::AD_UPLOAD_LATER],
+            true
+        ) ? $postUploadChoice : null;
+
+        $data['evidence'] = array_merge(
+            $data['evidence'],
+            [
+                'uploadNowRadio' => $uploadChoice,
+                'uploadedFileCount' => isset($data['evidence']['files']['list'])
+                    ? count($data['evidence']['files']['list'])
+                    : 0,
+            ]
+        );
+
+        return $data;
+    }
+
     /**
      * Map from form
      *
@@ -95,9 +116,13 @@ abstract class AbstractEvidenceMapper implements MapperInterface
         $dataEvidence = $data['evidence'];
         if (
             isset($dataEvidence['uploadNowRadio'])
-            && (int) $dataEvidence['uploadNowRadio'] === RefData::AD_UPLOAD_NOW
+            && in_array(
+                (int) $dataEvidence['uploadNowRadio'],
+                [RefData::AD_UPLOAD_NOW, RefData::AD_UPLOAD_LATER],
+                true
+            )
         ) {
-            $uploadNow = RefData::AD_UPLOAD_NOW;
+            $uploadNow = (int) $dataEvidence['uploadNowRadio'];
         } elseif (
             isset($dataEvidence['uploadLaterRadio'])
             && (int) $dataEvidence['uploadLaterRadio'] === RefData::AD_UPLOAD_LATER

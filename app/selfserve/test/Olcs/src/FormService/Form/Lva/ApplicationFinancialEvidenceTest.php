@@ -7,12 +7,14 @@ namespace OlcsTest\FormService\Form\Lva;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Common\RefData;
 use Common\Validator\ValidateIf;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\InputFilter\InputFilterInterface;
 use Laminas\Validator\ValidatorChain;
+use Laminas\Validator\NotEmpty;
 use Laminas\Validator\ValidatorPluginManager;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
@@ -97,6 +99,30 @@ final class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->once()
             ->getMock();
 
+        $uploadNowRadioElement = m::mock(ElementInterface::class)
+            ->shouldReceive('setName')->with('uploadNow')->once()
+            ->shouldReceive('getValueOptions')->andReturn([
+                RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+            ])
+            ->shouldReceive('setValueOptions')->with([
+                RefData::AD_UPLOAD_NOW => 'lva-financial-evidence-upload-now.yes',
+                RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+            ])
+            ->shouldReceive('setOption')->with('single-radio', false)->once()
+            ->shouldReceive('setAttribute')->with('required', true)->once()
+            ->getMock();
+        $uploadLaterRadioElement = m::mock(ElementInterface::class)
+            ->shouldReceive('getValueOptions')->andReturn([
+                RefData::AD_UPLOAD_LATER => 'lva-financial-evidence-upload-now.later',
+            ])
+            ->getMock();
+        $evidenceFieldset = m::mock(ElementInterface::class)
+            ->shouldReceive('get')->with('uploadNowRadio')->andReturn($uploadNowRadioElement)->once()
+            ->shouldReceive('get')->with('uploadLaterRadio')->andReturn($uploadLaterRadioElement)->once()
+            ->shouldReceive('remove')->with('uploadLaterRadio')->once()
+            ->shouldReceive('setOption')->with('hint', 'BAR')->once()
+            ->getMock();
+
         $mockForm = m::mock(Form::class)
             ->shouldReceive('get')
             ->with('form-actions')
@@ -104,33 +130,7 @@ final class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->once()
             ->shouldReceive('get')
             ->with('evidence')
-            ->andReturn(
-                m::mock(ElementInterface::class)
-                    ->shouldReceive('get')
-                    ->with('uploadNowRadio')
-                    ->andReturn(
-                        m::mock(ElementInterface::class)
-                            ->shouldReceive('setName')
-                            ->with('uploadNow')
-                            ->once()
-                            ->getMock()
-                    )
-                    ->once()
-                    ->shouldReceive('get')
-                    ->with('uploadLaterRadio')
-                    ->andReturn(
-                        m::mock(ElementInterface::class)
-                            ->shouldReceive('setName')
-                            ->with('uploadNow')
-                            ->once()
-                            ->getMock()
-                    )
-                    ->once()
-                    ->shouldReceive('setOption')
-                    ->with('hint', 'BAR')
-                    ->once()
-                    ->getMock()
-            )
+            ->andReturn($evidenceFieldset)
             ->once()
             ->getMock();
 
@@ -140,18 +140,31 @@ final class ApplicationFinancialEvidenceTest extends MockeryTestCase
         $mockEvidenceInputFilter = m::mock(InputFilterInterface::class);
         $mockUploadedFileCountInput = m::mock(ElementInterface::class);
         $mockValidatorChain = m::mock(ValidatorChain::class);
+        $mockUploadNowInput = m::mock(\Laminas\InputFilter\Input::class);
 
         $mockForm->shouldReceive('getInputFilter')->andReturn($mockInputFilter);
         $mockInputFilter->shouldReceive('get')->with('evidence')->andReturn($mockEvidenceInputFilter);
 
-        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
-        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadLaterRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
+        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn($mockUploadNowInput);
+        $mockUploadNowInput->shouldReceive('setRequired')->with(false)->once();
+        $mockUploadNowInput->shouldReceive('setContinueIfEmpty')->with(true)->once();
+        $mockUploadNowInput->shouldReceive('getValidatorChain')->andReturn($mockValidatorChain);
 
         $mockEvidenceInputFilter->shouldReceive('get')->with('uploadedFileCount')->andReturn($mockUploadedFileCountInput);
         $mockUploadedFileCountInput->shouldReceive('getValidatorChain')->andReturn($mockValidatorChain);
 
         $mockValidateIfValidator = m::mock(ValidateIf::class);
-        $this->vpm->shouldReceive('get')->with(ValidateIf::class)->andReturn($mockValidateIfValidator);
+        $mockRequiredChoiceValidator = m::mock(NotEmpty::class);
+        $this->vpm->shouldReceive('get')
+            ->with(NotEmpty::class)
+            ->andReturn($mockRequiredChoiceValidator)
+            ->once();
+        $this->vpm->shouldReceive('get')
+            ->with(ValidateIf::class)
+            ->andReturn($mockValidateIfValidator)
+            ->once();
+        $mockRequiredChoiceValidator->shouldReceive('setOptions')->once();
+        $mockValidatorChain->shouldReceive('attach')->with($mockRequiredChoiceValidator)->once();
         $mockValidateIfValidator->shouldReceive('setOptions')->once();
         $mockValidatorChain->shouldReceive('attach')->with($mockValidateIfValidator)->once();
 

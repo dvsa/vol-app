@@ -23,7 +23,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return \Iterator<(int | string), array<array<(array<(int | null)> | int | null)>>>
      *
-     * @psalm-return list{list{array{financialEvidenceUploaded: 1, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: 1, uploadLaterRadio: null, sendByPostRadio: null}}}, list{array{financialEvidenceUploaded: 2, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: 2, sendByPostRadio: null}}}, list{array{financialEvidenceUploaded: 0, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: null, sendByPostRadio: 0}}}, list{array{financialEvidenceUploaded: null, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: 1, uploadLaterRadio: null, sendByPostRadio: null}}}}
+     * @psalm-return list{list{array{financialEvidenceUploaded: 1, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: 1}}}, list{array{financialEvidenceUploaded: 2, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: 2}}}, list{array{financialEvidenceUploaded: 0, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null}}}, list{array{financialEvidenceUploaded: null, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null}}}}
      */
     public static function mapFromResultProvider(): \Iterator
     {
@@ -38,7 +38,6 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
                 'version'  => 2,
                 'evidence' => [
                     'uploadNowRadio' => RefData::AD_UPLOAD_NOW,
-                    'uploadLaterRadio' => null,
                 ]
             ]
         ];
@@ -52,8 +51,21 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
                 'id'       => 1,
                 'version'  => 2,
                 'evidence' => [
+                    'uploadNowRadio' => RefData::AD_UPLOAD_LATER,
+                ]
+            ]
+        ];
+        yield [
+            [
+                'financialEvidenceUploaded' => RefData::AD_POST,
+                'id' => 1,
+                'version' => 2
+            ],
+            [
+                'id'       => 1,
+                'version'  => 2,
+                'evidence' => [
                     'uploadNowRadio' => null,
-                    'uploadLaterRadio' => RefData::AD_UPLOAD_LATER,
                 ]
             ]
         ];
@@ -67,8 +79,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
                 'id'       => 1,
                 'version'  => 2,
                 'evidence' => [
-                    'uploadNowRadio' => RefData::AD_UPLOAD_NOW,
-                    'uploadLaterRadio' => null,
+                    'uploadNowRadio' => null,
                 ]
             ]
         ];
@@ -83,7 +94,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return \Iterator<(int | string), array<array<array<(array<array<string>> | int | string | null)>>>>
      *
-     * @psalm-return list{list{array{evidence: array{uploadNow: 1, files: array{list: list{'foo'}}, bar: 'cake'}}, array{evidence: array{uploadNowRadio: 1, uploadLaterRadio: null, sendByPostRadio: null, uploadedFileCount: 1, uploadNow: 1, files: array{list: list{'foo'}}, bar: 'cake'}}}, list{array{evidence: array{uploadNow: 2, files: array{list: list{'foo'}}, bar: 'cake'}}, array{evidence: array{uploadNowRadio: null, uploadLaterRadio: 2, sendByPostRadio: null, uploadedFileCount: 1, uploadNow: 2, files: array{list: list{'foo'}}, bar: 'cake'}}}, list{array{evidence: array{uploadNow: 0, files: array{list: list{'foo'}}, bar: 'cake'}}, array{evidence: array{uploadNowRadio: null, uploadLaterRadio: null, sendByPostRadio: 0, uploadedFileCount: 1, uploadNow: 0, files: array{list: list{'foo'}}, bar: 'cake'}}}, list{array<never, never>, array<never, never>}}
+     * @psalm-return list{list{array{evidence: array{uploadNow: 1, files: array{list: list{'foo'}}, bar: 'cake'}}, array{evidence: array{uploadNowRadio: 1, uploadedFileCount: 1, uploadNow: 1, files: array{list: list{'foo'}}, bar: 'cake'}}}, list{array{evidence: array{uploadNow: 2, files: array{list: list{'foo'}}, bar: 'cake'}}, array{evidence: array{uploadNowRadio: 2, uploadedFileCount: 1, uploadNow: 2, files: array{list: list{'foo'}}, bar: 'cake'}}}, list{array<never, never>, array<never, never>}}
      */
     public static function mapFromPostProvider(): \Iterator
     {
@@ -102,7 +113,6 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
             [
                 'evidence' => [
                     'uploadNowRadio' => RefData::AD_UPLOAD_NOW,
-                    'uploadLaterRadio' => null,
                     'uploadedFileCount' => 1,
                     'uploadNow' => RefData::AD_UPLOAD_NOW,
                     'files' => [
@@ -128,8 +138,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'evidence' => [
-                    'uploadNowRadio' => null,
-                    'uploadLaterRadio' => RefData::AD_UPLOAD_LATER,
+                    'uploadNowRadio' => RefData::AD_UPLOAD_LATER,
                     'uploadedFileCount' => 1,
                     'uploadNow' => RefData::AD_UPLOAD_LATER,
                     'files' => [
@@ -156,7 +165,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return \Iterator<(int | string), array<array<(array<(int | null)> | int)>>>
      *
-     * @psalm-return list{list{array{id: 1, version: 2, evidence: array{uploadNowRadio: 1, uploadLaterRadio: null, sendByPost: null}}, array{id: 1, version: 2, financialEvidenceUploaded: 1}}, list{array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: 2, sendByPost: null}}, array{id: 1, version: 2, financialEvidenceUploaded: 2}}, list{array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: null, sendByPost: 0}}, array{id: 1, version: 2, financialEvidenceUploaded: 0}}}
+     * @psalm-return list{list{array{id: 1, version: 2, evidence: array{uploadNowRadio: 1}}, array{id: 1, version: 2, financialEvidenceUploaded: 1}}, list{array{id: 1, version: 2, evidence: array{uploadNowRadio: 2}}, array{id: 1, version: 2, financialEvidenceUploaded: 2}}, list{array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: null, sendByPost: 0}}, array{id: 1, version: 2, financialEvidenceUploaded: 0}}}
      */
     public static function mapFromFormProvider(): \Iterator
     {
@@ -181,9 +190,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
                 'id' => 1,
                 'version' => 2,
                 'evidence' => [
-                    'uploadNowRadio' => null,
-                    'uploadLaterRadio' => RefData::AD_UPLOAD_LATER,
-                    'sendByPost' => null
+                    'uploadNowRadio' => RefData::AD_UPLOAD_LATER,
                 ]
             ],
             [

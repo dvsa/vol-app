@@ -36,7 +36,7 @@ if ($describedBy !== '') {
 
 <div class="<?= ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
     <fieldset class="radio-button__fieldset radio-button__fieldset--vertical" <?= $dataGroupAttribute; ?><?php if ($describedBy !== '') { ?> aria-describedby="<?= $this->escapeHtmlAttr($describedBy) ?>"<?php } ?>>
-        <legend class="<?= $this->labelAttributes['class'] ?? ''; ?>">
+        <legend class="<?= $this->label_attributes['class'] ?? ''; ?>">
             <?= $this->translate($this->label); ?>
         </legend>
 
@@ -47,10 +47,11 @@ if ($describedBy !== '') {
         <?php if ($hasValidationError) : ?>
             <?= $errors ?>
         <?php endif; ?>
-        <?php foreach ($this->valueOptions as $key => $valueOption) { ?>
-            <?= $this->formRadioOption($this->radioElement, $key); ?>
-            <?= $this->partial(new \Common\Form\View\Model\FormRadioContentViewModel($valueOption)); ?>
-        <?php } ?>
+        <?php
+        $radioElement = clone $this->radioElement;
+        $radioElement->setValueOptions($this->valueOptions);
+        echo $this->formRadio($radioElement);
+        ?>
     </fieldset>
 </div>
 

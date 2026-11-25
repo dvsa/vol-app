@@ -469,7 +469,6 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'formRadioOption' => \Common\Form\View\Helper\FormRadioOption::class,
             'formRadioHorizontal' => \Common\Form\View\Helper\FormRadioHorizontal::class,
             'formCheckboxAdvanced' => \Common\Form\View\Helper\FormCheckboxAdvanced::class,
             'formRadioVertical' => \Common\Form\View\Helper\FormRadioVertical::class,
@@ -580,7 +579,6 @@ return [
             'config' => \Common\View\Helper\Config::class,
             'escapeHtml' => \Common\View\Helper\EscapeHtml::class,
             'formradio' => FormRadio::class,
-            'formradiooption' => \Common\Form\View\Helper\FormRadioOption::class,
             'formradiohorizontal' => \Common\Form\View\Helper\FormRadioHorizontal::class,
             'formcheckboxadvanced' => \Common\Form\View\Helper\FormCheckboxAdvanced::class,
             'formradiovertical' => \Common\Form\View\Helper\FormRadioVertical::class,

@@ -14,14 +14,26 @@
         "options": {
           "label": "interim.application.undertakings.form.checkbox.label",
           "value_options": {
-            "Y": "Yes",
-            "N": "No"
+            "Y": {
+              "label": "Yes",
+              "value": "Y",
+              "attributes": {
+                "id": "interim-goods-application-yes"
+              }
+            },
+            "N": {
+              "label": "No",
+              "value": "N",
+              "attributes": {
+                "id": "interim-goods-application-no"
+              }
+            }
           },
           "label_attributes": {
             "class": "form-control form-control--radio form-control--inline"
           }
         },
-        "type": "\\Laminas\\Form\\Element\\Radio"
+        "type": "\\Common\\Form\\Elements\\Types\\Radio"
       }
     }
   ],
