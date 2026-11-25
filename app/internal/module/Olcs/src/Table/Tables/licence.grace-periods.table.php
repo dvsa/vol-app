@@ -60,7 +60,9 @@ return [
         [
             'name' => 'action',
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select grace period ' . ($row['description'] ?? '')
+                . ', ' . ($row['startDate'] ?? '') . ', reference ' . $row['id'],
         ]
     ]
 ];

@@ -92,7 +92,9 @@ return [
         [
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'format' => '{{[elements/checkbox]}}',
+            'label-callback' => static fn($row) => 'Select bus registration '
+                . ($row['busReg']['regNo'] ?? '') . ', variation ' . ($row['busReg']['variationNo'] ?? ''),
         ]
     ]
 ];

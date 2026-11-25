@@ -66,7 +66,9 @@ return [
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select allocation rule ' . $row['category']['description'] . ', '
+                . ($row['subCategory']['subCategoryName'] ?? 'N/A') . ', ' . $row['team']['name'],
         ],
     ]
 ];

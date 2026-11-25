@@ -32,7 +32,9 @@ return [
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select impounding application '
+                . ($row['applicationReceiptDate'] ?? '') . ', reference ' . $row['id'],
         ],
         [
             'title' => 'Application received',

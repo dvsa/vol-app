@@ -70,7 +70,8 @@ class Selector extends AbstractType
 
         // $data[$idx] is a row value going into two quoted attributes. It is an identifier, never
         // markup, so escaping it cannot change what renders.
-        $attributes[] = 'id="' . $fieldset . '[id][' . Escape::html($data[$idx]) . ']"';
+        $id = $column['selectionId'] ?? $fieldset . '[id][' . $data[$idx] . ']';
+        $attributes[] = 'id="' . Escape::html($id) . '"';
 
         return sprintf($this->format, $name, Escape::html($data[$idx]), implode(' ', $attributes));
     }

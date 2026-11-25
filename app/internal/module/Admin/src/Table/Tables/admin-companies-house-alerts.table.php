@@ -76,7 +76,9 @@ return [
         [
             'title' => 'Select',
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select Companies House alert ' . $row['companyOrLlpNo']
+                . ', licence ' . $row['licence']['licNo'],
         ],
     ]
 ];

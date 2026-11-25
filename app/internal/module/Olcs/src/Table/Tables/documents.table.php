@@ -61,6 +61,7 @@ return [
         [
             'width' => 'checkbox',
             'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select document ' . ($row['description'] ?? basename($row['filename'] ?? (string) $row['id'])),
             'data-attributes' => [
                 'filename'
             ],

@@ -71,6 +71,8 @@ return [
             'title' => '',
             'width' => 'checkbox',
             'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select community licence ' . $row['serialNoPrefix']
+                . ', issue ' . $row['issueNo'],
             'disableIfRowIsDisabled' => true,
             'data-attributes' => ['status']
         ],

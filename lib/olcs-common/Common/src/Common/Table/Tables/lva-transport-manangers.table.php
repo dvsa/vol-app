@@ -39,7 +39,8 @@ return [
         [
             'name' => 'select',
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select transport manager ' . $row['name']['forename'] . ' ' . $row['name']['familyName'],
         ]
     ]
 ];

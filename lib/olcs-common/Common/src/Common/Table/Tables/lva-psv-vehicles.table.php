@@ -81,6 +81,7 @@ return [
             'name' => 'action',
             'width' => 'checkbox',
             'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select vehicle ' . $row['vehicle']['vrm'],
             'disableIfRowIsDisabled' => true
         ]
     ]

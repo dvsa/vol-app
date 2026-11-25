@@ -24,16 +24,29 @@ final class InterimOcCheckboxTest extends MockeryTestCase
      */
     #[\PHPUnit\Framework\Attributes\Group('interimFormatter')]
     #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
-    public function testFormat($data, $expected): void
+    public function testFormat($data, bool $checked): void
     {
-        $this->assertEquals($expected, new \Common\Service\Table\Formatter\InterimOcCheckbox()->format($data));
+        $data['operatingCentre'] = ['address' => ['addressLine1' => '1 High & Main Street', 'town' => 'York']];
+        $output = new \Common\Service\Table\Formatter\InterimOcCheckbox()->format($data);
+        $this->assertStringContainsString('id="interim-operating-centre-1" value="1" name="operatingCentres[id][]"', $output);
+        $this->assertStringContainsString('for="interim-operating-centre-1">Select operating centre 1 High &amp; Main Street, York</label>', $output);
+        $this->assertSame($checked, str_contains($output, ' checked>'));
     }
 
-    /**
-     * @return \Iterator<(int | string), array<(array<(int | string)> | string)>>
-     *
-     * @psalm-return list{list{array{isInterim: 'Y', id: 1}, '<input type="checkbox" value="1" name="operatingCentres[id][]" checked>'}, list{array{isInterim: 'N', id: 1}, '<input type="checkbox" value="1" name="operatingCentres[id][]" >'}, list{array{id: 1}, '<input type="checkbox" value="1" name="operatingCentres[id][]" >'}}
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
+    public function testFormatPreservesPercentInAddress($data, bool $checked): void
+    {
+        $data['operatingCentre'] = ['address' => ['addressLine1' => '100% Business & Park', 'town' => 'York']];
+
+        $output = new \Common\Service\Table\Formatter\InterimOcCheckbox()->format($data);
+
+        $this->assertStringContainsString(
+            'for="interim-operating-centre-1">Select operating centre 100% Business &amp; Park, York</label>',
+            $output
+        );
+        $this->assertSame($checked, str_contains($output, ' checked>'));
+    }
+
     public static function formatProvider(): \Iterator
     {
         yield [
@@ -41,20 +54,20 @@ final class InterimOcCheckboxTest extends MockeryTestCase
                 'isInterim' => 'Y',
                 'id' => 1
             ],
-            '<input type="checkbox" value="1" name="operatingCentres[id][]" checked>'
+            true
         ];
         yield [
             [
                 'isInterim' => 'N',
                 'id' => 1
             ],
-            '<input type="checkbox" value="1" name="operatingCentres[id][]" >'
+            false
         ];
         yield [
             [
                 'id' => 1
             ],
-            '<input type="checkbox" value="1" name="operatingCentres[id][]" >'
+            false
         ];
     }
 }

@@ -118,6 +118,20 @@ final class ContentHelperTest extends TestCase
         $this->assertEquals($expected, $contentHelper->replaceContent($content, $vars));
     }
 
+    public function testEscapedValuesCannotBeTreatedAsTemplatePlaceholders(): void
+    {
+        $contentHelper = $this->getContentHelper(null);
+
+        self::assertSame(
+            '&#123;&#123;name&#125;&#125; &amp; &lt;tag&gt; ',
+            $contentHelper->replaceContent(
+                '{{value}} {{missing}}',
+                ['value' => '{{name}} & <tag>', 'name' => 'substituted'],
+                true
+            )
+        );
+    }
+
     /**
      * Data provider for replaceContent
      *

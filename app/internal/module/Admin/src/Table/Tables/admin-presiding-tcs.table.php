@@ -60,7 +60,8 @@ return [
         [
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select presiding TC ' . ($row['name'] ?? ''),
         ],
     ]
 ];

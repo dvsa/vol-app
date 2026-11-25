@@ -43,6 +43,19 @@ return [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
+            'label-callback' => static function ($row) {
+                $address = $row['OcAddress'] ?? [];
+                $parts = [];
+                foreach (['addressLine1', 'addressLine2', 'addressLine3', 'addressLine4', 'town', 'postcode'] as $field) {
+                    if (!empty($address[$field])) {
+                        $parts[] = $address[$field];
+                    }
+                }
+                if (!empty($address['countryCode']['id'])) {
+                    $parts[] = $address['countryCode']['id'];
+                }
+                return 'Select operating centre ' . implode(', ', $parts);
+            },
             'hideWhenDisabled' => true
         ],
     ]

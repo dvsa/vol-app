@@ -38,6 +38,8 @@ return [
             'title' => '&nbsp;',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select hearing ' . ($row['hearingDate'] ?? '')
+                . ', reference ' . $row['id'],
             'hideWhenDisabled' => true
         ],
         [

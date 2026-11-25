@@ -27,6 +27,10 @@ class HideIfClosedRadio implements FormatterPluginManagerInterface
             return '';
         }
 
-        return '<input type="radio" value="' . Escape::html($data['id']) . '" name="id">';
+        $id = $column['selectionId'] ?? 'submission-' . $data['id'];
+        return '<input type="radio" id="' . Escape::htmlAttr($id) . '" value="'
+            . Escape::htmlAttr($data['id']) . '" name="id">'
+            . '<label class="govuk-visually-hidden" for="' . Escape::htmlAttr($id) . '">Select submission '
+            . Escape::html($data['id']) . '</label>';
     }
 }

@@ -407,6 +407,7 @@ final class TableEscapingHarness
      */
     private function normalise(string $html): string
     {
+        $html = (string)preg_replace('/table-selection-[0-9a-f]{16}-[0-9]+/', 'table-selection-ID', $html);
         $html = (string)preg_replace_callback(
             '/<input\b[^>]*>/',
             static function (array $match): string {

@@ -63,6 +63,7 @@ return [
             'title' => 'markup-table-th-action',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select test data ' . ($row['name'] ?? '') . ', reference ' . $row['id'],
         ],
     ],
 ];

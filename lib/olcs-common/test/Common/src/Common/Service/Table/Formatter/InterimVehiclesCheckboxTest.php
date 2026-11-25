@@ -24,16 +24,29 @@ final class InterimVehiclesCheckboxTest extends MockeryTestCase
      */
     #[\PHPUnit\Framework\Attributes\Group('interimFormatter')]
     #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
-    public function testFormat($data, $expected): void
+    public function testFormat($data, bool $checked): void
     {
-        $this->assertEquals($expected, new \Common\Service\Table\Formatter\InterimVehiclesCheckbox()->format($data));
+        $data['vehicle'] = ['vrm' => 'AB12 & CDE'];
+        $output = new \Common\Service\Table\Formatter\InterimVehiclesCheckbox()->format($data);
+        $this->assertStringContainsString('id="interim-vehicle-1" value="1" name="vehicles[id][]"', $output);
+        $this->assertStringContainsString('for="interim-vehicle-1">Select vehicle AB12 &amp; CDE</label>', $output);
+        $this->assertSame($checked, str_contains($output, ' checked>'));
     }
 
-    /**
-     * @return \Iterator<(int | string), array<(array<(array<int> | int)> | string)>>
-     *
-     * @psalm-return list{list{array{interimApplication: array{id: 2}, id: 1}, '<input type="checkbox" value="1" name="vehicles[id][]" checked>'}, list{array{interimApplication: array<never, never>, id: 1}, '<input type="checkbox" value="1" name="vehicles[id][]" >'}, list{array{id: 1}, '<input type="checkbox" value="1" name="vehicles[id][]" >'}}
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
+    public function testFormatPreservesPercentInVrm($data, bool $checked): void
+    {
+        $data['vehicle'] = ['vrm' => 'AB12% Business & CDE'];
+
+        $output = new \Common\Service\Table\Formatter\InterimVehiclesCheckbox()->format($data);
+
+        $this->assertStringContainsString(
+            'for="interim-vehicle-1">Select vehicle AB12% Business &amp; CDE</label>',
+            $output
+        );
+        $this->assertSame($checked, str_contains($output, ' checked>'));
+    }
+
     public static function formatProvider(): \Iterator
     {
         yield [
@@ -41,20 +54,20 @@ final class InterimVehiclesCheckboxTest extends MockeryTestCase
                 'interimApplication' => ['id' => 2],
                 'id' => 1
             ],
-            '<input type="checkbox" value="1" name="vehicles[id][]" checked>'
+            true
         ];
         yield [
             [
                 'interimApplication' => [],
                 'id' => 1
             ],
-            '<input type="checkbox" value="1" name="vehicles[id][]" >'
+            false
         ];
         yield [
             [
                 'id' => 1
             ],
-            '<input type="checkbox" value="1" name="vehicles[id][]" >'
+            false
         ];
     }
 }

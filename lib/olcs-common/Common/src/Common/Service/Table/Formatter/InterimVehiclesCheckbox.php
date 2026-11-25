@@ -27,14 +27,17 @@ class InterimVehiclesCheckbox implements FormatterPluginManagerInterface
     #[\Override]
     public function format($data, $column = [])
     {
-        $format = '<input type="checkbox" value="' . Escape::html($data['id']) . '" name="vehicles[id][]" %s>';
+        $id = $column['selectionId'] ?? 'interim-vehicle-' . $data['id'];
+        $format = '<input type="checkbox" id="' . Escape::htmlAttr($id) . '" value="'
+            . Escape::htmlAttr($data['id']) . '" name="vehicles[id][]" %s>'
+            . '<label class="govuk-visually-hidden" for="' . Escape::htmlAttr($id) . '">Select vehicle %s</label>';
         if (
             isset($data['interimApplication'])
             && isset($data['interimApplication']['id'])
         ) {
-            return sprintf($format, 'checked');
+            return sprintf($format, 'checked', Escape::html($data['vehicle']['vrm']));
         }
 
-        return sprintf($format, '');
+        return sprintf($format, '', Escape::html($data['vehicle']['vrm']));
     }
 }

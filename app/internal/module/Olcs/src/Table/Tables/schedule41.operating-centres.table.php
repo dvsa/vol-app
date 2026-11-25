@@ -46,7 +46,10 @@ return [
         ],
         [
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select operating centre '
+                . ($row['address']['addressLine1'] ?? '') . ', ' . ($row['address']['town'] ?? '')
+                . ', reference ' . $row['id'],
         ]
     ]
 ];

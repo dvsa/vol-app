@@ -2,6 +2,8 @@
 
 namespace Common\Service\Table\Type;
 
+use Common\Util\Escape;
+
 class CustomSelector extends Selector
 {
     protected string $format = '<input type="radio" name="%s" value="%s" %s />';
@@ -36,6 +38,14 @@ class CustomSelector extends Selector
 
         if (isset($column['disableIfRowIsDisabled']) && $this->getTable()->isRowDisabled($data)) {
             $attributes[] = 'disabled="disabled"';
+        }
+
+        if (isset($column['label-callback'])) {
+            $id = $column['selectionId'] ?? 'table-user-' . $data[$dataField];
+            $attributes[] = 'id="' . Escape::htmlAttr($id) . '"';
+            $input = sprintf($this->format, $name, Escape::html($data[$dataField]), implode(' ', $attributes));
+            return $input . '<label class="govuk-visually-hidden" for="' . Escape::htmlAttr($id) . '">'
+                . Escape::html($column['label-callback']($data)) . '</label>';
         }
 
         return sprintf($this->format, $name, $data[$dataField], implode(' ', $attributes));

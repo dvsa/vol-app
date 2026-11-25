@@ -133,6 +133,7 @@ return [
             'title' => 'markup-table-th-action',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}',
+            'label-callback' => static fn($row) => 'Select letter issue ' . ($row['issueKey'] ?? '') . ', reference ' . $row['id'],
         ],
     ],
 ];

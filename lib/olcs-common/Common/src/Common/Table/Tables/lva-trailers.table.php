@@ -47,7 +47,8 @@ return [
         ],
         [
             'width' => 'checkbox',
-            'type' => 'Checkbox'
+            'type' => 'Checkbox',
+            'label-callback' => static fn($row) => 'Select trailer ' . $row['trailerNo'],
         ]
     ]
 ];

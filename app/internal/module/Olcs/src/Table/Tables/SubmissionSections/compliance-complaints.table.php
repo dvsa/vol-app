@@ -39,6 +39,8 @@ return [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
+            'label-callback' => static fn($row) => 'Select compliance complaint from ' . $row['complainantForename']
+                . ' ' . $row['complainantFamilyName'] . ', ' . $row['complaintDate'],
             'hideWhenDisabled' => true
         ],
     ]
