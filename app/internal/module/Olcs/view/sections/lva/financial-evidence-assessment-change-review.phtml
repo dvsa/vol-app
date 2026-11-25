@@ -17,7 +17,22 @@
  */
 
 use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
+use Olcs\Form\Model\Form\Lva\FinancialEvidenceOverrideRules;
 
+// When a check's form is being shown again with errors, the form object holds what was posted
+// and the messages. They are captured here (with each field's own class, which rendering an error
+// changes), before the override-form partial reuses the one form for each check.
+$overrideErrorRow = $overrideErrorRow ?? null;
+$capture = static function ($form): array {
+    $captured = [];
+
+    foreach (FinancialEvidenceOverrideRules::CASEWORKER_FIELDS as $name) {
+        $element = $form->get($name);
+        $captured[$name] = [$element->getValue(), $element->getMessages(), $element->getAttribute('class')];
+    }
+
+    return $captured;
+};
 ?>
 <a class="govuk-back-link" href="<?php echo $this->escapeHtmlAttr($backUrl); ?>">Back</a>
 
@@ -47,9 +62,12 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 <?php endif; ?>
 
 <?php if (!$showPassOverride) : ?>
+  <?php $issueCaptured = $capture($overrideForm); ?>
   <?php foreach ($issues as $issue) : ?>
     <?php $key = $this->escapeHtmlAttr($issue['key']); ?>
-    <h3 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-issue')); ?></h3>
+    <?php // The id is where this issue's form sends the browser back to (see the form partial); ?>
+    <?php // tabindex lets it take focus there, so keyboard and screen reader users land on it too. ?>
+    <h3 class="govuk-heading-m" id="issue-<?php echo $key; ?>" tabindex="-1"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-issue')); ?></h3>
     <dl class="govuk-summary-list">
       <?php // Only when the value names what failed; the mapper leaves it null otherwise. ?>
       <?php if ($issue['value'] !== null) : ?>
@@ -85,34 +103,26 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
       </div>
     </dl>
 
-    <?php if (!$issue['changed']) : ?>
-      <?php
-      // One override form serves every issue; only the row differs. Values are reset so one
-      // issue's input never shows against another, and ids are made unique per issue.
-      $overrideForm->get('analysisId')->setValue((string)$analysisId);
-      $overrideForm->get('row')->setValue($issue['key']);
-      $overrideForm->get('changeRecommendation')->setValue('N')->setAttribute('id', 'changeRecommendation-' . $issue['key']);
-      $overrideForm->get('comment')->setValue('')->setAttribute('id', 'comment-' . $issue['key']);
-      ?>
-      <?php // A native disclosure, as in the design; it works without JavaScript, unlike an accordion. ?>
-      <details class="govuk-details" id="change-<?php echo $key; ?>">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-recommendation-above')); ?></span>
-        </summary>
-        <div class="govuk-details__text">
-          <form method="post" novalidate>
-            <?php echo $this->formElement($overrideForm->get('security')); ?>
-            <?php echo $this->formElement($overrideForm->get('analysisId')); ?>
-            <?php echo $this->formElement($overrideForm->get('row')); ?>
-            <?php echo $this->formRow($overrideForm->get('changeRecommendation')); ?>
-            <?php echo $this->formRow($overrideForm->get('comment')); ?>
-            <div class="govuk-button-group">
-              <?php echo $this->formElement($overrideForm->get('saveOverride')); ?>
-            </div>
-          </form>
-        </div>
-      </details>
-    <?php endif; ?>
+    <?php // A native disclosure, as in the design; it works without JavaScript, unlike an accordion. ?>
+    <?php // Always there, so an answer can be revisited; open when there is one to see or an error. ?>
+    <details class="govuk-details" id="change-<?php echo $key; ?>"<?php
+        echo ($issue['changed'] || $issue['kept'] || $overrideErrorRow === $issue['key']) ? ' open' : '';
+    ?>>
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text"><?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-recommendation-above')); ?></span>
+      </summary>
+      <div class="govuk-details__text">
+        <?php echo $this->partial('partials/financial-evidence/override-form', [
+          'form' => $overrideForm,
+          'analysisId' => $analysisId,
+          'check' => $issue,
+          'idPrefix' => '',
+          'button' => 'saveOverride',
+          'captured' => $issueCaptured,
+          'errorRow' => $overrideErrorRow,
+        ]); ?>
+      </div>
+    </details>
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
   <?php endforeach; ?>
@@ -147,22 +157,7 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
     <?php echo $this->escapeHtml($this->translate('lva-financial-evidence-assessment-change-and-review')); ?>
   </a>
 <?php else : ?>
-  <?php
-  // When a check's form is being shown again with errors, the form object holds what was posted
-  // and the messages. They are captured here (with each field's own class, which rendering an
-  // error changes), before the loop below reuses the one form for each check.
-  //
-  // The framework's "There is a problem" summary (formErrors()) is deliberately not rendered: the
-  // page returns to the check that was submitted, where the message sits against its field, so
-  // a summary at the top would be off-screen and only repeat it.
-  $passOverrideErrorRow = $passOverrideErrorRow ?? null;
-  $passOverrideBound = [];
-
-  foreach (['changeRecommendation', 'comment'] as $name) {
-      $element = $passOverrideForm->get($name);
-      $passOverrideBound[$name] = [$element->getValue(), $element->getMessages(), $element->getAttribute('class')];
-  }
-  ?>
+  <?php $passCaptured = $capture($passOverrideForm); ?>
   <?php foreach ($passes as $pass) : ?>
     <?php if (!$pass['flagged']) : continue; endif; ?>
     <?php $key = $this->escapeHtmlAttr($pass['key']); ?>
@@ -208,56 +203,15 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
       </div>
     </dl>
 
-    <?php
-    // One pass-override form serves every pass; only the row differs. It is always shown, with
-    // the caseworker's saved answer on this check, so a typo can be fixed, the comment edited or
-    // the change undone (agreed with UX): "Yes" and their text on a check they changed to a fail,
-    // "No" and their note where one was left (a note is saved by answering "No"), and nothing
-    // selected on a check nobody has answered. "No" means the analyser's outcome stands: saving
-    // it on a changed check changes it back to a pass, and saving it with the box emptied removes
-    // the caseworker's entry altogether. Ids are made unique per pass.
-    $passOverrideForm->get('analysisId')->setValue((string)$analysisId);
-    $passOverrideForm->get('row')->setValue($pass['key']);
-    $passOverrideForm->get('changeRecommendation')
-        ->setValue($pass['changed'] ? 'Y' : ($pass['kept'] ? 'N' : null))
-        ->setAttribute('id', 'pass-changeRecommendation-' . $pass['key']);
-    $passOverrideForm->get('comment')->setValue($pass['comment'] ?? '')->setAttribute('id', 'pass-comment-' . $pass['key']);
-
-    // One form instance serves every check. The check the caseworker just tried to save shows
-    // the form as it was posted (their values and the form's own error messages, captured above);
-    // every other check shows its saved answer with no messages.
-    //
-    // The field's class is put back too: formRow() marks a field in error by adding an error class
-    // to the element itself, which would otherwise stay on the shared element and colour every
-    // check drawn after the one in error.
-    foreach ($passOverrideBound as $name => [$value, $messages, $class]) {
-        $isErrorRow = $passOverrideErrorRow === $pass['key'];
-        $passOverrideForm->get($name)->setMessages($isErrorRow ? $messages : []);
-        $passOverrideForm->get($name)->setAttribute('class', $class);
-
-        if ($isErrorRow) {
-            $passOverrideForm->get($name)->setValue($value);
-        }
-    }
-    ?>
-    <?php // The question is the radio group's own legend (from the form), so it is not repeated here. ?>
-    <?php // Posting to this issue's anchor brings the page back to it, so the caseworker does not ?>
-    <?php // have to scroll down again to find the error (or the result) on a long page. ?>
-    <form method="post" novalidate action="#issue-<?php echo $key; ?>">
-      <?php echo $this->formElement($passOverrideForm->get('security')); ?>
-      <?php echo $this->formElement($passOverrideForm->get('analysisId')); ?>
-      <?php echo $this->formElement($passOverrideForm->get('row')); ?>
-      <?php // Each field in its own GOV.UK form group, which gives the spacing between them the design shows. ?>
-      <div class="govuk-form-group">
-        <?php echo $this->formRow($passOverrideForm->get('changeRecommendation')); ?>
-      </div>
-      <div class="govuk-form-group">
-        <?php echo $this->formRow($passOverrideForm->get('comment')); ?>
-      </div>
-      <div class="govuk-button-group">
-        <?php echo $this->formElement($passOverrideForm->get('savePassOverride')); ?>
-      </div>
-    </form>
+    <?php echo $this->partial('partials/financial-evidence/override-form', [
+      'form' => $passOverrideForm,
+      'analysisId' => $analysisId,
+      'check' => $pass,
+      'idPrefix' => 'pass-',
+      'button' => 'savePassOverride',
+      'captured' => $passCaptured,
+      'errorRow' => $overrideErrorRow,
+    ]); ?>
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
   <?php endforeach; ?>

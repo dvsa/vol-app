@@ -6,11 +6,11 @@ use Dvsa\Olcs\Transfer\Command\Document\OverrideDocumentAnalysisFlag;
 use Laminas\Form\Annotation;
 
 /**
- * Caseworker change of one failed or skipped check to a pass, on the change document review page.
+ * Caseworker change of one failed or skipped check to a pass, on the change document review
+ * page. The reverse of FinancialEvidencePassOverride; the rules both share, and their wording,
+ * are in FinancialEvidenceOverrideRules (a reason is required to change a fail, not a skipped check).
  *
  * One instance serves every issue: the view sets row per issue before rendering it.
- * Whether the comment is required depends on the issue's own flag (a fail always needs a reason;
- * a skipped check does not), which the form cannot know, so that is enforced by the controller.
  *
  * @codeCoverageIgnore
  */
@@ -33,21 +33,31 @@ class FinancialEvidenceIssueOverride
     ])]
     public $row = null;
 
+    // Laid out as FinancialEvidencePassOverride's: Yes and No side by side, the label as the
+    // radio group's legend (the view must not print the question again), and no default.
     #[Annotation\Required(true)]
+    #[Annotation\ErrorMessage(FinancialEvidenceOverrideRules::MSG_ANSWER_REQUIRED)]
     #[Annotation\Type('Radio')]
+    #[Annotation\Attributes([
+        'radios_wrapper_attributes' => ['class' => 'govuk-radios--standard govuk-radios--inline'],
+    ])]
     #[Annotation\Options([
         'label' => 'lva-financial-evidence-assessment-issue-change-to-pass',
-        'value_options' => ['N' => 'No', 'Y' => 'Yes'],
-        'fieldset-attributes' => ['class' => 'inline'],
+        'value_options' => FinancialEvidenceOverrideRules::ANSWER_OPTIONS,
+        'fieldset-attributes' => ['class' => 'govuk-fieldset'],
+        'legend-attributes' => ['class' => 'govuk-fieldset__legend govuk-fieldset__legend--s'],
     ])]
-    #[Annotation\Attributes(['value' => 'N'])]
     public $changeRecommendation = null;
 
+    // See FinancialEvidencePassOverride::$comment for why it is Required with a "null only" NotEmpty.
+    #[Annotation\Required(true)]
     #[Annotation\Type('TextArea')]
     #[Annotation\Options(['label' => 'lva-financial-evidence-assessment-issue-reason'])]
-    #[Annotation\Attributes(['class' => 'extra-long'])]
+    #[Annotation\Attributes(['class' => 'extra-long', 'required' => false])]
     #[Annotation\Filter('Laminas\Filter\StringTrim')]
-    #[Annotation\Validator('Laminas\Validator\StringLength', options: ['max' => 1000])]
+    #[Annotation\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
+    #[Annotation\Validator('ValidateIf', options: FinancialEvidenceOverrideRules::REASON_REQUIRED)]
+    #[Annotation\Validator('Laminas\Validator\StringLength', options: FinancialEvidenceOverrideRules::COMMENT_LENGTH)]
     public $comment = null;
 
     #[Annotation\Attributes([
