@@ -1,0 +1,42 @@
+<?php
+
+namespace Admin\Controller;
+
+use Common\Service\Data\PluginManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Laminas\Navigation\Navigation;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Olcs\Service\Data\SubCategory;
+use Psr\Container\ContainerInterface;
+
+class MessagingSubjectControllerFactory implements FactoryInterface
+{
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): MessagingSubjectController
+    {
+        $translationHelper = $container->get(TranslationHelperService::class);
+        assert($translationHelper instanceof TranslationHelperService);
+
+        $formHelperService = $container->get(FormHelperService::class);
+        assert($formHelperService instanceof FormHelperService);
+
+        $flashMessenger = $container->get(FlashMessengerHelperService::class);
+        assert($flashMessenger instanceof FlashMessengerHelperService);
+
+        $navigation = $container->get('navigation');
+        assert($navigation instanceof Navigation);
+
+        $subCategory = $container->get(PluginManager::class)->get(SubCategory::class);
+        assert($subCategory instanceof SubCategory);
+
+        return new MessagingSubjectController(
+            $translationHelper,
+            $formHelperService,
+            $flashMessenger,
+            $navigation,
+            $subCategory
+        );
+    }
+}

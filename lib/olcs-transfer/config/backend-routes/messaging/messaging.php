@@ -112,6 +112,15 @@ return [
             'subjects' => RouteConfig::getRouteConfig(
                 'subjects',
                 [
+                    'GET' => QueryConfig::getConfig(Query\Messaging\Subjects\GetList::class),
+                    'POST' => CommandConfig::getPostConfig(Command\Messaging\Subject\Create::class),
+                    'single' => RouteConfig::getSingleConfig(
+                        [
+                            'GET' => QueryConfig::getConfig(Query\Messaging\Subjects\ById::class),
+                            'PUT' => CommandConfig::getPutConfig(Command\Messaging\Subject\Update::class),
+                            'DELETE' => CommandConfig::getDeleteConfig(Command\Messaging\Subject\Delete::class),
+                        ]
+                    ),
                     'all' => RouteConfig::getRouteConfig(
                         'all',
                         [
