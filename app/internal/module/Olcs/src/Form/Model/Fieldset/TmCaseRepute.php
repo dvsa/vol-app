@@ -14,17 +14,20 @@ class TmCaseRepute extends CaseBase
     #[Form\Options(['label' => 'MSI', 'value_options' => ['N' => 'No', 'Y' => 'Yes'], 'fieldset-attributes' => ['class' => 'inline']])]
     public $isMsi;
 
-    #[Form\Options(['label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
     public $decisionDate = null;
 
     #[Form\Required(true)]
+    #[Form\AllowEmpty(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Attributes(['required' => false])]
-    #[Form\Options(['label' => 'Date of notification (to TM)', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of notification (to TM)', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'decisionDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'decisionDate', 'compare_to_label' => 'Date of decision', 'operator' => 'gte']]]])]

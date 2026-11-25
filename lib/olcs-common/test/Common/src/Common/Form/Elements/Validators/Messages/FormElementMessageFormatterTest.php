@@ -83,6 +83,21 @@ final class FormElementMessageFormatterTest extends MockeryTestCase
      */
     protected $sut;
 
+    public function testPlaceholderMessageUsesQuestionLabelEvenWithShortLabel(): void
+    {
+        $formatter = new FormElementMessageFormatter(new \Laminas\I18n\Translator\Translator());
+        $element = new \Laminas\Form\Element('birthDate', [
+            'label' => 'Date of birth',
+            'short-label' => 'DOB',
+        ]);
+
+        self::assertSame(
+            'Date of birth must include a month',
+            $formatter->formatElementMessage($element, '{{fieldLabel}} must include a month', 'dateIncomplete')
+        );
+        self::assertSame('DOB: Other error', $formatter->formatElementMessage($element, 'Other error'));
+    }
+
     #[\PHPUnit\Framework\Attributes\Test]
     public function getReplacementForIsCallable(): void
     {

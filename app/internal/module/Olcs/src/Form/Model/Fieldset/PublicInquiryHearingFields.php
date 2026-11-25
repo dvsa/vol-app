@@ -25,8 +25,9 @@ class PublicInquiryHearingFields extends Base
 
     #[Form\Required(true)]
     #[Form\Type('DateTimeSelect')]
+    #[Form\Input('Common\InputFilter\DateTimeParts')]
     #[Form\Attributes(['id' => 'hearingDate'])]
-    #[Form\Options(['label' => 'Date of PI', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi_hearing', 'field' => 'hearingDate'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateTimeParts', 'label' => 'Date of PI', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi_hearing', 'field' => 'hearingDate'])]
     #[Form\Filter('DateTimeSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d H:i:s'])]
@@ -67,8 +68,9 @@ class PublicInquiryHearingFields extends Base
 
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Olcs\InputFilter\CancelledHearingDate')]
     #[Form\Attributes(['id' => 'cancelledDate', 'required' => false])]
-    #[Form\Options(['label' => 'Cancelled date', 'create_empty_option' => true])]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\CancelledHearingDate', 'label' => 'Cancelled date', 'create_empty_option' => true])]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'isCancelled', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']]]])]
@@ -89,8 +91,9 @@ class PublicInquiryHearingFields extends Base
 
     #[Form\Required(true)]
     #[Form\Type('DateTimeSelect')]
+    #[Form\Input('Olcs\InputFilter\AdjournedHearingDate')]
     #[Form\Attributes(['id' => 'adjournedDate'])]
-    #[Form\Options(['label' => 'Date adjournment agreed', 'create_empty_option' => true, 'render_delimiters' => true, 'field' => 'adjournedDate'])]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\AdjournedHearingDate', 'label' => 'Date adjournment agreed', 'create_empty_option' => true, 'render_delimiters' => true, 'field' => 'adjournedDate'])]
     #[Form\Filter('DateTimeSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'isAdjourned', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d H:i:s']]]])]

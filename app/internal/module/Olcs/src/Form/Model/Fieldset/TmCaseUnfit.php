@@ -15,23 +15,27 @@ class TmCaseUnfit extends CaseBase
     public $isMsi;
 
     #[Form\Type('DateSelect')]
-    #[Form\Options(['label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Input('Common\InputFilter\DateParts')]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $decisionDate = null;
 
     #[Form\Required(true)]
+    #[Form\AllowEmpty(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Attributes(['required' => false])]
-    #[Form\Options(['label' => 'Date of notification (to TM)', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of notification (to TM)', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'decisionDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'decisionDate', 'compare_to_label' => 'Date of decision', 'operator' => 'gte']]]])]
     public $notifiedDate = null;
 
     #[Form\Type('DateSelect')]
-    #[Form\Options(['label' => 'Unfitness start date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+3', 'min_year_delta' => '-100'])]
+    #[Form\Input('Common\InputFilter\DateParts')]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Unfitness start date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+3', 'min_year_delta' => '-100'])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -39,7 +43,8 @@ class TmCaseUnfit extends CaseBase
 
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Options(['label' => 'Unfitness end date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+12', 'min_year_delta' => '-100'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Unfitness end date', 'create_empty_option' => true, 'render_delimiters' => false, 'max_year_delta' => '+12', 'min_year_delta' => '-100'])]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

@@ -31,8 +31,9 @@ class QualificationDetails
 
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'issuedDate', 'required' => false])]
-    #[Form\Options(['label' => 'transport-manager.competences.form.date-of-issue', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'transport-manager.competences.form.date-of-issue', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

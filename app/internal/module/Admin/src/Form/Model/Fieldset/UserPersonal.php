@@ -26,6 +26,7 @@ class UserPersonal
     #[Form\Attributes(['id' => 'dob'])]
     #[Form\Options(['label' => 'Birth date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Required(false)]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

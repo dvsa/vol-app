@@ -12,8 +12,9 @@ class NonPiFields extends CaseBase
 {
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Attributes(['id' => 'agreedByTcDate'])]
-    #[Form\Options(['label' => 'Agreed by TC/DTC/HTRU/DHTRU date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Agreed by TC/DTC/HTRU/DHTRU date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -26,8 +27,9 @@ class NonPiFields extends CaseBase
 
     #[Form\Required(false)]
     #[Form\Type('DateTimeSelect')]
+    #[Form\Input('Common\InputFilter\DateTimeParts')]
     #[Form\Attributes(['id' => 'hearingDate'])]
-    #[Form\Options(['label' => 'Meeting date', 'create_empty_option' => true, 'render_delimiters' => true, 'field' => 'hearingDate'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateTimeParts', 'label' => 'Meeting date', 'create_empty_option' => true, 'render_delimiters' => true, 'field' => 'hearingDate'])]
     #[Form\Filter('DateTimeSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d H:i:s'])]

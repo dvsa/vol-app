@@ -10,8 +10,9 @@ use Laminas\Form\Annotation as Form;
 #[Form\Name('SubmissionInformationComplete-fields')]
 class SubmissionInformationComplete extends Base
 {
-    #[Form\Options(['label' => 'Information completed date', 'create_empty_option' => false, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Information completed date', 'create_empty_option' => false, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]

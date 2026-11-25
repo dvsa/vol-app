@@ -16,8 +16,9 @@ class ImpoundingFields
     public $impoundingType = null;
 
     #[Form\Attributes(['id' => 'applicationReceiptDate'])]
-    #[Form\Options(['label' => 'Application received', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Application received', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -38,8 +39,9 @@ class ImpoundingFields
 
     #[Form\Required(false)]
     #[Form\Type('DateTimeSelect')]
+    #[Form\Input('Olcs\InputFilter\ImpoundingHearingDate')]
     #[Form\Attributes(['id' => 'hearingDate'])]
-    #[Form\Options(['label' => 'Hearing date', 'create_empty_option' => true, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\ImpoundingHearingDate', 'label' => 'Hearing date', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Filter('Laminas\Filter\DateTimeSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'impoundingType', 'context_values' => ['impt_hearing'], 'allow_empty' => true, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d H:i:s']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'applicationReceiptDate', 'compare_to_label' => 'Application received', 'operator' => 'gte', 'has_time' => true]]]])]
     public $hearingDate = null;
@@ -75,9 +77,10 @@ class ImpoundingFields
     public $outcome = null;
 
     #[Form\Attributes(['id' => 'outcomeSentDate'])]
-    #[Form\Options(['label' => 'Outcome sent date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Outcome sent date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

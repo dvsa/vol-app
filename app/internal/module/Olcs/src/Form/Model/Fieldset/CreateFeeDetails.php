@@ -19,10 +19,11 @@ class CreateFeeDetails
     /**
      * Created date
      */
-    #[Form\Options(['short-label' => 'fees.created_date', 'label' => 'fees.created_date', 'label_attributes' => ['id' => 'label-createdDate'], 'create_empty_option' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'short-label' => 'fees.created_date', 'label' => 'fees.created_date', 'label_attributes' => ['id' => 'label-createdDate'], 'create_empty_option' => true])]
     #[Form\Required(true)]
     #[Form\Attributes(['required' => false, 'id' => 'createdDate'])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

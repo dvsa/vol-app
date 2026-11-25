@@ -60,9 +60,10 @@ class PublicInquiryRegisterDecisionMain
     public $witnesses = null;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -70,9 +71,10 @@ class PublicInquiryRegisterDecisionMain
     public $decisionDate = null;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Date of notification', 'create_empty_option' => true, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of notification', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

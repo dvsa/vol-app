@@ -554,6 +554,29 @@ final class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class="field "><fieldset class="user"><legend>Foo</legend></fieldset></div>', $result);
     }
 
+    public function testDateErrorUsesFieldsetLabelAndRestoresIt(): void
+    {
+        $this->setUpSut();
+        $this->viewHelperPluginManager()->get('form_element')->setView($this->phpRenderer());
+        $dateHelper = new CommonHelper\FormDateSelect();
+        $dateHelper->setView($this->phpRenderer());
+        $dateHelper->setTranslator($this->translator());
+        $this->viewHelperPluginManager()->setService('formdateselect', $dateHelper);
+        $this->viewHelperPluginManager()->setService('forminput', new LaminasHelper\FormInput());
+        $element = $this->setUpElement('DateSelect', ['label' => 'Date of birth', 'short-label' => 'DOB'], ['id' => 'dob']);
+        $element->setMessages(['dateIncomplete' => '{{fieldLabel}} must include a month']);
+        $form = new \Common\Form\Form('person');
+        $form->add($element);
+        $summary = new CommonHelper\FormErrors(new FormElementMessageFormatter($this->translator()), $this->translator());
+        $summary->setView($this->phpRenderer());
+
+        $markup = $this->sut->__invoke($element);
+
+        self::assertStringContainsString('Date of birth must include a month', $markup);
+        self::assertStringContainsString('Date of birth must include a month', $summary->render($form));
+        self::assertSame('Date of birth', $element->getLabel());
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('dateFieldsetDescriptionsProvider')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeDescribesDateFieldsetErrors(

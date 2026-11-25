@@ -20,9 +20,10 @@ class BusRegBrowse
     #[Form\Type('DynamicSelect')]
     public $status;
 
-    #[Form\Options(['label' => 'selfserve.search.busreg.browse.form.acceptedDate.label', 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'selfserve.search.busreg.browse.form.acceptedDate.label', 'render_delimiters' => false])]
     #[Form\Attributes(['id' => 'acceptedDate', 'placeholder' => ''])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

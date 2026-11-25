@@ -13,13 +13,13 @@ class DataRetentionExportOptions
     #[Form\Options(['label' => 'Rule'])]
     public $rule = null;
 
-    #[Form\Options(['label' => 'Date from'])]
+    #[Form\Options(['label' => 'Date from', 'input_type' => 'Common\InputFilter\DateParts'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $startDate = null;
 
-    #[Form\Options(['label' => 'Date to'])]
+    #[Form\Options(['label' => 'Date to', 'input_type' => 'Common\InputFilter\DateParts'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

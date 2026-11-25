@@ -38,6 +38,7 @@ class Offence extends Base
     #[Form\Type('DateSelect')]
     #[Form\Options(['label' => 'Date of birth', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Attributes(['required' => false])]
+    #[Form\Input('Common\InputFilter\OffenceDateOfBirth')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'defendantType', 'context_values' => ['def_t_op', ''], 'context_truth' => false, 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]])]
@@ -63,8 +64,9 @@ class Offence extends Base
 
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Offence date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Offence date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('Laminas\Filter\DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('\Common\Validator\Date')]
@@ -74,8 +76,9 @@ class Offence extends Base
     public $offenceDate = null;
 
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Conviction date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Conviction date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

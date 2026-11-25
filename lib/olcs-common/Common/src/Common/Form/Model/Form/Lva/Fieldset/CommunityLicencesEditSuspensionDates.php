@@ -9,8 +9,9 @@ use Laminas\Form\Annotation as Form;
 class CommunityLicencesEditSuspensionDates
 {
     #[Form\Required(true)]
-    #[Form\Options(['label' => 'internal.community_licence.form.start_date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'internal.community_licence.form.start_date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -18,8 +19,9 @@ class CommunityLicencesEditSuspensionDates
     public $startDate;
 
     #[Form\Required(false)]
-    #[Form\Options(['label' => 'internal.community_licence.form.end_date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'internal.community_licence.form.end_date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

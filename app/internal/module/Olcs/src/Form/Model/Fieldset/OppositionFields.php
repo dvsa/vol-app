@@ -34,8 +34,9 @@ class OppositionFields extends CaseBase
 
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Attributes(['id' => 'raisedDate'])]
-    #[Form\Options(['label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

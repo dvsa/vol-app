@@ -50,6 +50,7 @@ class DateTimeSelect extends LaminasElement\DateTimeSelect
         }
 
         return [
+            ...($this->getOption('input_type') ? ['type' => $this->getOption('input_type')] : []),
             'name' => $this->getName(),
             'required' => $this->getOption('required'),
             'filters' => [

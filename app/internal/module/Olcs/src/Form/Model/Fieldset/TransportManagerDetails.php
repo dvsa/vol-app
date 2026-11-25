@@ -59,6 +59,7 @@ class TransportManagerDetails
     #[Form\Attributes(['id' => 'dob', 'required' => false])]
     #[Form\Options(['label' => 'transport-manager-details-dob', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

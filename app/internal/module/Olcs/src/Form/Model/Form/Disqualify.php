@@ -28,11 +28,12 @@ class Disqualify
     public $isDisqualified = null;
 
     #[Form\Attributes(['id' => 'startDate'])]
-    #[Form\Options(['label' => 'form.disqualify.start-date', 'short-label' => 'form.disqualify.start-date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'form.disqualify.start-date', 'short-label' => 'form.disqualify.start-date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Required(true)]
     public $startDate = null;
 

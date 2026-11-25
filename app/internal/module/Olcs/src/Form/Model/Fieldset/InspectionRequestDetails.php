@@ -46,9 +46,10 @@ class InspectionRequestDetails
     public $requestType = null;
 
     #[Form\Attributes(['id' => 'requestDate'])]
-    #[Form\Options(['label' => 'Request date', 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Request date', 'render_delimiters' => false])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -56,9 +57,10 @@ class InspectionRequestDetails
     public $requestDate = null;
 
     #[Form\Attributes(['id' => 'dueDate'])]
-    #[Form\Options(['label' => 'Due date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Due date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -66,9 +68,10 @@ class InspectionRequestDetails
     public $dueDate = null;
 
     #[Form\Attributes(['id' => 'returnDate'])]
-    #[Form\Options(['label' => 'Return date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Return date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -81,18 +84,20 @@ class InspectionRequestDetails
     public $resultType = null;
 
     #[Form\Attributes(['id' => 'fromDate'])]
-    #[Form\Options(['label' => 'Investigation from', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Investigation from', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $fromDate = null;
 
     #[Form\Attributes(['id' => 'toDate'])]
-    #[Form\Options(['label' => 'Investigation to', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Investigation to', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

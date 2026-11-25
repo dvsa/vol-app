@@ -17,6 +17,7 @@ class Details
     #[Form\Attributes(['id' => 'dob'])]
     #[Form\Options(['label' => 'dob', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldset_attributes' => ['id' => 'details[birthDate]']])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

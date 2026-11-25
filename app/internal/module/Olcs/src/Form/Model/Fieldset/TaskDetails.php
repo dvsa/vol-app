@@ -15,8 +15,9 @@ class TaskDetails
     #[Form\Options(['label' => 'tasks.data.status', 'disable_html_escape' => true])]
     public $status = null;
 
-    #[Form\Options(['label' => 'tasks.data.actionDate', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => true, 'min_year_delta' => '-10', 'max_year_delta' => '+10'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'tasks.data.actionDate', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => true, 'min_year_delta' => '-10', 'max_year_delta' => '+10'])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]

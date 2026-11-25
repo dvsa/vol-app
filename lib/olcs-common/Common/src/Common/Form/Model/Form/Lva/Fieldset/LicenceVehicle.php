@@ -16,28 +16,31 @@ class LicenceVehicle
     public $version;
 
     #[Form\Attributes([])]
-    #[Form\Options(['label' => 'application_vehicle-safety_vehicle-sub-action.licence-vehicle.receivedDate', 'create_empty_option' => true, 'render_delimiters' => false, 'default_date' => 'now'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\ConditionallyValidatedDateParts', 'label' => 'application_vehicle-safety_vehicle-sub-action.licence-vehicle.receivedDate', 'create_empty_option' => true, 'render_delimiters' => false, 'default_date' => 'now'])]
     #[Form\Required(false)]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Type('Common\Form\Elements\Custom\DateSelect')]
+    #[Form\Input('Common\InputFilter\ConditionallyValidatedDateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $receivedDate;
 
     #[Form\Required(false)]
     #[Form\Type('DateTimeSelect')]
+    #[Form\Input('Common\InputFilter\ConditionallyValidatedDateTimeParts')]
     #[Form\Attributes(['id' => 'specifiedDate'])]
-    #[Form\Options(['label' => 'application_vehicle-safety_vehicle-sub-action.licence-vehicle.specifiedDate', 'create_empty_option' => false, 'render_delimiters' => true, 'field' => 'specifiedDate', 'month_attributes' => ['disabled' => 'disabled'], 'year_attributes' => ['disabled' => 'disabled'], 'day_attributes' => ['disabled' => 'disabled'], 'hour_attributes' => ['disabled' => 'disabled'], 'minute_attributes' => ['disabled' => 'disabled'], 'default_date' => 'now', 'display_every_minute' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\ConditionallyValidatedDateTimeParts', 'label' => 'application_vehicle-safety_vehicle-sub-action.licence-vehicle.specifiedDate', 'create_empty_option' => false, 'render_delimiters' => true, 'field' => 'specifiedDate', 'month_attributes' => ['disabled' => 'disabled'], 'year_attributes' => ['disabled' => 'disabled'], 'day_attributes' => ['disabled' => 'disabled'], 'hour_attributes' => ['disabled' => 'disabled'], 'minute_attributes' => ['disabled' => 'disabled'], 'default_date' => 'now', 'display_every_minute' => true])]
     #[Form\Filter('DateTimeSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d H:i:s'])]
     public $specifiedDate;
 
     #[Form\Attributes([])]
-    #[Form\Options(['label' => 'application_vehicle-safety_vehicle-sub-action.licence-vehicle.removalDate', 'create_empty_option' => true, 'render_delimiters' => false, 'month_attributes' => ['disabled' => 'disabled'], 'year_attributes' => ['disabled' => 'disabled'], 'day_attributes' => ['disabled' => 'disabled']])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\ConditionallyValidatedDateParts', 'label' => 'application_vehicle-safety_vehicle-sub-action.licence-vehicle.removalDate', 'create_empty_option' => true, 'render_delimiters' => false, 'month_attributes' => ['disabled' => 'disabled'], 'year_attributes' => ['disabled' => 'disabled'], 'day_attributes' => ['disabled' => 'disabled']])]
     #[Form\Required(false)]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Type('Common\Form\Elements\Custom\DateSelect')]
+    #[Form\Input('Common\InputFilter\ConditionallyValidatedDateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $removalDate;
