@@ -11,6 +11,7 @@
           "required": false
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateTimeParts",
           "label": "licence-status.curtailment.from",
           "create_empty_option": true,
           "max_year_delta": "+10",
@@ -24,6 +25,7 @@
         "name": "curtailTo",
         "type": "DateTimeSelect",
         "options": {
+          "input_type": "Common\\InputFilter\\DateTimeParts",
           "label": "licence-status.curtailment.to",
           "create_empty_option": true,
           "max_year_delta": "+10",
@@ -36,6 +38,7 @@
   "input_filter": {
     "curtailFrom": {
       "name": "curtailFrom",
+      "type": "Common\\InputFilter\\DateTimeParts",
       "filters": [
         {
           "name": "DateTimeSelectNullifier"
@@ -59,6 +62,7 @@
     },
     "curtailTo": {
       "name": "curtailTo",
+      "type": "Common\\InputFilter\\DateTimeParts",
       "filters": [
         {
           "name": "DateTimeSelectNullifier"

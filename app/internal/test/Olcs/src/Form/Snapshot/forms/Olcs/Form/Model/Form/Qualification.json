@@ -73,6 +73,7 @@
                 "id": "issuedDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "transport-manager.competences.form.date-of-issue",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -191,6 +192,7 @@
       "issuedDate": {
         "name": "issuedDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

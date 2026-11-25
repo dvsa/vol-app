@@ -27,6 +27,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "Date approval submission issued",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -43,6 +44,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "Date approval submission returned",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -76,6 +78,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date IOR letter issued",
           "create_empty_option": true,
           "render_delimiters": false
@@ -91,6 +94,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date operator's response due",
           "create_empty_option": true,
           "render_delimiters": false
@@ -106,6 +110,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date operator's response received",
           "create_empty_option": true,
           "render_delimiters": false
@@ -138,6 +143,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "Date final submission issued",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -154,6 +160,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "Date final submission returned",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -201,6 +208,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "Revocation letter issued date",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -217,6 +225,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "NFA letter issued date",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -233,6 +242,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "Warning letter issued date",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -249,6 +259,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "PI agreed",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -265,6 +276,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\RevocationsSlaDate",
           "label": "Other action agreed",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -283,6 +295,7 @@
     "approvalSubmissionIssuedDate": {
       "name": "approvalSubmissionIssuedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -303,6 +316,7 @@
     "approvalSubmissionReturnedDate": {
       "name": "approvalSubmissionReturnedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -327,6 +341,7 @@
     "iorLetterIssuedDate": {
       "name": "iorLetterIssuedDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -347,6 +362,7 @@
     "operatorResponseDueDate": {
       "name": "operatorResponseDueDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -367,6 +383,7 @@
     "operatorResponseReceivedDate": {
       "name": "operatorResponseReceivedDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -391,6 +408,7 @@
     "finalSubmissionIssuedDate": {
       "name": "finalSubmissionIssuedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -411,6 +429,7 @@
     "finalSubmissionReturnedDate": {
       "name": "finalSubmissionReturnedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -439,6 +458,7 @@
     "revocationLetterIssuedDate": {
       "name": "revocationLetterIssuedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -459,6 +479,7 @@
     "nfaLetterIssuedDate": {
       "name": "nfaLetterIssuedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -479,6 +500,7 @@
     "warningLetterIssuedDate": {
       "name": "warningLetterIssuedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -499,6 +521,7 @@
     "piAgreedDate": {
       "name": "piAgreedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -519,6 +542,7 @@
     "otherActionAgreedDate": {
       "name": "otherActionAgreedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\RevocationsSlaDate",
       "filters": [
         {
           "name": "DateSelectNullifier"

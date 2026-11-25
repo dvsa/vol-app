@@ -55,6 +55,7 @@
               },
               "type": "DateTimeSelect",
               "options": {
+                "input_type": "Common\\InputFilter\\DateTimeParts",
                 "label": "Date of PI",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -173,6 +174,7 @@
               },
               "type": "DateSelect",
               "options": {
+                "input_type": "Olcs\\InputFilter\\CancelledHearingDate",
                 "label": "Cancelled date",
                 "create_empty_option": true
               }
@@ -215,6 +217,7 @@
               },
               "type": "DateTimeSelect",
               "options": {
+                "input_type": "Olcs\\InputFilter\\AdjournedHearingDate",
                 "label": "Date adjournment agreed",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -461,6 +464,7 @@
       "hearingDate": {
         "name": "hearingDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateTimeParts",
         "filters": [
           {
             "name": "DateTimeSelect",
@@ -528,6 +532,7 @@
       "cancelledDate": {
         "name": "cancelledDate",
         "required": true,
+        "type": "Olcs\\InputFilter\\CancelledHearingDate",
         "filters": [
           {
             "name": "DateSelect",
@@ -610,6 +615,7 @@
       "adjournedDate": {
         "name": "adjournedDate",
         "required": true,
+        "type": "Olcs\\InputFilter\\AdjournedHearingDate",
         "filters": [
           {
             "name": "DateTimeSelect",

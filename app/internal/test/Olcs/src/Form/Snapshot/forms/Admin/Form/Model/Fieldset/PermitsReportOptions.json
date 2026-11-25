@@ -53,6 +53,7 @@
     "startDate": {
       "name": "startDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -73,6 +74,7 @@
     "endDate": {
       "name": "endDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

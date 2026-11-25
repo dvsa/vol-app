@@ -11,6 +11,7 @@
           "required": false
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "licence-status.surrender.date.label",
           "create_empty_option": true,
           "min_year_delta": "-5"
@@ -22,6 +23,7 @@
   "input_filter": {
     "surrenderDate": {
       "name": "surrenderDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

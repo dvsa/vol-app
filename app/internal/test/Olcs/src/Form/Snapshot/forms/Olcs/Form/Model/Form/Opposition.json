@@ -72,6 +72,7 @@
                 "id": "raisedDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Date received",
                 "create_empty_option": true,
                 "render_delimiters": true
@@ -681,6 +682,7 @@
       "raisedDate": {
         "name": "raisedDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

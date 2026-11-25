@@ -76,6 +76,7 @@
               },
               "type": "DateSelect",
               "options": {
+                "input_type": "Olcs\\InputFilter\\FeePaymentDate",
                 "short-label": "fees.receipt_date",
                 "label": "fees.receipt_date",
                 "label_attributes": {
@@ -143,6 +144,7 @@
                 "required": false
               },
               "options": {
+                "input_type": "Olcs\\InputFilter\\FeePaymentDate",
                 "short-label": "fees.cheque_date",
                 "label": "fees.cheque_date",
                 "label_attributes": {
@@ -473,6 +475,7 @@
       "receiptDate": {
         "name": "receiptDate",
         "required": true,
+        "type": "Olcs\\InputFilter\\FeePaymentDate",
         "filters": [
           {
             "name": "DateSelect",
@@ -609,6 +612,7 @@
       "chequeDate": {
         "name": "chequeDate",
         "required": true,
+        "type": "Olcs\\InputFilter\\FeePaymentDate",
         "filters": [
           {
             "name": "DateSelect",

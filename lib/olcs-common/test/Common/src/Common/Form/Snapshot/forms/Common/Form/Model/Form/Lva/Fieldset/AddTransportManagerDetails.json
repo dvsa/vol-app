@@ -92,6 +92,7 @@
     },
     "birthDate": {
       "name": "birthDate",
+      "type": "Common\\InputFilter\\PersonDateOfBirth",
       "filters": [
         {
           "name": "DateSelectNullifier"

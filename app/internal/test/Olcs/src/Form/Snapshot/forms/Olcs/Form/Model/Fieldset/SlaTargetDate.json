@@ -35,6 +35,7 @@
       "spec": {
         "name": "agreedDate",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Received/Agreed date",
           "create_empty_option": false,
           "render_delimiters": true
@@ -50,6 +51,7 @@
           "id": "sentDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Sent date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -65,6 +67,7 @@
           "id": "targetDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Target date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -135,6 +138,7 @@
     },
     "agreedDate": {
       "name": "agreedDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -154,6 +158,7 @@
     },
     "sentDate": {
       "name": "sentDate",
+      "type": "Common\\InputFilter\\DateParts",
       "required": false,
       "filters": [
         {
@@ -204,6 +209,7 @@
     },
     "targetDate": {
       "name": "targetDate",
+      "type": "Common\\InputFilter\\DateParts",
       "required": false,
       "filters": [
         {

@@ -25,6 +25,7 @@
           "data-container-class": "adPlacedDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\ConditionallyValidatedDateParts",
           "label": "application_operating-centres_authorisation-sub-action.advertisements.adPlacedDate",
           "legend-attributes": {
             "class": "form-element__label"
@@ -135,6 +136,7 @@
           "name": "DateSelectNullifier"
         }
       ],
+      "type": "Common\\InputFilter\\ConditionallyValidatedDateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"

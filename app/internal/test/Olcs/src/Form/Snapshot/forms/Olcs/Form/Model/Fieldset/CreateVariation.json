@@ -8,6 +8,7 @@
         "name": "receivedDate",
         "type": "DateSelect",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "create-variation-application-received-date"
         }
       }
@@ -51,6 +52,7 @@
   "input_filter": {
     "receivedDate": {
       "name": "receivedDate",
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"

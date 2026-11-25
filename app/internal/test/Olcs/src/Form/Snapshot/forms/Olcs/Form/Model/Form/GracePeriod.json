@@ -37,6 +37,7 @@
                 "id": "startDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "internal-licence-grace-periods-period-details-startDate",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -55,6 +56,7 @@
                 "id": "endDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "internal-licence-grace-periods-period-details-endDate",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -161,6 +163,7 @@
       "startDate": {
         "name": "startDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "validators": [
           {
             "name": "\\Common\\Validator\\Date"
@@ -184,6 +187,7 @@
       "endDate": {
         "name": "endDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "validators": [
           {
             "name": "ValidateIf",

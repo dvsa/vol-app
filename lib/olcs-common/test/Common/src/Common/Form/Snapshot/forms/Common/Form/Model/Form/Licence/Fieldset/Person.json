@@ -106,8 +106,7 @@
         "options": {
           "label": "Date of Birth",
           "create_empty_option": true,
-          "render_delimiters": false,
-          "error-message": "Enter date of birth"
+          "render_delimiters": false
         },
         "type": "DateSelect"
       }
@@ -169,6 +168,7 @@
     "birthDate": {
       "name": "birthDate",
       "required": true,
+      "type": "Common\\InputFilter\\PersonDateOfBirth",
       "filters": [
         {
           "name": "DateSelectNullifier"

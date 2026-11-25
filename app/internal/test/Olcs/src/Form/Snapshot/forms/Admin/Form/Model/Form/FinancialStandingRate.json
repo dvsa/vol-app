@@ -125,6 +125,7 @@
                 "id": ""
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "short-label": "financial-standing-rate-element-effectiveDate",
                 "label": "financial-standing-rate-element-effectiveDate",
                 "label_attributes": {
@@ -234,6 +235,10 @@
             "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money"
           }
         ]
+      },
+      "effectiveFrom": {
+        "name": "effectiveFrom",
+        "type": "Common\\InputFilter\\DateParts"
       },
       "type": "Laminas\\InputFilter\\InputFilter"
     }

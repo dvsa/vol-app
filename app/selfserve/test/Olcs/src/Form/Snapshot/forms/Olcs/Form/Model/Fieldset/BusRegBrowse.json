@@ -47,6 +47,7 @@
       "spec": {
         "name": "acceptedDate",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "selfserve.search.busreg.browse.form.acceptedDate.label",
           "render_delimiters": false
         },
@@ -69,6 +70,7 @@
     },
     "acceptedDate": {
       "name": "acceptedDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

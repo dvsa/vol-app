@@ -33,6 +33,7 @@
           "id": "dateReceived"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date received",
           "create_empty_option": true,
           "render_delimiters": false
@@ -369,6 +370,7 @@
     "dateReceived": {
       "name": "dateReceived",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

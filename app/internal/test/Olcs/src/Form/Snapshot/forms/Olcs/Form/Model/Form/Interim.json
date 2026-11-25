@@ -87,6 +87,7 @@
                 "id": "interimStart"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "internal.interim.form.interim_start",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -104,6 +105,7 @@
                 "id": "interimEnd"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "internal.interim.form.interim_end",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -416,6 +418,7 @@
       "interimStart": {
         "name": "interimStart",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -436,6 +439,7 @@
       "interimEnd": {
         "name": "interimEnd",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

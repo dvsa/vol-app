@@ -38,6 +38,7 @@
               "name": "continuationDate",
               "type": "DateSelect",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Continuation date",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -55,6 +56,7 @@
               "name": "reviewDate",
               "type": "DateSelect",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Review Date",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -158,6 +160,7 @@
       "continuationDate": {
         "name": "continuationDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -177,6 +180,7 @@
       },
       "reviewDate": {
         "name": "reviewDate",
+        "type": "Common\\InputFilter\\DateParts",
         "required": false,
         "filters": [
           {

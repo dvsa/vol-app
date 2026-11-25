@@ -12,6 +12,7 @@
         },
         "type": "DateSelect",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Agreed by TC/DTC/HTRU/DHTRU date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -44,6 +45,7 @@
           "id": "hearingDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateTimeParts",
           "label": "Meeting date",
           "create_empty_option": true,
           "render_delimiters": true,
@@ -168,6 +170,7 @@
     "agreedByTcDate": {
       "name": "agreedByTcDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -188,6 +191,7 @@
     "hearingDate": {
       "name": "hearingDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateTimeParts",
       "filters": [
         {
           "name": "DateTimeSelectNullifier"

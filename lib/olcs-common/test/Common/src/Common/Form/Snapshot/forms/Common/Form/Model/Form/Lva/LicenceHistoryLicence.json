@@ -111,6 +111,7 @@
                 "id": "dob"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "selfserve-app-subSection-previous-history-licence-history-disqualificationDate",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -144,6 +145,7 @@
                 "id": "purchaseDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "selfserve-app-subSection-previous-history-licence-history-purchaseDate",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -244,6 +246,7 @@
       "disqualificationDate": {
         "name": "disqualificationDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -271,6 +274,7 @@
       "purchaseDate": {
         "name": "purchaseDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

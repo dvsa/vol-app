@@ -21,6 +21,7 @@
           "class": "extra-long"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of request",
           "create_empty_option": true,
           "render_delimiters": false
@@ -38,6 +39,7 @@
           "class": "extra-long"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of decision",
           "create_empty_option": true,
           "render_delimiters": false
@@ -109,6 +111,7 @@
         },
         "type": "DateSelect",
         "options": {
+          "input_type": "Olcs\\InputFilter\\WithdrawnDate",
           "label": "Withdrawn date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -150,6 +153,7 @@
   "input_filter": {
     "requestDate": {
       "name": "requestDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -170,6 +174,7 @@
     "decisionDate": {
       "name": "decisionDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -236,6 +241,7 @@
     "withdrawnDate": {
       "name": "withdrawnDate",
       "required": true,
+      "type": "Olcs\\InputFilter\\WithdrawnDate",
       "filters": [
         {
           "name": "DateSelect",

@@ -99,6 +99,7 @@
           "id": "assignedDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date first assigned to TC/DTC/TR",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -162,6 +163,7 @@
     "assignedDate": {
       "name": "assignedDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "ValidateIf",

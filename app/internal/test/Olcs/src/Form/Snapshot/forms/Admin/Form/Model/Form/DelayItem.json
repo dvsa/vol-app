@@ -44,6 +44,7 @@
                 "data-container-class": "nextReviewDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Next review date:",
                 "create_empty_option": true
               }
@@ -112,6 +113,7 @@
       "nextReviewDate": {
         "name": "nextReviewDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

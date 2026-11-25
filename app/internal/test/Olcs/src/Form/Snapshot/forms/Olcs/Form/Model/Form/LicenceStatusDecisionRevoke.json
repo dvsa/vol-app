@@ -54,6 +54,7 @@
                 "required": false
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateTimeParts",
                 "label": "licence-status.revocation.from",
                 "create_empty_option": true,
                 "max_year_delta": "+5",
@@ -194,6 +195,7 @@
     "licence-decision": {
       "revokeFrom": {
         "name": "revokeFrom",
+        "type": "Common\\InputFilter\\DateTimeParts",
         "filters": [
           {
             "name": "DateTimeSelectNullifier"

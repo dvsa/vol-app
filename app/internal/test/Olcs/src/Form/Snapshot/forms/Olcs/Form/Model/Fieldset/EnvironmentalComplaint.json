@@ -10,6 +10,7 @@
           "id": "complaintDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Complaint date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -158,7 +159,8 @@
         {
           "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
         }
-      ]
+      ],
+      "type": "Common\\InputFilter\\DateParts"
     },
     "description": {
       "name": "description",

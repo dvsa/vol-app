@@ -95,6 +95,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date stopped",
           "create_empty_option": true,
           "render_delimiters": false
@@ -110,6 +111,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date requested",
           "create_empty_option": true,
           "render_delimiters": false
@@ -125,6 +127,7 @@
           "id": "issuedDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Issued date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -309,6 +312,7 @@
     },
     "stoppedDate": {
       "name": "stoppedDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -339,6 +343,7 @@
     },
     "requestedDate": {
       "name": "requestedDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -361,6 +366,7 @@
     },
     "issuedDate": {
       "name": "issuedDate",
+      "type": "Common\\InputFilter\\DateParts",
       "required": false,
       "validators": [
         {

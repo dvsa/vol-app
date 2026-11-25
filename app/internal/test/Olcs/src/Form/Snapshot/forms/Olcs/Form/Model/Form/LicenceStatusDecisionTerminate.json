@@ -20,6 +20,7 @@
                 "required": false
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "licence-status.terminate.date.label",
                 "create_empty_option": true,
                 "min_year_delta": "-5"
@@ -88,6 +89,7 @@
     "licence-decision": {
       "terminateDate": {
         "name": "terminateDate",
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

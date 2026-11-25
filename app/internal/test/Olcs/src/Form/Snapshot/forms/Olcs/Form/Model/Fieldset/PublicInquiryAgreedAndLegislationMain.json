@@ -7,6 +7,7 @@
       "spec": {
         "name": "agreedDate",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Agreed date",
           "create_empty_option": false,
           "render_delimiters": true
@@ -93,6 +94,7 @@
       "spec": {
         "name": "ecmsFirstReceivedDate",
         "options": {
+          "input_type": "Olcs\\InputFilter\\PublicInquiryEcmsDate",
           "label": "Date ECMS case first received by OTC",
           "create_empty_option": false,
           "render_delimiters": true,
@@ -190,6 +192,7 @@
   "input_filter": {
     "agreedDate": {
       "name": "agreedDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -221,6 +224,7 @@
     "ecmsFirstReceivedDate": {
       "name": "ecmsFirstReceivedDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\PublicInquiryEcmsDate",
       "filters": [
         {
           "name": "DateSelectNullifier"

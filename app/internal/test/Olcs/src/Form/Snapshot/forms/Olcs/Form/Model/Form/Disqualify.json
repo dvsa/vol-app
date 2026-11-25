@@ -63,6 +63,7 @@
           "required": "required"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "form.disqualify.start-date",
           "short-label": "form.disqualify.start-date",
           "create_empty_option": true,
@@ -170,6 +171,7 @@
           }
         }
       ],
+      "type": "Common\\InputFilter\\DateParts",
       "required": true
     },
     "period": {

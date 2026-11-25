@@ -15,6 +15,7 @@
           "required": "required"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Refunds after"
         },
         "type": "DateSelect"
@@ -30,6 +31,7 @@
           "required": "required"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Refunds before"
         },
         "type": "DateSelect"
@@ -77,6 +79,7 @@
     "startDate": {
       "name": "startDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -94,6 +97,7 @@
     "endDate": {
       "name": "endDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

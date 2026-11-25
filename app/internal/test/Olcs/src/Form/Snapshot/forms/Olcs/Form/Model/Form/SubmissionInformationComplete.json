@@ -16,6 +16,7 @@
             "spec": {
               "name": "informationCompleteDate",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Information completed date",
                 "create_empty_option": false,
                 "render_delimiters": true
@@ -107,6 +108,7 @@
     "fields": {
       "informationCompleteDate": {
         "name": "informationCompleteDate",
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

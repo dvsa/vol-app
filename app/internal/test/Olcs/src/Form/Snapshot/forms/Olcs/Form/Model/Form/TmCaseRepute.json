@@ -33,6 +33,7 @@
             "spec": {
               "name": "decisionDate",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Date of decision",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -49,6 +50,7 @@
               },
               "type": "DateSelect",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Date of notification (to TM)",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -170,6 +172,7 @@
     "fields": {
       "decisionDate": {
         "name": "decisionDate",
+        "type": "Common\\InputFilter\\DateParts",
         "validators": [
           {
             "name": "\\Common\\Validator\\Date"
@@ -190,6 +193,8 @@
       "notifiedDate": {
         "name": "notifiedDate",
         "required": true,
+        "allow_empty": true,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelect",

@@ -90,6 +90,7 @@
     },
     "birthDate": {
       "name": "birthDate",
+      "type": "Common\\InputFilter\\PersonDateOfBirth",
       "required": false,
       "filters": [
         {

@@ -28,6 +28,7 @@
           "id": "applicationReceiptDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Application received",
           "create_empty_option": true,
           "render_delimiters": false
@@ -78,6 +79,7 @@
           "id": "hearingDate"
         },
         "options": {
+          "input_type": "Olcs\\InputFilter\\ImpoundingHearingDate",
           "label": "Hearing date",
           "create_empty_option": true,
           "render_delimiters": true
@@ -163,6 +165,7 @@
           "id": "outcomeSentDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Outcome sent date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -189,6 +192,7 @@
   "input_filter": {
     "applicationReceiptDate": {
       "name": "applicationReceiptDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -229,6 +233,7 @@
     "hearingDate": {
       "name": "hearingDate",
       "required": false,
+      "type": "Olcs\\InputFilter\\ImpoundingHearingDate",
       "filters": [
         {
           "name": "Laminas\\Filter\\DateTimeSelect",
@@ -348,6 +353,7 @@
     "outcomeSentDate": {
       "name": "outcomeSentDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
