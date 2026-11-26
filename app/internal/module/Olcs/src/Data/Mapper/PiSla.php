@@ -7,6 +7,7 @@ use Olcs\Logging\Log\Logger;
 
 class PiSla extends Pi
 {
+    #[\Override]
     public static function mapFromForm(array $data)
     {
         $data = parent::mapFromForm($data);
@@ -28,6 +29,7 @@ class PiSla extends Pi
         return $data;
     }
 
+    #[\Override]
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
         $messages = $errors['messages'] ?? [];
