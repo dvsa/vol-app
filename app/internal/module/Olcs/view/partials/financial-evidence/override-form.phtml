@@ -1,0 +1,54 @@
+<?php
+/**
+ * The form a caseworker answers one check with on the change document review page, drawn the
+ * same way for an issue and a pass. One form instance serves every check of its kind; only the
+ * row differs, so ids are made unique per check.
+ *
+ * The check being saved shows the form as posted (values and messages).
+ *
+ * @var \Laminas\Form\FormInterface $form       the issue or pass override form
+ * @var int                         $analysisId
+ * @var array                       $check      one of the review mapper's issues or passes
+ * @var string                      $idPrefix   keeps element ids unique between the two forms
+ * @var string                      $button     the name of the form's submit element
+ * @var array                       $captured   per caseworker field: [value, messages, class] as posted
+ * @var string|null                 $errorRow   the check whose form is being shown again with errors
+ */
+
+$key = $check['key'];
+$isErrorRow = $errorRow === $key;
+
+$form->get('analysisId')->setValue((string)$analysisId);
+$form->get('row')->setValue($key);
+$form->get('changeRecommendation')
+    ->setValue($check['changed'] ? 'Y' : ($check['kept'] ? 'N' : null))
+    ->setAttribute('id', $idPrefix . 'changeRecommendation-' . $key);
+$form->get('comment')
+    ->setValue($check['comment'] ?? '')
+    ->setAttribute('id', $idPrefix . 'comment-' . $key);
+
+foreach ($captured as $name => [$value, $messages, $class]) {
+    $element = $form->get($name);
+    $element->setMessages($isErrorRow ? $messages : []);
+    $element->setAttribute('class', $class);
+
+    if ($isErrorRow) {
+        $element->setValue($value);
+    }
+}
+?>
+<form method="post" novalidate action="#issue-<?php echo $this->escapeHtmlAttr($key); ?>">
+  <?php echo $this->formElement($form->get('security')); ?>
+  <?php echo $this->formElement($form->get('analysisId')); ?>
+  <?php echo $this->formElement($form->get('row')); ?>
+  <div class="govuk-form-group">
+    <?php echo $this->formRow($form->get('changeRecommendation')); ?>
+  </div>
+  <div class="govuk-form-group">
+    <?php echo $this->formRow($form->get('comment')); ?>
+  </div>
+  <div class="govuk-button-group">
+    <?php echo $this->formElement($form->get($button)); ?>
+  </div>
+</form>
+

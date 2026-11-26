@@ -1,0 +1,127 @@
+{
+  "name": "messaging-subject-details",
+  "attributes": {
+    "class": "table__form"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "placeholder": "",
+          "class": "long",
+          "required": "required"
+        },
+        "options": {
+          "label": "Description"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "attributes": {
+          "id": "category",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Category",
+          "service_name": "Olcs\\Service\\Data\\Category",
+          "context": {
+            "isTaskCategory": "Y"
+          },
+          "empty_option": "Please select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subCategory",
+        "attributes": {
+          "id": "subCategory",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Sub-category",
+          "service_name": "Olcs\\Service\\Data\\SubCategory",
+          "context": {
+            "isTaskCategory": "Y"
+          },
+          "empty_option": "Please select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isActive",
+        "options": {
+          "label": "Active",
+          "checked_value": "1",
+          "unchecked_value": "0"
+        },
+        "type": "OlcsCheckbox",
+        "attributes": {
+          "class": "",
+          "id": "isActive"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "description": {
+      "name": "description",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 249
+          }
+        }
+      ]
+    },
+    "category": {
+      "name": "category",
+      "required": true
+    },
+    "subCategory": {
+      "name": "subCategory",
+      "required": true
+    }
+  }
+}

@@ -27,6 +27,7 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceDecision;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceIssueOverride;
+use Olcs\Form\Model\Form\Lva\FinancialEvidenceOverrideRules;
 use Olcs\Form\Model\Form\Lva\FinancialEvidencePassOverride;
 
 /**
@@ -46,7 +47,9 @@ use Olcs\Form\Model\Form\Lva\FinancialEvidencePassOverride;
  * change passes back to fails (OverridePassedDocumentAnalysisFlag, shown via the ?view=passes
  * query flag rather than a route segment, since the LVA section route is shared by every
  * section and a new path segment there would change every section's URL shape), and decide
- * the evidence (UpdateDocumentAnalysisAssessmentStatus). The section's own route always
+ * the evidence (UpdateDocumentAnalysisAssessmentStatus). Both directions are the same journey -
+ * an answer on a check that can be revisited, changed back or cleared - so both are handled by
+ * processOverride(), configured by OVERRIDE_JOURNEYS. The section's own route always
  * lands on indexAction, so leaving the change page and coming back shows the tabs again.
  */
 abstract class AbstractFinancialEvidenceAssessmentController extends AbstractController implements
@@ -92,16 +95,40 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
      */
     public const string MSG_UNCHANGED_ISSUES = 'lva-financial-evidence-assessment-error-unchanged-issues';
 
-    /** The fields of the passed-check form that the caseworker fills in; the rest are hidden. */
-    private const array PASS_OVERRIDE_CASEWORKER_FIELDS = ['changeRecommendation', 'comment'];
+    /**
+     * The two ways a caseworker can answer a check, keyed by the value of the button that posts
+     * them. Both are handled by processOverride(), which differs between them only by this:
+     * the list of the page's checks the answer is about, the form's button, the command that
+     * records it, and the flash messages for a change and for undoing one.
+     */
+    private const array OVERRIDE_JOURNEYS = [
+        self::CHANGE_OVERRIDE => [
+            'list' => 'issues',
+            'button' => 'saveOverride',
+            'command' => OverrideDocumentAnalysisFlag::class,
+            'changed' => 'lva-financial-evidence-assessment-message-changed-to-pass',
+            'changedBack' => 'lva-financial-evidence-assessment-message-changed-back-to-original',
+        ],
+        self::CHANGE_OVERRIDE_PASS => [
+            'list' => 'passes',
+            'button' => 'savePassOverride',
+            'command' => OverridePassedDocumentAnalysisFlag::class,
+            'changed' => 'lva-financial-evidence-assessment-message-changed-to-fail',
+            'changedBack' => 'lva-financial-evidence-assessment-message-changed-back-to-pass',
+        ],
+    ];
+
+    /** The decision form's only field the caseworker fills in; the rest are hidden. */
+    private const array DECISION_CASEWORKER_FIELDS = ['decision'];
 
     private const string SECTION_ROUTE = 'lva-%s/financial_evidence_assessment';
 
     /**
-     * The passed check whose form is being shown again with errors, or null. The errors and the
-     * values the caseworker entered are on the form object itself, as for any other form.
+     * The check (an issue or a pass) whose form is being shown again with errors, or null. The
+     * errors and the values the caseworker entered are on the form object itself, as for any
+     * other form.
      */
-    protected ?string $passOverrideErrorRow = null;
+    protected ?string $overrideErrorRow = null;
 
     protected string $location = 'internal';
 
@@ -320,31 +347,30 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             return $this->redirectToIndex();
         }
 
-        $overrideForm = $this->formHelper->createForm(FinancialEvidenceIssueOverride::class, true, false);
-        $passOverrideForm = $this->formHelper->createForm(FinancialEvidencePassOverride::class, true, false);
+        $overrideForms = [
+            self::CHANGE_OVERRIDE => $this->formHelper->createForm(FinancialEvidenceIssueOverride::class, true, false),
+            self::CHANGE_OVERRIDE_PASS => $this->formHelper->createForm(FinancialEvidencePassOverride::class, true, false),
+        ];
         $decisionForm = $this->formHelper->createForm(FinancialEvidenceDecision::class, true, false);
 
         if ($this->getRequest()->isPost()) {
             $post = $this->getRequest()->getPost();
+            $journey = self::postedOverrideJourney($post);
 
-            if ($post->get('saveOverride') === self::CHANGE_OVERRIDE) {
-                return $this->processOverride($overrideForm, $analysisId, $page);
-            }
-
-            if ($post->get('savePassOverride') === self::CHANGE_OVERRIDE_PASS) {
-                $response = $this->processPassOverride($passOverrideForm, $analysisId, $page);
-
-                // Null means the caseworker has something to put right: the page is drawn again
-                // (no redirect) with the error against the field and what they entered kept.
-                if ($response !== null) {
-                    return $response;
-                }
+            if ($journey !== null) {
+                $response = $this->processOverride($journey, $overrideForms[$journey], $analysisId, $page);
             } elseif ($post->get('saveDecision') === self::CHANGE_DECIDE) {
-                return $this->processDecision($decisionForm, $analysisId);
+                $response = $this->processDecision($decisionForm, $analysisId);
             } else {
                 $this->flashMessengerHelper->addUnknownError();
 
-                return $this->redirectBackToChangeReview();
+                $response = $this->redirectBackToChangeReview();
+            }
+
+            // Null means the caseworker has something to put right: the page is drawn again
+            // (no redirect) with the error against the field and what they entered kept.
+            if ($response !== null) {
+                return $response;
             }
         }
 
@@ -361,9 +387,9 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             'passCount'        => $page['passCount'],
             'passesTable'      => $this->tableFactory->prepareTable('financial-evidence-assessment-passes', $page['passes']),
             'showPassOverride' => $this->getRequest()->getQuery(self::QUERY_VIEW) === self::VIEW_PASSES,
-            'overrideForm'     => $overrideForm,
-            'passOverrideForm' => $passOverrideForm,
-            'passOverrideErrorRow' => $this->passOverrideErrorRow,
+            'overrideForm'     => $overrideForms[self::CHANGE_OVERRIDE],
+            'passOverrideForm' => $overrideForms[self::CHANGE_OVERRIDE_PASS],
+            'overrideErrorRow' => $this->overrideErrorRow,
             'decisionForm'     => $decisionForm,
             'backUrl'          => $this->url()->fromRoute($this->sectionRoute(), [], [], true),
         ]);
@@ -372,99 +398,61 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         return $this->render($view);
     }
 
-    /**
-     * Change one issue to a pass, or leave a note on it without changing its flag.
-     *
-     * "Yes" changes the row; a genuine fail always needs a reason, a skipped check does not.
-     * "No" with nothing to say changes nothing; "No" with a reason is saved as a note, the flag
-     * left as it is. The API refuses a row that is not currently a fail or skipped, or an
-     * analysis already decided.
-     */
-    protected function processOverride(FormInterface $form, int $analysisId, array $page)
+    /** Which of OVERRIDE_JOURNEYS was posted, by the value of its form's button, or null. */
+    private static function postedOverrideJourney(\Laminas\Stdlib\ParametersInterface $post): ?string
     {
-        $post = $this->getRequest()->getPost();
-        $form->setData($post);
-
-        if (!$form->isValid()) {
-            $this->flashMessengerHelper->addUnknownError();
-
-            return $this->redirectBackToChangeReview();
+        foreach (self::OVERRIDE_JOURNEYS as $journey => $config) {
+            if ($post->get($config['button']) === $journey) {
+                return $journey;
+            }
         }
 
-        $data = $form->getData();
-
-        if ((int)$data['analysisId'] !== $analysisId) {
-            $this->flashMessengerHelper->addUnknownError();
-
-            return $this->redirectBackToChangeReview();
-        }
-
-        $issue = self::findByKey($page['issues'], (string)$data['row']);
-
-        if ($issue === null || $issue['changed']) {
-            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-already-changed');
-
-            return $this->redirectBackToChangeReview();
-        }
-
-        $comment = trim((string)$data['comment']);
-        $changeToPass = $data['changeRecommendation'] === 'Y';
-
-        // A genuine fail always needs a reason to change; a skipped check does not.
-        if ($changeToPass && $comment === '' && $issue['flag'] === FinancialEvidenceAssessmentTab::FLAG_FAIL) {
-            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-error-issue-reason-required');
-
-            return $this->redirectBackToChangeReview();
-        }
-
-        if (!$changeToPass && $comment === '') {
-            // Nothing to change and nothing to say.
-            return $this->redirectBackToChangeReview();
-        }
-
-        $response = $this->handleCommand(
-            OverrideDocumentAnalysisFlag::create([
-                'id' => $analysisId,
-                'row' => $data['row'],
-                'comment' => $comment,
-                'changeRecommendation' => $data['changeRecommendation'],
-            ])
-        );
-
-        if ($response->isOk()) {
-            $this->flashMessengerHelper->addSuccessMessage(
-                $changeToPass ? 'lva-financial-evidence-assessment-message-changed-to-pass' : 'lva-financial-evidence-assessment-message-comment-saved'
-            );
-        } else {
-            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-change-not-recorded');
-        }
-
-        return $this->redirectBackToChangeReview();
+        return null;
     }
 
     /**
-     * Record the caseworker's answer on one passed check: change it to a fail, or leave a note on
-     * it without changing its flag.
+     * Record the caseworker's answer on one check: change it (an issue to a pass, or a pass to a
+     * fail, per $journey), or leave a note on it without changing its flag.
      *
      * The answer stands and can be revisited, so a check already changed is handled like any
-     * other. "Yes" makes it a fail (or keeps it one and replaces the comment); every row here is
-     * a genuine pass, so that always needs a reason, which the form enforces along with its other
-     * rules. "No" means the analyser's outcome stands,
-     * which changes a check already failed back to a pass: with text, the text is kept as a
-     * note; with none, the caseworker's entry for the check is deleted. "No" with nothing typed
-     * on a check nobody has answered is nothing to send. The API refuses a row the analyser did
-     * not pass.
+     * other. "Yes" changes it (or keeps it changed and replaces the comment). "No" means the
+     * analyser's outcome stands, which changes a check already changed back: with text, the text
+     * is kept as a note; with none, the caseworker's entry for the check is deleted. "No" with
+     * nothing typed on a check nobody has answered is nothing to send.
+     *
+     * Every rule the caseworker can fall foul of (no answer, "Yes" with no reason on a check that
+     * was not skipped, text over the limit) is the form's, with its message. An invalid form is
+     * shown again with those messages against their fields; nothing is sent to the API, which
+     * applies the same rules to any other caller.
+     *
+     * @return \Laminas\Http\Response|null null when the page is to be drawn again with the form's errors
      */
-    protected function processPassOverride(FormInterface $form, int $analysisId, array $page)
+    protected function processOverride(string $journey, FormInterface $form, int $analysisId, array $page)
     {
+        $config = self::OVERRIDE_JOURNEYS[$journey];
         $post = $this->getRequest()->getPost();
-        $form->setData($post);
+        $row = (string)$post->get('row');
+        $check = self::findByKey($page[$config['list']], $row);
 
-        // Every rule the caseworker can fall foul of (no answer, "Yes" with no reason, text over
-        // the limit) is the form's, with its message. An invalid form is shown again with those
-        // messages against their fields; nothing is sent to the API.
+        // Only a flagged check on this page's own list can be answered (bank details are listed
+        // with the passes for reference, but carry no flag). Anything else is a stale or edited form.
+        if ($check === null || !$check['flagged']) {
+            $this->flashMessengerHelper->addUnknownError();
+
+            return $this->redirectBackToChangeReview();
+        }
+
+        // An unanswered radio is not posted at all, but the reason's rule needs the key to read.
+        // The check's analyser flag is the page's, never the post's: it decides whether a reason
+        // is needed, so it cannot be left to what was sent.
+        $form->setData(array_merge(
+            ['changeRecommendation' => null],
+            $post->toArray(),
+            [FinancialEvidenceOverrideRules::CONTEXT_ANALYSER_FLAG => $check['flag']]
+        ));
+
         if (!$form->isValid()) {
-            return $this->passOverrideFormErrors($form, $post, $page);
+            return $this->formErrors($form, FinancialEvidenceOverrideRules::CASEWORKER_FIELDS, $row);
         }
 
         $data = $form->getData();
@@ -475,32 +463,19 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             return $this->redirectBackToChangeReview();
         }
 
-        $pass = self::findByKey($page['passes'], (string)$data['row']);
-
-        if ($pass === null || !$pass['flagged']) {
-            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-message-already-changed');
-
-            return $this->redirectBackToChangeReview();
-        }
-
         $comment = trim((string)$data['comment']);
-        $changeToFail = $data['changeRecommendation'] === 'Y';
+        $change = $data['changeRecommendation'] === 'Y';
+        $changeBack = !$change && $check['changed'];
 
-        // "No" means the analyser's outcome stands. On a check already changed to a fail that
-        // changes it back to a pass; with nothing typed, the API deletes the caseworker's entry
-        // for the check altogether (a change is undone, a note removed).
-        $changeBack = !$changeToFail && $pass['changed'];
-        $answered = $pass['changed'] || $pass['kept'];
-
-        if (!$changeToFail && $comment === '' && !$answered) {
+        if (!$change && $comment === '' && !($check['changed'] || $check['kept'])) {
             // Nothing to change, nothing to remove and nothing to say.
             return $this->redirectBackToChangeReview();
         }
 
         $response = $this->handleCommand(
-            OverridePassedDocumentAnalysisFlag::create([
+            $config['command']::create([
                 'id' => $analysisId,
-                'row' => $data['row'],
+                'row' => $row,
                 'comment' => $comment,
                 'changeRecommendation' => $data['changeRecommendation'],
             ])
@@ -509,8 +484,8 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ($response->isOk()) {
             $this->flashMessengerHelper->addSuccessMessage(
                 match (true) {
-                    $changeToFail => 'lva-financial-evidence-assessment-message-changed-to-fail',
-                    $changeBack => 'lva-financial-evidence-assessment-message-changed-back-to-pass',
+                    $change => $config['changed'],
+                    $changeBack => $config['changedBack'],
                     $comment === '' => 'lva-financial-evidence-assessment-message-comment-removed',
                     default => 'lva-financial-evidence-assessment-message-comment-saved',
                 }
@@ -523,37 +498,30 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * The form for one passed check did not validate. If that is something the caseworker can
-     * put right (the messages are all on the fields they fill in), the page is drawn again with
-     * the form's own messages against those fields and what they entered kept: formRow() renders
+     * A form on the change page did not validate. If that is something the caseworker can put
+     * right (the messages are all on fields they fill in), the page is drawn again with the
+     * form's own messages against those fields and what they entered kept: formRow() renders
      * them, as on any other form. Returns null so changeReviewAction() carries on to render.
      *
      * Anything else is not theirs to fix (a hidden field with a bad value, an expired security
-     * token, a row that is not one of the page's passed checks), so it reads as an unknown error.
+     * token), so it reads as an unknown error.
+     *
+     * @param list<string> $caseworkerFields
+     * @param string|null  $row the check the form is about, if it is an override form
      *
      * @return \Laminas\Http\Response|null
      */
-    protected function passOverrideFormErrors(
-        FormInterface $form,
-        \Laminas\Stdlib\ParametersInterface $post,
-        array $page,
-    ) {
-        $row = (string)$post->get('row');
-        $pass = self::findByKey($page['passes'], $row);
+    protected function formErrors(FormInterface $form, array $caseworkerFields, ?string $row = null)
+    {
         $fieldsInError = array_keys($form->getMessages());
 
-        $caseworkerCanFixIt = $fieldsInError !== []
-            && array_diff($fieldsInError, self::PASS_OVERRIDE_CASEWORKER_FIELDS) === []
-            && $pass !== null
-            && $pass['flagged'];
-
-        if (!$caseworkerCanFixIt) {
+        if ($fieldsInError === [] || array_diff($fieldsInError, $caseworkerFields) !== []) {
             $this->flashMessengerHelper->addUnknownError();
 
             return $this->redirectBackToChangeReview();
         }
 
-        $this->passOverrideErrorRow = $row;
+        $this->overrideErrorRow = $row;
 
         return null;
     }
@@ -561,16 +529,17 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     /**
      * Record the caseworker's decision. The API refuses acceptance while any issue is unchanged;
      * that refusal is explained, anything else reads as not recorded. A recorded decision ends the
-     * review, so the caseworker goes back to the tabs.
+     * review, so the caseworker goes back to the tabs. No decision selected is shown against the
+     * field, as the override forms' errors are.
+     *
+     * @return \Laminas\Http\Response|null null when the page is to be drawn again with the form's errors
      */
     protected function processDecision(FormInterface $form, int $analysisId)
     {
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
-            $this->flashMessengerHelper->addErrorMessage('lva-financial-evidence-assessment-error-decision-required');
-
-            return $this->redirectBackToChangeReview();
+            return $this->formErrors($form, self::DECISION_CASEWORKER_FIELDS);
         }
 
         $data = $form->getData();

@@ -22,7 +22,7 @@ final class OverrideDocumentAnalysisFlagTest extends TestCase
     #[\Override]
     protected function getOptionalDtoFields()
     {
-        return [];
+        return ['comment'];
     }
 
     #[\Override]
@@ -31,7 +31,8 @@ final class OverrideDocumentAnalysisFlagTest extends TestCase
         return [
             'id' => ['1', '2'],
             'row' => OverrideDocumentAnalysisFlag::ROWS,
-            'comment' => ['Checked by hand', str_repeat('a', 1000)],
+            'comment' => ['', 'Checked by hand', str_repeat('a', 1000)],
+            'changeRecommendation' => ['Y', 'N'],
         ];
     }
 
@@ -42,7 +43,8 @@ final class OverrideDocumentAnalysisFlagTest extends TestCase
             'id' => ['0', 'abc', null],
             // Bank and bank address carry no flag, so they cannot be overridden.
             'row' => ['bank', 'bankAddress', 'nonsense', '', null],
-            'comment' => ['', str_repeat('a', 1001), null],
+            'comment' => [str_repeat('a', 1001)],
+            'changeRecommendation' => ['y', 'yes', 'nonsense', '', null],
         ];
     }
 
