@@ -115,6 +115,15 @@ final class PersonDateOfBirthTest extends TestCase
         self::assertArrayHasKey('inFuture', $form->getMessages()['data']['birthDate']);
     }
 
+    public function testSoleTraderFutureDateIsRejected(): void
+    {
+        $form = $this->createDateForm(SoleTrader::class);
+        $form->setData(['data' => ['birthDate' => ['day' => '01', 'month' => '01', 'year' => '9999']]]);
+
+        self::assertFalse($form->isValid());
+        self::assertArrayHasKey('inFuture', $form->getMessages()['data']['birthDate']);
+    }
+
     public function testConvictionDateChecksRespectDefendantType(): void
     {
         $input = new OffenceDateOfBirth('birthDate');
