@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Messaging\CanListConversationsByLic
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessOrganisationAuthAware;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSideEffect;
+use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\NotIsAnonymousUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Messaging\CanAccessConversationMessagesWithConversationId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Messaging\CanListConversationsByOrganisation;
@@ -35,6 +36,11 @@ return [
     CommandHandler\Messaging\Conversation\StoreEnhancedSnapshot::class               => IsSideEffect::class,
     QueryHandler\Messaging\Conversations\ByOrganisation::class                       => CanListConversationsByOrganisation::class,
     QueryHandler\Messaging\Subjects\All::class                                       => NotIsAnonymousUser::class,
+    QueryHandler\Messaging\Subjects\GetList::class                                  => IsSystemAdmin::class,
+    QueryHandler\Messaging\Subjects\ById::class                                     => IsSystemAdmin::class,
+    CommandHandler\Messaging\Subject\Create::class                                  => IsSystemAdmin::class,
+    CommandHandler\Messaging\Subject\Update::class                                  => IsSystemAdmin::class,
+    CommandHandler\Messaging\Subject\Delete::class                                  => IsSystemAdmin::class,
     CommandHandler\Messaging\Conversation\Create::class                              => CanCreateConversationForOrganisation::class,
     CommandHandler\Email\SendNewMessageNotificationToOperators::class                => IsSideEffect::class,
     QueryHandler\Messaging\Message\UnreadCountByOrganisationAndRoles::class          => CanListConversationsByOrganisation::class,

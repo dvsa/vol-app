@@ -47,6 +47,9 @@ final class OverrideDocumentAnalysisFlag extends AbstractCommand
     /**
      * @var string
      */
+    // Optional: "N" with no comment is a real request (it removes the caseworker's entry for the
+    // check), as is "Y" on a skipped check, and an input not marked optional is refused when empty.
+    #[Transfer\Optional]
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
     #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 1000])]
     protected $comment;

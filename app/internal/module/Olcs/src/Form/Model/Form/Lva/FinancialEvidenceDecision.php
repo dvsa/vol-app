@@ -16,12 +16,16 @@ use Laminas\Form\Annotation;
 #[Annotation\Options(['prefer_form_input_filter' => true])]
 class FinancialEvidenceDecision
 {
+    /** Shown against the field when no decision is selected. */
+    public const string MSG_DECISION_REQUIRED = 'lva-financial-evidence-assessment-error-decision-required';
+
     #[Annotation\Type('Hidden')]
     #[Annotation\Required(true)]
     #[Annotation\Validator('Laminas\Validator\Digits')]
     public $analysisId = null;
 
     #[Annotation\Required(true)]
+    #[Annotation\ErrorMessage(self::MSG_DECISION_REQUIRED)]
     #[Annotation\Type('Radio')]
     #[Annotation\Attributes(['radios_wrapper_attributes' => ['class' => 'govuk-radios--standard']])]
     #[Annotation\Options([

@@ -1,5 +1,25 @@
 # Changelog
 
+## [9.8.0](https://github.com/dvsa/vol-app/compare/v9.7.0...v9.8.0) (2026-11-25)
+
+
+### Features
+
+* admin page to manage message categories VOL-6409 ([#1936](https://github.com/dvsa/vol-app/issues/1936)) ([f87d600](https://github.com/dvsa/vol-app/commit/f87d600fb8c7fd48eba8717bc9a74cf986640b86))
+* caseworkers can attach documents to messages VOL-7224 ([#1927](https://github.com/dvsa/vol-app/issues/1927)) ([0aed2c4](https://github.com/dvsa/vol-app/commit/0aed2c48d8b4261c245f2d455069b1ddac1e5c01))
+* financial assessment change pass to fail ([#1867](https://github.com/dvsa/vol-app/issues/1867)) ([3250cc3](https://github.com/dvsa/vol-app/commit/3250cc34f962460fa612f79bb631946f9546d34b))
+* grace period type, finance or transport manager VOL-7767 ([#1926](https://github.com/dvsa/vol-app/issues/1926)) ([df9e0a7](https://github.com/dvsa/vol-app/commit/df9e0a75456294ac48de3719efc8ab7ea189fa27))
+* local mock for GOV.UK One Login and address lookup ([#1931](https://github.com/dvsa/vol-app/issues/1931)) ([68cef41](https://github.com/dvsa/vol-app/commit/68cef412ce80f6c5867042be7bc7e98db1fa9c6b))
+* vol 7322 financial assessment change fail to pass ([#1840](https://github.com/dvsa/vol-app/issues/1840)) ([ae35ee0](https://github.com/dvsa/vol-app/commit/ae35ee089886b7b27246e6cfe5ee5931653c6eb5))
+
+
+### Bug Fixes
+
+* add slack alerting for ni compliance ([#1932](https://github.com/dvsa/vol-app/issues/1932)) ([367590e](https://github.com/dvsa/vol-app/commit/367590e6021d097d9bc2bdc82162565baa165f7b))
+* hide documents from cancelled draft applications (vol-7730) ([#1917](https://github.com/dvsa/vol-app/issues/1917)) ([4f4116f](https://github.com/dvsa/vol-app/commit/4f4116fa52e911e65a3e887936a7279b9d61d8a1))
+* hide unsubmitted application documents on every docs tab (vol-7729) ([#1916](https://github.com/dvsa/vol-app/issues/1916)) ([d9c90c4](https://github.com/dvsa/vol-app/commit/d9c90c4c4b9d6669fb79f0b116ce830fe1feec6d))
+* let uploads over 1 MB through the local Docker proxy, and upgrade it from nginx-proxy 1.5 to 1.11.6 - VOL-7777 ([#1921](https://github.com/dvsa/vol-app/issues/1921)) ([cc81cc2](https://github.com/dvsa/vol-app/commit/cc81cc235473a1f6dacbbd47ee92f114bf92aea9))
+
 ## [9.7.0](https://github.com/dvsa/vol-app/compare/v9.6.0...v9.7.0) (2026-11-17)
 
 
