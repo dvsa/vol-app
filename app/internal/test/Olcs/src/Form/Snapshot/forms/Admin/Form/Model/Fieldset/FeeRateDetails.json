@@ -37,6 +37,7 @@
       "spec": {
         "name": "effectiveFrom",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Effective From:"
         },
         "attributes": {
@@ -106,6 +107,7 @@
     "effectiveFrom": {
       "name": "effectiveFrom",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

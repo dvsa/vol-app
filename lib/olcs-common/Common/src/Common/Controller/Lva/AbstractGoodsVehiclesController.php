@@ -431,6 +431,12 @@ abstract class AbstractGoodsVehiclesController extends AbstractController
         if (!is_null($vehicleData['removalDate'])) {
             $this->formHelper
                 ->disableValidation($form->getInputFilter());
+            $vehicleInputs = $form->getInputFilter()->get('licence-vehicle');
+            foreach (['receivedDate', 'specifiedDate', 'warningLetterSeedDate', 'warningLetterSentDate'] as $field) {
+                if ($vehicleInputs->has($field)) {
+                    $vehicleInputs->get($field)->setValidateDateParts(false);
+                }
+            }
         }
 
         // If the vehicle is removed, ignore validation

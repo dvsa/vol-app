@@ -71,7 +71,7 @@ class FormElementMessageFormatter
         }
 
         $label = $this->getElementShortLabel($element);
-        if ($label === '' || $label === '0') {
+        if ($label === '' || $label === '0' || str_contains($message, self::FIELD_LABEL_PLACEHOLDER)) {
             $message = $this->replaceDefaultValidationMessages($element, $messageKey, $message);
             $message = $this->translator->translate($message);
             $message = $this->replaceMessageVariables($element, $message);
@@ -150,7 +150,7 @@ class FormElementMessageFormatter
 
     protected function getFieldLabelForElement(ElementInterface $element): string
     {
-        $label = $element->getLabel();
+        $label = $element->getLabel() ?: $element->getOption('validation-label');
         if (! is_string($label)) {
             return '';
         }

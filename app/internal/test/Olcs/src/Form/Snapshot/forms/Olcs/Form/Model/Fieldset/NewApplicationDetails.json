@@ -10,6 +10,7 @@
           "id": "receivedDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Application received",
           "create_empty_option": true,
           "render_delimiters": false
@@ -55,7 +56,8 @@
         {
           "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
         }
-      ]
+      ],
+      "type": "Common\\InputFilter\\DateParts"
     }
   }
 }

@@ -42,8 +42,9 @@ class ScanningDetails
 
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'received_date'])]
-    #[Form\Options(['label' => 'scanning.data.received_date', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => 'received_date'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'scanning.data.received_date', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => 'received_date'])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

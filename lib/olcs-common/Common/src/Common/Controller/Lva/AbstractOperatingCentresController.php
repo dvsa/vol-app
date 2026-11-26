@@ -287,6 +287,10 @@ abstract class AbstractOperatingCentresController extends AbstractController
             ->getForm($resultData, $request)
             ->setData($data);
 
+        if ($request->isPost()) {
+            $this->configureAdvertisementDateValidation($form, $data);
+        }
+
         $hasProcessedPostcode = $this->formHelper
             ->processAddressLookupForm($form, $request);
 
@@ -397,6 +401,10 @@ abstract class AbstractOperatingCentresController extends AbstractController
             ->get('lva-' . $this->lva . '-operating_centre')
             ->getForm($resultData, $request)
             ->setData($data);
+
+        if ($request->isPost()) {
+            $this->configureAdvertisementDateValidation($form, $data);
+        }
 
         if ($form->get('address')->has('searchPostcode')) {
             $hasProcessedPostcode = $this->formHelper
@@ -630,6 +638,17 @@ abstract class AbstractOperatingCentresController extends AbstractController
         $dtoClass = $this->getItemCommandMap[$this->lva];
         $response = $this->handleQuery($dtoClass::create(['id' => $this->params('child_id')]));
         return $response->getResult();
+    }
+
+    private function configureAdvertisementDateValidation($form, array $data): void
+    {
+        if (
+            $form->has('advertisements')
+            && ($data['advertisements']['radio'] ?? null) !== OperatingCentre::VALUE_OPTION_AD_PLACED_NOW
+        ) {
+            $form->getInputFilter()->get('advertisements')->get('adPlacedContent')->get('adPlacedDate')
+                ->setValidateDateParts(false);
+        }
     }
 
     /**

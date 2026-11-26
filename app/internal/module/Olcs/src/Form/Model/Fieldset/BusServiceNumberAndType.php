@@ -69,9 +69,10 @@ class BusServiceNumberAndType extends BusRegDetails
     public $otherDetails = null;
 
     #[Form\Attributes(['id' => 'receivedDate'])]
-    #[Form\Options(['label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -80,9 +81,10 @@ class BusServiceNumberAndType extends BusRegDetails
     public $receivedDate = null;
 
     #[Form\Attributes(['id' => 'effectiveDate'])]
-    #[Form\Options(['label' => 'Effective date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Effective date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
@@ -90,9 +92,10 @@ class BusServiceNumberAndType extends BusRegDetails
     public $effectiveDate = null;
 
     #[Form\Attributes(['id' => 'endDate'])]
-    #[Form\Options(['label' => 'End date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'End date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
@@ -100,9 +103,10 @@ class BusServiceNumberAndType extends BusRegDetails
     public $endDate = null;
 
     #[Form\Attributes(['id' => 'applicationCompleteDate'])]
-    #[Form\Options(['label' => 'Application complete date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Application complete date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     #[Form\Filter('DateSelectNullifier')]

@@ -30,9 +30,10 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $addOrRemoveCountriesButton = null;
 
     #[Form\Attributes(['id' => 'dateReceived'])]
-    #[Form\Options(['label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date received', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

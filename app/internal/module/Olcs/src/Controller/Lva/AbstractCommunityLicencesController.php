@@ -747,9 +747,12 @@ abstract class AbstractCommunityLicencesController extends AbstractController
     protected function alterStopForm($form)
     {
         if ($form->get('data')->get('type')->getValue() === 'N') {
+            $dateInputs = $form->getInputFilter()->get('dates');
+            $dateInputs->get('startDate')->setValidateDateParts(false);
+            $dateInputs->get('endDate')->setValidateDateParts(false);
             $this->formHelper
                 ->disableValidation(
-                    $form->getInputFilter()->get('dates')->get('startDate')
+                    $dateInputs->get('startDate')
                 );
         }
     }

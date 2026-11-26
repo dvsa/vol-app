@@ -11,7 +11,8 @@ class LicenceOverviewDetails
 {
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Options(['label' => 'Continuation date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+10'])]
+    #[Form\Input('Common\InputFilter\DateParts')]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Continuation date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+10'])]
     #[Form\Attributes(['required' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
@@ -19,8 +20,9 @@ class LicenceOverviewDetails
     public $continuationDate = null;
 
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Required(false)]
-    #[Form\Options(['label' => 'Review Date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+10'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Review Date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+10'])]
     #[Form\Attributes(['required' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]

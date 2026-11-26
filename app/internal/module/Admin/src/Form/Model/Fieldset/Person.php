@@ -34,6 +34,7 @@ class Person
     #[Form\Options(['label' => 'Birth date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     #[Form\Filter('DateSelectNullifier')]

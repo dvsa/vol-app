@@ -11,8 +11,9 @@ use Laminas\Form\Annotation as Form;
 #[Form\Options(['label' => ''])]
 class PublicInquiryAgreedAndLegislationMain
 {
-    #[Form\Options(['label' => 'Agreed date', 'create_empty_option' => false, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Agreed date', 'create_empty_option' => false, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -42,8 +43,9 @@ class PublicInquiryAgreedAndLegislationMain
     public $isEcmsCase = null;
 
     #[Form\Required(false)]
-    #[Form\Options(['label' => 'Date ECMS case first received by OTC', 'create_empty_option' => false, 'render_delimiters' => true, 'fieldsetClass' => 'pi_ecms_first_received_date'])]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\PublicInquiryEcmsDate', 'label' => 'Date ECMS case first received by OTC', 'create_empty_option' => false, 'render_delimiters' => true, 'fieldsetClass' => 'pi_ecms_first_received_date'])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Olcs\InputFilter\PublicInquiryEcmsDate')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

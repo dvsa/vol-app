@@ -319,6 +319,26 @@ final class FormDateTimeSelectTest extends MockeryTestCase
         $this->assertSame(1, $xpath->query('//div[@class="date-time-input__time"]/select[@id="hearingDate_minute"]')->length);
     }
 
+    public function testRenderHighlightsOnlyMissingDatePart(): void
+    {
+        $element = new DateTimeSelect('startDate');
+        $element->setOption('pattern', "d MMMM y 'time' HH:mm:ss");
+        $element->setAttribute('id', 'startDate');
+        $element->setValue(['day' => '1', 'month' => '', 'year' => '2025', 'hour' => '12', 'minute' => '00', 'second' => '00']);
+        $element->setMessages(['dateIncomplete' => '{{fieldLabel}} must include a month']);
+
+        $document = new \DOMDocument();
+        $document->loadHTML($this->sut->render($element));
+        $xpath = new \DOMXPath($document);
+
+        foreach (['day', 'month', 'year'] as $part) {
+            $class = $xpath->evaluate('string(//input[@id="startDate_' . $part . '"]/@class)');
+            self::assertSame($part === 'month', str_contains($class, 'govuk-input--error'));
+        }
+        self::assertSame(1, $xpath->query('//div[@class="date-time-input__time"]/select[@id="startDate_hour"]')->length);
+        self::assertSame(1, $xpath->query('//div[@class="date-time-input__time"]/select[@id="startDate_minute"]')->length);
+    }
+
     public function testRenderElementWithNoName(): void
     {
         $this->expectException(\Laminas\Form\Exception\DomainException::class);

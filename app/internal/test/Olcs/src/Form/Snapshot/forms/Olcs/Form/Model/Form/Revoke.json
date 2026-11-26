@@ -73,6 +73,7 @@
                 "id": ""
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "PTR agreed date",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -88,6 +89,7 @@
                 "id": ""
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Closed date",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -205,6 +207,7 @@
       },
       "ptrAgreedDate": {
         "name": "ptrAgreedDate",
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -225,6 +228,7 @@
       "closedDate": {
         "name": "closedDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

@@ -21,6 +21,29 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 final class SearchDateRangeFieldsetTest extends TestCase
 {
+    public function testDateRangesValidateRawParts(): void
+    {
+        $range = new \Common\Data\Object\Search\Aggregations\DateRange\PublishedDateFrom();
+        $service = m::mock(\Common\Service\Data\Search\Search::class);
+        $service->shouldReceive('setIndex')->with('publication')->once();
+        $service->shouldReceive('getDateRanges')->once()->andReturn([$range]);
+        $fieldset = new SearchDateRangeFieldset('dateRanges', ['index' => 'publication']);
+        $fieldset->setSearchService($service);
+        $fieldset->init();
+        $form = new \Laminas\Form\Form();
+        $form->add($fieldset);
+        $field = $range->getKey();
+        $form->setData(['dateRanges' => [$field => ['day' => '12', 'month' => '', 'year' => '2020']]]);
+        self::assertFalse($form->isValid());
+        self::assertArrayHasKey('dateIncomplete', $form->getMessages()['dateRanges'][$field]);
+        self::assertSame('12', $fieldset->get($field)->getDayElement()->getValue());
+        $form->setData(['dateRanges' => [$field => ['day' => '', 'month' => '', 'year' => '']]]);
+        self::assertTrue($form->isValid());
+        $form->setData(['dateRanges' => [$field => ['day' => '12', 'month' => '03', 'year' => '2020']]]);
+        self::assertTrue($form->isValid());
+        self::assertSame('2020-03-12', $form->getData()['dateRanges'][$field]);
+    }
+
     public function testSearchAwareTraitByProxy(): void
     {
         $service = m::mock(\Common\Service\Data\Search\Search::class);

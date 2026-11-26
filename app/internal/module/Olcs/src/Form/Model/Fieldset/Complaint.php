@@ -26,12 +26,13 @@ class Complaint extends CaseBase
     public $complainantFamilyName = null;
 
     #[Form\Attributes(['id' => 'complaintDate'])]
-    #[Form\Options(['label' => 'Complaint date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Complaint date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     public $complaintDate = null;
 
     #[Form\Attributes(['id' => 'complaintType'])]
@@ -75,9 +76,10 @@ class Complaint extends CaseBase
     public $driverFamilyName = null;
 
     #[Form\Attributes(['id' => 'closedDate'])]
-    #[Form\Options(['label' => 'Close date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Close date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

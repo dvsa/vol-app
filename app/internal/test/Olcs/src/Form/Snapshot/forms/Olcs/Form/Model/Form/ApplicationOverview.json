@@ -34,6 +34,7 @@
               "name": "receivedDate",
               "type": "DateSelect",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Application received date",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -52,6 +53,7 @@
               "name": "targetCompletionDate",
               "type": "DateSelect",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Target completion",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -233,6 +235,7 @@
       "receivedDate": {
         "name": "receivedDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "\\Common\\Filter\\DateSelectNullifier"
@@ -259,6 +262,7 @@
       "targetCompletionDate": {
         "name": "targetCompletionDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "\\Common\\Filter\\DateSelectNullifier"

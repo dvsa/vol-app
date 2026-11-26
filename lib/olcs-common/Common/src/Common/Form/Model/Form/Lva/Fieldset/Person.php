@@ -51,8 +51,9 @@ class Person
 
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'dob'])]
-    #[Form\Options(['label' => 'dob', 'create_empty_option' => false, 'render_delimiters' => true, 'error-message' => 'person_birthDate-error', 'fieldset-attributes' => ['id' => 'dob_day']])]
+    #[Form\Options(['label' => 'dob', 'create_empty_option' => false, 'render_delimiters' => true, 'fieldset-attributes' => ['id' => 'dob_day']])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('\Common\Validator\Date')]

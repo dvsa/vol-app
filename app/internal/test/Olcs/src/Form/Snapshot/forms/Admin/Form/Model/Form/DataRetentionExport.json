@@ -24,7 +24,8 @@
             "spec": {
               "name": "startDate",
               "options": {
-                "label": "Date from"
+                "label": "Date from",
+                "input_type": "Common\\InputFilter\\DateParts"
               },
               "attributes": {
                 "required": "required"
@@ -37,7 +38,8 @@
             "spec": {
               "name": "endDate",
               "options": {
-                "label": "Date to"
+                "label": "Date to",
+                "input_type": "Common\\InputFilter\\DateParts"
               },
               "attributes": {
                 "required": "required"

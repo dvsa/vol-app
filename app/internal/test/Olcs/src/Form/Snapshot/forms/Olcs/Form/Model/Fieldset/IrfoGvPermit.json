@@ -43,6 +43,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "In force date",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -60,6 +61,7 @@
           "id": "expiryDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Expiry date",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -155,6 +157,7 @@
     },
     "inForceDate": {
       "name": "inForceDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -174,6 +177,7 @@
     },
     "expiryDate": {
       "name": "expiryDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

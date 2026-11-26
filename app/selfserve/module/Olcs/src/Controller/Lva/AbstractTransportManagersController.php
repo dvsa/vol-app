@@ -240,7 +240,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             // If we are saving, but not submitting
             if ($crudAction || $this->isButtonPressed('save')) {
                 $submit = false;
+                $birthDate = $form->getInputFilter()->get('details')->get('birthDate');
+                $birthDateValidators = $birthDate->getValidatorChain();
                 $formHelper->disableValidation($form->getInputFilter());
+                $birthDate->setValidatorChain($birthDateValidators);
             }
 
             if ($form->isValid()) {

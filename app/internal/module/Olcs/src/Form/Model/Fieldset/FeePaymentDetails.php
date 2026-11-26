@@ -37,7 +37,8 @@ class FeePaymentDetails
      */
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
-    #[Form\Options(['short-label' => 'fees.receipt_date', 'label' => 'fees.receipt_date', 'label_attributes' => ['id' => 'label-receiptDate']])]
+    #[Form\Input('Olcs\InputFilter\FeePaymentDate')]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\FeePaymentDate', 'short-label' => 'fees.receipt_date', 'label' => 'fees.receipt_date', 'label_attributes' => ['id' => 'label-receiptDate']])]
     #[Form\Attributes(['required' => false])]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
@@ -82,9 +83,10 @@ class FeePaymentDetails
      */
     #[Form\Required(true)]
     #[Form\Name('chequeDate')]
-    #[Form\Options(['short-label' => 'fees.cheque_date', 'label' => 'fees.cheque_date', 'label_attributes' => ['id' => 'label-chequeDate'], 'render_delimiters' => false, 'create_empty_option' => true, 'required' => true, 'max_year_delta' => '+1', 'min_year_delta' => '-1'])]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\FeePaymentDate', 'short-label' => 'fees.cheque_date', 'label' => 'fees.cheque_date', 'label_attributes' => ['id' => 'label-chequeDate'], 'render_delimiters' => false, 'create_empty_option' => true, 'required' => true, 'max_year_delta' => '+1', 'min_year_delta' => '-1'])]
     #[Form\Attributes(['required' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Olcs\InputFilter\FeePaymentDate')]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['array'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'paymentType', 'context_values' => ['fpm_cheque'], 'context_truth' => true, 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\ChequeDate'], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture', 'options' => ['messageTemplates' => ['inFuture' => 'Cheque date cannot be in the future']]]]])]

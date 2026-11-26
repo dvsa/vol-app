@@ -15,9 +15,10 @@ class AdvertisementsAdPlacedNow
 
     #[Form\Required(false)]
     #[Form\Attributes(['id' => 'adPlacedDate', 'data-container-class' => 'adPlacedDate'])]
-    #[Form\Options(['label' => 'application_operating-centres_authorisation-sub-action.advertisements.adPlacedDate', 'legend-attributes' => ['class' => 'form-element__label'], 'label_attributes' => ['class' => 'form-element__label'], 'create_empty_option' => true, 'render_delimiters' => false, 'fieldset-attributes' => ['id' => 'adPlacedDate_day']])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\ConditionallyValidatedDateParts', 'label' => 'application_operating-centres_authorisation-sub-action.advertisements.adPlacedDate', 'legend-attributes' => ['class' => 'form-element__label'], 'label_attributes' => ['class' => 'form-element__label'], 'create_empty_option' => true, 'render_delimiters' => false, 'fieldset-attributes' => ['id' => 'adPlacedDate_day']])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\ConditionallyValidatedDateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $adPlacedDate;

@@ -209,6 +209,7 @@
       },
       "startDate": {
         "name": "startDate",
+        "type": "Common\\InputFilter\\DateTimeParts",
         "required": true,
         "filters": [
           {
@@ -232,6 +233,7 @@
       },
       "endDate": {
         "name": "endDate",
+        "type": "Common\\InputFilter\\DateTimeParts",
         "required": true,
         "filters": [
           {

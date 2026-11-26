@@ -101,6 +101,7 @@
           "required": "required"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Request date",
           "render_delimiters": false
         },
@@ -116,6 +117,7 @@
           "required": "required"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Due date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -131,6 +133,7 @@
           "id": "returnDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Return date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -164,6 +167,7 @@
           "id": "fromDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Investigation from",
           "create_empty_option": true,
           "render_delimiters": false
@@ -179,6 +183,7 @@
           "id": "toDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Investigation to",
           "create_empty_option": true,
           "render_delimiters": false
@@ -274,6 +279,7 @@
     "requestDate": {
       "name": "requestDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -297,6 +303,7 @@
     "dueDate": {
       "name": "dueDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -320,6 +327,7 @@
     "returnDate": {
       "name": "returnDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -344,6 +352,7 @@
     "fromDate": {
       "name": "fromDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -364,6 +373,7 @@
     "toDate": {
       "name": "toDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

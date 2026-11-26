@@ -82,8 +82,7 @@
             "class": "form-element__question"
           },
           "create_empty_option": true,
-          "render_delimiters": false,
-          "error-message": "previousConvictionData_convictionDate-error"
+          "render_delimiters": false
         },
         "type": "DateSelect"
       }
@@ -184,6 +183,7 @@
     "convictionDate": {
       "name": "convictionDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

@@ -15,8 +15,9 @@ class Stay extends CaseBase
     public $stayType = null;
 
     #[Form\Attributes(['id' => '', 'class' => 'extra-long'])]
-    #[Form\Options(['label' => 'Date of request', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of request', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -25,7 +26,8 @@ class Stay extends CaseBase
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Attributes(['id' => 'decisionDate', 'class' => 'extra-long'])]
-    #[Form\Options(['label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'requestDate', 'context_values' => ['--'], 'context_truth' => false, 'allow_empty' => true, 'validators' => [['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => 'DateCompare', 'options' => ['compare_to' => 'requestDate', 'compare_to_label' => 'Date of request', 'operator' => 'gte']]]])]
@@ -55,8 +57,9 @@ class Stay extends CaseBase
 
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Olcs\InputFilter\WithdrawnDate')]
     #[Form\Attributes(['id' => 'withdrawnDate', 'required' => false])]
-    #[Form\Options(['label' => 'Withdrawn date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\WithdrawnDate', 'label' => 'Withdrawn date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'isWithdrawn', 'context_values' => ['Y'], 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture']]])]

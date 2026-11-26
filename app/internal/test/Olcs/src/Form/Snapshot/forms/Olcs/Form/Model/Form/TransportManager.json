@@ -656,6 +656,7 @@
       "birthDate": {
         "name": "birthDate",
         "required": true,
+        "type": "Common\\InputFilter\\PersonDateOfBirth",
         "filters": [
           {
             "name": "DateSelectNullifier"

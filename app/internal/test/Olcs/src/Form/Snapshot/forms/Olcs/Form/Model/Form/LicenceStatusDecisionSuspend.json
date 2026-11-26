@@ -54,6 +54,7 @@
                 "required": false
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateTimeParts",
                 "label": "licence-status.suspension.from",
                 "create_empty_option": true,
                 "max_year_delta": "+10",
@@ -67,6 +68,7 @@
               "name": "suspendTo",
               "type": "DateTimeSelect",
               "options": {
+                "input_type": "Common\\InputFilter\\DateTimeParts",
                 "label": "licence-status.suspension.to",
                 "create_empty_option": true,
                 "max_year_delta": "+10",
@@ -207,6 +209,7 @@
     "licence-decision": {
       "suspendFrom": {
         "name": "suspendFrom",
+        "type": "Common\\InputFilter\\DateTimeParts",
         "filters": [
           {
             "name": "DateTimeSelectNullifier"
@@ -230,6 +233,7 @@
       },
       "suspendTo": {
         "name": "suspendTo",
+        "type": "Common\\InputFilter\\DateTimeParts",
         "filters": [
           {
             "name": "DateTimeSelectNullifier"

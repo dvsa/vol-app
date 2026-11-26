@@ -34,6 +34,7 @@
           "class": "long"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "transport-manager.convictions-and-penalties.form.conviction-date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -106,6 +107,7 @@
   "input_filter": {
     "convictionDate": {
       "name": "convictionDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

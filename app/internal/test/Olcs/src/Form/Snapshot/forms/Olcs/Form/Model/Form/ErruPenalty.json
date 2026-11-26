@@ -44,6 +44,7 @@
                 "id": "startDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Start date",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -59,6 +60,7 @@
                 "id": "endDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "End date",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -199,6 +201,7 @@
       "startDate": {
         "name": "startDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -219,6 +222,7 @@
       "endDate": {
         "name": "endDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

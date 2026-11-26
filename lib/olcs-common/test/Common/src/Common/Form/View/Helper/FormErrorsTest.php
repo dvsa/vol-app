@@ -513,6 +513,31 @@ final class FormErrorsTest extends MockeryTestCase
         $this->assertStringContainsString('href="#fields[date]_day"', $this->sut->__invoke($form));
     }
 
+    public function testNestedDateWithoutIdLinksToMissingMonth(): void
+    {
+        $date = new DateSelect('date');
+        $date->setValue(['day' => '1', 'month' => '', 'year' => '1990']);
+        $fields = new \Laminas\Form\Fieldset('fields');
+        $fields->add($date);
+        $form = new Form();
+        $form->add($fields);
+        $form->setMessages(['fields' => ['date' => ['dateIncomplete' => 'Date must include a month']]]);
+
+        $this->assertStringContainsString('href="#fields[date]_month"', $this->sut->__invoke($form));
+    }
+
+    public function testDateTimeErrorLinksToMissingYear(): void
+    {
+        $date = new \Laminas\Form\Element\DateTimeSelect('startDate');
+        $date->setAttribute('id', 'startDate');
+        $date->setValue(['day' => '1', 'month' => '2', 'year' => '', 'hour' => '12', 'minute' => '00', 'second' => '00']);
+        $form = new Form();
+        $form->add($date);
+        $form->setMessages(['startDate' => ['dateIncomplete' => 'Start must include a year']]);
+
+        $this->assertStringContainsString('href="#startDate_year"', $this->sut->__invoke($form));
+    }
+
     public function testTopLevelAnchorStillUsesElementName(): void
     {
         $form = new Form();
