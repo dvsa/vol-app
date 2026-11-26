@@ -24,6 +24,8 @@ use Common\Form\Model\Form\Lva\Fieldset\LicenceVehicle;
 use Common\Form\Model\Form\Lva\Fieldset\LicenceVehicleAppVar;
 use Common\Validator\DateCompare;
 use Common\Validator\ValidateIf;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\Filter\FilterPluginManager;
 use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Factory;
@@ -54,6 +56,7 @@ use Olcs\InputFilter\AdjournedHearingDate;
 use Olcs\InputFilter\CancelledHearingDate;
 use Olcs\InputFilter\RevocationsSlaDate;
 use Olcs\Form\Model\Form\Disqualify;
+use Olcs\Data\Mapper\PiSla;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -474,7 +477,152 @@ final class StandardDateFieldsTest extends TestCase
         self::assertArrayHasKey('dateIncomplete', $input->getMessages());
         $input->setValue(['day' => '12', 'month' => '03', 'year' => '9999']);
         self::assertTrue($input->isValid(['writtenOutcome' => 'piwo_verbal']), json_encode($input->getMessages()));
-        self::assertFalse($input->isValid(['writtenOutcome' => 'piwo_decision']));
+        self::assertTrue($input->isValid(['writtenOutcome' => 'piwo_decision']));
+    }
+
+    #[DataProvider('formModes')]
+    public function testHiddenVerbalDecisionLetterDoesNotBlockWrittenDecision(bool $preferFormInputFilter): void
+    {
+        $form = $this->createDateForm(
+            PublicInquirySlaMain::class,
+            'decisionLetterSentDate',
+            $preferFormInputFilter,
+            false,
+            'writtenOutcome',
+            ['writtenDecisionLetterDate']
+        );
+        $form->setData([
+            'writtenOutcome' => 'piwo_decision',
+            'decisionLetterSentDate' => ['day' => '12', 'month' => '03', 'year' => '9999'],
+            'writtenDecisionLetterDate' => ['day' => '12', 'month' => '03', 'year' => '2020'],
+        ]);
+
+        self::assertTrue($form->isValid(), json_encode($form->getMessages()));
+        self::assertSame('2020-03-12', $form->getData()['writtenDecisionLetterDate']);
+
+        $form = $this->createDateForm(
+            PublicInquirySlaMain::class,
+            'decisionLetterSentDate',
+            $preferFormInputFilter,
+            false,
+            'writtenOutcome',
+            ['writtenDecisionLetterDate']
+        );
+        $form->setData([
+            'writtenOutcome' => 'piwo_decision',
+            'decisionLetterSentDate' => ['day' => '12', 'month' => '03', 'year' => '9999'],
+            'writtenDecisionLetterDate' => ['day' => '12', 'month' => '03', 'year' => '9999'],
+        ]);
+
+        self::assertFalse($form->isValid());
+        self::assertArrayNotHasKey('decisionLetterSentDate', $form->getMessages());
+        self::assertArrayHasKey('writtenDecisionLetterDate', $form->getMessages());
+    }
+
+    #[DataProvider('formModes')]
+    public function testInvalidVerbalDateIsNotSentAfterSwitchingToWrittenDecision(bool $preferFormInputFilter): void
+    {
+        $form = $this->createDateForm(
+            PublicInquirySlaMain::class,
+            'decisionLetterSentDate',
+            $preferFormInputFilter,
+            false,
+            'writtenOutcome',
+            ['writtenDecisionLetterDate']
+        );
+        $invalidDate = ['day' => '31', 'month' => '02', 'year' => '2020'];
+        $emptyDate = ['day' => '', 'month' => '', 'year' => ''];
+        $form->setData([
+            'writtenOutcome' => 'piwo_verbal',
+            'decisionLetterSentDate' => $invalidDate,
+            'writtenDecisionLetterDate' => $emptyDate,
+        ]);
+        self::assertFalse($form->isValid());
+        self::assertArrayHasKey('dateInvalid', $form->getMessages()['decisionLetterSentDate']);
+
+        $form = $this->createDateForm(
+            PublicInquirySlaMain::class,
+            'decisionLetterSentDate',
+            $preferFormInputFilter,
+            false,
+            'writtenOutcome',
+            ['writtenDecisionLetterDate']
+        );
+        $form->setData([
+            'writtenOutcome' => 'piwo_decision',
+            'decisionLetterSentDate' => $invalidDate,
+            'writtenDecisionLetterDate' => $emptyDate,
+        ]);
+        self::assertTrue($form->isValid(), json_encode($form->getMessages()));
+        $data = PiSla::mapFromForm(['fields' => $form->getData() + ['id' => '1', 'version' => '1']]);
+        self::assertArrayNotHasKey('decisionLetterSentDate', $data);
+        self::assertNull($data['writtenDecisionLetterDate']);
+
+        $builder = new AnnotationBuilder();
+        $builder->setFilterManager(new FilterPluginManager(new ServiceManager()));
+        $builder->setValidatorManager(new ValidatorPluginManager(new ServiceManager()));
+        $command = $builder->createCommand(UpdateSla::create($data));
+        self::assertTrue($command->isValid(), json_encode($command->getMessages()));
+    }
+
+    #[DataProvider('formModes')]
+    public function testHiddenWrittenDecisionDateDoesNotBlockVerbalOutcome(bool $preferFormInputFilter): void
+    {
+        $form = $this->createDateForm(
+            PublicInquirySlaMain::class,
+            'writtenDecisionLetterDate',
+            $preferFormInputFilter,
+            false,
+            'writtenOutcome',
+            ['decisionLetterSentDate']
+        );
+        $form->setData([
+            'writtenOutcome' => 'piwo_verbal',
+            'writtenDecisionLetterDate' => ['day' => '31', 'month' => '02', 'year' => '2020'],
+            'decisionLetterSentDate' => ['day' => '12', 'month' => '03', 'year' => '9999'],
+        ]);
+
+        self::assertTrue($form->isValid(), json_encode($form->getMessages()));
+        $data = PiSla::mapFromForm(['fields' => $form->getData()]);
+        self::assertArrayNotHasKey('writtenDecisionLetterDate', $data);
+        self::assertSame('9999-03-12', $data['decisionLetterSentDate']);
+    }
+
+    #[DataProvider('formModes')]
+    public function testNestedSlaFormDiscardsInvalidInactiveDateBeforeDtoValidation(bool $preferFormInputFilter): void
+    {
+        $form = $this->createDateForm(
+            PublicInquirySlaMain::class,
+            'decisionLetterSentDate',
+            $preferFormInputFilter,
+            false,
+            'writtenOutcome',
+            ['writtenDecisionLetterDate', 'tcWrittenDecisionDate', 'tcWrittenReasonDate', 'writtenReasonLetterDate'],
+            true
+        );
+        $emptyDate = ['day' => '', 'month' => '', 'year' => ''];
+        $form->setData(['fields' => [
+            'writtenOutcome' => 'piwo_decision',
+            'decisionLetterSentDate' => ['day' => '31', 'month' => '02', 'year' => '2020'],
+            'writtenDecisionLetterDate' => $emptyDate,
+            'tcWrittenDecisionDate' => $emptyDate,
+            'tcWrittenReasonDate' => $emptyDate,
+            'writtenReasonLetterDate' => $emptyDate,
+        ]]);
+        self::assertTrue($form->isValid(), json_encode($form->getMessages()));
+        $data = $form->getData();
+        $data['fields'] += ['id' => '1', 'version' => '1'];
+        $builder = new AnnotationBuilder();
+        $builder->setFilterManager(new FilterPluginManager(new ServiceManager()));
+        $builder->setValidatorManager(new ValidatorPluginManager(new ServiceManager()));
+        $unmappedCommand = $builder->createCommand(UpdateSla::create($data['fields']));
+        self::assertFalse($unmappedCommand->isValid());
+        self::assertArrayHasKey('decisionLetterSentDate', $unmappedCommand->getMessages());
+
+        $mappedData = PiSla::mapFromForm($data);
+        self::assertArrayNotHasKey('decisionLetterSentDate', $mappedData);
+        $command = $builder->createCommand(UpdateSla::create($mappedData));
+        self::assertTrue($command->isValid(), json_encode($command->getMessages()));
     }
 
     #[DataProvider('formModes')]
@@ -585,17 +733,20 @@ final class StandardDateFieldsTest extends TestCase
         string $field,
         bool $preferFormInputFilter,
         bool $originalInput = false,
-        ?string $contextField = null
+        ?string $contextField = null,
+        array $additionalFields = [],
+        bool $nested = false
     ): \Laminas\Form\FormInterface {
         $spec = ArrayUtils::iteratorToArray((new AttributeBuilder())->getFormSpecification($fieldset));
         $spec['type'] = \Common\Form\Form::class;
         $spec['options']['prefer_form_input_filter'] = $preferFormInputFilter;
+        $fields = [$field, ...$additionalFields];
         $spec['elements'] = array_values(array_filter(
             $spec['elements'],
-            static fn(array $element): bool => $element['spec']['name'] === $field
+            static fn(array $element): bool => in_array($element['spec']['name'], $fields, true)
         ));
         $spec['fieldsets'] = [];
-        $spec['input_filter'] = [$field => $spec['input_filter'][$field]];
+        $spec['input_filter'] = array_intersect_key($spec['input_filter'], array_flip($fields));
         if ($originalInput) {
             unset($spec['elements'][0]['spec']['options']['input_type'], $spec['input_filter'][$field]['type']);
         }
@@ -622,6 +773,14 @@ final class StandardDateFieldsTest extends TestCase
         $validators->setAlias('DateCompare', DateCompare::class);
         $validators->setInvokableClass(DateCompare::class, DateCompare::class);
         $factory->getInputFilterFactory()->getDefaultValidatorChain()->setPluginManager($validators);
+
+        if ($nested) {
+            $spec['name'] = 'fields';
+            $spec = [
+                'type' => \Common\Form\Form::class,
+                'fieldsets' => [['spec' => $spec]],
+            ];
+        }
 
         return $factory->createForm($spec);
     }
