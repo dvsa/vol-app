@@ -13,7 +13,6 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 #[ORM\Index(name: 'ix_workshop_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_workshop_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_workshop_contact_details_id', columns: ['contact_details_id'])]
-#[ORM\UniqueConstraint(name: 'uk_workshop_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Workshop extends AbstractWorkshop
 {

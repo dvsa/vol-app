@@ -12,7 +12,6 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
 #[ORM\Index(name: 'ix_goods_disc_licence_vehicle_id', columns: ['licence_vehicle_id'])]
 #[ORM\Index(name: 'ix_goods_disc_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_goods_disc_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_goods_disc_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class GoodsDisc extends AbstractGoodsDisc
 {
