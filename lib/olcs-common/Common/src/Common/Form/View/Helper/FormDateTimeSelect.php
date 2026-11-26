@@ -14,7 +14,6 @@ use DateTime;
 use IntlDateFormatter;
 use Laminas\Form\Element\DateTimeSelect as DateTimeSelectElement;
 use Laminas\Form\Exception;
-use Laminas\Form\View\Helper\FormDateSelect as FormDateSelectHelper;
 
 /**
  * Renders a date time select element
@@ -23,9 +22,7 @@ use Laminas\Form\View\Helper\FormDateSelect as FormDateSelectHelper;
  */
 class FormDateTimeSelect extends LaminasFormDateTimeSelect
 {
-    private $inputHelper;
-
-    private $format = '<div class="field inline-text"><label for="%s">%s</label>%s</div>';
+    use DateInputTrait;
 
     private $displayEveryMinute;
 
@@ -106,72 +103,7 @@ class FormDateTimeSelect extends LaminasFormDateTimeSelect
             }
         }
 
-        $markup = '';
-        foreach ($pattern as $key => $value) {
-            // Delimiter
-            if (is_numeric($key)) {
-                $markup .= $value;
-            } else {
-                $markup .= $data[$value];
-            }
-        }
-
-        return trim($markup);
-    }
-
-    protected function renderDayInput($element)
-    {
-        return $this->wrap(
-            $this->renderInput($element, 2),
-            'Day',
-            $element->getAttribute('id')
-        );
-    }
-
-    protected function renderMonthInput($element)
-    {
-        return $this->wrap(
-            $this->renderInput($element, 2),
-            'Month',
-            $element->getAttribute('id')
-        );
-    }
-
-    protected function renderYearInput($element)
-    {
-        return $this->wrap(
-            $this->renderInput($element, 4),
-            'Year',
-            $element->getAttribute('id')
-        );
-    }
-
-    protected function wrap($content, $label, $id): string
-    {
-        $label = $this->getTranslator()->translate('date-' . $label);
-
-        return sprintf($this->format, $id, $label, $content);
-    }
-
-    /**
-     * @psalm-param 2|4 $maxLength
-     */
-    protected function renderInput($element, $maxLength)
-    {
-        $inputHelper = $this->getInputHelper();
-
-        $element->setAttribute('maxlength', $maxLength);
-
-        return $inputHelper->render($element);
-    }
-
-    protected function getInputHelper()
-    {
-        if ($this->inputHelper === null) {
-            $this->inputHelper = $this->view->plugin('forminput');
-        }
-
-        return $this->inputHelper;
+        return '<div class="date-time-input">' . trim($this->renderDatePattern($pattern, $data, true)) . '</div>';
     }
 
     /**
