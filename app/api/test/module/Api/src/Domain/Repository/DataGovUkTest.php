@@ -34,6 +34,10 @@ final class DataGovUkTest extends MockeryTestCase
 
         $this->mockConn = m::mock(Connection::class);
         $this->mockConn->shouldReceive('close')->withNoArgs();
+        $this->mockConn
+            ->expects('executeStatement')
+            ->with('SET SESSION group_concat_max_len = ' . DataGovUk::GROUP_CONCAT_MAX_LEN)
+            ->andReturn(0);
 
         $this->sut = new DataGovUk($this->mockConn);
     }

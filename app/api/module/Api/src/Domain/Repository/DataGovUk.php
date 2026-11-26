@@ -15,6 +15,9 @@ use Doctrine\DBAL\ParameterType;
  */
 class DataGovUk
 {
+    // Session value as mySQL uses GROUP_CONCAT, which silently truncates at the default of 1024 bytes.
+    public const int GROUP_CONCAT_MAX_LEN = 1000000;
+
     /**
      * DataGovUk constructor.
      *
@@ -38,6 +41,8 @@ class DataGovUk
 
     public function fetchPsvOperatorList(): Result
     {
+        $this->raiseGroupConcatMaxLen();
+
         $stmt = $this->conn->prepare(
             'SELECT * FROM data_gov_uk_psv_operator_list'
         );
@@ -50,6 +55,8 @@ class DataGovUk
      */
     public function fetchOperatorLicences(array $areaNames): Result
     {
+        $this->raiseGroupConcatMaxLen();
+
         $inStmt = implode(', ', array_fill(0, count($areaNames), '?'));
 
         //  query data
@@ -85,6 +92,8 @@ class DataGovUk
      */
     private function fetchBusReg(string $view, array $areaCodes): Result
     {
+        $this->raiseGroupConcatMaxLen();
+
         $inStmt = implode(', ', array_fill(0, count($areaCodes), '?'));
 
         $stmt = $this->conn->prepare(
@@ -96,5 +105,12 @@ class DataGovUk
         }
 
         return $stmt->executeQuery();
+    }
+
+    private function raiseGroupConcatMaxLen(): void
+    {
+        $this->conn->executeStatement(
+            'SET SESSION group_concat_max_len = ' . self::GROUP_CONCAT_MAX_LEN
+        );
     }
 }

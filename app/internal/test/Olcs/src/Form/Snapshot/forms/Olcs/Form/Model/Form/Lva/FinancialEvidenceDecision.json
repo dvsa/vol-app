@@ -74,7 +74,8 @@
     },
     "decision": {
       "name": "decision",
-      "required": true
+      "required": true,
+      "error_message": "lva-financial-evidence-assessment-error-decision-required"
     }
   }
 }
