@@ -36,21 +36,28 @@ jobs:
           node-version: "lts/*"
           cache: npm
           cache-dependency-path: website/package-lock.json
+      # Install scripts are off (website/.npmrc): docmd's optional native engine downloads a binary
+      # from a CDN outside npm's integrity checks, and the JavaScript engine it falls back to is
+      # fast enough for this site.
       - run: npm ci
+      # Fails on a relative link to a page that doesn't exist. docmd's build doesn't check links
+      # itself, so this is the gate.
+      - name: Check links
+        run: npm run validate
       - run: npm run build
-      # Docusaurus moves this: 3.9 wrote the site to build/<baseUrl>/, 3.10 writes it to build/.
-      # A hardcoded path is therefore invalidated by an ordinary minor bump, and because the
-      # upload below only runs on a real deploy, CI stayed green while the deploy broke. So
-      # resolve the root from the build rather than assuming it, and run ungated so a PR that
-      # changes the layout fails here instead. 404.html is emitted exactly once, at the site
-      # root, which makes it the marker - and a count other than one means the assumption no
-      # longer holds, which is worth failing on rather than guessing past.
+      # Site generators have moved this before: Docusaurus 3.9 wrote the site to
+      # build/<baseUrl>/ and 3.10 to build/. Because the upload below only runs on a real deploy,
+      # a moved root left CI green while the deploy broke. So resolve the root from the build
+      # rather than assuming it, and run ungated so a PR that changes the layout fails here
+      # instead. 404.html is emitted exactly once, at the site root, which makes it the marker -
+      # and a count other than one means the assumption no longer holds, which is worth failing on
+      # rather than guessing past.
       - name: Resolve site root
         id: site
         run: |
           count=$(find build -name 404.html | wc -l)
           if [ "$count" -ne 1 ]; then
-            echo "::error::Expected exactly one 404.html under website/build, found $count. The Docusaurus build output layout has changed - update the deploy artefact path."
+            echo "::error::Expected exactly one 404.html under website/build, found $count. The docs site build output layout has changed - update the deploy artefact path."
             find build -name 404.html
             exit 1
           fi

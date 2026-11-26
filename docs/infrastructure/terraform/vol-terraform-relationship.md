@@ -40,7 +40,7 @@ The listener rule is controlled by the variable: `service.listener_rule_enable` 
 
 To push traffic to the ECS service, set `service.listener_rule_enable = true`. This can be controlled per environment _and_ service.
 
-```hcl showLineNumbers
+```hcl
 # vol-app/infra/terraform/environments/[env]/main.tf
 
 module "service" {
@@ -52,9 +52,10 @@ module "service" {
     "service" = {
       # ...
 
-      // highlight-next-line
       listener_rule_enable = true # default is `true`.
     }
   }
 }
 ```
+
+:::

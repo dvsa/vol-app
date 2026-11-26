@@ -1,20 +1,13 @@
 # Dependencies
 /node_modules
 
-# Production
+# Build output
 /build
 
-# Generated files
-.docusaurus
-.cache-loader
+# docmd copies a .mjs config to a timestamped file to load it, and removes it afterwards; a build
+# killed part-way can leave one behind.
+/docmd.config-*.mjs
 
 # Misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
