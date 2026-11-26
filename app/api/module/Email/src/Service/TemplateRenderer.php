@@ -135,6 +135,13 @@ class TemplateRenderer
     {
         $locale = $message->getLocale();
         $markdown = $this->getEmailContent($locale, $templates, 'md', $variables);
+
+        // no layout in Notify, so add the licence line the SMTP layout prints
+        if (!empty($this->withoutPrintedLicNo($variables, $markdown)['licNo'])) {
+            $label = $locale === 'cy_GB' ? 'Trwydded' : 'Licence';
+            $markdown = $label . ': ' . $variables['licNo'] . "\n\n" . $markdown;
+        }
+
         $message->setMarkdownBody($markdown);
     }
 
