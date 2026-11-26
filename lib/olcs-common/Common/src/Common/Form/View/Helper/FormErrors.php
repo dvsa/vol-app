@@ -158,7 +158,7 @@ class FormErrors extends AbstractHelper
         }
 
         // Try and find an element to link to
-        $anchor = $this->getNamedAnchor($element, $elementPath);
+        $anchor = $this->getNamedAnchor($element, $elementPath, $messageKey);
 
         // If we have an ID
         if (!empty($anchor)) {
@@ -175,7 +175,7 @@ class FormErrors extends AbstractHelper
      *
      * @return string
      */
-    protected function getNamedAnchor($element, ?string $elementPath = null)
+    protected function getNamedAnchor($element, ?string $elementPath = null, mixed $messageKey = null)
     {
         $fallbackName = $elementPath !== null && str_contains($elementPath, '[')
             ? $elementPath
@@ -189,10 +189,10 @@ class FormErrors extends AbstractHelper
             return $element->get('postcode')->getAttribute('id');
         }
 
-        // For DateSelect element we want to focus on the day element
+        // Link to the first date input relevant to this error.
         if ($element instanceof DateSelect) {
-            // id is automatically generated on day element when it is rendered using this pattern
-            return ($element->getAttribute('id') ?: ($fallbackName ?? $element->getName())) . '_day';
+            $part = DateErrorParts::forMessage($element, $messageKey)[0];
+            return ($element->getAttribute('id') ?: ($fallbackName ?? $element->getName())) . '_' . $part;
         }
 
         if ($element instanceof Radio) {

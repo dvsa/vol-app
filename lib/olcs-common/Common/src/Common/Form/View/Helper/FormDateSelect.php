@@ -61,10 +61,11 @@ class FormDateSelect extends LaminasFormDateSelect
         $monthElement->setAttributes(['id' => $element->getAttribute('id') . '_month', 'pattern' => '\d*']);
         $yearElement->setAttributes(['id' => $element->getAttribute('id') . '_year', 'pattern' => '\d*']);
 
+        $errorParts = DateErrorParts::forElement($element);
         $data = [];
-        $data[$pattern['day']]   = $this->renderDayInput($dayElement);
-        $data[$pattern['month']] = $this->renderMonthInput($monthElement);
-        $data[$pattern['year']]  = $this->renderYearInput($yearElement);
+        $data[$pattern['day']]   = $this->renderDayInput($dayElement, in_array('day', $errorParts, true));
+        $data[$pattern['month']] = $this->renderMonthInput($monthElement, in_array('month', $errorParts, true));
+        $data[$pattern['year']]  = $this->renderYearInput($yearElement, in_array('year', $errorParts, true));
 
         return $this->renderDatePattern($pattern, $data);
     }

@@ -577,6 +577,115 @@ final class FormRowTest extends MockeryTestCase
         self::assertSame('Date of birth', $element->getLabel());
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateErrorPartsProvider')]
+    public function testDateSummaryAndInputsUseRelevantParts(array $values, array $expectedParts, string $firstPart): void
+    {
+        $this->setUpSut();
+        $this->viewHelperPluginManager()->get('form_element')->setView($this->phpRenderer());
+        $dateHelper = new CommonHelper\FormDateSelect();
+        $dateHelper->setView($this->phpRenderer());
+        $dateHelper->setTranslator($this->translator());
+        $this->viewHelperPluginManager()->setService('formdateselect', $dateHelper);
+        $this->viewHelperPluginManager()->setService('forminput', new LaminasHelper\FormInput());
+
+        $input = new \Common\InputFilter\PersonDateOfBirth('birthDate');
+        $input->setValue($values);
+        self::assertFalse($input->isValid());
+
+        $element = $this->setUpElement('DateSelect', ['label' => 'Date of birth'], ['id' => 'dob']);
+        $element->setValue($values);
+        $element->setMessages($input->getMessages());
+        $form = new \Common\Form\Form('person');
+        $form->add($element);
+        $summary = new CommonHelper\FormErrors(new FormElementMessageFormatter($this->translator()), $this->translator());
+        $summary->setView($this->phpRenderer());
+
+        // The summary is rendered before the form row on the page.
+        $summaryMarkup = $summary->render($form);
+        $rowMarkup = $this->sut->__invoke($element);
+        $document = new \DOMDocument();
+        $document->loadHTML($rowMarkup);
+        $xpath = new \DOMXPath($document);
+
+        self::assertStringContainsString('href="#dob_' . $firstPart . '"', $summaryMarkup);
+        foreach (['day', 'month', 'year'] as $part) {
+            $inputClass = $xpath->evaluate('string(//input[@id="dob_' . $part . '"]/@class)');
+            self::assertSame(in_array($part, $expectedParts, true), str_contains($inputClass, 'govuk-input--error'));
+            self::assertSame($values[$part], $xpath->evaluate('string(//input[@id="dob_' . $part . '"]/@value)'));
+        }
+
+        $inlineMessage = trim($xpath->evaluate('string(//p[contains(@class, "govuk-error-message")])'));
+        $inlineMessage = preg_replace('/^Error:\s*/', '', $inlineMessage);
+        self::assertStringContainsString($inlineMessage, $summaryMarkup);
+    }
+
+    public static function dateErrorPartsProvider(): array
+    {
+        return [
+            'missing month' => [['day' => '1', 'month' => '', 'year' => '1990'], ['month'], 'month'],
+            'missing year' => [['day' => '1', 'month' => '2', 'year' => ''], ['year'], 'year'],
+            'missing day and year' => [['day' => '', 'month' => '2', 'year' => ''], ['day', 'year'], 'day'],
+            'blank date' => [['day' => '', 'month' => '', 'year' => ''], ['day', 'month', 'year'], 'day'],
+            'impossible date' => [['day' => '31', 'month' => '2', 'year' => '1990'], ['day', 'month', 'year'], 'day'],
+            'invalid month' => [['day' => '1', 'month' => '13', 'year' => '1990'], ['month'], 'month'],
+            'invalid year and day' => [['day' => 'ab', 'month' => '2', 'year' => '99'], ['day', 'year'], 'day'],
+        ];
+    }
+
+    public function testSoleTraderDateValidationRendersMatchingSummaryAndInlineError(): void
+    {
+        $this->setUpSut();
+        $this->viewHelperPluginManager()->get('form_element')->setView($this->phpRenderer());
+        $dateHelper = new CommonHelper\FormDateSelect();
+        $dateHelper->setView($this->phpRenderer());
+        $dateHelper->setTranslator($this->translator());
+        $this->viewHelperPluginManager()->setService('formdateselect', $dateHelper);
+        $this->viewHelperPluginManager()->setService('forminput', new LaminasHelper\FormInput());
+
+        $builder = new \Laminas\Form\Annotation\AttributeBuilder();
+        $spec = \Laminas\Stdlib\ArrayUtils::iteratorToArray(
+            $builder->getFormSpecification(\Common\Form\Model\Form\Lva\SoleTrader::class)
+        );
+        $spec['fieldsets'][0]['spec']['elements'] = array_values(array_filter(
+            $spec['fieldsets'][0]['spec']['elements'],
+            static fn(array $element): bool => $element['spec']['name'] === 'birthDate'
+        ));
+        $spec['fieldsets'] = [$spec['fieldsets'][0]];
+        $spec['input_filter']['data'] = [
+            'birthDate' => $spec['input_filter']['data']['birthDate'],
+            'type' => $spec['input_filter']['data']['type'],
+        ];
+        $elements = new \Laminas\Form\FormElementManager(new ServiceManager());
+        $elements->setAlias('DateSelect', \Common\Form\Elements\Custom\DateSelect::class);
+        $elements->setInvokableClass(\Common\Form\Elements\Custom\DateSelect::class, \Common\Form\Elements\Custom\DateSelect::class);
+        $factory = new \Laminas\Form\Factory($elements);
+        $filters = new \Laminas\Filter\FilterPluginManager(new ServiceManager());
+        $filters->setAlias('DateSelectNullifier', \Common\Filter\DateSelectNullifier::class);
+        $filters->setInvokableClass(\Common\Filter\DateSelectNullifier::class, \Common\Filter\DateSelectNullifier::class);
+        $factory->getInputFilterFactory()->getDefaultFilterChain()->setPluginManager($filters);
+        $form = $factory->createForm($spec);
+        $form->setData(['data' => ['birthDate' => ['day' => '1', 'month' => '', 'year' => '1990']]]);
+
+        self::assertFalse($form->isValid());
+        $form->prepare();
+        $element = $form->get('data')->get('birthDate');
+        $summary = new CommonHelper\FormErrors(new FormElementMessageFormatter($this->translator()), $this->translator());
+        $summary->setView($this->phpRenderer());
+        $summaryMarkup = $summary->render($form);
+        $rowMarkup = $this->sut->__invoke($element);
+
+        $document = new \DOMDocument();
+        $document->loadHTML($rowMarkup);
+        $xpath = new \DOMXPath($document);
+        $inlineMessage = trim($xpath->evaluate('string(//p[contains(@class, "govuk-error-message")])'));
+        $inlineMessage = preg_replace('/^Error:\s*/', '', $inlineMessage);
+
+        self::assertStringContainsString('href="#dob_month"', $summaryMarkup);
+        self::assertStringContainsString('must include a month', $inlineMessage);
+        self::assertStringContainsString($inlineMessage, $summaryMarkup);
+        self::assertStringContainsString('govuk-input--error', $xpath->evaluate('string(//input[@id="dob_month"]/@class)'));
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('dateFieldsetDescriptionsProvider')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeDescribesDateFieldsetErrors(
