@@ -25,7 +25,7 @@ final class DateOfBirth extends Date
         }
 
         $date = $this->convertToDateTime($value, false);
-        if ($date->format('Y-m-d') > date('Y-m-d')) {
+        if ((int) $date->format('Ymd') > (int) date('Ymd')) {
             $this->error(self::IN_FUTURE);
             return false;
         }
