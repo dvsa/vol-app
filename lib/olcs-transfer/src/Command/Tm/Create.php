@@ -28,7 +28,7 @@ final class Create extends AbstractCommand
     #[Transfer\Optional]
     public $emailAddress;
 
-    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\DateOfBirth', options: ['format' => 'Y-m-d'])]
     public $birthDate;
 
     #[Transfer\Filter('Laminas\Filter\StringTrim')]

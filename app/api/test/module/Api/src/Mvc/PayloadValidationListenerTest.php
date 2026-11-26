@@ -30,6 +30,60 @@ final class PayloadValidationListenerTest extends MockeryTestCase
         parent::setUp();
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('transportManagerDobRequests')]
+    public function testTransportManagerDetailsDobAtApiBoundary(
+        string $submit,
+        ?string $dob,
+        bool $valid,
+        ?string $error
+    ): void {
+        $builder = new AnnotationBuilder();
+        $serviceManager = m::mock(\Laminas\ServiceManager\ServiceManager::class);
+        $builder->setFilterManager(new \Laminas\Filter\FilterPluginManager($serviceManager));
+        $builder->setValidatorManager(new \Laminas\Validator\ValidatorPluginManager($serviceManager));
+        $listener = new Sut($builder);
+
+        $request = new HttpRequest();
+        $request->setMethod(HttpRequest::METHOD_PUT);
+        $request->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $request->setContent(json_encode([
+            'id' => 1,
+            'version' => 1,
+            'homeAddress' => [],
+            'workAddress' => [],
+            'submit' => $submit,
+            'dob' => $dob,
+        ], JSON_THROW_ON_ERROR));
+        $event = new MvcEvent();
+        $event->setRequest($request);
+        $event->setRouteMatch(new RouteMatch([
+            'dto' => \Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateDetails::class,
+        ]));
+
+        $response = $listener->onRoute($event);
+        if ($valid) {
+            self::assertNull($response);
+            return;
+        }
+
+        self::assertInstanceOf(HttpResponse::class, $response);
+        self::assertSame(422, $response->getStatusCode());
+        $messages = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey($error, $messages['dob']);
+    }
+
+    public static function transportManagerDobRequests(): array
+    {
+        return [
+            'save rejects future' => ['N', '2099-01-01', false, 'inFuture'],
+            'submit rejects future' => ['Y', '2099-01-01', false, 'inFuture'],
+            'save rejects malformed' => ['N', 'not-a-date', false, 'dateInvalidDate'],
+            'save accepts blank draft' => ['N', null, true, null],
+            'save accepts past' => ['N', '1990-01-01', true, null],
+            'submit accepts today' => ['Y', date('Y-m-d'), true, null],
+        ];
+    }
+
     public function testAttach(): void
     {
         $mockEventManager = m::mock(EventManagerInterface::class);

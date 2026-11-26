@@ -106,7 +106,7 @@ final class UpdateDetails extends AbstractCommand
     #[Transfer\Optional]
     protected $hasUndertakenTraining;
 
-    #[Transfer\Validator('Laminas\Validator\Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\DateOfBirth', options: ['format' => 'Y-m-d'])]
     #[Transfer\Optional]
     protected $dob;
 
