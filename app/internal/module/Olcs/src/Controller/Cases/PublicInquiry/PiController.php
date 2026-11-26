@@ -23,6 +23,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Pi as PiMapper;
+use Olcs\Data\Mapper\PiSla as PiSlaMapper;
 use Olcs\Data\Mapper\PiSlaException as PiSlaExceptionMapper;
 use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation as AgreedAndLegislationForm;
 use Olcs\Form\Model\Form\PublicInquiryRegisterDecision as DecisionForm;
@@ -279,7 +280,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
             $this->itemDto,
             new GenericItem($this->itemParams),
             $this->updateSlaCommand,
-            $this->mapperClass,
+            PiSlaMapper::class,
             $this->editViewTemplate,
             'Updated record',
             'Service level agreement'
