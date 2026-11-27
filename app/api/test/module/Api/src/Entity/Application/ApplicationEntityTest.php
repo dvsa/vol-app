@@ -473,6 +473,19 @@ final class ApplicationEntityTest extends EntityTester
         $this->assertSame($aoc1, $this->entity->getApplicationOperatingCentreById(7));
     }
 
+    public function testGetApplicationOperatingCentreByIdFindsNothingForNumericStringId(): void
+    {
+        $aoc1 = new ApplicationOperatingCentre($this->entity, new OperatingCentre());
+        $aoc1->setId(7);
+
+        $aoc2 = new ApplicationOperatingCentre($this->entity, new OperatingCentre());
+        $aoc2->setId(8);
+
+        $this->entity->setOperatingCentres(new ArrayCollection([$aoc2, $aoc1]));
+
+        $this->assertFalse($this->entity->getApplicationOperatingCentreById('7'));
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestUpdateFinancialHistory')]
     public function testUpdateFinancialHistory(
         mixed $bankrupt,
