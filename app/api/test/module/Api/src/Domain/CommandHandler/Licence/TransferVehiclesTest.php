@@ -305,7 +305,7 @@ final class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandTransfersNothingWhenIdsAreStrings(): void
+    public function testHandleCommandTransfersNothingForStringIdsWhenTheVehicleListIsLoaded(): void
     {
         $data = [
             'id' => 111,
