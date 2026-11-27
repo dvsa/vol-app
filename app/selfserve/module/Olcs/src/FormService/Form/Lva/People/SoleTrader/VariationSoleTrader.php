@@ -16,6 +16,8 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class VariationSoleTrader extends CommonVariationSoleTrader
 {
+    use Autocomplete;
+
     protected FormHelperService $formHelper;
     protected AuthorizationService $authService;
     protected PeopleLvaService $peopleLvaService;
@@ -42,6 +44,10 @@ class VariationSoleTrader extends CommonVariationSoleTrader
     public function alterForm($form, array $params)
     {
         $form = parent::alterForm($form, $params);
+
+        if ($params['location'] === 'external') {
+            $this->addSoleTraderAutocomplete($form);
+        }
 
         $this->removeStandardFormActions($form);
 

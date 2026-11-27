@@ -27,6 +27,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 final class ApplicationSoleTraderTest extends MockeryTestCase
 {
     use ButtonsAlterations;
+    use AutocompleteAssertions;
 
     /**
      * @var ApplicationSoleTrader
@@ -66,6 +67,10 @@ final class ApplicationSoleTraderTest extends MockeryTestCase
         $formActions->shouldReceive('remove')->once()->with('disqualify');
 
         $form = m::mock(Form::class);
+        if ($params['location'] === 'external') {
+            $person = $this->createPersonFieldset();
+            $form->shouldReceive('get')->with('data')->andReturn($person);
+        }
 
         $form->shouldReceive('has')->with('form-actions')->andReturn(true);
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
@@ -77,6 +82,9 @@ final class ApplicationSoleTraderTest extends MockeryTestCase
         $this->mockAlterButtons($form, $this->formHelper, $formActions);
 
         $this->sut->getForm($params);
+        if (isset($person)) {
+            $this->assertPersonAutocomplete($person);
+        }
     }
 
     public function testGetForm(): void

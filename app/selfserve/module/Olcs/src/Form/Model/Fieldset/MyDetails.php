@@ -25,7 +25,7 @@ class MyDetails extends Base
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 35])]
     public $familyName = null;
 
-    #[Form\Attributes(['class' => 'long'])]
+    #[Form\Attributes(['class' => 'long', 'autocomplete' => 'email'])]
     #[Form\Options(['label' => 'email-address', 'error-message' => 'myDetails_emailAddress-error'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
@@ -33,7 +33,7 @@ class MyDetails extends Base
     #[Form\Validator('Common\Form\Elements\Validators\EmailConfirm', options: ['token' => 'emailConfirm'])]
     public $emailAddress = null;
 
-    #[Form\Attributes(['class' => 'long'])]
+    #[Form\Attributes(['class' => 'long', 'autocomplete' => 'email'])]
     #[Form\Options(['label' => 'confirm-email-address', 'error-message' => 'myDetails_emailConfirms-error'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]

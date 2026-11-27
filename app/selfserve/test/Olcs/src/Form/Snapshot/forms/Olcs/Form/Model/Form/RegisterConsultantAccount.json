@@ -50,7 +50,8 @@
                 "id": "forename",
                 "placeholder": "",
                 "class": "medium",
-                "required": false
+                "required": false,
+                "autocomplete": "given-name"
               },
               "options": {
                 "label": "first-name"
@@ -66,7 +67,8 @@
                 "id": "familyName",
                 "placeholder": "",
                 "class": "medium",
-                "required": false
+                "required": false,
+                "autocomplete": "family-name"
               },
               "options": {
                 "label": "last-name"
@@ -79,7 +81,8 @@
             "spec": {
               "name": "emailAddress",
               "attributes": {
-                "class": "long"
+                "class": "long",
+                "autocomplete": "email"
               },
               "options": {
                 "label": "email-address",
@@ -93,7 +96,8 @@
             "spec": {
               "name": "emailConfirm",
               "attributes": {
-                "class": "long"
+                "class": "long",
+                "autocomplete": "email"
               },
               "options": {
                 "label": "confirm-email-address"

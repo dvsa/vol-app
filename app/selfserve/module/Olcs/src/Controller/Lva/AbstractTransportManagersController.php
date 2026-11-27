@@ -207,6 +207,27 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
+        $details = $form->get('details');
+        $details->get('emailAddress')->setAttribute('autocomplete', 'email');
+        $birthDate = $details->get('birthDate');
+        $birthDate->getDayElement()->setAttribute('autocomplete', 'bday-day');
+        $birthDate->getMonthElement()->setAttribute('autocomplete', 'bday-month');
+        $birthDate->getYearElement()->setAttribute('autocomplete', 'bday-year');
+
+        $homeAddress = $form->get('homeAddress');
+        foreach (
+            [
+                'addressLine1' => 'address-line1',
+                'addressLine2' => 'address-line2',
+                'addressLine3' => 'address-line3',
+                'town' => 'address-level2',
+                'postcode' => 'postal-code',
+                'countryCode' => 'country',
+            ] as $field => $autocomplete
+        ) {
+            $homeAddress->get($field)->setAttribute('autocomplete', $autocomplete);
+        }
+        $homeAddress->get('searchPostcode')->get('postcode')->setAttribute('autocomplete', 'postal-code');
 
         $flashMessenger = $this->flashMessengerHelper;
         $this->maybeSelectOptions($transportManagerApplicationData, $form);

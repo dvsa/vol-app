@@ -23,21 +23,21 @@ class RegisterConsultantAccount
     #[Form\Validator('Olcs\Form\Validator\UniqueConsultantDetails')]
     public $loginId = null;
 
-    #[Form\Attributes(['id' => 'forename', 'placeholder' => '', 'class' => 'medium', 'required' => false])]
+    #[Form\Attributes(['id' => 'forename', 'placeholder' => '', 'class' => 'medium', 'required' => false, 'autocomplete' => 'given-name'])]
     #[Form\Options(['label' => 'first-name'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 35])]
     public $forename = null;
 
-    #[Form\Attributes(['id' => 'familyName', 'placeholder' => '', 'class' => 'medium', 'required' => false])]
+    #[Form\Attributes(['id' => 'familyName', 'placeholder' => '', 'class' => 'medium', 'required' => false, 'autocomplete' => 'family-name'])]
     #[Form\Options(['label' => 'last-name'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 35])]
     public $familyName = null;
 
-    #[Form\Attributes(['class' => 'long'])]
+    #[Form\Attributes(['class' => 'long', 'autocomplete' => 'email'])]
     #[Form\Options(['label' => 'email-address', 'hint' => 'user-registration.field.consultant-email.hint'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
@@ -46,7 +46,7 @@ class RegisterConsultantAccount
     #[Form\Validator('Olcs\Form\Validator\UniqueConsultantDetails')]
     public $emailAddress = null;
 
-    #[Form\Attributes(['class' => 'long'])]
+    #[Form\Attributes(['class' => 'long', 'autocomplete' => 'email'])]
     #[Form\Options(['label' => 'confirm-email-address'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
