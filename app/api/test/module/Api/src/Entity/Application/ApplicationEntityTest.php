@@ -1805,6 +1805,19 @@ final class ApplicationEntityTest extends EntityTester
         $this->assertEquals('foo', $application->getActiveVehicles());
     }
 
+    public function testGetActiveVehiclesKeepsOnlyVehiclesWithoutARemovalDate(): void
+    {
+        $active = m::mock(LicenceVehicle::class)->makePartial();
+        $removed = m::mock(LicenceVehicle::class)->makePartial();
+        $removed->setRemovalDate('2026-01-02T03:04:05+0000');
+
+        $application = m::mock(Entity::class)->makePartial();
+        $application->shouldReceive('getLicenceVehicles')
+            ->andReturn(new ArrayCollection([$removed, $active]));
+
+        $this->assertSame([$active], $application->getActiveVehicles()->getValues());
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetSectionsRequiringAttention')]
     public function testGetSectionsRequiringAttention(Entity $entity, array $statuses, array $expect): void
     {
@@ -4086,6 +4099,28 @@ final class ApplicationEntityTest extends EntityTester
         $this->assertEquals([$mockTask], $sut->getOpenTasksForCategory($catId, $subCatId)->toArray());
     }
 
+    public function testGetOpenTasksForCategoryDropsAClosedTask(): void
+    {
+        $catId = 9999;
+        $subCatId = 8888;
+
+        $closedTask = m::mock(Entities\Task\Task::class)->makePartial();
+        $closedTask->setIsClosed('Y');
+        $closedTask->shouldReceive('getCategory->getId')->andReturn($catId);
+        $closedTask->shouldReceive('getSubCategory->getId')->andReturn($subCatId);
+
+        $openTask = m::mock(Entities\Task\Task::class)->makePartial();
+        $openTask->setIsClosed('N');
+        $openTask->shouldReceive('getCategory->getId')->once()->andReturn($catId);
+        $openTask->shouldReceive('getSubCategory->getId')->once()->andReturn($subCatId);
+
+        $sut = m::mock(Entity::class)->makePartial()
+            ->shouldReceive('getTasks')->once()->andReturn(new ArrayCollection([$closedTask, $openTask]))
+            ->getMock();
+
+        $this->assertSame([$openTask], $sut->getOpenTasksForCategory($catId, $subCatId)->getValues());
+    }
+
     public function testIsPublishableNewApplication(): void
     {
         $licence = new Licence(new Organisation(), new RefData());
@@ -4423,6 +4458,53 @@ final class ApplicationEntityTest extends EntityTester
         $sut->shouldReceive('getFees->matching')->once()->andReturn([]);
 
         $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Fee\Fee::class, $sut->getLatestOutstandingInterimFee());
+    }
+
+    private function buildOutstandingFee(string $feeTypeId, mixed $invoicedDate): Entities\Fee\Fee
+    {
+        $type = new RefData($feeTypeId);
+        $feeType = new Entities\Fee\FeeType();
+        $feeType->setFeeType($type);
+
+        $fee = new Entities\Fee\Fee($feeType, 100, new RefData(Entities\Fee\Fee::STATUS_OUTSTANDING));
+        $fee->setInvoicedDate($invoicedDate);
+
+        return $fee;
+    }
+
+    public function testGetLatestOutstandingApplicationFeeReturnsTheNewestOfLoadedDateStrings(): void
+    {
+        $january = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_APP, '2026-01-02T03:04:05+0000');
+        $march = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_APP, '2026-03-02T03:04:05+0000');
+
+        $sut = m::mock(Entity::class)->makePartial();
+        $sut->shouldReceive('isVariation')->andReturn(false);
+        $sut->shouldReceive('getFees')->andReturn(new ArrayCollection([$january, $march]));
+
+        $this->assertSame($march, $sut->getLatestOutstandingApplicationFee());
+    }
+
+    public function testGetLatestOutstandingApplicationFeePutsAnEarlierDateTimeBeforeALoadedDateString(): void
+    {
+        $string = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_APP, '2026-03-02T03:04:05+0000');
+        $dateTime = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_APP, new \DateTime('2026-01-02T03:04:05+0000'));
+
+        $sut = m::mock(Entity::class)->makePartial();
+        $sut->shouldReceive('isVariation')->andReturn(false);
+        $sut->shouldReceive('getFees')->andReturn(new ArrayCollection([$string, $dateTime]));
+
+        $this->assertSame($dateTime, $sut->getLatestOutstandingApplicationFee());
+    }
+
+    public function testGetLatestOutstandingInterimFeeReturnsTheNewestOfLoadedDateStrings(): void
+    {
+        $january = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_GRANTINT, '2026-01-02T03:04:05+0000');
+        $march = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_GRANTINT, '2026-03-02T03:04:05+0000');
+
+        $sut = m::mock(Entity::class)->makePartial();
+        $sut->shouldReceive('getFees')->andReturn(new ArrayCollection([$january, $march]));
+
+        $this->assertSame($march, $sut->getLatestOutstandingInterimFee());
     }
 
     public function testHasOutstandingGrantFee(): void
