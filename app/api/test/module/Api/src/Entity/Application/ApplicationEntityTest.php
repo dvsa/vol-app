@@ -452,7 +452,19 @@ final class ApplicationEntityTest extends EntityTester
         $droppedDocument->setSubCategory($otherSubCategory);
         $droppedDocument->setOperatingCentre($operatingCentre);
 
-        $this->entity->setDocuments(new ArrayCollection([$keptDocument, $droppedDocument]));
+        $otherCategoryDocument = new Entities\Doc\Document('other-category');
+        $otherCategoryDocument->setCategory(new Entities\System\Category());
+        $otherCategoryDocument->setSubCategory($subCategory);
+        $otherCategoryDocument->setOperatingCentre($operatingCentre);
+
+        $otherOperatingCentreDocument = new Entities\Doc\Document('other-operating-centre');
+        $otherOperatingCentreDocument->setCategory($category);
+        $otherOperatingCentreDocument->setSubCategory($subCategory);
+        $otherOperatingCentreDocument->setOperatingCentre(new OperatingCentre());
+
+        $this->entity->setDocuments(
+            new ArrayCollection([$otherCategoryDocument, $keptDocument, $droppedDocument, $otherOperatingCentreDocument])
+        );
 
         $this->assertSame(
             [$keptDocument],
@@ -5171,8 +5183,28 @@ final class ApplicationEntityTest extends EntityTester
         $otherSubCategoryDocument->setOperatingCentre($operatingCentre);
         $otherSubCategoryDocument->setIsPostSubmissionUpload(true);
 
+        $otherCategoryDocument = new Entities\Doc\Document('other-category');
+        $otherCategoryDocument->setCategory(new Entities\System\Category());
+        $otherCategoryDocument->setSubCategory($subCategory);
+        $otherCategoryDocument->setOperatingCentre($operatingCentre);
+        $otherCategoryDocument->setIsPostSubmissionUpload(true);
+
+        $otherOperatingCentreDocument = new Entities\Doc\Document('other-operating-centre');
+        $otherOperatingCentreDocument->setCategory($category);
+        $otherOperatingCentreDocument->setSubCategory($subCategory);
+        $otherOperatingCentreDocument->setOperatingCentre(new OperatingCentre());
+        $otherOperatingCentreDocument->setIsPostSubmissionUpload(true);
+
         $this->entity->setDocuments(
-            new ArrayCollection([$notPostSubmissionDocument, $otherSubCategoryDocument, $keptDocument])
+            new ArrayCollection(
+                [
+                    $otherCategoryDocument,
+                    $notPostSubmissionDocument,
+                    $otherSubCategoryDocument,
+                    $keptDocument,
+                    $otherOperatingCentreDocument,
+                ]
+            )
         );
 
         $this->assertSame(

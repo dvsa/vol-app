@@ -1579,7 +1579,11 @@ final class LicenceEntityTest extends EntityTester
         $mockDocument2->setCategory($category);
         $mockDocument2->setSubCategory($otherSubCategory);
 
-        $documentsCollection = new ArrayCollection([$mockDocument1, $mockDocument2]);
+        $mockDocument3 = m::mock(Document::class)->makePartial();
+        $mockDocument3->setCategory(m::mock(RefData::class)->makePartial());
+        $mockDocument3->setSubCategory($subCategory);
+
+        $documentsCollection = new ArrayCollection([$mockDocument1, $mockDocument2, $mockDocument3]);
 
         $licence->setDocuments($documentsCollection);
         $this->assertSame(
