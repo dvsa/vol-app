@@ -6,26 +6,30 @@ trait DateInputTrait
 {
     private $inputHelper;
 
-    protected function renderDayInput($element)
+    protected function renderDayInput($element, bool $hasError = false)
     {
-        return $this->renderDateInput($element, 'Day', 2);
+        return $this->renderDateInput($element, 'Day', 2, $hasError);
     }
 
-    protected function renderMonthInput($element)
+    protected function renderMonthInput($element, bool $hasError = false)
     {
-        return $this->renderDateInput($element, 'Month', 2);
+        return $this->renderDateInput($element, 'Month', 2, $hasError);
     }
 
-    protected function renderYearInput($element)
+    protected function renderYearInput($element, bool $hasError = false)
     {
-        return $this->renderDateInput($element, 'Year', 4);
+        return $this->renderDateInput($element, 'Year', 4, $hasError);
     }
 
-    private function renderDateInput($element, string $label, int $width): string
+    private function renderDateInput($element, string $label, int $width, bool $hasError): string
     {
         $element->setAttribute('type', 'text');
         $element->setAttribute('maxlength', $width);
-        $element->setAttribute('class', 'govuk-input govuk-date-input__input govuk-input--width-' . $width);
+        $element->setAttribute(
+            'class',
+            'govuk-input govuk-date-input__input govuk-input--width-' . $width
+                . ($hasError ? ' govuk-input--error' : '')
+        );
         $element->setAttribute('inputmode', 'numeric');
 
         return sprintf(

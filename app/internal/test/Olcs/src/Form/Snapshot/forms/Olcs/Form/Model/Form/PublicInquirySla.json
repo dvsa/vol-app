@@ -16,6 +16,7 @@
             "spec": {
               "name": "callUpLetterDate",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Call up letter issued",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -31,6 +32,7 @@
             "spec": {
               "name": "briefToTcDate",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Brief sent",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -63,6 +65,7 @@
             "spec": {
               "name": "tcWrittenDecisionDate",
               "options": {
+                "input_type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
                 "label": "Date of written decision",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -80,6 +83,7 @@
             "spec": {
               "name": "decisionLetterSentDate",
               "options": {
+                "input_type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
                 "label": "Decision letter sent",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -97,6 +101,7 @@
             "spec": {
               "name": "tcWrittenReasonDate",
               "options": {
+                "input_type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
                 "label": "Date of written reason",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -114,6 +119,7 @@
             "spec": {
               "name": "writtenReasonLetterDate",
               "options": {
+                "input_type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
                 "label": "Written reason letter sent",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -131,6 +137,7 @@
             "spec": {
               "name": "writtenDecisionLetterDate",
               "options": {
+                "input_type": "Olcs\\InputFilter\\PublicInquiryWrittenDecisionDate",
                 "label": "Written decision letter sent",
                 "create_empty_option": true,
                 "render_delimiters": true,
@@ -225,6 +232,7 @@
       "callUpLetterDate": {
         "name": "callUpLetterDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -248,6 +256,7 @@
       "briefToTcDate": {
         "name": "briefToTcDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -276,7 +285,7 @@
         "name": "tcWrittenDecisionDate",
         "required": true,
         "allow_empty": true,
-        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -313,7 +322,7 @@
         "name": "decisionLetterSentDate",
         "required": true,
         "allow_empty": true,
-        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -350,7 +359,7 @@
         "name": "tcWrittenReasonDate",
         "required": true,
         "allow_empty": true,
-        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -387,7 +396,7 @@
         "name": "writtenReasonLetterDate",
         "required": true,
         "allow_empty": true,
-        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "type": "Olcs\\InputFilter\\PublicInquiryWrittenOutcomeDate",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -423,6 +432,7 @@
       "writtenDecisionLetterDate": {
         "name": "writtenDecisionLetterDate",
         "required": false,
+        "type": "Olcs\\InputFilter\\PublicInquiryWrittenDecisionDate",
         "filters": [
           {
             "name": "DateSelectNullifier"

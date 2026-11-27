@@ -11,17 +11,19 @@ use Laminas\Form\Annotation as Form;
 class PiReportFilter
 {
     #[Form\Attributes(['id' => '', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'PI date from'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'PI date from'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $startDate = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'PI date to'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'PI date to'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('DateCompare', options: ['has_time' => false, 'compare_to' => 'startDate', 'operator' => 'gte', 'compare_to_label' => 'PI date from'])]

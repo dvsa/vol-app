@@ -10,6 +10,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date appeal received",
           "create_empty_option": true,
           "render_delimiters": false
@@ -25,6 +26,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Appeal deadline",
           "create_empty_option": true,
           "render_delimiters": false
@@ -98,6 +100,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of appeal hearing",
           "create_empty_option": true,
           "render_delimiters": false
@@ -113,6 +116,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of decision",
           "create_empty_option": true,
           "render_delimiters": false
@@ -128,6 +132,7 @@
           "id": "papersDueTcDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Papers due with TC/DTC/HTRU/DHTRU",
           "create_empty_option": true,
           "render_delimiters": false
@@ -143,6 +148,7 @@
           "id": "papersSentTcDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Papers sent to TC/DTC/HTRU/DHTRU",
           "create_empty_option": true,
           "render_delimiters": false
@@ -158,6 +164,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Papers due at tribunal",
           "create_empty_option": true,
           "render_delimiters": false
@@ -173,6 +180,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Papers sent to tribunal",
           "create_empty_option": true,
           "render_delimiters": false
@@ -233,6 +241,7 @@
         },
         "type": "DateSelect",
         "options": {
+          "input_type": "Olcs\\InputFilter\\WithdrawnDate",
           "label": "Withdrawn date",
           "create_empty_option": true,
           "render_delimiters": false,
@@ -275,6 +284,7 @@
   "input_filter": {
     "appealDate": {
       "name": "appealDate",
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -294,6 +304,7 @@
     },
     "deadlineDate": {
       "name": "deadlineDate",
+      "type": "Common\\InputFilter\\DateParts",
       "required": false,
       "validators": [
         {
@@ -360,6 +371,7 @@
     "hearingDate": {
       "name": "hearingDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -380,6 +392,7 @@
     "decisionDate": {
       "name": "decisionDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -400,6 +413,7 @@
     "papersDueTcDate": {
       "name": "papersDueTcDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -420,6 +434,7 @@
     "papersSentTcDate": {
       "name": "papersSentTcDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -440,6 +455,7 @@
     "papersDueDate": {
       "name": "papersDueDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -460,6 +476,7 @@
     "papersSentDate": {
       "name": "papersSentDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -507,6 +524,7 @@
     "withdrawnDate": {
       "name": "withdrawnDate",
       "required": true,
+      "type": "Olcs\\InputFilter\\WithdrawnDate",
       "filters": [
         {
           "name": "DateSelect",

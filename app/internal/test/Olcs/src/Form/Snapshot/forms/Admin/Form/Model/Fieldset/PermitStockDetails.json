@@ -247,6 +247,7 @@
     "validFrom": {
       "name": "validFrom",
       "required": false,
+      "type": "Admin\\InputFilter\\PermitStockDate",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -267,6 +268,7 @@
     "validTo": {
       "name": "validTo",
       "required": false,
+      "type": "Admin\\InputFilter\\PermitStockDate",
       "filters": [
         {
           "name": "DateSelectNullifier"

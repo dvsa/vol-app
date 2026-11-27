@@ -11,8 +11,9 @@ use Laminas\Form\Annotation as Form;
 class ProhibitionFields extends Base
 {
     #[Form\Attributes(['id' => 'prohibitionDate'])]
-    #[Form\Options(['label' => 'Prohibition date', 'create_empty_option' => true, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Prohibition date', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -36,7 +37,8 @@ class ProhibitionFields extends Base
 
     #[Form\Required(false)]
     #[Form\Attributes(['required' => false, 'id' => 'clearedDate'])]
-    #[Form\Options(['label' => 'Date cleared', 'create_empty_option' => true, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date cleared', 'create_empty_option' => true, 'render_delimiters' => true])]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]

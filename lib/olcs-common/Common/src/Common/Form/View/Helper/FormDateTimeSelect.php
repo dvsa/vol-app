@@ -87,10 +87,11 @@ class FormDateTimeSelect extends LaminasFormDateTimeSelect
             $secondElement->setEmptyOption('');
         }
 
+        $errorParts = DateErrorParts::forElement($element);
         $data = [];
-        $data[$pattern['day']]    = $this->renderDayInput($dayElement);
-        $data[$pattern['month']]  = $this->renderMonthInput($monthElement);
-        $data[$pattern['year']]   = $this->renderYearInput($yearElement);
+        $data[$pattern['day']]    = $this->renderDayInput($dayElement, in_array('day', $errorParts, true));
+        $data[$pattern['month']]  = $this->renderMonthInput($monthElement, in_array('month', $errorParts, true));
+        $data[$pattern['year']]   = $this->renderYearInput($yearElement, in_array('year', $errorParts, true));
         $data[$pattern['hour']]   = $selectHelper->render($hourElement);
         $data[$pattern['minute']] = $selectHelper->render($minuteElement);
 

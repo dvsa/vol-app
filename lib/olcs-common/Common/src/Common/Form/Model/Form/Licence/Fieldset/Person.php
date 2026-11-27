@@ -50,8 +50,9 @@ class Person
 
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'dob'])]
-    #[Form\Options(['label' => 'Date of Birth', 'create_empty_option' => true, 'render_delimiters' => false, 'error-message' => 'Enter date of birth'])]
+    #[Form\Options(['label' => 'Date of Birth', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

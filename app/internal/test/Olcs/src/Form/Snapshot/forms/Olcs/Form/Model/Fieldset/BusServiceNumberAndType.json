@@ -113,6 +113,7 @@
           "id": "receivedDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date received",
           "create_empty_option": true,
           "render_delimiters": false
@@ -130,6 +131,7 @@
           "id": "effectiveDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Effective date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -147,6 +149,7 @@
           "id": "endDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "End date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -164,6 +167,7 @@
           "id": "applicationCompleteDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Application complete date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -427,6 +431,7 @@
     "receivedDate": {
       "name": "receivedDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -450,6 +455,7 @@
     "effectiveDate": {
       "name": "effectiveDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -470,6 +476,7 @@
     "endDate": {
       "name": "endDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "\\Common\\Validator\\Date"
@@ -490,6 +497,7 @@
     "applicationCompleteDate": {
       "name": "applicationCompleteDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "validators": [
         {
           "name": "Date",

@@ -43,7 +43,7 @@ class DateSelect extends LaminasElement\DateSelect
     public function getInputSpecification(): array
     {
         return [
-            'type' => \Common\InputFilter\DateSelect::class,
+            'type' => $this->getOption('input_type') ?: \Common\InputFilter\DateSelect::class,
             'name' => $this->getName(),
             'required' => $this->getOption('required'),
             'filters' => [

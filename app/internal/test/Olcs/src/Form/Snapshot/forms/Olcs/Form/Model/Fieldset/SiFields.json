@@ -42,6 +42,7 @@
           "required": "required"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of infringement"
         },
         "type": "DateSelect"
@@ -56,6 +57,7 @@
           "required": "required"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of check"
         },
         "type": "DateSelect"
@@ -152,6 +154,7 @@
     "infringementDate": {
       "name": "infringementDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -175,6 +178,7 @@
     "checkDate": {
       "name": "checkDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

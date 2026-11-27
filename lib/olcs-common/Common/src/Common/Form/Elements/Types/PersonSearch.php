@@ -109,6 +109,7 @@ class PersonSearch extends Fieldset
                 'create_empty_option' => true,
                 'render_delimiters' => false,
                 'required' => false,
+                'input_type' => \Common\InputFilter\PersonDateOfBirth::class,
             ]
         );
         $this->add($birthDate);

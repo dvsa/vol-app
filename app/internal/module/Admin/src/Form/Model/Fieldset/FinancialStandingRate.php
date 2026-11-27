@@ -48,7 +48,8 @@ class FinancialStandingRate
 
     #[Form\Name('effectiveFrom')]
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['short-label' => 'financial-standing-rate-element-effectiveDate', 'label' => 'financial-standing-rate-element-effectiveDate', 'label_attributes' => ['id' => 'label-effectiveFrom'], 'render_delimiters' => false, 'create_empty_option' => true, 'required' => true, 'max_year_delta' => '+10', 'min_year_delta' => '-10'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'short-label' => 'financial-standing-rate-element-effectiveDate', 'label' => 'financial-standing-rate-element-effectiveDate', 'label_attributes' => ['id' => 'label-effectiveFrom'], 'render_delimiters' => false, 'create_empty_option' => true, 'required' => true, 'max_year_delta' => '+10', 'min_year_delta' => '-10'])]
     #[Form\Type('\Common\Form\Elements\Custom\DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     public $effectiveFrom = null;
 }

@@ -110,6 +110,7 @@
                 "id": "received_date"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "scanning.data.received_date",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -203,6 +204,7 @@
       "dateReceived": {
         "name": "dateReceived",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

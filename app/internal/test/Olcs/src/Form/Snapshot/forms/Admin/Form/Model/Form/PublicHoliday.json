@@ -148,6 +148,7 @@
       "holidayDate": {
         "name": "holidayDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

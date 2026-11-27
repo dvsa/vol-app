@@ -171,6 +171,7 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
             : '';
 
         $element->setOption('hint', '');
+        $element->setOption('validation-label', $label);
         $element->setLabel('');
 
         if ($element->getOption('hint-position') === 'end') {
@@ -178,6 +179,8 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
         } else {
             $markup = $hint . $this->renderRow($element);
         }
+
+        $element->setLabel($label);
 
         if ($label !== null && $label !== '' && $label !== '0') {
             $translator = $this->getTranslator();

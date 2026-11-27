@@ -19,6 +19,7 @@
                 "id": "prohibitionDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Prohibition date",
                 "create_empty_option": true,
                 "render_delimiters": true
@@ -78,6 +79,7 @@
                 "id": "clearedDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "Date cleared",
                 "create_empty_option": true,
                 "render_delimiters": true
@@ -181,6 +183,7 @@
     "fields": {
       "prohibitionDate": {
         "name": "prohibitionDate",
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -208,6 +211,7 @@
       "clearedDate": {
         "name": "clearedDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

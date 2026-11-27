@@ -17,8 +17,9 @@ class InterimDetails
 
     #[Form\Required(false)]
     #[Form\Attributes(['id' => 'interimStart'])]
-    #[Form\Options(['label' => 'internal.interim.form.interim_start', 'create_empty_option' => true, 'render_delimiters' => false, 'min_year_delta' => '-5', 'max_year_delta' => '+5'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'internal.interim.form.interim_start', 'create_empty_option' => true, 'render_delimiters' => false, 'min_year_delta' => '-5', 'max_year_delta' => '+5'])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -26,8 +27,9 @@ class InterimDetails
 
     #[Form\Required(false)]
     #[Form\Attributes(['id' => 'interimEnd'])]
-    #[Form\Options(['label' => 'internal.interim.form.interim_end', 'create_empty_option' => true, 'render_delimiters' => false, 'min_year_delta' => '-5', 'max_year_delta' => '+5'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'internal.interim.form.interim_end', 'create_empty_option' => true, 'render_delimiters' => false, 'min_year_delta' => '-5', 'max_year_delta' => '+5'])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

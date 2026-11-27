@@ -11,16 +11,18 @@ use Laminas\Form\Annotation as Form;
 class Appeal extends CaseBase
 {
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Date appeal received', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date appeal received', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
     public $appealDate = null;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Appeal deadline', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Appeal deadline', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Required(false)]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -55,54 +57,60 @@ class Appeal extends CaseBase
     public $outlineGround = null;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Date of appeal hearing', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of appeal hearing', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
     public $hearingDate = null;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of decision', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
     public $decisionDate = null;
 
     #[Form\Attributes(['id' => 'papersDueTcDate'])]
-    #[Form\Options(['label' => 'Papers due with TC/DTC/HTRU/DHTRU', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Papers due with TC/DTC/HTRU/DHTRU', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
     public $papersDueTcDate = null;
 
     #[Form\Attributes(['id' => 'papersSentTcDate'])]
-    #[Form\Options(['label' => 'Papers sent to TC/DTC/HTRU/DHTRU', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Papers sent to TC/DTC/HTRU/DHTRU', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
     public $papersSentTcDate = null;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Papers due at tribunal', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Papers due at tribunal', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
     public $papersDueDate = null;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'Papers sent to tribunal', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Papers sent to tribunal', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]
@@ -129,8 +137,9 @@ class Appeal extends CaseBase
 
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Olcs\InputFilter\WithdrawnDate')]
     #[Form\Attributes(['id' => 'withdrawnDate'])]
-    #[Form\Options(['label' => 'Withdrawn date', 'create_empty_option' => true, 'render_delimiters' => false, 'hint' => 'Please note, all associated stay information on this case will also be withdrawn'])]
+    #[Form\Options(['input_type' => 'Olcs\InputFilter\WithdrawnDate', 'label' => 'Withdrawn date', 'create_empty_option' => true, 'render_delimiters' => false, 'hint' => 'Please note, all associated stay information on this case will also be withdrawn'])]
     #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
     #[Form\Validator('ValidateIf', options: ['context_field' => 'isWithdrawn', 'context_values' => ['Y'], 'validators' => [['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture'], ['name' => 'NotEmpty']]])]

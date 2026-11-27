@@ -105,6 +105,7 @@
     "birthDate": {
       "name": "birthDate",
       "required": false,
+      "type": "Common\\InputFilter\\PersonDateOfBirth",
       "validators": [
         {
           "name": "Date",

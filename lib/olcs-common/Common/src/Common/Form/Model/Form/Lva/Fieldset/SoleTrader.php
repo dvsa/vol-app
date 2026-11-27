@@ -42,6 +42,7 @@ class SoleTrader
     #[Form\Attributes(['id' => 'dob'])]
     #[Form\Options(['label' => 'application_your-business_people-sub-action-formDateOfBirth', 'create_empty_option' => false, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

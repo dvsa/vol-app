@@ -47,6 +47,7 @@
           "id": "decisionDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of decision",
           "create_empty_option": true,
           "render_delimiters": true
@@ -96,6 +97,7 @@
           "id": "notificationDate"
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Date of notification",
           "create_empty_option": true,
           "render_delimiters": true
@@ -222,6 +224,7 @@
     "decisionDate": {
       "name": "decisionDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -257,6 +260,7 @@
     "notificationDate": {
       "name": "notificationDate",
       "required": false,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

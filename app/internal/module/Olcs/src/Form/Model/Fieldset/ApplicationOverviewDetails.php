@@ -17,7 +17,8 @@ class ApplicationOverviewDetails
 
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Options(['label' => 'Application received date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+5', 'min_year_delta' => '-5'])]
+    #[Form\Input('Common\InputFilter\DateParts')]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Application received date', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+5', 'min_year_delta' => '-5'])]
     #[Form\Attributes(['required' => false])]
     #[Form\Filter('\Common\Filter\DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
@@ -27,7 +28,8 @@ class ApplicationOverviewDetails
 
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
-    #[Form\Options(['label' => 'Target completion', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+5', 'min_year_delta' => '-5'])]
+    #[Form\Input('Common\InputFilter\DateParts')]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Target completion', 'create_empty_option' => true, 'render_delimiters' => false, 'required' => false, 'max_year_delta' => '+5', 'min_year_delta' => '-5'])]
     #[Form\Attributes(['required' => false])]
     #[Form\Filter('\Common\Filter\DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]

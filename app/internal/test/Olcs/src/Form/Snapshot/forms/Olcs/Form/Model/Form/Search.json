@@ -331,7 +331,8 @@
       },
       "birthDate": {
         "name": "birthDate",
-        "required": false
+        "required": false,
+        "type": "Common\\InputFilter\\PersonDateOfBirth"
       },
       "type": "Laminas\\InputFilter\\InputFilter"
     },

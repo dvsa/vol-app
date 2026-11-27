@@ -26,6 +26,7 @@ class NewTmUserDetails
     #[Form\Attributes(['id' => 'dob'])]
     #[Form\Options(['label' => 'tm-add-user-birthDate', 'short-label' => 'tm-add-user-birthDate', 'create_empty_option' => true, 'render_delimiters' => true])]
     #[Form\Type('Common\Form\Elements\Custom\DateSelect')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

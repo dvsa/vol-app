@@ -12,12 +12,13 @@ use Laminas\Form\Annotation as Form;
 class EnvironmentalComplaint extends CaseBase
 {
     #[Form\Attributes(['id' => 'complaintDate'])]
-    #[Form\Options(['label' => 'Complaint date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Complaint date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     public $complaintDate = null;
 
     #[Form\Options(['label' => 'Description', 'label_attributes' => ['class' => '']])]

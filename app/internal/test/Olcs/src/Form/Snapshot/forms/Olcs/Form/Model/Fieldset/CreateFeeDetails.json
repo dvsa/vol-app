@@ -29,6 +29,7 @@
       "spec": {
         "name": "createdDate",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "short-label": "fees.created_date",
           "label": "fees.created_date",
           "label_attributes": {
@@ -154,6 +155,7 @@
     "createdDate": {
       "name": "createdDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

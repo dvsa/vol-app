@@ -81,6 +81,7 @@
                 "required": "required"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "internal.community_licence.form.start_date",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -93,6 +94,7 @@
             "spec": {
               "name": "endDate",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "internal.community_licence.form.end_date",
                 "create_empty_option": true,
                 "render_delimiters": false
@@ -179,6 +181,7 @@
       "startDate": {
         "name": "startDate",
         "required": true,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"
@@ -206,6 +209,7 @@
       "endDate": {
         "name": "endDate",
         "required": false,
+        "type": "Common\\InputFilter\\DateParts",
         "filters": [
           {
             "name": "DateSelectNullifier"

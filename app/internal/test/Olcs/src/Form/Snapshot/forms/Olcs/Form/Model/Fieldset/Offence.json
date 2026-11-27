@@ -106,6 +106,7 @@
         },
         "type": "DateSelect",
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Offence date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -121,6 +122,7 @@
           "id": ""
         },
         "options": {
+          "input_type": "Common\\InputFilter\\DateParts",
           "label": "Conviction date",
           "create_empty_option": true,
           "render_delimiters": false
@@ -353,6 +355,7 @@
     "birthDate": {
       "name": "birthDate",
       "required": false,
+      "type": "Common\\InputFilter\\OffenceDateOfBirth",
       "filters": [
         {
           "name": "DateSelectNullifier"
@@ -444,6 +447,7 @@
     "offenceDate": {
       "name": "offenceDate",
       "required": true,
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "Laminas\\Filter\\DateSelect",
@@ -483,6 +487,7 @@
     },
     "convictionDate": {
       "name": "convictionDate",
+      "type": "Common\\InputFilter\\DateParts",
       "filters": [
         {
           "name": "DateSelectNullifier"

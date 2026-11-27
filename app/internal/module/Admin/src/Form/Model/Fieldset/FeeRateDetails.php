@@ -24,10 +24,11 @@ class FeeRateDetails
     #[Form\Options(['label' => 'Description:'])]
     public $description;
 
-    #[Form\Options(['label' => 'Effective From:'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Effective From:'])]
     #[Form\Required(true)]
     #[Form\Attributes(['required' => true])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\DateInFuture', options: ['include_today' => true, 'use_time' => false])]

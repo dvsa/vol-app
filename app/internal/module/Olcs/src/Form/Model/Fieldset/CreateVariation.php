@@ -10,7 +10,8 @@ use Laminas\Form\Annotation as Form;
 class CreateVariation
 {
     #[Form\Type('DateSelect')]
-    #[Form\Options(['label' => 'create-variation-application-received-date'])]
+    #[Form\Input('Common\InputFilter\DateParts')]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'create-variation-application-received-date'])]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Filter('DateSelectNullifier')]

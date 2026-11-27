@@ -31,6 +31,7 @@ class SystemInfoMessageDetails
     public $description;
 
     #[Form\Type('DateTimeSelect')]
+    #[Form\Input('Common\InputFilter\DateTimeParts')]
     #[Form\Required(true)]
     #[Form\Options(['label' => 'Start:', 'create_empty_option' => true, 'max_year_delta' => '+1', 'min_year_delta' => '0'])]
     #[Form\Filter('DateTimeSelectNullifier')]
@@ -39,6 +40,7 @@ class SystemInfoMessageDetails
     public $startDate = null;
 
     #[Form\Type('DateTimeSelect')]
+    #[Form\Input('Common\InputFilter\DateTimeParts')]
     #[Form\Required(true)]
     #[Form\Options(['label' => 'End:', 'create_empty_option' => true, 'max_year_delta' => '+10', 'min_year_delta' => '0'])]
     #[Form\Filter('DateTimeSelectNullifier')]

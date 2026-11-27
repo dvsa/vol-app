@@ -20,8 +20,9 @@ class ConvictionsAndPenaltiesDetails
     public $version;
 
     #[Form\Attributes(['id' => 'conviction-date', 'required' => false, 'class' => 'long'])]
-    #[Form\Options(['label' => 'transport-manager.convictions-and-penalties.form.conviction-date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'transport-manager.convictions-and-penalties.form.conviction-date', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Required(true)]
     #[Form\Validator('\Common\Validator\Date')]

@@ -48,6 +48,7 @@ class Search
     #[Form\Options(['label' => 'Date of birth', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('\Common\Form\Elements\InputFilters\DateNotRequiredNotInFuture')]
+    #[Form\Input('Common\InputFilter\PersonDateOfBirth')]
     public $birthDate = null;
 
     #[Form\Attributes(['data-module' => 'govuk-button', 'type' => 'submit', 'class' => 'govuk-button'])]

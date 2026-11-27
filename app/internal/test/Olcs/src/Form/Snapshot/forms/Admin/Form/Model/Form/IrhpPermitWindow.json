@@ -51,6 +51,7 @@
                 "id": "startDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateTimeParts",
                 "label": "internal.community_licence.form.start_date",
                 "create_empty_option": true,
                 "max_year_delta": "+1",
@@ -70,6 +71,7 @@
                 "id": "endDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\DateTimeParts",
                 "label": "internal.community_licence.form.end_date",
                 "create_empty_option": true,
                 "max_year_delta": "+10",
@@ -151,6 +153,7 @@
     "permitWindowDetails": {
       "startDate": {
         "name": "startDate",
+        "type": "Common\\InputFilter\\DateTimeParts",
         "required": true,
         "filters": [
           {
@@ -197,6 +200,7 @@
       },
       "endDate": {
         "name": "endDate",
+        "type": "Common\\InputFilter\\DateTimeParts",
         "required": true,
         "filters": [
           {

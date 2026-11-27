@@ -119,6 +119,7 @@
               "name": "receivedDate",
               "attributes": [],
               "options": {
+                "input_type": "Common\\InputFilter\\ConditionallyValidatedDateParts",
                 "label": "application_vehicle-safety_vehicle-sub-action.licence-vehicle.receivedDate",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -136,6 +137,7 @@
                 "id": "specifiedDate"
               },
               "options": {
+                "input_type": "Common\\InputFilter\\ConditionallyValidatedDateTimeParts",
                 "label": "application_vehicle-safety_vehicle-sub-action.licence-vehicle.specifiedDate",
                 "create_empty_option": false,
                 "render_delimiters": true,
@@ -165,6 +167,7 @@
               "name": "removalDate",
               "attributes": [],
               "options": {
+                "input_type": "Common\\InputFilter\\ConditionallyValidatedDateParts",
                 "label": "application_vehicle-safety_vehicle-sub-action.licence-vehicle.removalDate",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -276,6 +279,7 @@
             "name": "DateSelectNullifier"
           }
         ],
+        "type": "Common\\InputFilter\\ConditionallyValidatedDateParts",
         "validators": [
           {
             "name": "\\Common\\Validator\\Date"
@@ -291,6 +295,7 @@
       "specifiedDate": {
         "name": "specifiedDate",
         "required": false,
+        "type": "Common\\InputFilter\\ConditionallyValidatedDateTimeParts",
         "filters": [
           {
             "name": "DateTimeSelectNullifier"
@@ -316,6 +321,7 @@
             "name": "DateSelectNullifier"
           }
         ],
+        "type": "Common\\InputFilter\\ConditionallyValidatedDateParts",
         "validators": [
           {
             "name": "\\Common\\Validator\\Date"

@@ -129,7 +129,6 @@
                 "label": "dob",
                 "create_empty_option": false,
                 "render_delimiters": true,
-                "error-message": "person_birthDate-error",
                 "fieldset-attributes": {
                   "id": "dob_day"
                 }
@@ -299,6 +298,7 @@
       "birthDate": {
         "name": "birthDate",
         "required": true,
+        "type": "Common\\InputFilter\\PersonDateOfBirth",
         "filters": [
           {
             "name": "DateSelect",

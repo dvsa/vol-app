@@ -11,17 +11,19 @@ use Laminas\Form\Annotation as Form;
 class InterimRefundReportFilter
 {
     #[Form\Attributes(['id' => '', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'Refunds after'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Refunds after'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $startDate = null;
 
     #[Form\Attributes(['id' => '', 'placeholder' => ''])]
-    #[Form\Options(['label' => 'Refunds before'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Refunds before'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     #[Form\Validator('DateCompare', options: ['has_time' => false, 'compare_to' => 'startDate', 'operator' => 'gte', 'compare_to_label' => 'Refunds after'])]

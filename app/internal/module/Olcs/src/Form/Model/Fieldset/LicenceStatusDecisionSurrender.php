@@ -8,10 +8,11 @@ use Laminas\Form\Annotation as Form;
 class LicenceStatusDecisionSurrender
 {
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Required(true)]
     #[Form\Attributes(['required' => false])]
-    #[Form\Options(['label' => 'licence-status.surrender.date.label', 'create_empty_option' => true, 'min_year_delta' => '-5'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'licence-status.surrender.date.label', 'create_empty_option' => true, 'min_year_delta' => '-5'])]
     #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

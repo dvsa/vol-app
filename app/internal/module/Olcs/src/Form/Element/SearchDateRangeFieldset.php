@@ -32,6 +32,7 @@ class SearchDateRangeFieldset extends Fieldset
             $date = new \Common\Form\Elements\Custom\DateSelect();
             $date->setName($class->getKey());
             $date->setLabel($class->getTitle());
+            $date->setOption('input_type', \Common\InputFilter\DateParts::class);
             $date->setShouldCreateEmptyOption(true);
 
             $this->add($date);

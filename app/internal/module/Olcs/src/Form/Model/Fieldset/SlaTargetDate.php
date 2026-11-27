@@ -22,15 +22,17 @@ class SlaTargetDate extends Base
     #[Form\Type('Hidden')]
     public $entityType = null;
 
-    #[Form\Options(['label' => 'Received/Agreed date', 'create_empty_option' => false, 'render_delimiters' => true])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Received/Agreed date', 'create_empty_option' => false, 'render_delimiters' => true])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $agreedDate = null;
 
     #[Form\Attributes(['id' => 'sentDate'])]
-    #[Form\Options(['label' => 'Sent date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Sent date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]
@@ -41,7 +43,8 @@ class SlaTargetDate extends Base
     public $sentDate = null;
 
     #[Form\Attributes(['id' => 'targetDate'])]
-    #[Form\Options(['label' => 'Target date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Target date', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]

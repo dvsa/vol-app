@@ -38,8 +38,9 @@ class LicenceHistoryLicenceData
 
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'dob', 'required' => false])]
-    #[Form\Options(['label' => 'selfserve-app-subSection-previous-history-licence-history-disqualificationDate', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'selfserve-app-subSection-previous-history-licence-history-disqualificationDate', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -54,8 +55,9 @@ class LicenceHistoryLicenceData
 
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'purchaseDate', 'required' => false])]
-    #[Form\Options(['label' => 'selfserve-app-subSection-previous-history-licence-history-purchaseDate', 'create_empty_option' => true, 'render_delimiters' => false])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'selfserve-app-subSection-previous-history-licence-history-purchaseDate', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

@@ -30,8 +30,9 @@ class PreviousConvictionData
 
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'dob', 'required' => false])]
-    #[Form\Options(['label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formDateOfConviction', 'label_attributes' => ['class' => 'form-element__question'], 'create_empty_option' => true, 'render_delimiters' => false, 'error-message' => 'previousConvictionData_convictionDate-error'])]
+    #[Form\Options(['label' => 'selfserve-app-subSection-previous-history-criminal-conviction-formDateOfConviction', 'label_attributes' => ['class' => 'form-element__question'], 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

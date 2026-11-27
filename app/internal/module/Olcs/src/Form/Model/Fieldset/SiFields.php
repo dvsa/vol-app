@@ -25,9 +25,10 @@ class SiFields extends CaseBase
     public $siCategoryType;
 
     #[Form\Attributes(['id' => 'infringementDate'])]
-    #[Form\Options(['label' => 'Date of infringement'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of infringement'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
@@ -35,9 +36,10 @@ class SiFields extends CaseBase
     public $infringementDate;
 
     #[Form\Attributes(['id' => 'checkDate'])]
-    #[Form\Options(['label' => 'Date of check'])]
+    #[Form\Options(['input_type' => 'Common\InputFilter\DateParts', 'label' => 'Date of check'])]
     #[Form\Required(true)]
     #[Form\Type('DateSelect')]
+    #[Form\Input('Common\InputFilter\DateParts')]
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]

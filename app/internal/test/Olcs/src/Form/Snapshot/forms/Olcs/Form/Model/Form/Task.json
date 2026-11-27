@@ -79,6 +79,7 @@
             "spec": {
               "name": "actionDate",
               "options": {
+                "input_type": "Common\\InputFilter\\DateParts",
                 "label": "tasks.data.actionDate",
                 "create_empty_option": true,
                 "render_delimiters": false,
@@ -316,6 +317,7 @@
     "details": {
       "actionDate": {
         "name": "actionDate",
+        "type": "Common\\InputFilter\\DateParts",
         "validators": [
           {
             "name": "\\Common\\Validator\\Date"
