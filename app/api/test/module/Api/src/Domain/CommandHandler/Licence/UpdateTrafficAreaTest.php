@@ -85,4 +85,48 @@ final class UpdateTrafficAreaTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame(['Licence Traffic Area updated'], $response->getMessages());
     }
+
+    public function testHandleCommandIgnoresVariationListedBeforeNewApplication(): void
+    {
+        $data = [
+            'id' => 52,
+            'trafficArea' => 'Z',
+            'version' => 4324,
+        ];
+        $command = Command::create($data);
+
+        $licence = new LicenceEntity(
+            new \Dvsa\Olcs\Api\Entity\Organisation\Organisation(),
+            new \Dvsa\Olcs\Api\Entity\System\RefData()
+        );
+        $variation = new \Dvsa\Olcs\Api\Entity\Application\Application(
+            $licence,
+            new \Dvsa\Olcs\Api\Entity\System\RefData(),
+            true
+        );
+        $variation->setId(33);
+        $application = new \Dvsa\Olcs\Api\Entity\Application\Application(
+            $licence,
+            new \Dvsa\Olcs\Api\Entity\System\RefData(),
+            false
+        );
+        $application->setId(34);
+        $licence->addApplications($variation);
+        $licence->addApplications($application);
+
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')
+            ->with($command, \Doctrine\ORM\Query::HYDRATE_OBJECT, 4324)->once()->andReturn($licence);
+
+        $this->repoMap['Licence']->shouldReceive('save')->once();
+
+        $this->expectedSideEffect(
+            \Dvsa\Olcs\Api\Domain\Command\Application\GenerateLicenceNumber::class,
+            ['id' => 34],
+            new \Dvsa\Olcs\Api\Domain\Command\Result()
+        );
+
+        $response = $this->sut->handleCommand($command);
+
+        $this->assertSame(['Licence Traffic Area updated'], $response->getMessages());
+    }
 }

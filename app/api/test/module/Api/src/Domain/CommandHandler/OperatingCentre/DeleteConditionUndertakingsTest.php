@@ -97,16 +97,17 @@ final class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCa
         ];
 
         $criteria = null;
-        $conditionUndertakings = [
-            $this->mapReference(ConditionUndertaking::class, 101),
-            $this->mapReference(ConditionUndertaking::class, 102),
-        ];
+        $conditionUndertakings = new ArrayCollection([
+            $this->mapReference(ConditionUndertaking::class, 101)->setApplication($application),
+            $this->mapReference(ConditionUndertaking::class, 102)->setApplication($application),
+            m::mock(ConditionUndertaking::class)->makePartial()->setApplication(m::mock(Application::class)->makePartial()),
+        ]);
         $oc->shouldReceive('getConditionUndertakings->matching')
             ->once()
             ->andReturnUsing(
                 function ($c) use (&$criteria, $conditionUndertakings) {
                     $criteria = $c;
-                    return $conditionUndertakings;
+                    return $conditionUndertakings->matching($c);
                 }
             );
 
@@ -150,16 +151,17 @@ final class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCa
         ];
 
         $criteria = null;
-        $conditionUndertakings = [
-            $this->mapReference(ConditionUndertaking::class, 101),
-            $this->mapReference(ConditionUndertaking::class, 102),
-        ];
+        $conditionUndertakings = new ArrayCollection([
+            $this->mapReference(ConditionUndertaking::class, 101)->setLicence($licence),
+            $this->mapReference(ConditionUndertaking::class, 102)->setLicence($licence),
+            m::mock(ConditionUndertaking::class)->makePartial()->setLicence(m::mock(Licence::class)->makePartial()),
+        ]);
         $oc->shouldReceive('getConditionUndertakings->matching')
             ->once()
             ->andReturnUsing(
                 function ($c) use (&$criteria, $conditionUndertakings) {
                     $criteria = $c;
-                    return $conditionUndertakings;
+                    return $conditionUndertakings->matching($c);
                 }
             );
 

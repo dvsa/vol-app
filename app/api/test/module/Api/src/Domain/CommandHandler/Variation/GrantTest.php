@@ -199,6 +199,160 @@ final class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpDuplicateVehicleRemovalDates')]
+    public function testHandleCommandMarksDuplicateVehicleRemovedOnlyWhenExistingOneIsStillSpecified(
+        ?string $existingRemovalDate,
+        bool $expectRemoved
+    ): void
+    {
+        $data = [
+            'id' => 111,
+            'grantAuthority' => RefData::GRANT_AUTHORITY_DELEGATED,
+        ];
+
+        $command = Cmd::create($data);
+
+        /** @var Licence $licence */
+        $licence = m::mock(Licence::class)->makePartial();
+        $licence->setLicenceType($this->refData[Licence::LICENCE_TYPE_STANDARD_NATIONAL]);
+        $licence->updateTotAuthHgvVehicles(10);
+        $licence->setTrafficArea(new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea()->setId('TA'));
+
+        $vehicle = m::mock();
+
+        $existingLicenceVehicle = m::mock(LicenceVehicle::class)->makePartial();
+        $existingLicenceVehicle->setVehicle($vehicle);
+        $existingLicenceVehicle->setRemovalDate($existingRemovalDate);
+        $existingLicenceVehicle->setSpecifiedDate('2026-01-02T03:04:05+0000');
+
+        $existingLicenceVehicles = new ArrayCollection();
+        $existingLicenceVehicles->add($existingLicenceVehicle);
+        $licence->setLicenceVehicles($existingLicenceVehicles);
+
+        /* @var $application ApplicationEntity */
+        $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setLicenceType($this->refData[Licence::LICENCE_TYPE_STANDARD_NATIONAL]);
+        $application->setId(111);
+        $application->setLicence($licence);
+
+        $newLicenceVehicles = new ArrayCollection();
+        $newLicenceVehicle = m::mock(LicenceVehicle::class)->makePartial();
+        $newLicenceVehicle->setVehicle($vehicle);
+        $newLicenceVehicles->add($newLicenceVehicle);
+
+        $application->shouldReceive('getCurrentInterimStatus')
+            ->andReturn(ApplicationEntity::INTERIM_STATUS_INFORCE)
+            ->twice()
+            ->shouldReceive('isGoods')
+            ->andReturn(true)
+            ->twice()
+            ->shouldReceive('isVariation')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('isPublishable')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('isPsv')
+            ->once()
+            ->andReturn(false)
+            ->shouldReceive('getLicenceVehicles')
+            ->andReturn($newLicenceVehicles)
+            ->once()
+            ->shouldReceive('setGrantAuthority')
+            ->with(m::on(fn($refData) => $refData instanceof RefData && $refData->getId() === RefData::GRANT_AUTHORITY_DELEGATED))
+            ->once()
+            ->getMock();
+
+        $this->repoMap['LicenceVehicle']
+            ->shouldReceive('save')
+            ->with($newLicenceVehicle)
+            ->times($expectRemoved ? 1 : 0)
+            ->getMock();
+
+        $this->expectedSideEffectAsSystemUser(EndInterimCmd::class, ['id' => 111], new Result());
+
+        $licence->shouldReceive('copyInformationFromApplication')
+            ->with($application);
+
+        $this->repoMap['Application']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($application)
+            ->shouldReceive('save')
+            ->once()
+            ->with($application);
+
+        $result1 = new Result();
+        $result1->addMessage('CreateSnapshot');
+        $this->expectedSideEffectAsSystemUser(
+            CreateSnapshot::class,
+            ['id' => 111, 'event' => CreateSnapshot::ON_GRANT],
+            $result1
+        );
+
+        $this->expectedSideEffectAsSystemUser(
+            \Dvsa\Olcs\Transfer\Command\Publication\Application::class,
+            [
+                'id' => 111,
+                'trafficArea' => 'TA',
+                'publicationSection' => \Dvsa\Olcs\Api\Entity\Publication\PublicationSection::VAR_GRANTED_SECTION,
+            ],
+            new Result()
+        );
+        $this->expectedSideEffectAsSystemUser(
+            \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
+            [
+                'id' => 111,
+            ],
+            new Result()
+        );
+
+        $result2 = new Result();
+        $result2->addMessage('CreateDiscRecords');
+        $expectedCommandData = ['id' => $data['id']];
+        $expectedCommandData['currentTotAuth'] = 10;
+        $this->expectedSideEffectAsSystemUser(CreateDiscRecords::class, $expectedCommandData, $result2);
+
+        $result3 = new Result();
+        $result3->addMessage('ProcessApplicationOperatingCentres');
+        $this->expectedSideEffectAsSystemUser(ProcessApplicationOperatingCentres::class, ['id' => $data['id']], $result3);
+
+        $result4 = new Result();
+        $result4->addMessage('CommonGrant');
+        $expectedCommandData = ['id' => $data['id']];
+        $this->expectedSideEffectAsSystemUser(CommonGrant::class, $expectedCommandData, $result4);
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => [
+                'Application' => 111
+            ],
+            'messages' => [
+                'CreateSnapshot',
+                'CreateDiscRecords',
+                'ProcessApplicationOperatingCentres',
+                'CommonGrant',
+                'Application 111 granted'
+            ]
+        ];
+
+        $this->assertEquals($expected, $result->toArray());
+
+        $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
+
+        if ($expectRemoved) {
+            $this->assertInstanceOf(\DateTime::class, $newLicenceVehicle->getRemovalDate());
+        } else {
+            $this->assertNull($newLicenceVehicle->getRemovalDate());
+        }
+    }
+
+    public static function dpDuplicateVehicleRemovalDates(): \Iterator
+    {
+        yield 'existing vehicle still specified' => [null, true];
+        yield 'existing vehicle already removed' => ['2026-02-03T04:05:06+0000', false];
+    }
+
     public function testHandleCommandUpgradeGoods(): void
     {
         $data = [

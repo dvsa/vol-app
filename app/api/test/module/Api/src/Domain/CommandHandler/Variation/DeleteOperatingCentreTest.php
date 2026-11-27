@@ -84,22 +84,27 @@ final class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         ];
         $command = Cmd::create($data);
 
-        $aoc = m::mock();
+        /** @var OperatingCentre $oc */
+        $oc = m::mock(OperatingCentre::class)->makePartial();
 
-        $aocs = new ArrayCollection();
-        $aocs->add($aoc);
+        $otherOc = m::mock(OperatingCentre::class)->makePartial();
+
+        $otherAoc = m::mock(ApplicationOperatingCentre::class)->makePartial();
+        $otherAoc->setOperatingCentre($otherOc);
+
+        $aoc = m::mock(ApplicationOperatingCentre::class)->makePartial();
+        $aoc->setOperatingCentre($oc);
+
+        $aocs = new ArrayCollection([$otherAoc, $aoc]);
 
         /** @var Application $application */
         $application = m::mock(Application::class)->makePartial();
-        $application->shouldReceive('getOperatingCentres->matching')
+        $application->shouldReceive('getOperatingCentres')
             ->andReturn($aocs);
 
         $this->repoMap['Application']->shouldReceive('fetchById')
             ->with(111)
             ->andReturn($application);
-
-        /** @var OperatingCentre $oc */
-        $oc = m::mock(OperatingCentre::class)->makePartial();
 
         $this->references[LicenceOperatingCentre::class][22]->setOperatingCentre($oc);
 
@@ -187,20 +192,25 @@ final class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         ];
         $command = Cmd::create($data);
 
-        $aocs = new ArrayCollection();
+        /** @var OperatingCentre $oc */
+        $oc = m::mock(OperatingCentre::class)->makePartial();
+
+        $otherOc = m::mock(OperatingCentre::class)->makePartial();
+
+        $otherAoc = m::mock(ApplicationOperatingCentre::class)->makePartial();
+        $otherAoc->setOperatingCentre($otherOc);
+
+        $aocs = new ArrayCollection([$otherAoc]);
 
         /** @var Application $application */
         $application = m::mock(Application::class)->makePartial();
         $application->setId($applicationId);
-        $application->shouldReceive('getOperatingCentres->matching')
+        $application->shouldReceive('getOperatingCentres')
             ->andReturn($aocs);
 
         $this->repoMap['Application']->shouldReceive('fetchById')
             ->with($applicationId)
             ->andReturn($application);
-
-        /** @var OperatingCentre $oc */
-        $oc = m::mock(OperatingCentre::class)->makePartial();
 
         $this->references[LicenceOperatingCentre::class][22]->setOperatingCentre($oc);
 
@@ -244,7 +254,7 @@ final class DeleteOperatingCentreTest extends AbstractCommandHandlerTestCase
         /** @var Application $application */
         $application = m::mock(Application::class)->makePartial();
         $application->setId(111);
-        $application->shouldReceive('getOperatingCentres->matching')
+        $application->shouldReceive('getOperatingCentres')
             ->andReturn($aocs);
 
         $this->repoMap['Application']->shouldReceive('fetchById')

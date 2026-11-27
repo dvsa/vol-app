@@ -230,4 +230,42 @@ final class UpdateTradingNamesTest extends AbstractCommandHandlerTestCase
 
         $this->assertFalse($result->getFlag('hasChanged'));
     }
+
+    public function testHandleCommandWithOrgLeavesOutTradingNamesLinkedToALicence(): void
+    {
+        $data = [
+            'organisation' => 111,
+            'tradingNames' => [
+                'Foo',
+            ]
+        ];
+        $command = Cmd::create($data);
+
+        $orgTradingName = new TradingNameEntity('Foo');
+
+        $licenceTradingName = new TradingNameEntity('Baz');
+        $licenceTradingName->setLicence(m::mock(LicenceEntity::class)->makePartial());
+
+        /** @var OrganisationEntity $organisation */
+        $organisation = m::mock(OrganisationEntity::class)->makePartial();
+        $organisation->setTradingNames(new ArrayCollection([$licenceTradingName, $orgTradingName]));
+
+        $this->repoMap['Organisation']->shouldReceive('fetchById')
+            ->with(111)
+            ->andReturn($organisation);
+
+        $this->repoMap['TradingName']->shouldReceive('delete')->never();
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => [],
+            'messages' => [
+                'Trading names are unchanged'
+            ],
+            'flags' => ['hasChanged' => false]
+        ];
+
+        $this->assertEquals($expected, $result->toArray());
+    }
 }
