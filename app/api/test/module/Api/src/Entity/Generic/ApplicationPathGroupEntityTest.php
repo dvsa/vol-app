@@ -141,4 +141,30 @@ final class ApplicationPathGroupEntityTest extends EntityTester
         yield [Entity::BILATERALS_STANDARD_PERMITS_ONLY_ID, false];
         yield [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, true];
     }
+
+    public function testActiveApplicationPathReturnsTheLaterOfTwoLoadedDateStringsBeforeTheDate(): void
+    {
+        $earlier = new ApplicationPathEntity();
+        $earlier->setEffectiveFrom('2020-01-02T03:04:05+0000');
+        $later = new ApplicationPathEntity();
+        $later->setEffectiveFrom('2021-01-02T03:04:05+0000');
+
+        $sut = new Entity();
+        $sut->setApplicationPaths(new ArrayCollection([$earlier, $later]));
+
+        $this->assertSame($later, $sut->getActiveApplicationPath(new DateTime('2022-06-01')));
+    }
+
+    public function testActiveApplicationPathReturnsALoadedDateStringAfterTheDate(): void
+    {
+        $before = new ApplicationPathEntity();
+        $before->setEffectiveFrom('2020-01-02T03:04:05+0000');
+        $after = new ApplicationPathEntity();
+        $after->setEffectiveFrom('2099-01-02T03:04:05+0000');
+
+        $sut = new Entity();
+        $sut->setApplicationPaths(new ArrayCollection([$before, $after]));
+
+        $this->assertSame($after, $sut->getActiveApplicationPath(new DateTime('2022-06-01')));
+    }
 }

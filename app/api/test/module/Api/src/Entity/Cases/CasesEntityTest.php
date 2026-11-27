@@ -589,6 +589,78 @@ final class CasesEntityTest extends EntityTester
         $this->assertTrue($sut->hasStayType($stayType));
     }
 
+    public function testHasStayTypeIsTrueWhenACaseHasAStayOfThatType(): void
+    {
+        $wanted = new RefData('stay_t_wanted');
+        $other = new RefData('stay_t_other');
+
+        $sut = $this->entity;
+        $sut->setStays(new ArrayCollection([new StayEntity($sut, $other), new StayEntity($sut, $wanted)]));
+
+        $this->assertTrue($sut->hasStayType($wanted));
+    }
+
+    public function testHasStayTypeIsFalseWhenACaseHasOnlyStaysOfAnotherType(): void
+    {
+        $wanted = new RefData('stay_t_wanted');
+        $other = new RefData('stay_t_other');
+
+        $sut = $this->entity;
+        $sut->setStays(new ArrayCollection([new StayEntity($sut, $other)]));
+
+        $this->assertFalse($sut->hasStayType($wanted));
+    }
+
+    private function createComplaintHolding(mixed $isCompliance): ComplaintEntity
+    {
+        $complaint = m::mock(ComplaintEntity::class)->makePartial();
+        $complaint->setIsCompliance($isCompliance);
+
+        return $complaint;
+    }
+
+    public function testGetComplianceComplaintsReturnsAnUnsavedComplaintHoldingOne(): void
+    {
+        $compliance = $this->createComplaintHolding(1);
+        $environmental = $this->createComplaintHolding(0);
+
+        $sut = $this->entity;
+        $sut->setComplaints(new ArrayCollection([$environmental, $compliance]));
+
+        $this->assertSame([$compliance], $sut->getComplianceComplaints()->getValues());
+    }
+
+    public function testGetComplianceComplaintsIgnoresLoadedBooleans(): void
+    {
+        $sut = $this->entity;
+        $sut->setComplaints(
+            new ArrayCollection([$this->createComplaintHolding(true), $this->createComplaintHolding(false)])
+        );
+
+        $this->assertSame([], $sut->getComplianceComplaints()->getValues());
+    }
+
+    public function testGetEnvironmentalComplaintsReturnsAnUnsavedComplaintHoldingTheDefault(): void
+    {
+        $compliance = $this->createComplaintHolding(1);
+        $environmental = $this->createComplaintHolding(0);
+
+        $sut = $this->entity;
+        $sut->setComplaints(new ArrayCollection([$compliance, $environmental]));
+
+        $this->assertSame([$environmental], $sut->getEnvironmentalComplaints()->getValues());
+    }
+
+    public function testGetEnvironmentalComplaintsIgnoresLoadedBooleans(): void
+    {
+        $sut = $this->entity;
+        $sut->setComplaints(
+            new ArrayCollection([$this->createComplaintHolding(true), $this->createComplaintHolding(false)])
+        );
+
+        $this->assertSame([], $sut->getEnvironmentalComplaints()->getValues());
+    }
+
     public function testHasAppeal(): void
     {
         $caseType = m::mock(RefData::class);

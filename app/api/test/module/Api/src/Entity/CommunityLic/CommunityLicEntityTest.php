@@ -268,4 +268,125 @@ final class CommunityLicEntityTest extends EntityTester
         yield [CommunityLicEntity::STATUS_ANNUL];
         yield [CommunityLicEntity::STATUS_RETURNDED];
     }
+
+    private function createCommunityLicWithStatus(string $status): CommunityLicEntity
+    {
+        $sut = new CommunityLicEntity();
+        $sut->setStatus((new RefData())->setId($status));
+
+        return $sut;
+    }
+
+    private function createSuspensionStarting(mixed $startDate, int $id): CommunityLicSuspension
+    {
+        $suspension = new CommunityLicSuspension();
+        $suspension->setStartDate($startDate);
+        $suspension->setId($id);
+
+        return $suspension;
+    }
+
+    private function createWithdrawalStarting(mixed $startDate, int $id): CommunityLicWithdrawal
+    {
+        $withdrawal = new CommunityLicWithdrawal();
+        $withdrawal->setStartDate($startDate);
+        $withdrawal->setId($id);
+
+        return $withdrawal;
+    }
+
+    public function testGetFutureSuspensionUsesTheSuspensionStartingTomorrow(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_ACTIVE);
+        $sut->setCommunityLicSuspensions(
+            new ArrayCollection(
+                [
+                    $this->createSuspensionStarting(new \DateTime('yesterday'), 1),
+                    $this->createSuspensionStarting(new \DateTime('tomorrow'), 2),
+                ]
+            )
+        );
+
+        $this->assertSame(2, $sut->getFutureSuspension()['id']);
+    }
+
+    public function testGetFutureSuspensionIgnoresALoadedDateString(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_ACTIVE);
+        $sut->setCommunityLicSuspensions(
+            new ArrayCollection([$this->createSuspensionStarting('2099-01-02T03:04:05+0000', 1)])
+        );
+
+        $this->assertNull($sut->getFutureSuspension());
+    }
+
+    public function testGetCurrentSuspensionUsesALoadedPastDateString(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_SUSPENDED);
+        $sut->setCommunityLicSuspensions(
+            new ArrayCollection(
+                [
+                    $this->createSuspensionStarting(new \DateTime('tomorrow'), 1),
+                    $this->createSuspensionStarting('2000-01-02T03:04:05+0000', 2),
+                ]
+            )
+        );
+
+        $this->assertSame(2, $sut->getCurrentSuspension()['id']);
+    }
+
+    public function testGetCurrentSuspensionAlsoReturnsALoadedFutureDateString(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_SUSPENDED);
+        $sut->setCommunityLicSuspensions(
+            new ArrayCollection([$this->createSuspensionStarting('2099-01-02T03:04:05+0000', 1)])
+        );
+
+        $this->assertSame(1, $sut->getCurrentSuspension()['id']);
+    }
+
+    public function testGetCurrentSuspensionIgnoresASuspensionStartingTomorrow(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_SUSPENDED);
+        $sut->setCommunityLicSuspensions(
+            new ArrayCollection([$this->createSuspensionStarting(new \DateTime('tomorrow'), 1)])
+        );
+
+        $this->assertNull($sut->getCurrentSuspension());
+    }
+
+    public function testGetCurrentWithdrawalUsesALoadedPastDateString(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_WITHDRAWN);
+        $sut->setCommunityLicWithdrawals(
+            new ArrayCollection(
+                [
+                    $this->createWithdrawalStarting(new \DateTime('tomorrow'), 1),
+                    $this->createWithdrawalStarting('2000-01-02T03:04:05+0000', 2),
+                ]
+            )
+        );
+
+        $this->assertSame(2, $sut->getCurrentWithdrawal()['id']);
+    }
+
+    public function testGetCurrentWithdrawalAlsoReturnsALoadedFutureDateString(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_WITHDRAWN);
+        $sut->setCommunityLicWithdrawals(
+            new ArrayCollection([$this->createWithdrawalStarting('2099-01-02T03:04:05+0000', 1)])
+        );
+
+        $this->assertSame(1, $sut->getCurrentWithdrawal()['id']);
+    }
+
+    public function testGetCurrentWithdrawalIgnoresAWithdrawalStartingTomorrow(): void
+    {
+        $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_WITHDRAWN);
+        $sut->setCommunityLicWithdrawals(
+            new ArrayCollection([$this->createWithdrawalStarting(new \DateTime('tomorrow'), 1)])
+        );
+
+        $this->assertNull($sut->getCurrentWithdrawal());
+    }
 }
