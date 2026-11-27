@@ -553,6 +553,71 @@ final class SummaryTest extends QueryHandlerTestCase
         );
     }
 
+    public function testHandleQueryVariationBundleKeepsAddedAndUpdatedTransportManagersWhenTheTransportManagerListIsLoaded(): void
+    {
+        $query = Qry::create(['id' => 111]);
+
+        $mockRefData = m::mock(Entity\System\RefData::class);
+        $mockRefData->shouldReceive('getId')->andReturn('apsts_valid');
+
+        $added = $this->transportManagerApplication('A');
+        $updated = $this->transportManagerApplication('U');
+        $deleted = $this->transportManagerApplication('D');
+
+        $kept = null;
+
+        /** @var Entity\Application\Application|m\MockInterface $mockApplication */
+        $mockApplication = m::mock(Entity\Application\Application::class)->makePartial();
+        $mockApplication->shouldReceive('serialize')
+            ->once()
+            ->andReturnUsing(
+                function (array $bundle) use ($added, $updated, $deleted, &$kept) {
+                    $kept = (new ArrayCollection([$deleted, $added, $updated]))
+                        ->matching($bundle['transportManagers']['criteria'])
+                        ->getValues();
+
+                    return ['foo' => 'bar'];
+                }
+            );
+        $mockApplication->shouldReceive('canAddOperatingCentresEvidence')->andReturn(false);
+        $mockApplication->shouldReceive('canAddFinancialEvidence')->andReturn(false);
+        $mockApplication->shouldReceive('getStatus')->andReturn($mockRefData);
+        $mockApplication->shouldReceive('getLicence->getId')->andReturn(1);
+        $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
+        $mockApplication->setIsVariation(1);
+        $mockApplication->setAuthSignature(1);
+        $mockApplication->shouldReceive('getLicenceType->getId')
+            ->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+        $mockApplication->shouldReceive('getTransportManagers')->andReturn(new ArrayCollection([$added]));
+        $mockApplication->setDocuments(new ArrayCollection());
+        $mockApplication->shouldReceive('getLatestOutstandingApplicationFee')->andReturn(null);
+
+        $this->mockAppRepo->shouldReceive('fetchUsingId')
+            ->once()
+            ->with($query)
+            ->andReturn($mockApplication);
+        $this->mockAppRepo->shouldReceive('getRefdataReference->getId')->andReturn('apsts_consideration');
+        $this->mockFeeRepo->shouldReceive('fetchLatestPaidFeeByApplicationId')->with(111)->andReturn(null);
+        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([]);
+
+        $result = $this->sut->handleQuery($query)->serialize();
+
+        $this->assertSame('APPROVE_TM', $result['actions']['APPROVE_TM']);
+        $this->assertSame([$added, $updated], $kept);
+    }
+
+    private function transportManagerApplication(string $action): m\MockInterface
+    {
+        $tm = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
+        $tm->setTmApplicationStatus(
+            new Entity\System\RefData(Entity\Tm\TransportManagerApplication::STATUS_AWAITING_SIGNATURE)
+        );
+        $tm->setAction($action);
+
+        return $tm;
+    }
+
     public function testHandleQueryVariationUnchangedFinancialEvidence(): void
     {
         $query = Qry::create(['id' => 111]);

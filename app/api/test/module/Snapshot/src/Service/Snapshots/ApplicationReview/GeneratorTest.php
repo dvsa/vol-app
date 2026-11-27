@@ -7,6 +7,10 @@ namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
+use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\SignatureReviewService;
@@ -384,6 +388,64 @@ final class GeneratorTest extends MockeryTestCase
             );
 
         $this->assertEquals('markup', $this->sut->generate($this->application, true));
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('vehicleSectionProvider')]
+    public function testGenerateApplicationBundleKeepsOnlyVehiclesNotRemovedWhenTheVehicleListIsLoaded(string $section, string $service): void
+    {
+        $notRemoved = new LicenceVehicle(m::mock(Licence::class)->shouldIgnoreMissing(), new Vehicle());
+        $notRemoved->setRemovalDate(null);
+
+        $removed = new LicenceVehicle(m::mock(Licence::class)->shouldIgnoreMissing(), new Vehicle());
+        $removed->setRemovalDate('2026-01-02T03:04:05+0000');
+
+        $kept = null;
+
+        $mockReview = m::mock();
+        $mockReview->shouldReceive('getConfigFromData')->andReturn([]);
+        $mockReview->shouldReceive('getHeaderTranslationKey')->andReturn('header');
+
+        $this->sm->setService($service, $mockReview);
+
+        $this->application->setIsVariation(false);
+        $this->application->setNiFlag('Y');
+        $this->application->shouldReceive('isGoods')->andReturn(true);
+        $this->application->shouldReceive('isSpecialRestricted')->andReturn(false);
+        $this->application->shouldReceive('isOperatingSmallPsvAsPartOfLarge')->andReturn(false);
+        $this->application->shouldReceive('serialize')
+            ->once()
+            ->andReturnUsing(
+                function (array $bundle) use ($section, $notRemoved, $removed, &$kept) {
+                    $this->assertInstanceOf(Criteria::class, $bundle['licenceVehicles']['criteria']);
+
+                    $kept = (new ArrayCollection([$removed, $notRemoved]))
+                        ->matching($bundle['licenceVehicles']['criteria'])
+                        ->getValues();
+
+                    return [
+                        'sections' => [$section],
+                        'id' => 111,
+                        'licence' => ['organisation' => ['name' => 'Foo ltd'], 'licNo' => 'AB12345678'],
+                    ];
+                }
+            );
+
+        $this->niTranslation->shouldReceive('setLocaleForNiFlag')->once()->with('Y');
+
+        $this->sectionAccessService->shouldReceive('getAccessibleSections')
+            ->with($this->application)
+            ->andReturn([$section => 'bar']);
+
+        $this->viewRenderer->shouldReceive('render')->once()->andReturn('markup');
+
+        $this->assertEquals('markup', $this->sut->generate($this->application, true));
+        $this->assertSame([$notRemoved], $kept);
+    }
+
+    public static function vehicleSectionProvider(): \Iterator
+    {
+        yield 'goods' => ['vehicles', 'Review\\ApplicationVehicles'];
+        yield 'psv' => ['vehicles_psv', 'Review\\ApplicationVehiclesPsv'];
     }
 
     private function mockSignatureSection(): void

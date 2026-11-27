@@ -10,7 +10,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bookmark;
 
-use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\QueryHandler\Bookmark\InterimUnlinkedTm;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
@@ -51,23 +52,32 @@ final class InterimUnlinkedTmTest extends QueryHandlerTestCase
             ]
         ];
 
-        $tm1 = m::mock();
+        $tm1 = $this->transportManager('A');
         $tm1->shouldReceive('serialize')
             ->with($bundle)
             ->andReturn('foo');
-        $tm2 = m::mock();
+        $tm2 = $this->transportManager('U');
         $tm2->shouldReceive('serialize')
             ->with($bundle)
             ->andReturn('bar');
+        $deleted = $this->transportManager('D');
+        $deleted->shouldReceive('serialize')->never();
 
-        $entity->shouldReceive('getTransportManagers->matching')
-            ->with(m::type(Criteria::class))
-            ->andReturn([$tm1, $tm2]);
+        $entity->shouldReceive('getTransportManagers')
+            ->andReturn(new ArrayCollection([$tm1, $deleted, $tm2]));
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')
             ->with($query)
             ->andReturn($entity);
 
         $this->assertEquals(['id' => 111, 'transportManagers' => ['foo', 'bar']], $this->sut->handleQuery($query));
+    }
+
+    private function transportManager(string $action): m\MockInterface
+    {
+        $tm = m::mock(TransportManagerApplication::class)->makePartial();
+        $tm->setAction($action);
+
+        return $tm;
     }
 }

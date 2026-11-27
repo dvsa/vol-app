@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
+use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\VehiclesSpecified;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -22,6 +25,28 @@ final class VehiclesSpecifiedTest extends MockeryTestCase
         $query = $bookmark->getQuery(['licence' => 123]);
 
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
+    }
+
+    public function testGetQueryCriteriaKeepsSpecifiedVehiclesNotRemovedWhenTheVehicleListIsLoaded(): void
+    {
+        $licence = m::mock(Licence::class)->shouldIgnoreMissing();
+
+        $specified = new LicenceVehicle($licence, new Vehicle());
+        $specified->setSpecifiedDate('2026-01-02T03:04:05+0000');
+
+        $unspecified = new LicenceVehicle($licence, new Vehicle());
+
+        $removed = new LicenceVehicle($licence, new Vehicle());
+        $removed->setSpecifiedDate('2026-01-02T03:04:05+0000');
+        $removed->setRemovalDate('2026-02-03T04:05:06+0000');
+
+        $query = (new VehiclesSpecified())->getQuery(['licence' => 123]);
+        $criteria = $query->getBundle()['licenceVehicles']['criteria'];
+
+        $this->assertSame(
+            [$specified],
+            (new ArrayCollection([$removed, $unspecified, $specified]))->matching($criteria)->getValues()
+        );
     }
 
     public function testRenderWithNoVehiclesSpecified(): void
