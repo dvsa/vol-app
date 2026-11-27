@@ -28,7 +28,7 @@ final class CreateNewUser extends AbstractCommand
     #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 35])]
     public $familyName;
 
-    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\DateOfBirth', options: ['format' => 'Y-m-d'])]
     public $birthDate;
 
     #[Transfer\Filter('Laminas\Filter\StringTrim')]

@@ -46,5 +46,6 @@ class SoleTrader
     #[Form\Filter('DateSelectNullifier')]
     #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Form\Validator('\Common\Form\Elements\Validators\DateNotInFuture')]
     public $birthDate;
 }

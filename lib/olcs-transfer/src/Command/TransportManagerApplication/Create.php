@@ -30,7 +30,7 @@ final class Create extends AbstractCommand
     protected $action;
 
     #[Transfer\Optional]
-    #[Transfer\Validator('Laminas\Validator\Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\DateOfBirth', options: ['format' => 'Y-m-d'])]
     protected $dob;
 
     /**

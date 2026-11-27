@@ -53,7 +53,10 @@
           "validators": [
             {
               "instance": {
-                "class": "Laminas\\Validator\\Date"
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\DateOfBirth",
+                "clock": {
+                  "class": "Closure"
+                }
               },
               "breakChainOnFailure": false
             }
