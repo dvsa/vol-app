@@ -63,7 +63,7 @@ module "parameters" {
     olcs_from_email                              = "notifications@preview.vehicle-operator-licensing.service.gov.uk"
     olcs_google_gtm_auth                         = "CuKPicQeN0SoVhVAJK-9rA"
     olcs_google_gtm_preview                      = "env-463"
-    olcs_google_id                               = "GTM-W7G4V8"
+    olcs_google_id                               = "GTM-KH8ZXR9B"
     olcs_imap_host                               = "imapoffice365.mgmt.olcs.dvsacloud.uk"
     olcs_imap_port                               = "993"
     olcs_imap_ssl                                = "ssl"
