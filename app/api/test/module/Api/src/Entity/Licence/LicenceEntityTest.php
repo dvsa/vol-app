@@ -22,6 +22,8 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
+use Dvsa\Olcs\Api\Entity\Licence\PsvDisc;
+use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\TradingName as TradingNameEntity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -199,6 +201,57 @@ final class LicenceEntityTest extends EntityTester
         $licence->setLicenceVehicles($lvCollection);
 
         $this->assertInstanceOf(ArrayCollection::class, $licence->getActiveVehicles());
+    }
+
+    public function testGetActiveVehiclesKeepsOnlySpecifiedUnremovedVehiclesWithoutInterim(): void
+    {
+        $licence = $this->instantiate(Entity::class);
+        $interim = m::mock(Application::class);
+
+        $active = m::mock(LicenceVehicle::class)->makePartial();
+        $active->setSpecifiedDate('2026-01-02T03:04:05+0000');
+        $active->setRemovalDate(null);
+        $active->setInterimApplication(null);
+
+        $removed = m::mock(LicenceVehicle::class)->makePartial();
+        $removed->setSpecifiedDate('2026-01-02T03:04:05+0000');
+        $removed->setRemovalDate('2026-02-03T04:05:06+0000');
+        $removed->setInterimApplication(null);
+
+        $notSpecified = m::mock(LicenceVehicle::class)->makePartial();
+        $notSpecified->setSpecifiedDate(null);
+        $notSpecified->setRemovalDate(null);
+        $notSpecified->setInterimApplication(null);
+
+        $withInterim = m::mock(LicenceVehicle::class)->makePartial();
+        $withInterim->setSpecifiedDate('2026-01-02T03:04:05+0000');
+        $withInterim->setRemovalDate(null);
+        $withInterim->setInterimApplication($interim);
+
+        $licence->setLicenceVehicles(new ArrayCollection([$active, $removed, $notSpecified, $withInterim]));
+
+        $this->assertSame([$active], array_values($licence->getActiveVehicles()->toArray()));
+        $this->assertSame(
+            [$active, $withInterim],
+            array_values($licence->getActiveVehicles(true, true)->toArray())
+        );
+    }
+
+    public function testGetActiveVehiclesStillDropsUnspecifiedVehiclesWhenSpecifiedIsNotChecked(): void
+    {
+        $licence = $this->instantiate(Entity::class);
+
+        $active = m::mock(LicenceVehicle::class)->makePartial();
+        $active->setSpecifiedDate('2026-01-02T03:04:05+0000');
+        $active->setRemovalDate(null);
+
+        $notSpecified = m::mock(LicenceVehicle::class)->makePartial();
+        $notSpecified->setSpecifiedDate(null);
+        $notSpecified->setRemovalDate(null);
+
+        $licence->setLicenceVehicles(new ArrayCollection([$active, $notSpecified]));
+
+        $this->assertSame([$active], array_values($licence->getActiveVehicles(false)->toArray()));
     }
 
     public function testGetOtherActiveLicences(): void
@@ -399,6 +452,36 @@ final class LicenceEntityTest extends EntityTester
         $licence = m::mock(Entity::class)->makePartial();
         $licence->shouldReceive('getConditionUndertakings->matching->count')
             ->andReturn(0);
+
+        $this->assertFalse($licence->hasApprovedUnfulfilledConditions());
+    }
+
+    public function testHasApprovedUnfulfilledConditionsIsTrueForUnsavedDefaults(): void
+    {
+        $licence = $this->instantiate(Entity::class);
+        $licence->setConditionUndertakings(
+            new ArrayCollection([new ConditionUndertaking(m::mock(RefData::class), 0, 0)])
+        );
+
+        $this->assertTrue($licence->hasApprovedUnfulfilledConditions());
+    }
+
+    public function testHasApprovedUnfulfilledConditionsIsFalseForLoadedFulfilledCondition(): void
+    {
+        $licence = $this->instantiate(Entity::class);
+        $licence->setConditionUndertakings(
+            new ArrayCollection([new ConditionUndertaking(m::mock(RefData::class), 'Y', 0)])
+        );
+
+        $this->assertFalse($licence->hasApprovedUnfulfilledConditions());
+    }
+
+    public function testHasApprovedUnfulfilledConditionsIsFalseForLoadedApprovedUnfulfilledCondition(): void
+    {
+        $licence = $this->instantiate(Entity::class);
+        $licence->setConditionUndertakings(
+            new ArrayCollection([new ConditionUndertaking(m::mock(RefData::class), 'N', 'N')])
+        );
 
         $this->assertFalse($licence->hasApprovedUnfulfilledConditions());
     }
@@ -1208,24 +1291,17 @@ final class LicenceEntityTest extends EntityTester
 
     public function testGetPsvDiscsNotCeased(): void
     {
-        $psvDiscsCollection = m::mock(ArrayCollection::class);
-        $psvDiscsNotCeasedCollection = m::mock(ArrayCollection::class);
-
-        $psvDiscsCollection->shouldReceive('matching')->once()->with(m::type(Criteria::class))->andReturnUsing(
-            function (Criteria $criteria) use ($psvDiscsNotCeasedCollection) {
-                $expectedCriteria = Criteria::create()
-                    ->where(Criteria::expr()->isNull('ceasedDate'));
-
-                $this->assertEquals($expectedCriteria, $criteria);
-
-                return $psvDiscsNotCeasedCollection;
-            }
-        );
-
         $licence = $this->instantiate(Entity::class);
 
-        $licence->setPsvDiscs($psvDiscsCollection);
-        $this->assertSame($psvDiscsNotCeasedCollection, $licence->getPsvDiscsNotCeased());
+        $notCeased = m::mock(PsvDisc::class)->makePartial();
+        $notCeased->setCeasedDate(null);
+
+        $ceased = m::mock(PsvDisc::class)->makePartial();
+        $ceased->setCeasedDate('2026-01-02T03:04:05+0000');
+
+        $licence->setPsvDiscs(new ArrayCollection([$notCeased, $ceased]));
+
+        $this->assertSame([$notCeased], $licence->getPsvDiscsNotCeased()->getValues());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveVariationProvider')]
@@ -1491,29 +1567,25 @@ final class LicenceEntityTest extends EntityTester
     public function testGetApplicationDocuments(): void
     {
         $licence = m::mock(Entity::class)->makePartial();
-        $mockDocument1 = m::mock()
-            ->shouldReceive('getcategory')
-            ->andReturn('category')
-            ->once()
-            ->shouldReceive('getsubCategory')
-            ->andReturn('subCategory')
-            ->once()
-            ->getMock();
+        $category = m::mock(RefData::class)->makePartial();
+        $subCategory = m::mock(RefData::class)->makePartial();
+        $otherSubCategory = m::mock(RefData::class)->makePartial();
 
-        $mockDocument2 = m::mock()
-            ->shouldReceive('getcategory')
-            ->andReturn('category1')
-            ->once()
-            ->shouldReceive('getsubCategory')
-            ->andReturn('subCategory1')
-            ->never()
-            ->getMock();
+        $mockDocument1 = m::mock(Document::class)->makePartial();
+        $mockDocument1->setCategory($category);
+        $mockDocument1->setSubCategory($subCategory);
+
+        $mockDocument2 = m::mock(Document::class)->makePartial();
+        $mockDocument2->setCategory($category);
+        $mockDocument2->setSubCategory($otherSubCategory);
 
         $documentsCollection = new ArrayCollection([$mockDocument1, $mockDocument2]);
-        $expected = new ArrayCollection([$mockDocument1]);
 
         $licence->setDocuments($documentsCollection);
-        $this->assertEquals($expected, $licence->getLicenceDocuments('category', 'subCategory'));
+        $this->assertSame(
+            [$mockDocument1],
+            $licence->getLicenceDocuments($category, $subCategory)->getValues()
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetOutstandingOrganisations')]
@@ -2468,14 +2540,24 @@ final class LicenceEntityTest extends EntityTester
 
     public function testGetLatestBusRouteNo(): void
     {
-        /** @var BusRegEntity|m\Mock $busReg */
-        $busReg = m::mock(BusRegEntity::class)->makePartial();
-        $busReg->setRouteNo(52);
+        $licence = $this->instantiate(Entity::class);
+        $otherLicence = $this->instantiate(Entity::class);
 
-        $licence = m::mock(Entity::class)->makePartial();
-        $licence->shouldReceive('getBusRegs->matching->current')->with()->twice()->andReturn($busReg);
+        $busReg1 = m::mock(BusRegEntity::class)->makePartial();
+        $busReg1->setLicence($licence);
+        $busReg1->setRouteNo(3);
 
-        $this->assertSame(52, $licence->getLatestBusRouteNo());
+        $busReg2 = m::mock(BusRegEntity::class)->makePartial();
+        $busReg2->setLicence($licence);
+        $busReg2->setRouteNo(9);
+
+        $busReg3 = m::mock(BusRegEntity::class)->makePartial();
+        $busReg3->setLicence($otherLicence);
+        $busReg3->setRouteNo(99);
+
+        $licence->setBusRegs(new ArrayCollection([$busReg1, $busReg2, $busReg3]));
+
+        $this->assertSame(9, $licence->getLatestBusRouteNo());
     }
 
     public function testGetLatestBusRouteNoNull(): void
