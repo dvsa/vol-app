@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application\Grant;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\GrantTransportManager as GrantTransportManagerCmd;
 use Dvsa\Olcs\Api\Domain\Command\Licence\TmNominatedTask;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create;
@@ -107,20 +106,17 @@ final class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
 
         $command = GrantTransportManagerCmd::create($data);
 
-        /** @var TransportManager $ltm */
-        $ltm = m::mock(TransportManager::class)->makePartial();
-
-        $matchingTms = new ArrayCollection();
-        $matchingTms->add($ltm);
-
         /** @var Licence $licence */
         $licence = m::mock(Licence::class)->makePartial();
-        $licence->shouldReceive('getTmLicences->matching')
-            ->with(m::type(Criteria::class))
-            ->andReturn($matchingTms);
 
         /** @var TransportManager $tm */
         $tm = m::mock(TransportManager::class)->makePartial();
+
+        $otherTm = m::mock(TransportManager::class)->makePartial();
+
+        $ltm = new TransportManagerLicence($licence, $tm);
+        $otherLtm = new TransportManagerLicence($licence, $otherTm);
+        $licence->setTmLicences(new ArrayCollection([$ltm, $otherLtm]));
 
         $otherLicence = new OtherLicence();
         $otherLicence->setId(123);
@@ -154,6 +150,7 @@ final class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
 
         $this->repoMap['TransportManagerLicence']->shouldReceive('delete')
             ->with($ltm)
+            ->once()
             ->shouldReceive('save')
             ->once();
 
@@ -188,21 +185,18 @@ final class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
 
         $command = GrantTransportManagerCmd::create($data);
 
-        /** @var TransportManager $ltm */
-        $ltm = m::mock(TransportManager::class)->makePartial();
-
-        $matchingTms = new ArrayCollection();
-        $matchingTms->add($ltm);
-
         /** @var Licence $licence */
         $licence = m::mock(Licence::class)->makePartial();
         $licence->setId(222);
-        $licence->shouldReceive('getTmLicences->matching')
-            ->with(m::type(Criteria::class))
-            ->andReturn($matchingTms);
 
         /** @var TransportManager $tm */
         $tm = m::mock(TransportManager::class)->makePartial();
+
+        $otherTm = m::mock(TransportManager::class)->makePartial();
+
+        $ltm = new TransportManagerLicence($licence, $tm);
+        $otherLtm = new TransportManagerLicence($licence, $otherTm);
+        $licence->setTmLicences(new ArrayCollection([$ltm, $otherLtm]));
 
         /** @var TransportManagerApplication $tma */
         $tma = m::mock(TransportManagerApplication::class)->makePartial();
@@ -227,7 +221,8 @@ final class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
             ->andReturn($application);
 
         $this->repoMap['TransportManagerLicence']->shouldReceive('delete')
-            ->with($ltm);
+            ->with($ltm)
+            ->once();
 
         $result1 = new Result();
         $result1->addMessage('TmNominatedTask');

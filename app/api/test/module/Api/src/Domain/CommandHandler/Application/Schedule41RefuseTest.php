@@ -18,6 +18,7 @@ use Dvsa\Olcs\Api\Domain\Command\Schedule41\RefuseS4;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\Schedule41Refuse;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Application\S4;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
 use Dvsa\Olcs\Transfer\Command\Application\Schedule41Refuse as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -78,6 +79,30 @@ final class Schedule41RefuseTest extends AbstractCommandHandlerTestCase
             ['s4' => 2309],
             new Result()
         );
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testHandleCommandDoesNotRefuseAnS4WithAnOutcome(): void
+    {
+        $command = Cmd::create(['id' => 1]);
+
+        $application = $this->getTestingApplication();
+
+        $this->repoMap['Application']->shouldReceive('fetchById')->once()->andReturn($application);
+
+        $decidedS4 = new S4($application, $application->getLicence());
+        $decidedS4->setId(2310);
+        $decidedS4->setOutcome(new RefData(S4::STATUS_APPROVED));
+        $application->addS4s($decidedS4);
+
+        $s4 = new S4($application, $application->getLicence());
+        $s4->setId(2309);
+        $application->addS4s($s4);
+
+        $this->expectedSideEffect(RefuseS4::class, ['id' => 2309], new Result());
+        $this->expectedSideEffect(DeleteApplicationOperatingCentre::class, ['s4' => 2309], new Result());
+        $this->expectedSideEffect(DeleteConditionUndertakingS4::class, ['s4' => 2309], new Result());
 
         $this->sut->handleCommand($command);
     }

@@ -17,6 +17,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\Schedule41Reset;
 use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Application\S4;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Publication\PublicationSection;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\Schedule41Approve as Cmd;
@@ -43,7 +44,31 @@ final class Schedule41ResetTest extends AbstractCommandHandlerTestCase
     #[\Override]
     protected function initReferences(): void
     {
+        $this->refData = [
+            S4::STATUS_APPROVED,
+            S4::STATUS_REFUSED,
+        ];
+
         parent::initReferences();
+    }
+
+    private function getS4s(): ArrayCollection
+    {
+        $application = m::mock(Application::class);
+        $licence = m::mock(Licence::class);
+
+        $refusedS4 = new S4($application, $licence);
+        $refusedS4->setId(2);
+        $refusedS4->setOutcome($this->refData[S4::STATUS_REFUSED]);
+
+        $approvedS4 = new S4($application, $licence);
+        $approvedS4->setId(1);
+        $approvedS4->setOutcome($this->refData[S4::STATUS_APPROVED]);
+
+        $undecidedS4 = new S4($application, $licence);
+        $undecidedS4->setId(3);
+
+        return new ArrayCollection([$refusedS4, $approvedS4, $undecidedS4]);
     }
 
     public function testHandleCommand(): void
@@ -74,19 +99,8 @@ final class Schedule41ResetTest extends AbstractCommandHandlerTestCase
             )
             ->shouldReceive('getS4s')
             ->once()
-            ->andReturn(
-                m::mock()->shouldReceive('matching')
-                    ->andReturn(
-                        [
-                            m::mock(S4::class)
-                                ->shouldReceive('getId')
-                                ->once()
-                                ->andReturn(1)
-                                ->getMock()
-                        ]
-                    )
-                    ->getMock()
-            )->getMock();
+            ->andReturn($this->getS4s())
+            ->getMock();
 
         $this->repoMap['Application']->shouldReceive('fetchById')->with(510)->once()->andReturn($application);
 
@@ -139,19 +153,8 @@ final class Schedule41ResetTest extends AbstractCommandHandlerTestCase
             )
             ->shouldReceive('getS4s')
             ->once()
-            ->andReturn(
-                m::mock()->shouldReceive('matching')
-                    ->andReturn(
-                        [
-                            m::mock(S4::class)
-                                ->shouldReceive('getId')
-                                ->once()
-                                ->andReturn(1)
-                                ->getMock()
-                        ]
-                    )
-                    ->getMock()
-            )->getMock();
+            ->andReturn($this->getS4s())
+            ->getMock();
 
         $this->repoMap['Application']->shouldReceive('fetchById')->with(510)->once()->andReturn($application);
 
@@ -198,19 +201,8 @@ final class Schedule41ResetTest extends AbstractCommandHandlerTestCase
             )
             ->shouldReceive('getS4s')
             ->once()
-            ->andReturn(
-                m::mock()->shouldReceive('matching')
-                    ->andReturn(
-                        [
-                            m::mock(S4::class)
-                                ->shouldReceive('getId')
-                                ->once()
-                                ->andReturn(1)
-                                ->getMock()
-                        ]
-                    )
-                    ->getMock()
-            )->getMock();
+            ->andReturn($this->getS4s())
+            ->getMock();
 
         $this->repoMap['Application']->shouldReceive('fetchById')->with(510)->once()->andReturn($application);
 

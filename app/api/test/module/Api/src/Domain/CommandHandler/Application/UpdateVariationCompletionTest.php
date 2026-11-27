@@ -13,6 +13,8 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Application\UpdateVariationCompletion as Cmd;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
+use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
+use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationCompletionEntity;
 use LmcRbacMvc\Service\AuthorizationService;
@@ -587,6 +589,23 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             'operatingCentres',
             static fn () => self::getApplicationState1(),
             static fn () => self::getLicenceState1(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Operating Centres - removed vehicles are not counted against totAuthVehicles' => [
+            'operatingCentres',
+            static fn () => self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+            static fn () => self::getLicenceStateWithRemovedVehicle(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -1549,6 +1568,20 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $licence->shouldReceive('getActiveCommunityLicences->count')->andReturn(6);
 
         $licence->shouldReceive('getOrganisation->getType->getId')->andReturn('bar');
+
+        return $licence;
+    }
+
+    private static function getLicenceStateWithRemovedVehicle(): mixed
+    {
+        $licence = self::getLicenceState1();
+
+        $activeVehicle = new LicenceVehicle($licence, new Vehicle());
+        $removedVehicle = new LicenceVehicle($licence, new Vehicle());
+        $removedVehicle->setRemovalDate('2026-01-02T03:04:05+0000');
+
+        $licence->setLicenceVehicles(new ArrayCollection([$removedVehicle, $activeVehicle]));
+        $licence->updateTotAuthHgvVehicles(1);
 
         return $licence;
     }
