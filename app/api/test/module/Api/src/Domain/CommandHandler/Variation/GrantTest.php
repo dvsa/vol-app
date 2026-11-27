@@ -203,8 +203,7 @@ final class GrantTest extends AbstractCommandHandlerTestCase
     public function testHandleCommandMarksDuplicateVehicleRemovedOnlyWhenExistingOneIsStillSpecified(
         ?string $existingRemovalDate,
         bool $expectRemoved
-    ): void
-    {
+    ): void {
         $data = [
             'id' => 111,
             'grantAuthority' => RefData::GRANT_AUTHORITY_DELEGATED,
