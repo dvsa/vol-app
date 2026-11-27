@@ -43,7 +43,8 @@
       "spec": {
         "name": "emailAddress",
         "attributes": {
-          "class": "long"
+          "class": "long",
+          "autocomplete": "email"
         },
         "options": {
           "label": "email-address",
@@ -57,7 +58,8 @@
       "spec": {
         "name": "emailConfirm",
         "attributes": {
-          "class": "long"
+          "class": "long",
+          "autocomplete": "email"
         },
         "options": {
           "label": "confirm-email-address",
