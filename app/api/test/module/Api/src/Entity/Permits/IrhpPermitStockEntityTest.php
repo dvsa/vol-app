@@ -1610,17 +1610,13 @@ final class IrhpPermitStockEntityTest extends EntityTester
 
     private static function createMockRange(mixed $ssReserve, mixed $lostReplacement, mixed $fromNo, mixed $emissionsCategoryId = null, mixed $journey = null): mixed
     {
-        $irhpPermitRange = m::mock(IrhpPermitRange::class);
-        $irhpPermitRange->shouldReceive('getSsReserve')
-            ->andReturn($ssReserve);
-        $irhpPermitRange->shouldReceive('getLostReplacement')
-            ->andReturn($lostReplacement);
-        $irhpPermitRange->shouldReceive('getFromNo')
-            ->andReturn($fromNo);
+        $irhpPermitRange = m::mock(IrhpPermitRange::class)->makePartial();
+        $irhpPermitRange->setSsReserve($ssReserve);
+        $irhpPermitRange->setLostReplacement($lostReplacement);
+        $irhpPermitRange->setFromNo($fromNo);
         $irhpPermitRange->shouldReceive('getEmissionsCategory->getId')
             ->andReturn($emissionsCategoryId);
-        $irhpPermitRange->shouldReceive('getJourney')
-            ->andReturn($journey);
+        $irhpPermitRange->setJourney($journey);
 
         return $irhpPermitRange;
     }
