@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
@@ -51,87 +50,26 @@ final class VehiclesReviewServiceTest extends MockeryTestCase
         $isGoods = $category === Licence::LICENCE_CATEGORY_GOODS_VEHICLE;
         $continuationDetail = new ContinuationDetail();
 
-        $licenceVehicles = new ArrayCollection();
+        $mockLicence = m::mock(Licence::class)->makePartial();
+        $mockLicence->setGoodsOrPsv(new RefData($category));
 
-        $licenceVehicle1 = m::mock(LicenceVehicle::class)->makePartial()
-            ->shouldReceive('getVehicle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getVrm')
-                    ->andReturn('VRM456')
-                    ->once()
-                    ->shouldReceive('getPlatedWeight')
-                    ->andReturn(1000)
-                    ->times($isGoods ? 1 : 0)
-                    ->getMock()
-            )
-            ->once()
-            ->shouldReceive('getremovalDate')
-            ->andReturn(null)
-            ->once()
-            ->shouldReceive('getSpecifiedDate')
-            ->andReturn('2010-01-01')
-            ->getMock();
-        $licenceVehicle1->setApplication(m::mock(Application::class));
+        $licenceVehicle1 = $this->licenceVehicle($mockLicence, 'VRM456', 1000, '2010-01-01T00:00:00+0000', null);
+        $licenceVehicle2 = $this->licenceVehicle($mockLicence, 'VRM123', 2000, '2010-01-01T00:00:00+0000', null);
+        $removedVehicle = $this->licenceVehicle(
+            $mockLicence,
+            'REMOVED',
+            4000,
+            '2010-01-01T00:00:00+0000',
+            '2011-01-01T00:00:00+0000'
+        );
+        $unspecifiedVehicle = $this->licenceVehicle($mockLicence, 'UNSPECIFIED', 3000, null, null);
 
-        $licenceVehicle2 = m::mock()
-            ->shouldReceive('getVehicle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getVrm')
-                    ->andReturn('VRM123')
-                    ->once()
-                    ->shouldReceive('getPlatedWeight')
-                    ->andReturn(2000)
-                    ->times($isGoods ? 1 : 0)
-                    ->getMock()
-            )
-            ->once()
-            ->shouldReceive('getremovalDate')
-            ->andReturn(null)
-            ->once()
-            ->shouldReceive('getSpecifiedDate')
-            ->andReturn('2010-01-01')
-            ->getMock();
-
-        $licenceVehicle3 = m::mock()
-            ->shouldReceive('getremovalDate')
-            ->andReturn('2010-01-01')
-            ->once()
-            ->shouldReceive('getSpecifiedDate')
-            ->andReturn('2010-01-01')
-            ->getMock();
-
-        $unspecifiedVehicle = m::mock()
-            ->shouldReceive('getRemovalDate')->andReturn(null)
-            ->shouldReceive('getSpecifiedDate')->andReturn(null)
-            ->shouldReceive('getVehicle')->andReturn(
-                m::mock()
-                    ->shouldReceive('getVrm')->andReturn('UNSPECIFIED')
-                    ->shouldReceive('getPlatedWeight')->andReturn(3000)
-                    ->getMock()
-            )
-            ->getMock();
-
-        $licenceVehicles->add($licenceVehicle1);
-        $licenceVehicles->add($licenceVehicle2);
-        $licenceVehicles->add($licenceVehicle3);
-        $licenceVehicles->add($unspecifiedVehicle);
-
-        $mockLicence = m::mock(Licence::class)
-            ->shouldReceive('getLicenceVehicles')
-            ->andReturn($licenceVehicles)
-            ->once()
-            ->shouldReceive('getGoodsOrPsv')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getId')
-                ->andReturn($category)
-                ->once()
-                ->getMock()
-            )
-            ->once()
-            ->getMock();
+        $mockLicence->setLicenceVehicles(new ArrayCollection([
+            $licenceVehicle1,
+            $licenceVehicle2,
+            $removedVehicle,
+            $unspecifiedVehicle,
+        ]));
 
         $continuationDetail->setLicence($mockLicence);
 
@@ -158,6 +96,24 @@ final class VehiclesReviewServiceTest extends MockeryTestCase
         }
 
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
+    }
+
+    private function licenceVehicle(
+        Licence $licence,
+        string $vrm,
+        int $platedWeight,
+        ?string $specifiedDate,
+        ?string $removalDate
+    ): LicenceVehicle {
+        $vehicle = new Vehicle();
+        $vehicle->setVrm($vrm);
+        $vehicle->setPlatedWeight($platedWeight);
+
+        $licenceVehicle = new LicenceVehicle($licence, $vehicle);
+        $licenceVehicle->setSpecifiedDate($specifiedDate);
+        $licenceVehicle->setRemovalDate($removalDate);
+
+        return $licenceVehicle;
     }
 
     public function testGetConfigFromDataWithOnlyUnspecifiedVehicles(): void

@@ -365,6 +365,57 @@ final class LicenceVehicleTest extends RepositoryTestCase
         );
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('psvLoadedCollectionProvider')]
+    public function testGetAllPsvVehiclesWithLoadedDateStrings(
+        bool $forApplication,
+        bool $includeRemoved,
+        array $expectedKeys
+    ): void {
+        $application = m::mock(ApplicationEntity::class)->makePartial();
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+
+        $later = m::mock(Entity::class)->makePartial();
+        $later->setSpecifiedDate('2026-03-02T03:04:05+0000');
+
+        $earlier = m::mock(Entity::class)->makePartial();
+        $earlier->setSpecifiedDate('2026-01-02T03:04:05+0000');
+
+        $removed = m::mock(Entity::class)->makePartial();
+        $removed->setSpecifiedDate('2026-02-02T03:04:05+0000');
+        $removed->setRemovalDate('2026-02-03T03:04:05+0000');
+
+        $unspecified = m::mock(Entity::class)->makePartial();
+
+        $forThisApplication = m::mock(Entity::class)->makePartial();
+        $forThisApplication->setApplication($application);
+
+        $licence->setLicenceVehicles(
+            new ArrayCollection([$later, $removed, $unspecified, $forThisApplication, $earlier])
+        );
+
+        $entity = $licence;
+        if ($forApplication) {
+            $entity = $application;
+            $application->setLicence($licence);
+        }
+
+        $all = ['later' => $later, 'removed' => $removed, 'earlier' => $earlier, 'app' => $forThisApplication];
+
+        $this->assertSame(
+            array_map(fn(string $key) => $all[$key], $expectedKeys),
+            array_values($this->sut->getAllPsvVehicles($entity, $includeRemoved)->toArray()),
+        );
+    }
+
+    public static function psvLoadedCollectionProvider(): \Iterator
+    {
+        yield 'licence, excluding removed' => [false, false, ['earlier', 'later']];
+        yield 'licence, including removed' => [false, true, ['earlier', 'removed', 'later']];
+        yield 'application, excluding removed' => [true, false, ['app', 'earlier', 'later']];
+        yield 'application, including removed' => [true, true, ['app', 'earlier', 'removed', 'later']];
+    }
+
     public static function psvCollectionProvider(): \Iterator
     {
         yield 'licence, excluding removed' => [false, false, 1];
