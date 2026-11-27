@@ -459,15 +459,18 @@ REGENERATE_SCHEMA_DRIFT_BASELINE=1 vendor/bin/phpunit \
 
 ## Getters and stored values
 
-An in-memory `Criteria` filter (`$collection->matching($criteria)`) reads the
-stored property of each record, not its getter. doctrine/collections 3 removes
-the older behaviour of calling the getter, so a field whose getter returns
-something other than the stored value would filter differently from what the
-code reads.
+An in-memory `Criteria` filter (`$collection->matching($criteria)` on a list
+that is already loaded) can read a field of each record in two ways: by calling
+its getter, or by reading the stored property. doctrine/collections 3 always
+reads the stored property, and our `Criteria` filters are being moved to that
+way of reading (VOL-7595).
 
-`GetterReadsStoredValueTest` proves the two agree for every mapped field of every
-entity, with the property untouched, set to representative values and set to
-null. Four fields are listed as known differences:
+`app/api/test/module/Api/src/Entity/GetterReadsStoredValueTest.php` checks that
+the two reads give the same value for every mapped field of every entity, with
+the property untouched, set to representative values and set to null. This
+guarantees that the move cannot change which records a filter returns. It lives
+in the normal unit suite, so it runs on every PR. Four fields are listed as
+known differences:
 
 - `DocumentAnalysis::$token`: the getter returns `''` when nothing is stored.
 - `BusRegSearchView::$isTxcApp`: the `bool` return type converts 0/1 and throws
@@ -479,6 +482,19 @@ null. Four fields are listed as known differences:
 None of the four is used in a `Criteria`. When the test fails, either make the
 getter return the stored value, or add the field to the list in the test and
 make sure nothing filters on it in memory.
+
+`app/api/test/integration/src/Entity/FilteredFieldReadTest.php` makes the same
+comparison on rows loaded from the local database, for the fields our filters
+read, and checks that the stored read loads a lazy record and gives the
+getter's value. It runs only in the local integration suite. Its list of
+classes and fields is kept by hand, so when a filter starts reading a new
+field, add the field to it.
+
+Tests in the group `pins-current-behaviour` record how some in-memory filters
+behave today when they meet the values a loaded record holds. They are not
+statements of intended behaviour. They were added so that the move to reading
+the stored property could be shown not to change them. Run them from `app/api`
+with `vendor/bin/phpunit --group pins-current-behaviour`.
 
 ## Table output escaping
 

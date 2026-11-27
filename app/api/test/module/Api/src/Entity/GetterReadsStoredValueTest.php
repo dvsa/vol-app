@@ -22,7 +22,7 @@ class GetterReadsStoredValueTest extends TestCase
     {
         $entityManager = require __DIR__ . '/../../../../../phpstan-object-manager.php';
 
-        $fieldsChecked = 0;
+        $comparisons = 0;
         $differing = [];
 
         foreach ($entityManager->getMetadataFactory()->getAllMetadata() as $metadata) {
@@ -57,7 +57,6 @@ class GetterReadsStoredValueTest extends TestCase
             }
 
             foreach ($fields as $name => $values) {
-                $fieldsChecked++;
                 $property = $this->findProperty($class, $name);
                 $states = array_merge(
                     [['default', null]],
@@ -89,6 +88,7 @@ class GetterReadsStoredValueTest extends TestCase
                         $stored = $e;
                     }
 
+                    $comparisons++;
                     $same = ($viaGetter instanceof \Throwable && $stored instanceof \Throwable)
                         ? $viaGetter::class === $stored::class
                         : $viaGetter === $stored;
@@ -101,13 +101,16 @@ class GetterReadsStoredValueTest extends TestCase
 
         $differing = array_keys($differing);
         sort($differing);
+        $expected = self::KNOWN_DIFFERENCES;
+        sort($expected);
 
-        $this->assertGreaterThan(3000, $fieldsChecked);
+        $this->assertGreaterThan(10000, $comparisons);
         $this->assertSame(
-            self::KNOWN_DIFFERENCES,
+            $expected,
             $differing,
-            'Fields whose getter does not return the stored value. In-memory Criteria filters read the'
-                . ' stored value, so see "Getters and stored values" in docs/app/testing.md before changing this list.'
+            'Fields whose getter does not return the stored value. Under doctrine/collections 3 an in-memory'
+                . ' Criteria filter reads the stored value, not the getter, so see "Getters and stored values"'
+                . ' in docs/app/testing.md before changing this list.'
         );
     }
 

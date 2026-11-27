@@ -303,7 +303,7 @@ final class CommunityLicEntityTest extends EntityTester
             new ArrayCollection(
                 [
                     $this->createSuspensionStarting(new \DateTime('yesterday'), 1),
-                    $this->createSuspensionStarting(new \DateTime('tomorrow'), 2),
+                    $this->createSuspensionStarting(new \DateTime('+1 year'), 2),
                 ]
             )
         );
@@ -328,7 +328,7 @@ final class CommunityLicEntityTest extends EntityTester
         $sut->setCommunityLicSuspensions(
             new ArrayCollection(
                 [
-                    $this->createSuspensionStarting(new \DateTime('tomorrow'), 1),
+                    $this->createSuspensionStarting(new \DateTime('+1 year'), 1),
                     $this->createSuspensionStarting('2000-01-02T03:04:05+0000', 2),
                 ]
             )
@@ -352,7 +352,7 @@ final class CommunityLicEntityTest extends EntityTester
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_SUSPENDED);
         $sut->setCommunityLicSuspensions(
-            new ArrayCollection([$this->createSuspensionStarting(new \DateTime('tomorrow'), 1)])
+            new ArrayCollection([$this->createSuspensionStarting(new \DateTime('+1 year'), 1)])
         );
 
         $this->assertNull($sut->getCurrentSuspension());
@@ -364,7 +364,7 @@ final class CommunityLicEntityTest extends EntityTester
         $sut->setCommunityLicWithdrawals(
             new ArrayCollection(
                 [
-                    $this->createWithdrawalStarting(new \DateTime('tomorrow'), 1),
+                    $this->createWithdrawalStarting(new \DateTime('+1 year'), 1),
                     $this->createWithdrawalStarting('2000-01-02T03:04:05+0000', 2),
                 ]
             )
@@ -388,7 +388,7 @@ final class CommunityLicEntityTest extends EntityTester
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_WITHDRAWN);
         $sut->setCommunityLicWithdrawals(
-            new ArrayCollection([$this->createWithdrawalStarting(new \DateTime('tomorrow'), 1)])
+            new ArrayCollection([$this->createWithdrawalStarting(new \DateTime('+1 year'), 1)])
         );
 
         $this->assertNull($sut->getCurrentWithdrawal());
