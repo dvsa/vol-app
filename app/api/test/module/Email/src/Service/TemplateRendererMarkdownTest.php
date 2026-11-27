@@ -46,6 +46,54 @@ final class TemplateRendererMarkdownTest extends MockeryTestCase
         $this->assertSame('Helo', $message->getMarkdownBody());
     }
 
+    public function testRenderMarkdownBodyAddsLicenceLineWhenBodyLacksLicNo(): void
+    {
+        $sut = $this->sutRendering('Hello');
+        $message = new Message('user@example.com', 'Subj')->setLocale('en_GB');
+
+        $sut->renderMarkdownBody($message, 'tpl', ['licNo' => 'OB1234567']);
+
+        $this->assertSame("Licence: OB1234567\n\nHello", $message->getMarkdownBody());
+    }
+
+    public function testRenderMarkdownBodyUsesWelshLicenceLabel(): void
+    {
+        $sut = $this->sutRendering('Helo');
+        $message = new Message('user@example.com', 'Subj')->setLocale('cy_GB');
+
+        $sut->renderMarkdownBody($message, 'tpl', ['licNo' => 'OB1234567']);
+
+        $this->assertSame("Trwydded: OB1234567\n\nHelo", $message->getMarkdownBody());
+    }
+
+    public function testRenderMarkdownBodyDoesNotAddLicenceLineWhenBodyHasLicNo(): void
+    {
+        $sut = $this->sutRendering('Your licence OB1234567 is ready');
+        $message = new Message('user@example.com', 'Subj')->setLocale('en_GB');
+
+        $sut->renderMarkdownBody($message, 'tpl', ['licNo' => 'OB1234567']);
+
+        $this->assertSame('Your licence OB1234567 is ready', $message->getMarkdownBody());
+    }
+
+    public function testRenderMarkdownBodyLeavesBodyAloneWithoutLicNo(): void
+    {
+        $sut = $this->sutRendering('Hello');
+        $message = new Message('user@example.com', 'Subj')->setLocale('en_GB');
+
+        $sut->renderMarkdownBody($message, 'tpl', ['licNo' => '']);
+
+        $this->assertSame('Hello', $message->getMarkdownBody());
+    }
+
+    private function sutRendering(string $markdown): TemplateRenderer
+    {
+        $renderer = m::mock(StrategySelectingViewRenderer::class);
+        $renderer->shouldReceive('render')->once()->andReturn($markdown);
+
+        return new TemplateRenderer()->setViewRenderer($renderer);
+    }
+
     public function testRenderBodyInNotifyModeRoutesThroughMarkdownAndStampsTemplateKey(): void
     {
         $renderer = m::mock(StrategySelectingViewRenderer::class);
@@ -70,6 +118,27 @@ final class TemplateRendererMarkdownTest extends MockeryTestCase
         $this->assertSame('uuid-en', $message->getTemplateKey());
         $this->assertNull($message->getPlainBody());
         $this->assertNull($message->getHtmlBody());
+    }
+
+    public function testRenderBodyInNotifyModeAddsLicenceLine(): void
+    {
+        $renderer = m::mock(StrategySelectingViewRenderer::class);
+        $renderer->shouldReceive('render')
+            ->once()
+            ->with('en_GB', 'md', 'my-template', ['licNo' => 'OB1234567'])
+            ->andReturn('Hello world');
+
+        $sut = new TemplateRenderer()
+            ->setViewRenderer($renderer)
+            ->setNotifyMode(true)
+            ->setPassthroughTemplateUuids(['en_GB' => 'uuid-en', 'cy_GB' => 'uuid-cy']);
+
+        $message = new Message('user@example.com', 'Subj')->setLocale('en_GB');
+
+        $sut->renderBody($message, 'my-template', ['licNo' => 'OB1234567']);
+
+        $this->assertSame("Licence: OB1234567\n\nHello world", $message->getMarkdownBody());
+        $this->assertSame('uuid-en', $message->getTemplateKey());
     }
 
     public function testRenderBodyInSmtpModeUsesLegacyHtmlPlainPath(): void

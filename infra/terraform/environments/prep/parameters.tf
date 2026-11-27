@@ -54,7 +54,7 @@ module "parameters" {
     olcs_cpmsclientid                            = "OLCS"
     olcs_cpmsclientid_ni                         = "OLNI"
     olcs_cpmsserver                              = "https://api.preprod.live.cpms.dvsacloud.uk"
-    olcs_document_store_backend                  = "webdav"
+    olcs_document_store_backend                  = "s3"
     olcs_document_store_s3_bucket                = "olcs-apppp-base-sabredav"
     olcs_document_store_s3_key_prefix            = "migration/olcs"
     olcs_dvla_search_base_uri                    = "https://api.dvla.prep.smc.dvsacloud.uk/1.0/"
