@@ -437,58 +437,40 @@ final class ApplicationEntityTest extends EntityTester
     #[\PHPUnit\Framework\Attributes\Group('applicationEntity')]
     public function testGetApplicationDocuments(): void
     {
-        $mockDocument1 = m::mock()
-            ->shouldReceive('getcategory')
-            ->andReturn('category')
-            ->once()
-            ->shouldReceive('getsubCategory')
-            ->andReturn('subCategory')
-            ->once()
-            ->shouldReceive('getoperatingCentre')
-            ->andReturn('operatingCentre')
-            ->once()
-            ->getMock();
+        $category = new Entities\System\Category();
+        $subCategory = new Entities\System\SubCategory();
+        $otherSubCategory = new Entities\System\SubCategory();
+        $operatingCentre = new OperatingCentre();
 
-        $mockDocument2 = m::mock()
-            ->shouldReceive('getcategory')
-            ->andReturn('category1')
-            ->once()
-            ->shouldReceive('getsubCategory')
-            ->andReturn('subCategory1')
-            ->never()
-            ->shouldReceive('getoperatingCentre')
-            ->andReturn('operatingCentre1')
-            ->never()
-            ->getMock();
+        $keptDocument = new Entities\Doc\Document('kept');
+        $keptDocument->setCategory($category);
+        $keptDocument->setSubCategory($subCategory);
+        $keptDocument->setOperatingCentre($operatingCentre);
 
-        $documentsCollection = new ArrayCollection([$mockDocument1, $mockDocument2]);
-        $expected = new ArrayCollection([$mockDocument1]);
+        $droppedDocument = new Entities\Doc\Document('dropped');
+        $droppedDocument->setCategory($category);
+        $droppedDocument->setSubCategory($otherSubCategory);
+        $droppedDocument->setOperatingCentre($operatingCentre);
 
-        $this->entity->setDocuments($documentsCollection);
-        $this->assertEquals(
-            $expected,
-            $this->entity->getApplicationDocuments('category', 'subCategory', 'operatingCentre')
+        $this->entity->setDocuments(new ArrayCollection([$keptDocument, $droppedDocument]));
+
+        $this->assertSame(
+            [$keptDocument],
+            $this->entity->getApplicationDocuments($category, $subCategory, $operatingCentre)->getValues()
         );
     }
 
     public function testGetApplicationOperatingCentreById(): void
     {
-        $mockAoc1 = m::mock()
-            ->shouldReceive('getid')
-            ->andReturn(1)
-            ->once()
-            ->getMock();
+        $aoc1 = new ApplicationOperatingCentre($this->entity, new OperatingCentre());
+        $aoc1->setId(7);
 
-        $mockAoc2 = m::mock()
-            ->shouldReceive('getid')
-            ->andReturn(2)
-            ->once()
-            ->getMock();
+        $aoc2 = new ApplicationOperatingCentre($this->entity, new OperatingCentre());
+        $aoc2->setId(8);
 
-        $aocCollection = new ArrayCollection([$mockAoc1, $mockAoc2]);
-        $this->entity->setOperatingCentres($aocCollection);
+        $this->entity->setOperatingCentres(new ArrayCollection([$aoc2, $aoc1]));
 
-        $this->assertEquals($mockAoc1, $this->entity->getApplicationOperatingCentreById(1));
+        $this->assertSame($aoc1, $this->entity->getApplicationOperatingCentreById(7));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestUpdateFinancialHistory')]
@@ -1342,23 +1324,17 @@ final class ApplicationEntityTest extends EntityTester
     #[\PHPUnit\Framework\Attributes\Group('applicationEntity')]
     public function testGetOtherLicencesByType(): void
     {
-        $mockOtherLicence1 = m::mock()
-            ->shouldReceive('getpreviousLicenceType')
-            ->andReturn('type')
-            ->once()
-            ->getMock();
+        $type = new RefData('type');
 
-        $mockOtherLicence2 = m::mock()
-            ->shouldReceive('getpreviousLicenceType')
-            ->andReturn('type1')
-            ->once()
-            ->getMock();
+        $keptOtherLicence = new Entities\OtherLicence\OtherLicence();
+        $keptOtherLicence->setPreviousLicenceType($type);
 
-        $otherLicencesCollection = new ArrayCollection([$mockOtherLicence1, $mockOtherLicence2]);
-        $expected = new ArrayCollection([$mockOtherLicence1]);
+        $droppedOtherLicence = new Entities\OtherLicence\OtherLicence();
+        $droppedOtherLicence->setPreviousLicenceType(new RefData('type1'));
 
-        $this->entity->setOtherLicences($otherLicencesCollection);
-        $this->assertEquals($expected, $this->entity->getOtherLicencesByType('type'));
+        $this->entity->setOtherLicences(new ArrayCollection([$droppedOtherLicence, $keptOtherLicence]));
+
+        $this->assertSame([$keptOtherLicence], $this->entity->getOtherLicencesByType($type)->getValues());
     }
 
     public function testUpdateLicenceHistory(): void
@@ -5078,58 +5054,35 @@ final class ApplicationEntityTest extends EntityTester
     #[\PHPUnit\Framework\Attributes\Group('applicationEntity')]
     public function testGetPostSubmissionApplicationDocuments(): void
     {
-        $mockDocument1 = m::mock()
-            ->shouldReceive('getcategory')
-            ->andReturn('category')
-            ->once()
-            ->shouldReceive('getsubCategory')
-            ->andReturn('subCategory')
-            ->once()
-            ->shouldReceive('getoperatingCentre')
-            ->andReturn('operatingCentre')
-            ->once()
-            ->shouldReceive('getisPostSubmissionUpload')
-            ->andReturn(true)
-            ->once()
-            ->getMock();
+        $category = new Entities\System\Category();
+        $subCategory = new Entities\System\SubCategory();
+        $operatingCentre = new OperatingCentre();
 
-        $mockDocument2 = m::mock()
-            ->shouldReceive('getcategory')
-            ->andReturn('category1')
-            ->once()
-            ->shouldReceive('getsubCategory')
-            ->andReturn('subCategory1')
-            ->never()
-            ->shouldReceive('getoperatingCentre')
-            ->andReturn('operatingCentre1')
-            ->never()
-            ->shouldReceive('getisPostSubmissionUpload')
-            ->andReturn(false)
-            ->never()
-            ->getMock();
+        $keptDocument = new Entities\Doc\Document('kept');
+        $keptDocument->setCategory($category);
+        $keptDocument->setSubCategory($subCategory);
+        $keptDocument->setOperatingCentre($operatingCentre);
+        $keptDocument->setIsPostSubmissionUpload(true);
 
-        $mockDocument3 = m::mock()
-            ->shouldReceive('getcategory')
-            ->andReturn('category')
-            ->once()
-            ->shouldReceive('getsubCategory')
-            ->andReturn('subCategory')
-            ->once()
-            ->shouldReceive('getoperatingCentre')
-            ->andReturn('operatingCentre')
-            ->once()
-            ->shouldReceive('getisPostSubmissionUpload')
-            ->andReturn(false)
-            ->once()
-            ->getMock();
+        $notPostSubmissionDocument = new Entities\Doc\Document('not-post-submission');
+        $notPostSubmissionDocument->setCategory($category);
+        $notPostSubmissionDocument->setSubCategory($subCategory);
+        $notPostSubmissionDocument->setOperatingCentre($operatingCentre);
+        $notPostSubmissionDocument->setIsPostSubmissionUpload(false);
 
-        $documentsCollection = new ArrayCollection([$mockDocument1, $mockDocument2, $mockDocument3]);
-        $expected = new ArrayCollection([$mockDocument1]);
+        $otherSubCategoryDocument = new Entities\Doc\Document('other-sub-category');
+        $otherSubCategoryDocument->setCategory($category);
+        $otherSubCategoryDocument->setSubCategory(new Entities\System\SubCategory());
+        $otherSubCategoryDocument->setOperatingCentre($operatingCentre);
+        $otherSubCategoryDocument->setIsPostSubmissionUpload(true);
 
-        $this->entity->setDocuments($documentsCollection);
-        $this->assertEquals(
-            $expected,
-            $this->entity->getPostSubmissionApplicationDocuments('category', 'subCategory', 'operatingCentre')
+        $this->entity->setDocuments(
+            new ArrayCollection([$notPostSubmissionDocument, $otherSubCategoryDocument, $keptDocument])
+        );
+
+        $this->assertSame(
+            [$keptDocument],
+            $this->entity->getPostSubmissionApplicationDocuments($category, $subCategory, $operatingCentre)->getValues()
         );
     }
 
