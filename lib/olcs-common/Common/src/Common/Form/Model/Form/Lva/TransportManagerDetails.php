@@ -2,6 +2,7 @@
 
 namespace Common\Form\Model\Form\Lva;
 
+use Common\Form\Elements\Types\Address;
 use Laminas\Form\Annotation as Form;
 
 #[Form\Options(['prefer_form_input_filter' => true])]
@@ -17,13 +18,13 @@ class TransportManagerDetails
 
     #[Form\Name('homeAddress')]
     #[Form\ComposedObject('Common\Form\Model\Fieldset\Address')]
-    #[Form\Options(['label' => 'lva-tm-details-details-homeAddress', 'label_attributes' => ['id' => 'homeAddress']])]
+    #[Form\Options(['label' => 'lva-tm-details-details-homeAddress', 'label_attributes' => ['id' => 'homeAddress'], 'address_type' => Address::TYPE_HOME])]
     #[Form\Flags(['priority' => -20])]
     public $homeAddress;
 
     #[Form\Name('workAddress')]
     #[Form\ComposedObject('Common\Form\Model\Fieldset\Address')]
-    #[Form\Options(['label' => 'lva-tm-details-details-workAddress'])]
+    #[Form\Options(['label' => 'lva-tm-details-details-workAddress', 'address_type' => Address::TYPE_WORK])]
     #[Form\Flags(['priority' => -30])]
     public $workAddress;
 

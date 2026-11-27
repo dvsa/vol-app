@@ -24,7 +24,7 @@ final class PostcodeTest extends \PHPUnit\Framework\TestCase
         $this->assertArraySubsetRecursive(
             [
                 'class' => 'short js-input',
-                'data-container-class' => 'inline',
+                'data-container-class' => 'inline postcode-search__input',
             ],
             $attributes
         );

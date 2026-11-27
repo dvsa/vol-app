@@ -6,6 +6,7 @@ namespace CommonTest\Form\View\Helper;
 
 use Common\Form\Elements\Types\FileUploadList;
 use Common\Form\Elements\Types\FileUploadListItem;
+use Common\Form\Elements\Types\Address;
 use Common\Form\Elements\Types\HoursPerWeek;
 use Common\Form\Elements\Types\PostcodeSearch;
 use Common\Form\Elements\Types\RadioHorizontal;
@@ -148,17 +149,17 @@ final class FormCollectionTest extends MockeryTestCase
      */
     public function testRenderForPostCodeElement(): void
     {
-        $this->element = new PostcodeSearch('postcode');
+        $this->element = new PostcodeSearch('postcode', ['wrapperElement' => 'div']);
 
         $viewHelper = $this->prepareViewHelper();
 
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset data-group="postcode">'
-            . '<label class=\"govuk-visually-hidden\" for=\"postcodeInput([0-9]+)\">Postcode search<\/label>'
+            '/^<div class="postcode-search" data-group="postcode">'
+            . '<label for=\"postcodeInput([0-9]+)\">Postcode search<\/label>'
             . '<label for=\"selectAddress([0-9]+)\">postcode.select_address.label<\/label>'
-            . '<\/fieldset>$/'
+            . '<\/div>$/'
         );
     }
 
@@ -174,6 +175,55 @@ final class FormCollectionTest extends MockeryTestCase
         $this->assertStringStartsWith('<div class="validation-wrapper">', $markup);
         $this->assertStringContainsString('id="postcode-error"', $markup);
         $this->assertStringContainsString('aria-describedby="postcode-error"', $markup);
+    }
+
+    public function testContextualPostcodeSearchHasVisibleLabelAndNoFieldset(): void
+    {
+        $element = new PostcodeSearch('searchPostcode', ['wrapperElement' => 'div']);
+        $element->setAddressType(Address::TYPE_HOME);
+        $element->setMessages(['Please enter a postcode']);
+        $viewHelper = $this->prepareViewHelper(true);
+        $viewHelper->setElementHelper((new \Common\Form\View\Helper\FormRow())->setView($viewHelper->getView()));
+
+        $markup = $viewHelper($element, true);
+        $document = new \DOMDocument();
+        $document->loadHTML($markup);
+        $xpath = new \DOMXPath($document);
+        $id = $element->get('postcode')->getAttribute('id');
+
+        self::assertSame(0, $xpath->query('//fieldset | //legend')->length);
+        self::assertSame(1, $xpath->query('//div[contains(concat(" ", normalize-space(@class), " "), " postcode-search ")]')->length);
+        self::assertSame(1, $xpath->query('//label[@for="' . $id . '" and text()="Home address postcode"]')->length);
+        self::assertSame(1, $xpath->query('//input[@id="' . $id . '" and @aria-describedby="searchPostcode-error"]')->length);
+        self::assertSame(1, $xpath->query('//button[text()="Find home address"]')->length);
+        self::assertSame(1, $xpath->query('//div[contains(@class, "postcode-search__input")]/input[@id="' . $id . '"]')->length);
+        self::assertSame(1, $xpath->query('//div[contains(@class, "postcode-search__button")]/button')->length);
+        self::assertSame(1, $xpath->query('//a[text()="Enter home address manually"]')->length);
+    }
+
+    public function testAddressFieldsetsRenderDistinctPostcodeSearchControls(): void
+    {
+        $form = new Form('test');
+        foreach ([Address::TYPE_HOME, Address::TYPE_WORK] as $name) {
+            $address = new Address($name, ['label' => ucfirst($name) . ' address', 'address_type' => $name]);
+            $address->add(new PostcodeSearch('searchPostcode', ['wrapperElement' => 'div']));
+            $form->add($address);
+        }
+        $form->prepare();
+        $helper = $this->prepareViewHelper(true);
+
+        $document = new \DOMDocument();
+        $document->loadHTML($helper($form->get('home')) . $helper($form->get('work')));
+        $xpath = new \DOMXPath($document);
+
+        self::assertSame(2, $xpath->query('//fieldset')->length);
+        foreach (['Home', 'Work'] as $name) {
+            $fieldset = $xpath->query('//fieldset[legend="' . $name . ' address"]')->item(0);
+            self::assertNotNull($fieldset);
+            self::assertSame(1, $xpath->query('.//label[text()="' . $name . ' address postcode"]', $fieldset)->length);
+            self::assertSame(1, $xpath->query('.//button[text()="Find ' . strtolower($name) . ' address"]', $fieldset)->length);
+            self::assertSame(1, $xpath->query('.//a[text()="Enter ' . strtolower($name) . ' address manually"]', $fieldset)->length);
+        }
     }
 
     public function testPostcodeInputDescribesFieldsetErrors(): void

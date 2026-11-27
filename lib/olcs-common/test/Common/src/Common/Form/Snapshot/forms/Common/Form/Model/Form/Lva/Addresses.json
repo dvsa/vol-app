@@ -200,10 +200,7 @@
             "spec": {
               "name": "searchPostcode",
               "options": {
-                "label": "Postcode search",
-                "label_attributes": {
-                  "class": "form-element__label"
-                }
+                "wrapperElement": "div"
               },
               "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
             }
@@ -517,10 +514,7 @@
             "spec": {
               "name": "searchPostcode",
               "options": {
-                "label": "Postcode search",
-                "label_attributes": {
-                  "class": "form-element__label"
-                }
+                "wrapperElement": "div"
               },
               "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
             }
@@ -754,10 +748,7 @@
             "spec": {
               "name": "searchPostcode",
               "options": {
-                "label": "Postcode search",
-                "label_attributes": {
-                  "class": "form-element__label"
-                }
+                "wrapperElement": "div"
               },
               "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
             }

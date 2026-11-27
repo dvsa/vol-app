@@ -34,6 +34,7 @@ class PostcodeSearch extends Fieldset
     public function __construct($name = null, $options = [])
     {
         parent::__construct($name, $options);
+        $this->setAttribute('class', 'postcode-search');
 
         ++self::$count;
 
@@ -43,7 +44,7 @@ class PostcodeSearch extends Fieldset
         $postcodeSearch->setAttributes(
             [
                 'class' => 'short js-input',
-                'data-container-class' => 'inline',
+                'data-container-class' => 'inline postcode-search__input',
                 'id' => $postcodeSearchId,
             ]
         );
@@ -52,7 +53,6 @@ class PostcodeSearch extends Fieldset
                 'remove_if_readonly' => true,
                 'label' => 'Postcode search',
                 'label_attributes' => [
-                    'class' => 'govuk-visually-hidden',
                     'for' => $postcodeSearchId,
                 ],
             ]
@@ -65,7 +65,7 @@ class PostcodeSearch extends Fieldset
             [
                 'type' => 'submit',
                 'class' => 'govuk-button js-find',
-                'data-container-class' => 'inline'
+                'data-container-class' => 'inline postcode-search__button'
             ]
         );
         $searchButton->setValue('search');
@@ -118,6 +118,17 @@ class PostcodeSearch extends Fieldset
         $manualLink->setOption('remove_if_readonly', true);
 
         $this->add($manualLink);
+    }
+
+    public function setAddressType(string $type): void
+    {
+        if (!in_array($type, [Address::TYPE_HOME, Address::TYPE_WORK], true)) {
+            throw new \InvalidArgumentException(sprintf('Unsupported address type: %s', $type));
+        }
+
+        $this->get('postcode')->setLabel(ucfirst($type) . ' address postcode');
+        $this->get('search')->setLabel('Find ' . $type . ' address');
+        $this->get('manual-link')->setTokens(['postcode.error.not-available', 'Enter ' . $type . ' address manually']);
     }
 
     /**

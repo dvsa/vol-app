@@ -360,10 +360,7 @@
             "spec": {
               "name": "searchPostcode",
               "options": {
-                "label": "Postcode search",
-                "label_attributes": {
-                  "class": "form-element__label"
-                }
+                "wrapperElement": "div"
               },
               "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
             }
@@ -371,7 +368,8 @@
         ],
         "type": "\\Common\\Form\\Elements\\Types\\Address",
         "options": {
-          "label": "transport-manager-details-home-address"
+          "label": "transport-manager-details-home-address",
+          "address_type": "home"
         }
       }
     },
@@ -519,10 +517,7 @@
             "spec": {
               "name": "searchPostcode",
               "options": {
-                "label": "Postcode search",
-                "label_attributes": {
-                  "class": "form-element__label"
-                }
+                "wrapperElement": "div"
               },
               "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
             }
@@ -530,7 +525,8 @@
         ],
         "type": "\\Common\\Form\\Elements\\Types\\Address",
         "options": {
-          "label": "transport-manager-details-work-address"
+          "label": "transport-manager-details-work-address",
+          "address_type": "work"
         }
       }
     },

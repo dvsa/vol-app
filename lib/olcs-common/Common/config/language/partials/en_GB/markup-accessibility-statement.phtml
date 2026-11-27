@@ -186,7 +186,6 @@
 
 <h4 id="non-descriptive-labels" class="govuk-heading-s">Non-descriptive labels</h4>
 <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
-    <li>The page contains two "Postcode search" fields—one for the home address and one for the work address—but both use identical labels and button text. Because the fields are placed inside nested fieldsets that do not correctly announce the "Home address" and "Work address" legends, screen reader users cannot distinguish between the two inputs. Additionally, placing each field inside a fieldset with the legend "Postcode search" alongside a label of the same name causes screen readers to announce "Postcode search Postcode search".</li>
     <li>The "Attach file(s)" button is non-descriptive and not clearly associated with any group. The file upload component also does not follow GOV.UK Design System guidance, using incorrect labelling and styling across all upload elements in the service.</li>
     <li>The "Add" button is non-descriptive, and screen reader users navigating out of context (such as through the form fields dialog) cannot tell what will be added when activating it.</li>
     <li>The radio button groups depend on the heading "Has anyone named on your licence ever been:" for context, but this context is lost when screen reader users navigate out of sequence. The group legends do not make sense on their own, and the aria-describedby attribute is incorrectly applied to each legend, so the additional context is not announced.</li>

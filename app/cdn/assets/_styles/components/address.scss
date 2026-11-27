@@ -2,13 +2,48 @@
  * Addresses
  */
 
-@if $app == 'selfserve' {
+.postcode-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 10px;
+  margin-bottom: $gutter;
 
+  > .postcode-search__input,
+  > .postcode-search__button {
+    @include govuk-responsive-margin(6, "bottom", $adjustment: $govuk-border-width-form-element);
+  }
+
+  > .postcode-search__input {
+    flex: 1 1 0;
+    min-width: 70px;
+    max-width: 240px;
+    margin-right: 0;
+
+    input {
+      box-sizing: border-box;
+      width: 100%;
+    }
+  }
+
+  > .postcode-search__button {
+    margin-right: 0;
+
+    button {
+      margin-bottom: 0;
+    }
+  }
+
+  > .field:not(.postcode-search__input):not(.postcode-search__button) {
+    flex-basis: 100%;
+  }
+}
+
+@if $app == "selfserve" {
   .address {
     &-container {
       margin-bottom: 1em;
       font-style: normal;
     }
   }
-
 }

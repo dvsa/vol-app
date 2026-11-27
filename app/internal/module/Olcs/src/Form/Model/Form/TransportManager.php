@@ -2,6 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
+use Common\Form\Elements\Types\Address;
 use Laminas\Form\Annotation as Form;
 
 /**
@@ -19,12 +20,12 @@ class TransportManager
 
     #[Form\Name('home-address')]
     #[Form\ComposedObject('Common\Form\Model\Fieldset\AddressOptional')]
-    #[Form\Options(['label' => 'transport-manager-details-home-address'])]
+    #[Form\Options(['label' => 'transport-manager-details-home-address', 'address_type' => Address::TYPE_HOME])]
     public $homeAddress = null;
 
     #[Form\Name('work-address')]
     #[Form\ComposedObject('Common\Form\Model\Fieldset\AddressOptional')]
-    #[Form\Options(['label' => 'transport-manager-details-work-address'])]
+    #[Form\Options(['label' => 'transport-manager-details-work-address', 'address_type' => Address::TYPE_WORK])]
     public $workAddress = null;
 
     #[Form\Name('form-actions')]

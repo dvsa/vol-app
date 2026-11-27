@@ -388,10 +388,7 @@
             "spec": {
               "name": "searchPostcode",
               "options": {
-                "label": "Postcode search",
-                "label_attributes": {
-                  "class": "form-element__label"
-                }
+                "wrapperElement": "div"
               },
               "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
             }
@@ -402,7 +399,8 @@
           "label": "lva-tm-details-details-homeAddress",
           "label_attributes": {
             "id": "homeAddress"
-          }
+          },
+          "address_type": "home"
         }
       }
     },
@@ -556,10 +554,7 @@
             "spec": {
               "name": "searchPostcode",
               "options": {
-                "label": "Postcode search",
-                "label_attributes": {
-                  "class": "form-element__label"
-                }
+                "wrapperElement": "div"
               },
               "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
             }
@@ -567,7 +562,8 @@
         ],
         "type": "\\Common\\Form\\Elements\\Types\\Address",
         "options": {
-          "label": "lva-tm-details-details-workAddress"
+          "label": "lva-tm-details-details-workAddress",
+          "address_type": "work"
         }
       }
     },

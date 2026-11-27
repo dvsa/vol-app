@@ -18,7 +18,7 @@ class Address
     #[Form\Type('Hidden')]
     public $version;
 
-    #[Form\Options(['label' => 'Postcode search', 'label_attributes' => ['class' => 'form-element__label']])]
+    #[Form\Options(['wrapperElement' => 'div'])]
     #[Form\Required(false)]
     #[Form\Type('Common\Form\Elements\Types\PostcodeSearch')]
     #[Form\Flags(['priority' => 100])]
