@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.8.1](https://github.com/dvsa/vol-app/compare/v9.8.0...v9.8.1) (2026-11-26)
+
+
+### Miscellaneous Chores
+
+* release 9.8.1 ([ca1627d](https://github.com/dvsa/vol-app/commit/ca1627d776393d08d456fd0c834750f199706e15))
+
 ## [9.8.0](https://github.com/dvsa/vol-app/compare/v9.7.0...v9.8.0) (2026-11-25)
 
 
