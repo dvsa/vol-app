@@ -11,6 +11,7 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
 <html lang="<?php echo $this->escapeHtmlAttr($pageLang); ?>" class="govuk-template app-html-class">
 
 <head>
+  <?php echo $this->partial('partials/google-tag-manager'); ?>
   <!-- Meta tags -->
   <meta charset="utf-8">
   <?php if ($cookieBannerMode == 'confirmation'): ?>
@@ -96,7 +97,6 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
       });
     </script>
   <?php } ?>
-  <?php echo $this->partial('partials/google-tag-manager'); ?>
   <?php echo $this->version(); ?>
 
   <script data-queueit-c='dvsavol' type='text/javascript' src='//static.queue-it.net/script/queueconfigloader.min.js'></script>
