@@ -29,6 +29,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson;
 use Mockery as m;
 use Dvsa\OlcsTest\Api\Entity\Traits\TotAuthVehiclesTraitTestCase;
 use RuntimeException;
+use PHPUnit\Framework\Attributes\Group;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\Application::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplication::class)]
@@ -485,6 +486,7 @@ final class ApplicationEntityTest extends EntityTester
         $this->assertSame($aoc1, $this->entity->getApplicationOperatingCentreById(7));
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetApplicationOperatingCentreByIdFindsNothingForNumericStringId(): void
     {
         $aoc1 = new ApplicationOperatingCentre($this->entity, new OperatingCentre());
@@ -4496,6 +4498,7 @@ final class ApplicationEntityTest extends EntityTester
         $this->assertSame($march, $sut->getLatestOutstandingApplicationFee());
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetLatestOutstandingApplicationFeePutsAnEarlierDateTimeBeforeALoadedDateString(): void
     {
         $string = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_APP, '2026-03-02T03:04:05+0000');

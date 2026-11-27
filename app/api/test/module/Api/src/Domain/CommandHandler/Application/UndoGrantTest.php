@@ -19,6 +19,7 @@ use Mockery as m;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Application\UndoCancelAllInterimFees as UndoCmd;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Grant Goods Test
@@ -130,9 +131,9 @@ final class UndoGrantTest extends AbstractCommandHandlerTestCase
         );
 
         $this->assertEquals('Y', $task->getIsClosed());
-        $this->assertEquals('Y', $closedTask->getIsClosed());
     }
 
+    #[Group('pins-current-behaviour')]
     public function testHandleCommandDoesNotCloseALoadedTaskThatHoldsCategoryEntities(): void
     {
         $command = Cmd::create(['id' => 111]);

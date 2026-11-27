@@ -48,6 +48,7 @@ use Dvsa\Olcs\Api\Entity\SectionableInterface;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * IrhpApplication Entity Unit Tests
@@ -1413,6 +1414,7 @@ final class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetFeesByAgeKeepsLoadedDateStringsOnBothSidesOfTheCutoff(): void
     {
         $older = m::mock(Fee::class)->makePartial();

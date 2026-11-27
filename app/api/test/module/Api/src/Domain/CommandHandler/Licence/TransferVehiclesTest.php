@@ -25,6 +25,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Mockery as m;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle as LicenceVehicleEntity;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Transfer Vehicles Test
@@ -305,6 +306,7 @@ final class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         }
     }
 
+    #[Group('pins-current-behaviour')]
     public function testHandleCommandTransfersNothingForStringIdsWhenTheVehicleListIsLoaded(): void
     {
         $data = [

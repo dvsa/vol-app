@@ -20,6 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository\Application as Repo;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\InterimConditionsUndertakings as Qry;
 use Dvsa\Olcs\Api\Entity\Application\Application as Entity;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * InterimConditionsUndertakings Test
@@ -86,6 +87,7 @@ final class InterimConditionsUndertakingsTest extends QueryHandlerTestCase
         );
     }
 
+    #[Group('pins-current-behaviour')]
     public function testHandleQueryBundleDropsAConditionLoadedWithNoAndNoWhenTheConditionListIsLoaded(): void
     {
         $attachedTo = m::mock(RefData::class);

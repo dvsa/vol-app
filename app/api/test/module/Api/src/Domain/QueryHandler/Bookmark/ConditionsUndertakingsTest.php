@@ -19,6 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository\Licence as Repo;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\ConditionsUndertakings as Qry;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as Entity;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ConditionsUndertakings Test
@@ -97,6 +98,7 @@ final class ConditionsUndertakingsTest extends QueryHandlerTestCase
         );
     }
 
+    #[Group('pins-current-behaviour')]
     public function testHandleQueryDropsAConditionLoadedWithNoAndNoWhenTheConditionListIsLoaded(): void
     {
         $attachedTo = m::mock(RefData::class);

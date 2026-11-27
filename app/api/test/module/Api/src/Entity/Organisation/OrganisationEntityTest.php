@@ -19,6 +19,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 use Doctrine\ORM\EntityNotFoundException;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Organisation Entity Unit Tests
@@ -968,6 +969,7 @@ final class OrganisationEntityTest extends EntityTester
         $this->assertSame('New', $organisation->getTradingAs());
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetTradingAsThrowsWhenTheNewestUndeletedIsNotFirstInTheList(): void
     {
         $this->expectException(\Error::class);

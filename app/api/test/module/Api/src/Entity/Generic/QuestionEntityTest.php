@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Service\Qa\QaEntityInterface;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Question Entity Unit Tests
@@ -192,6 +193,7 @@ final class QuestionEntityTest extends EntityTester
         $this->assertSame($later, $sut->getActiveQuestionText(new DateTime('2022-06-01')));
     }
 
+    #[Group('pins-current-behaviour')]
     public function testActiveQuestionTextReturnsALoadedDateStringAfterTheDate(): void
     {
         $before = new QuestionTextEntity();

@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspensionReason;
 use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal;
 use Mockery as m;
 use Doctrine\Common\Collections\Criteria;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * CommunityLic Entity Unit Tests
@@ -310,6 +311,7 @@ final class CommunityLicEntityTest extends EntityTester
         $this->assertSame(2, $sut->getFutureSuspension()['id']);
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetFutureSuspensionIgnoresALoadedDateString(): void
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_ACTIVE);
@@ -335,6 +337,7 @@ final class CommunityLicEntityTest extends EntityTester
         $this->assertSame(2, $sut->getCurrentSuspension()['id']);
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetCurrentSuspensionAlsoReturnsALoadedFutureDateString(): void
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_SUSPENDED);
@@ -370,6 +373,7 @@ final class CommunityLicEntityTest extends EntityTester
         $this->assertSame(2, $sut->getCurrentWithdrawal()['id']);
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetCurrentWithdrawalAlsoReturnsALoadedFutureDateString(): void
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_WITHDRAWN);

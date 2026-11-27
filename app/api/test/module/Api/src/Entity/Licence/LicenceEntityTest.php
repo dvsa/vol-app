@@ -43,6 +43,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\Address;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\OlcsTest\Api\Entity\Traits\TotAuthVehiclesTraitTestCase;
 use RuntimeException;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Licence Entity Unit Tests
@@ -237,6 +238,7 @@ final class LicenceEntityTest extends EntityTester
         );
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetActiveVehiclesStillDropsUnspecifiedVehiclesWhenSpecifiedIsNotChecked(): void
     {
         $licence = $this->instantiate(Entity::class);
@@ -456,7 +458,7 @@ final class LicenceEntityTest extends EntityTester
         $this->assertFalse($licence->hasApprovedUnfulfilledConditions());
     }
 
-    public function testHasApprovedUnfulfilledConditionsIsTrueForUnsavedDefaults(): void
+    public function testHasApprovedUnfulfilledConditionsIsTrueForAConditionHoldingIntZero(): void
     {
         $licence = $this->instantiate(Entity::class);
         $licence->setConditionUndertakings(
@@ -476,6 +478,7 @@ final class LicenceEntityTest extends EntityTester
         $this->assertFalse($licence->hasApprovedUnfulfilledConditions());
     }
 
+    #[Group('pins-current-behaviour')]
     public function testHasApprovedUnfulfilledConditionsIsFalseForLoadedApprovedUnfulfilledCondition(): void
     {
         $licence = $this->instantiate(Entity::class);

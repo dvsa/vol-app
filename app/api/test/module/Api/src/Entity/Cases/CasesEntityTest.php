@@ -20,6 +20,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Mockery as m;
 use Dvsa\Olcs\Api\Entity\Note\Note as NoteEntity;
 use Doctrine\Common\Collections\Criteria;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Cases Entity Unit Tests
@@ -619,7 +620,7 @@ final class CasesEntityTest extends EntityTester
         return $complaint;
     }
 
-    public function testGetComplianceComplaintsReturnsAnUnsavedComplaintHoldingOne(): void
+    public function testGetComplianceComplaintsReturnsAComplaintHoldingIntOne(): void
     {
         $compliance = $this->createComplaintHolding(1);
         $environmental = $this->createComplaintHolding(0);
@@ -630,6 +631,7 @@ final class CasesEntityTest extends EntityTester
         $this->assertSame([$compliance], $sut->getComplianceComplaints()->getValues());
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetComplianceComplaintsIgnoresLoadedBooleans(): void
     {
         $sut = $this->entity;
@@ -640,7 +642,7 @@ final class CasesEntityTest extends EntityTester
         $this->assertSame([], $sut->getComplianceComplaints()->getValues());
     }
 
-    public function testGetEnvironmentalComplaintsReturnsAnUnsavedComplaintHoldingTheDefault(): void
+    public function testGetEnvironmentalComplaintsReturnsAComplaintHoldingIntZero(): void
     {
         $compliance = $this->createComplaintHolding(1);
         $environmental = $this->createComplaintHolding(0);
@@ -651,6 +653,7 @@ final class CasesEntityTest extends EntityTester
         $this->assertSame([$environmental], $sut->getEnvironmentalComplaints()->getValues());
     }
 
+    #[Group('pins-current-behaviour')]
     public function testGetEnvironmentalComplaintsIgnoresLoadedBooleans(): void
     {
         $sut = $this->entity;

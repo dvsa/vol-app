@@ -9,6 +9,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationPath as ApplicationPathEntity;
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup as Entity;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * ApplicationPathGroup Entity Unit Tests
@@ -155,6 +156,7 @@ final class ApplicationPathGroupEntityTest extends EntityTester
         $this->assertSame($later, $sut->getActiveApplicationPath(new DateTime('2022-06-01')));
     }
 
+    #[Group('pins-current-behaviour')]
     public function testActiveApplicationPathReturnsALoadedDateStringAfterTheDate(): void
     {
         $before = new ApplicationPathEntity();
