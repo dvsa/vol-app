@@ -142,14 +142,16 @@ final class TransportManagerDraftDateOfBirthTest extends TestCase
 
         $inputHelper = new FormInput();
         $selectHelper = new FormSelect();
-        foreach ([
-            'addressLine1' => 'address-line1',
-            'addressLine2' => 'address-line2',
-            'addressLine3' => 'address-line3',
-            'town' => 'address-level2',
-            'postcode' => 'postal-code',
-            'countryCode' => 'country',
-        ] as $field => $autocomplete) {
+        foreach (
+            [
+                'addressLine1' => 'address-line1',
+                'addressLine2' => 'address-line2',
+                'addressLine3' => 'address-line3',
+                'town' => 'address-level2',
+                'postcode' => 'postal-code',
+                'countryCode' => 'country',
+            ] as $field => $autocomplete
+        ) {
             $element = $homeAddress->get($field);
             $markup = $element instanceof Select ? $selectHelper->render($element) : $inputHelper->render($element);
             $document = new \DOMDocument();

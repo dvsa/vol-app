@@ -215,14 +215,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $birthDate->getYearElement()->setAttribute('autocomplete', 'bday-year');
 
         $homeAddress = $form->get('homeAddress');
-        foreach ([
-            'addressLine1' => 'address-line1',
-            'addressLine2' => 'address-line2',
-            'addressLine3' => 'address-line3',
-            'town' => 'address-level2',
-            'postcode' => 'postal-code',
-            'countryCode' => 'country',
-        ] as $field => $autocomplete) {
+        foreach (
+            [
+                'addressLine1' => 'address-line1',
+                'addressLine2' => 'address-line2',
+                'addressLine3' => 'address-line3',
+                'town' => 'address-level2',
+                'postcode' => 'postal-code',
+                'countryCode' => 'country',
+            ] as $field => $autocomplete
+        ) {
             $homeAddress->get($field)->setAttribute('autocomplete', $autocomplete);
         }
         $homeAddress->get('searchPostcode')->get('postcode')->setAttribute('autocomplete', 'postal-code');
