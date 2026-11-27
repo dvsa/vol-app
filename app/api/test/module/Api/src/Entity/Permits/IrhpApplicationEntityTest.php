@@ -1442,6 +1442,9 @@ final class IrhpApplicationEntityTest extends EntityTester
         $this->sut->setFees(new ArrayCollection([$undated, $dated, $newer]));
         $this->assertSame($newer, $this->sut->getLatestIssueFee());
 
+        $this->sut->setFees(new ArrayCollection([$undated, $dated]));
+        $this->assertSame($dated, $this->sut->getLatestIssueFee());
+
         $this->sut->setFees(new ArrayCollection([$undated]));
         $this->assertSame($undated, $this->sut->getLatestIssueFee());
     }
