@@ -42,7 +42,10 @@
           "validators": [
             {
               "instance": {
-                "class": "Dvsa\\Olcs\\Transfer\\Validators\\DateOfBirth"
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\DateOfBirth",
+                "clock": {
+                  "class": "Closure"
+                }
               },
               "breakChainOnFailure": false
             }
