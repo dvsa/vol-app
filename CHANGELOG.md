@@ -1,5 +1,17 @@
 # Changelog
 
+## [9.9.0](https://github.com/dvsa/vol-app/compare/v9.8.1...v9.9.0) (2026-11-27)
+
+
+### Features
+
+* show licence number at the top of Notify emails VOL-7731 ([#1947](https://github.com/dvsa/vol-app/issues/1947)) ([f64ec02](https://github.com/dvsa/vol-app/commit/f64ec02d7807fcc795c692e9df0aaba356bde64c))
+
+
+### Bug Fixes
+
+* vol 6630 operating centre list export bug ([#1938](https://github.com/dvsa/vol-app/issues/1938)) ([bca31af](https://github.com/dvsa/vol-app/commit/bca31af2da1d60e06646fcb8cad4bbae54458394))
+
 ## [9.8.1](https://github.com/dvsa/vol-app/compare/v9.8.0...v9.8.1) (2026-11-26)
 
 
