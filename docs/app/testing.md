@@ -457,6 +457,29 @@ REGENERATE_SCHEMA_DRIFT_BASELINE=1 vendor/bin/phpunit \
   -c phpunit-integration.xml --filter SchemaDriftTest
 ```
 
+## Getters and stored values
+
+An in-memory `Criteria` filter (`$collection->matching($criteria)`) reads the
+stored property of each record, not its getter. doctrine/collections 3 removes
+the older behaviour of calling the getter, so a field whose getter returns
+something other than the stored value would filter differently from what the
+code reads.
+
+`GetterReadsStoredValueTest` proves the two agree for every mapped field of every
+entity, with the property untouched, set to representative values and set to
+null. Four fields are listed as known differences:
+
+- `DocumentAnalysis::$token`: the getter returns `''` when nothing is stored.
+- `BusRegSearchView::$isTxcApp`: the `bool` return type converts 0/1 and throws
+  on null.
+- `BusRegSearchView::$organisationId`: there is no getter.
+- `TaskSearchView::$messaging`: the return type is `int` but the column holds
+  `'Y'` or `'N'`, so the getter throws.
+
+None of the four is used in a `Criteria`. When the test fails, either make the
+getter return the stored value, or add the field to the list in the test and
+make sure nothing filters on it in memory.
+
 ## Table output escaping
 
 The table render pipeline does not escape. `ContentHelper::replaceContent()` is a
