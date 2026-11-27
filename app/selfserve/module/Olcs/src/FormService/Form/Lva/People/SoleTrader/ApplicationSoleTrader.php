@@ -14,6 +14,7 @@ use Laminas\Form\Form;
 class ApplicationSoleTrader extends CommonApplicationSoleTrader
 {
     use ButtonsAlterations;
+    use Autocomplete;
 
     /**
      * Alter form
@@ -27,6 +28,10 @@ class ApplicationSoleTrader extends CommonApplicationSoleTrader
     protected function alterForm($form, array $params)
     {
         $form = parent::alterForm($form, $params);
+
+        if ($params['location'] === 'external') {
+            $this->addSoleTraderAutocomplete($form);
+        }
 
         if ($params['canModify'] === false) {
             $this->removeFormAction($form, 'cancel');

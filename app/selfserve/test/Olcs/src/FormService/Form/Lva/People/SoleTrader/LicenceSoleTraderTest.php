@@ -22,6 +22,8 @@ use LmcRbacMvc\Service\AuthorizationService;
 
 final class LicenceSoleTraderTest extends MockeryTestCase
 {
+    use AutocompleteAssertions;
+
     protected $sut;
 
     protected $formHelper;
@@ -62,6 +64,10 @@ final class LicenceSoleTraderTest extends MockeryTestCase
         $formActions->shouldReceive('remove')->once()->with('disqualify');
 
         $form = m::mock(Form::class);
+        if ($params['location'] === 'external') {
+            $person = $this->createPersonFieldset();
+            $form->shouldReceive('get')->with('data')->andReturn($person);
+        }
 
         $this->mockLicenceService->shouldReceive('alterForm')
             ->once()
@@ -75,6 +81,9 @@ final class LicenceSoleTraderTest extends MockeryTestCase
             ->andReturn($form);
 
         $this->sut->getForm($params);
+        if (isset($person)) {
+            $this->assertPersonAutocomplete($person);
+        }
     }
 
     public function testGetForm(): void
