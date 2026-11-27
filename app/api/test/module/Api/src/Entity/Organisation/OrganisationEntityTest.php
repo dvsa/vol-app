@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Disqualification;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as Entity;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
+use Dvsa\Olcs\Api\Entity\Organisation\TradingName;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock;
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -883,27 +884,103 @@ final class OrganisationEntityTest extends EntityTester
 
     public function testHasUnlicencedLicences(): void
     {
-        $mockLic1 = m::mock(LicenceEntity::class)
-            ->shouldReceive('getLicNo')
-            ->andReturn('FOO')
-            ->getMock();
-
-        $mockLic2 = m::mock(LicenceEntity::class)
-            ->shouldReceive('getLicNo')
-            ->andReturn('UA123')
-            ->getMock();
-
-        $licences = new ArrayCollection();
-        $licences->add($mockLic1);
-        $licences->add($mockLic2);
-
         $organisation = m::mock(Entity::class)->makePartial();
-        $organisation->shouldReceive('getLicences')
-            ->andReturn($licences)
-            ->once()
-            ->getMock();
+        $organisation->setLicences(new ArrayCollection([
+            $this->licenceWithLicNo('OB1234567'),
+            $this->licenceWithLicNo('UB1234567'),
+        ]));
 
         $this->assertTrue($organisation->hasUnlicencedLicences());
+    }
+
+    public function testHasUnlicencedLicencesFalseWhenNoLicNoContainsU(): void
+    {
+        $organisation = m::mock(Entity::class)->makePartial();
+        $organisation->setLicences(new ArrayCollection([
+            $this->licenceWithLicNo('OB1234567'),
+            $this->licenceWithLicNo('PD8538936'),
+        ]));
+
+        $this->assertFalse($organisation->hasUnlicencedLicences());
+    }
+
+    private function licenceWithLicNo(string $licNo): LicenceEntity
+    {
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->setLicNo($licNo);
+
+        return $licence;
+    }
+
+    public function testHasInforceLicencesTrueForLicenceWithInForceDate(): void
+    {
+        $withDate = m::mock(LicenceEntity::class)->makePartial();
+        $withDate->setInForceDate('2020-01-02');
+        $withoutDate = m::mock(LicenceEntity::class)->makePartial();
+        $withoutDate->setInForceDate(null);
+
+        $organisation = m::mock(Entity::class)->makePartial();
+        $organisation->setLicences(new ArrayCollection([$withoutDate, $withDate]));
+
+        $this->assertTrue($organisation->hasInforceLicences());
+    }
+
+    public function testHasInforceLicencesFalseWhenNoLicenceHasInForceDate(): void
+    {
+        $withoutDate = m::mock(LicenceEntity::class)->makePartial();
+        $withoutDate->setInForceDate(null);
+
+        $organisation = m::mock(Entity::class)->makePartial();
+        $organisation->setLicences(new ArrayCollection([$withoutDate]));
+
+        $this->assertFalse($organisation->hasInforceLicences());
+    }
+
+    public function testGetLicenceByLicNoReturnsOnlyTheMatchingLicence(): void
+    {
+        $wanted = $this->licenceWithLicNo('PD8538936');
+        $other = $this->licenceWithLicNo('PD1111111');
+
+        $organisation = m::mock(Entity::class)->makePartial();
+        $organisation->setLicences(new ArrayCollection([$other, $wanted]));
+
+        $this->assertSame([$wanted], $organisation->getLicenceByLicNo('PD8538936')->getValues());
+    }
+
+    private function tradingName(string $name, string $createdOn, ?string $deletedDate = null): TradingName
+    {
+        $tradingName = new TradingName($name);
+        $tradingName->setCreatedOn($createdOn);
+        $tradingName->setDeletedDate($deletedDate);
+
+        return $tradingName;
+    }
+
+    public function testGetTradingAsReturnsNewestUndeletedWhenItIsFirstInTheList(): void
+    {
+        $organisation = m::mock(Entity::class)->makePartial();
+        $organisation->setTradingNames(new ArrayCollection([
+            $this->tradingName('New', '2026-03-02T03:04:05+0000'),
+            $this->tradingName('Old', '2026-01-02T03:04:05+0000'),
+            $this->tradingName('Deleted', '2026-05-02T03:04:05+0000', '2026-05-03T03:04:05+0000'),
+        ]));
+
+        $this->assertSame('New', $organisation->getTradingAs());
+    }
+
+    public function testGetTradingAsThrowsWhenTheNewestUndeletedIsNotFirstInTheList(): void
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to a member function getName() on null');
+
+        $organisation = m::mock(Entity::class)->makePartial();
+        $organisation->setTradingNames(new ArrayCollection([
+            $this->tradingName('Old', '2026-01-02T03:04:05+0000'),
+            $this->tradingName('New', '2026-03-02T03:04:05+0000'),
+            $this->tradingName('Deleted', '2026-05-02T03:04:05+0000', '2026-05-03T03:04:05+0000'),
+        ]));
+
+        $organisation->getTradingAs();
     }
 
     /**
