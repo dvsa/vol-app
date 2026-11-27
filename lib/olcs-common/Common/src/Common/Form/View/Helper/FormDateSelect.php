@@ -12,7 +12,6 @@ use Laminas\Form\View\Helper\FormDateSelect as LaminasFormDateSelect;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Element\DateSelect as DateSelectElement;
 use Laminas\Form\Exception;
-use Laminas\Form\View\Helper\FormMonthSelect as FormMonthSelectHelper;
 
 /**
  * Form Date Select
@@ -21,9 +20,7 @@ use Laminas\Form\View\Helper\FormMonthSelect as FormMonthSelectHelper;
  */
 class FormDateSelect extends LaminasFormDateSelect
 {
-    private $inputHelper;
-
-    private $format = '<div class="field inline-text"><label for="%s">%s</label>%s</div>';
+    use DateInputTrait;
 
     /**
      * Render a date element that is composed of three selects
@@ -69,74 +66,6 @@ class FormDateSelect extends LaminasFormDateSelect
         $data[$pattern['month']] = $this->renderMonthInput($monthElement);
         $data[$pattern['year']]  = $this->renderYearInput($yearElement);
 
-        $markup = '';
-        foreach ($pattern as $key => $value) {
-            // Delimiter
-            if (is_numeric($key)) {
-                $markup .= $value;
-            } else {
-                $markup .= $data[$value];
-            }
-        }
-
-        return $markup;
-    }
-
-    protected function renderDayInput($element)
-    {
-
-        return $this->wrap(
-            $this->renderInput($element, 2),
-            'Day',
-            $element->getAttribute('id')
-        );
-    }
-
-    protected function renderMonthInput($element)
-    {
-
-        return $this->wrap(
-            $this->renderInput($element, 2),
-            'Month',
-            $element->getAttribute('id')
-        );
-    }
-
-    protected function renderYearInput($element)
-    {
-
-        return $this->wrap(
-            $this->renderInput($element, 4),
-            'Year',
-            $element->getAttribute('id')
-        );
-    }
-
-    protected function wrap($content, $label, $id): string
-    {
-        $label = $this->getTranslator()->translate('date-' . $label);
-
-        return sprintf($this->format, $id, $label, $content);
-    }
-
-    /**
-     * @psalm-param 2|4 $maxLength
-     */
-    protected function renderInput($element, $maxLength)
-    {
-        $inputHelper = $this->getInputHelper();
-        $element->setAttribute('maxlength', $maxLength);
-        $element->setAttribute('class', 'govuk-input govuk-date-input__input govuk-input--width-' . $maxLength);
-
-        return $inputHelper->render($element);
-    }
-
-    protected function getInputHelper()
-    {
-        if ($this->inputHelper === null) {
-            $this->inputHelper = $this->view->plugin('forminput');
-        }
-
-        return $this->inputHelper;
+        return $this->renderDatePattern($pattern, $data);
     }
 }

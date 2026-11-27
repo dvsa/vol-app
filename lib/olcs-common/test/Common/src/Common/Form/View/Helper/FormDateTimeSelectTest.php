@@ -58,18 +58,19 @@ final class FormDateTimeSelectTest extends MockeryTestCase
 
         $markup = $this->sut->render($element);
 
-        $expected = '<div class="field inline-text"><label for="_day">translated-date-Day</label>'
-            . '<input type="select" name="day" id="_day" maxlength="2" value="">'
-        . '</div> '
-        . '<div class="field inline-text">'
-            . '<label for="_month">translated-date-Month</label>'
-            . '<input type="select" name="month" id="_month" maxlength="2" value="">'
-        . '</div> '
-        . '<div class="field inline-text">'
-            . '<label for="_year">translated-date-Year</label>'
-            . '<input type="select" name="year" id="_year" maxlength="4" value="">'
-        . '</div>'
-        . ' time <select name="hour" id="_hour">'
+        $expected = '<div class="date-time-input"><div class="govuk-date-input"><div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_day">translated-date-Day</label>'
+            . '<input type="text" name="day" id="_day" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" inputmode="numeric" value="">'
+        . '</div></div> '
+        . '<div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_month">translated-date-Month</label>'
+            . '<input type="text" name="month" id="_month" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" inputmode="numeric" value="">'
+        . '</div></div> '
+        . '<div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_year">translated-date-Year</label>'
+            . '<input type="text" name="year" id="_year" maxlength="4" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-4" inputmode="numeric" value="">'
+        . '</div></div></div>'
+        . '<div class="date-time-input__time"> time <select name="hour" id="_hour">'
             . '<option value="00">00</option>'
             . '<option value="01">01</option>'
             . '<option value="02">02</option>'
@@ -100,7 +101,7 @@ final class FormDateTimeSelectTest extends MockeryTestCase
             . '<option value="15">15</option>'
             . '<option value="30">30</option>'
             . '<option value="45">45</option>'
-        . '</select>';
+        . '</select></div></div>';
 
         $this->assertSame($expected, str_replace("\n", '', $markup));
     }
@@ -113,18 +114,19 @@ final class FormDateTimeSelectTest extends MockeryTestCase
 
         $markup = $this->sut->render($element);
 
-        $expected = '<div class="field inline-text"><label for="_day">translated-date-Day</label>'
-            . '<input type="select" name="day" id="_day" maxlength="2" value="">'
-            . '</div> '
-            . '<div class="field inline-text">'
-            . '<label for="_month">translated-date-Month</label>'
-            . '<input type="select" name="month" id="_month" maxlength="2" value="">'
-            . '</div> '
-            . '<div class="field inline-text">'
-            . '<label for="_year">translated-date-Year</label>'
-            . '<input type="select" name="year" id="_year" maxlength="4" value="">'
-            . '</div>'
-            . ' time <select name="hour" id="_hour">'
+        $expected = '<div class="date-time-input"><div class="govuk-date-input"><div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_day">translated-date-Day</label>'
+            . '<input type="text" name="day" id="_day" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" inputmode="numeric" value="">'
+            . '</div></div> '
+            . '<div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_month">translated-date-Month</label>'
+            . '<input type="text" name="month" id="_month" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" inputmode="numeric" value="">'
+            . '</div></div> '
+            . '<div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_year">translated-date-Year</label>'
+            . '<input type="text" name="year" id="_year" maxlength="4" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-4" inputmode="numeric" value="">'
+            . '</div></div></div>'
+            . '<div class="date-time-input__time"> time <select name="hour" id="_hour">'
             . '<option value="00">00</option>'
             . '<option value="01">01</option>'
             . '<option value="02">02</option>'
@@ -157,7 +159,7 @@ final class FormDateTimeSelectTest extends MockeryTestCase
             $expected .= '<option value="' . $minute . '">' . $minute . '</option>';
         }
 
-        $expected .= '</select>';
+        $expected .= '</select></div></div>';
 
         $this->assertSame($expected, str_replace("\n", '', $markup));
     }
@@ -171,18 +173,19 @@ final class FormDateTimeSelectTest extends MockeryTestCase
 
         $markup = $this->sut->render($element);
 
-        $expected = '<div class="field inline-text"><label for="_day">translated-date-Day</label>'
-            . '<input type="select" name="day" id="_day" maxlength="2" value="">'
-            . '</div> '
-            . '<div class="field inline-text">'
-            . '<label for="_month">translated-date-Month</label>'
-            . '<input type="select" name="month" id="_month" maxlength="2" value="">'
-            . '</div> '
-            . '<div class="field inline-text">'
-            . '<label for="_year">translated-date-Year</label>'
-            . '<input type="select" name="year" id="_year" maxlength="4" value="">'
-            . '</div>'
-            . ' time <select name="hour" id="_hour">'
+        $expected = '<div class="date-time-input"><div class="govuk-date-input"><div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_day">translated-date-Day</label>'
+            . '<input type="text" name="day" id="_day" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" inputmode="numeric" value="">'
+            . '</div></div> '
+            . '<div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_month">translated-date-Month</label>'
+            . '<input type="text" name="month" id="_month" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" inputmode="numeric" value="">'
+            . '</div></div> '
+            . '<div class="govuk-date-input__item"><div class="govuk-form-group">'
+            . '<label class="govuk-label govuk-date-input__label" for="_year">translated-date-Year</label>'
+            . '<input type="text" name="year" id="_year" maxlength="4" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-4" inputmode="numeric" value="">'
+            . '</div></div></div>'
+            . '<div class="date-time-input__time"> time <select name="hour" id="_hour">'
             . '<option value=""></option>'
             . '<option value="00">00</option>'
             . '<option value="01">01</option>'
@@ -278,7 +281,7 @@ final class FormDateTimeSelectTest extends MockeryTestCase
             . '<option value="57">57</option>'
             . '<option value="58">58</option>'
             . '<option value="59">59</option>'
-            . '</select>';
+            . '</select></div></div>';
 
         $this->assertSame($expected, str_replace("\n", '', $markup));
     }
@@ -290,6 +293,30 @@ final class FormDateTimeSelectTest extends MockeryTestCase
         $element = new Text('date');
 
         $this->sut->render($element);
+    }
+
+    public function testRenderTimeBeforeDatePreservesSeparators(): void
+    {
+        $element = new DateTimeSelect('date');
+        $element->setOption('pattern', "HH:mm:ss 'on' d/M/y");
+        $element->setShouldShowSeconds(true);
+        $element->setAttribute('id', 'hearingDate');
+
+        $markup = $this->sut->render($element);
+        $document = new \DOMDocument();
+        $document->loadHTML($markup);
+        $xpath = new \DOMXPath($document);
+
+        $this->assertSame(1, $xpath->query('//div[@class="govuk-date-input"]')->length);
+        $this->assertSame(3, $xpath->query('//div[@class="govuk-date-input"]/div[@class="govuk-date-input__item"]')->length);
+        $this->assertSame(2, $xpath->query('//div[@class="govuk-date-input"]/span[@class="govuk-body"][text()="/"]')->length);
+        $this->assertSame(0, $xpath->query('//div[@class="govuk-date-input"]//select')->length);
+        $this->assertSame(1, $xpath->query('//select[@id="hearingDate_hour"]')->length);
+        $this->assertSame(1, $xpath->query('//select[@id="hearingDate_minute"]')->length);
+        $this->assertLessThan(strpos($markup, 'class="govuk-date-input"'), strpos($markup, 'id="hearingDate_minute"'));
+        $this->assertStringContainsString(' on </div><div class="govuk-date-input">', $markup);
+        $this->assertSame(1, $xpath->query('//div[@class="date-time-input__time"]/select[@id="hearingDate_hour"]')->length);
+        $this->assertSame(1, $xpath->query('//div[@class="date-time-input__time"]/select[@id="hearingDate_minute"]')->length);
     }
 
     public function testRenderElementWithNoName(): void

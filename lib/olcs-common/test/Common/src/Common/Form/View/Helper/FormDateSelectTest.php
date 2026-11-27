@@ -46,11 +46,33 @@ final class FormDateSelectTest extends MockeryTestCase
     public function testRender(): void
     {
         $element = new DateSelect('date');
+        $element->setAttribute('id', 'dob');
+        $element->setValue(['day' => '5', 'month' => '6', 'year' => '1990']);
         $markup = $this->sut->render($element);
 
-          $expected = '<div class="field inline-text"><label for="_day">translated-date-Day</label><input type="select" name="day" id="_day" pattern="&#x5C;d&#x2A;" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" value=""></div> <div class="field inline-text"><label for="_month">translated-date-Month</label><input type="select" name="month" id="_month" pattern="&#x5C;d&#x2A;" maxlength="2" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-2" value=""></div> <div class="field inline-text"><label for="_year">translated-date-Year</label><input type="select" name="year" id="_year" pattern="&#x5C;d&#x2A;" maxlength="4" class="govuk-input&#x20;govuk-date-input__input&#x20;govuk-input--width-4" value=""></div>';
+        $document = new \DOMDocument();
+        $document->loadHTML($markup);
+        $xpath = new \DOMXPath($document);
 
-        $this->assertEquals($expected, $markup);
+        $this->assertSame(1, $xpath->query('//div[@class="govuk-date-input"]')->length);
+        foreach (['day' => [2, '5'], 'month' => [2, '6'], 'year' => [4, '1990']] as $part => [$width, $value]) {
+            $item = '//div[@class="govuk-date-input"]/div[@class="govuk-date-input__item"]';
+            $input = $item . '/div[@class="govuk-form-group"]/input[@id="dob_' . $part . '"]';
+            $this->assertSame(1, $xpath->query($input)->length);
+            $this->assertSame('text', $xpath->evaluate('string(' . $input . '/@type)'));
+            $this->assertSame('numeric', $xpath->evaluate('string(' . $input . '/@inputmode)'));
+            $this->assertSame($part, $xpath->evaluate('string(' . $input . '/@name)'));
+            $this->assertSame($value, $xpath->evaluate('string(' . $input . '/@value)'));
+            $this->assertSame((string) $width, $xpath->evaluate('string(' . $input . '/@maxlength)'));
+            $this->assertSame(
+                'govuk-input govuk-date-input__input govuk-input--width-' . $width,
+                $xpath->evaluate('string(' . $input . '/@class)')
+            );
+            $this->assertSame(
+                1,
+                $xpath->query($item . '/div/label[@class="govuk-label govuk-date-input__label"][@for="dob_' . $part . '"]')->length
+            );
+        }
     }
 
     public function testRenderWrongElement(): void
