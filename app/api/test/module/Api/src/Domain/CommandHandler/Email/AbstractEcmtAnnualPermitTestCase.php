@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
 use Dvsa\Olcs\Api\Domain\Exception\MissingEmailException;
@@ -237,21 +238,32 @@ abstract class AbstractEcmtAnnualPermitTestCase extends AbstractPermitTestCase
             ->withNoArgs()
             ->andReturn($validityYear);
 
-        $fee = m::mock(Fee::class);
+        $outstandingStatus = m::mock(RefData::class);
+        $this->refData[Fee::STATUS_OUTSTANDING] = $outstandingStatus;
+
+        $paidFee = m::mock(Fee::class)->makePartial();
+        $paidFee->setFeeStatus(new RefData(Fee::STATUS_PAID));
+        $paidFee->shouldReceive('isEcmtIssuingFee')->withNoArgs()->andReturn(true);
+        $paidFee->shouldReceive('getFeeTypeAmount')->withNoArgs()->andReturn(999);
+        $paidFee->shouldReceive('getOutstandingAmount')->withNoArgs()->andReturn(999);
+        $paidFee->shouldReceive('getInvoicedDateTime')->withNoArgs()->andReturn(new DateTime('1 January 2018'));
+
+        $fee = m::mock(Fee::class)->makePartial();
+        $fee->setFeeStatus($outstandingStatus);
         $fee->shouldReceive('isEcmtIssuingFee')->withNoArgs()->andReturn(true);
         $fee->shouldReceive('getFeeTypeAmount')->withNoArgs()->andReturn($issueFeeAmount);
         $fee->shouldReceive('getOutstandingAmount')->withNoArgs()->andReturn($permitsGrantedissueFeeTotal);
         $fee->shouldReceive('getInvoicedDateTime')->withNoArgs()->andReturn(
             new DateTime('8 March 2019')
         );
-        $fees = [$fee];
+        $fees = new ArrayCollection([$paidFee, $fee]);
 
         $this->applicationEntity->shouldReceive('getFirstIrhpPermitApplication')
             ->withNoArgs()
             ->andReturn($irhpPermitApplication);
 
         $this->applicationEntity->shouldReceive('calculateTotalPermitsRequired')->andReturn($permitsRequired);
-        $this->applicationEntity->shouldReceive('getFees->matching')->andReturn($fees);
+        $this->applicationEntity->shouldReceive('getFees')->andReturn($fees);
         $this->applicationEntity->shouldReceive('isAwaitingFee')->once()->withNoArgs()->andReturn(true);
         $this->applicationEntity->shouldReceive('getCreatedBy')->once()->withNoArgs()->andReturn($this->userEntity);
         $this->applicationEntity->shouldReceive('getLicence->getTranslateToWelsh')

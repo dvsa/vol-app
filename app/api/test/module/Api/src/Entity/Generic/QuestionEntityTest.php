@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Service\Qa\QaEntityInterface;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Question Entity Unit Tests
@@ -177,5 +178,32 @@ final class QuestionEntityTest extends EntityTester
             $answerValue,
             $entity->getStandardAnswer($qaEntity, $applicationPathLockedOn)
         );
+    }
+
+    public function testGetActiveQuestionTextReturnsTheLaterOfTwoLoadedDateStringsBeforeTheDate(): void
+    {
+        $earlier = new QuestionTextEntity();
+        $earlier->setEffectiveFrom('2020-01-02T03:04:05+0000');
+        $later = new QuestionTextEntity();
+        $later->setEffectiveFrom('2021-01-02T03:04:05+0000');
+
+        $sut = $this->entity;
+        $sut->setQuestionTexts(new ArrayCollection([$earlier, $later]));
+
+        $this->assertSame($later, $sut->getActiveQuestionText(new DateTime('2022-06-01')));
+    }
+
+    #[Group('pins-current-behaviour')]
+    public function testGetActiveQuestionTextReturnsALoadedDateStringAfterTheDate(): void
+    {
+        $before = new QuestionTextEntity();
+        $before->setEffectiveFrom('2020-01-02T03:04:05+0000');
+        $after = new QuestionTextEntity();
+        $after->setEffectiveFrom('2099-01-02T03:04:05+0000');
+
+        $sut = $this->entity;
+        $sut->setQuestionTexts(new ArrayCollection([$before, $after]));
+
+        $this->assertSame($after, $sut->getActiveQuestionText(new DateTime('2022-06-01')));
     }
 }

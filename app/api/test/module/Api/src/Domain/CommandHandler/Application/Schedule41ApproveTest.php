@@ -17,6 +17,8 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\Schedule41Approve;
 use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Application\S4;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\Schedule41Approve as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
@@ -49,19 +51,21 @@ final class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
         $command = Cmd::create($data);
 
         $application = m::mock(Application::class);
+        $licence = m::mock(Licence::class);
+
+        $keptS4 = new S4($application, $licence);
+        $keptS4->setId(14);
+
+        $decidedS4 = new S4($application, $licence);
+        $decidedS4->setId(15);
+        $decidedS4->setOutcome(new RefData(S4::STATUS_REFUSED));
+
+        $agreedS4 = new S4($application, $licence);
+        $agreedS4->setId(16);
+        $agreedS4->setAgreedDate('2026-01-02T03:04:05+0000');
+
         $application->shouldReceive('getS4s')->with()->once()->andReturn(
-            m::mock()->shouldReceive('matching')->once()->andReturn(
-                new \Doctrine\Common\Collections\ArrayCollection(
-                    [
-                        m::mock(S4::class)
-                            ->shouldReceive('getId')
-                            ->once()
-                            ->andReturn(14)
-                            ->getMock()
-                    ]
-                )
-            )
-            ->getMock()
+            new \Doctrine\Common\Collections\ArrayCollection([$decidedS4, $keptS4, $agreedS4])
         );
         $trafficArea = new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea();
         $trafficArea->setIsNi($isNi);

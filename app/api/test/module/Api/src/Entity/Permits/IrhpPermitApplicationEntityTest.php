@@ -422,43 +422,33 @@ final class IrhpPermitApplicationEntityTest extends EntityTester
         $euro5EmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO5_REF);
         $euro6EmissionsCategory = new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF);
 
-        $candidatePermit1 = m::mock(IrhpCandidatePermit::class);
-        $candidatePermit1->shouldReceive('getSuccessful')
-            ->andReturn(true);
-        $candidatePermit1->shouldReceive('getWanted')
-            ->andReturn(false);
+        $candidatePermit1 = m::mock(IrhpCandidatePermit::class)->makePartial();
+        $candidatePermit1->setSuccessful(true);
+        $candidatePermit1->setWanted(false);
         $candidatePermit1->shouldReceive('getAssignedEmissionsCategory')
             ->andReturn($euro5EmissionsCategory);
 
-        $candidatePermit2 = m::mock(IrhpCandidatePermit::class);
-        $candidatePermit2->shouldReceive('getSuccessful')
-            ->andReturn(false);
-        $candidatePermit2->shouldReceive('getWanted')
-            ->andReturn(true);
+        $candidatePermit2 = m::mock(IrhpCandidatePermit::class)->makePartial();
+        $candidatePermit2->setSuccessful(false);
+        $candidatePermit2->setWanted(true);
         $candidatePermit2->shouldReceive('getAssignedEmissionsCategory')
             ->andReturn($euro5EmissionsCategory);
 
-        $candidatePermit3 = m::mock(IrhpCandidatePermit::class);
-        $candidatePermit3->shouldReceive('getSuccessful')
-            ->andReturn(true);
-        $candidatePermit3->shouldReceive('getWanted')
-            ->andReturn(true);
+        $candidatePermit3 = m::mock(IrhpCandidatePermit::class)->makePartial();
+        $candidatePermit3->setSuccessful(true);
+        $candidatePermit3->setWanted(true);
         $candidatePermit3->shouldReceive('getAssignedEmissionsCategory')
             ->andReturn($euro5EmissionsCategory);
 
-        $candidatePermit4 = m::mock(IrhpCandidatePermit::class);
-        $candidatePermit4->shouldReceive('getSuccessful')
-            ->andReturn(false);
-        $candidatePermit4->shouldReceive('getWanted')
-            ->andReturn(true);
+        $candidatePermit4 = m::mock(IrhpCandidatePermit::class)->makePartial();
+        $candidatePermit4->setSuccessful(false);
+        $candidatePermit4->setWanted(true);
         $candidatePermit4->shouldReceive('getAssignedEmissionsCategory')
             ->andReturn($euro6EmissionsCategory);
 
-        $candidatePermit5 = m::mock(IrhpCandidatePermit::class);
-        $candidatePermit5->shouldReceive('getSuccessful')
-            ->andReturn(true);
-        $candidatePermit5->shouldReceive('getWanted')
-            ->andReturn(false);
+        $candidatePermit5 = m::mock(IrhpCandidatePermit::class)->makePartial();
+        $candidatePermit5->setSuccessful(true);
+        $candidatePermit5->setWanted(false);
         $candidatePermit5->shouldReceive('getAssignedEmissionsCategory')
             ->andReturn($euro6EmissionsCategory);
 

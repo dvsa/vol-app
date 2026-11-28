@@ -10,12 +10,16 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\UndoGrant;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\System\Category;
+use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Api\Entity\Task\Task;
 use Dvsa\Olcs\Api\Entity\Fee\Fee;
 use Mockery as m;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Application\UndoCancelAllInterimFees as UndoCmd;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Grant Goods Test
@@ -38,7 +42,9 @@ final class UndoGrantTest extends AbstractCommandHandlerTestCase
     {
         $this->refData = [
             Licence::LICENCE_STATUS_UNDER_CONSIDERATION,
-            ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION
+            ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Category::CATEGORY_APPLICATION => m::mock(RefData::class),
+            Category::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE => m::mock(RefData::class),
         ];
         $this->references = [];
 
@@ -57,11 +63,10 @@ final class UndoGrantTest extends AbstractCommandHandlerTestCase
         $licence = m::mock(Licence::class)->makePartial();
         $licence->setId(222);
 
-        /** @var Task $task */
-        $task = m::mock(Task::class)->makePartial();
+        $task = $this->newGrantTask('N');
+        $closedTask = $this->newGrantTask('Y');
 
-        $tasks = new ArrayCollection();
-        $tasks->add($task);
+        $tasks = new ArrayCollection([$closedTask, $task]);
 
         /** @var Fee $fee */
         $fee = m::mock(Fee::class)
@@ -82,9 +87,7 @@ final class UndoGrantTest extends AbstractCommandHandlerTestCase
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId(111);
         $application->setLicence($licence);
-        $application
-            ->shouldReceive('getTasks->matching')
-            ->andReturn($tasks);
+        $application->setTasks($tasks);
         $application
             ->shouldReceive('getFees')
             ->andReturn($fees);
@@ -128,5 +131,49 @@ final class UndoGrantTest extends AbstractCommandHandlerTestCase
         );
 
         $this->assertEquals('Y', $task->getIsClosed());
+    }
+
+    #[Group('pins-current-behaviour')]
+    public function testHandleCommandDoesNotCloseALoadedTaskThatHoldsCategoryEntities(): void
+    {
+        $command = Cmd::create(['id' => 111]);
+
+        $licence = m::mock(Licence::class)->makePartial();
+        $licence->setId(222);
+
+        $task = new Task(new Category(), new SubCategory());
+        $task->setIsClosed('N');
+
+        $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setId(111);
+        $application->setLicence($licence);
+        $application->setTasks(new ArrayCollection([$task]));
+        $application->shouldReceive('getFees')->andReturn(new ArrayCollection());
+
+        $this->repoMap['Application']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($application)
+            ->shouldReceive('save')
+            ->once()
+            ->with($application);
+
+        $this->repoMap['Task']->shouldReceive('save')->never();
+
+        $this->expectedSideEffect(UndoCmd::class, ['id' => 111], new Result());
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertEquals(['0 Task(s) closed'], $result->toArray()['messages']);
+        $this->assertEquals('N', $task->getIsClosed());
+    }
+
+    private function newGrantTask(string $isClosed): Task
+    {
+        $task = new Task(new Category(), new SubCategory());
+        $task->setCategory($this->refData[Category::CATEGORY_APPLICATION]);
+        $task->setSubCategory($this->refData[Category::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE]);
+        $task->setIsClosed($isClosed);
+
+        return $task;
     }
 }

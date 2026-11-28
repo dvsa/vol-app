@@ -137,6 +137,39 @@ final class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->assertSame($loc, $this->sut->findCorrespondingLoc($aoc, $licence));
     }
 
+    public function testFindCorrespondingLocSkipsLocsForOtherOperatingCentres(): void
+    {
+        $oc = m::mock(Entity\OperatingCentre\OperatingCentre::class)->makePartial();
+
+        $aoc = m::mock(ApplicationOperatingCentreEntity::class)->makePartial();
+        $aoc->setOperatingCentre($oc);
+
+        $otherLoc = m::mock(Entity\Licence\LicenceOperatingCentre::class)->makePartial();
+        $otherLoc->setOperatingCentre(m::mock(Entity\OperatingCentre\OperatingCentre::class)->makePartial());
+
+        $loc = m::mock(Entity\Licence\LicenceOperatingCentre::class)->makePartial();
+        $loc->setOperatingCentre($oc);
+
+        $licence = m::mock(Entity\Licence\Licence::class)->makePartial();
+        $licence->setOperatingCentres(new ArrayCollection([$otherLoc, $loc]));
+
+        $this->assertSame($loc, $this->sut->findCorrespondingLoc($aoc, $licence));
+    }
+
+    public function testFindCorrespondingLocWithOnlyOtherOperatingCentres(): void
+    {
+        $aoc = m::mock(ApplicationOperatingCentreEntity::class)->makePartial();
+        $aoc->setOperatingCentre(m::mock(Entity\OperatingCentre\OperatingCentre::class)->makePartial());
+
+        $otherLoc = m::mock(Entity\Licence\LicenceOperatingCentre::class)->makePartial();
+        $otherLoc->setOperatingCentre(m::mock(Entity\OperatingCentre\OperatingCentre::class)->makePartial());
+
+        $licence = m::mock(Entity\Licence\Licence::class)->makePartial();
+        $licence->setOperatingCentres(new ArrayCollection([$otherLoc]));
+
+        $this->assertNull($this->sut->findCorrespondingLoc($aoc, $licence));
+    }
+
     public function testFindCorrespondingLocWithoutMatch(): void
     {
         $aoc = m::mock(ApplicationOperatingCentreEntity::class)->makePartial();

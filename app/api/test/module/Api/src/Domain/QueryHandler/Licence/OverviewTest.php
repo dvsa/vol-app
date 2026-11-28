@@ -18,6 +18,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Licence as LicenceRepo;
 use Dvsa\Olcs\Api\Domain\Repository\TrafficArea as TrafficAreaRepo;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
+use Dvsa\Olcs\Api\Entity\Licence\PsvDisc;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
@@ -157,6 +158,48 @@ final class OverviewTest extends QueryHandlerTestCase
             ],
             $result->serialize()
         );
+    }
+
+    public function testHandleQueryBundleKeepsPsvDiscsNotCeasedWhenTheDiscListIsLoaded(): void
+    {
+        $query = Qry::create(['id' => 7]);
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->setId(7);
+
+        $current = new PsvDisc($licence);
+        $ceased = new PsvDisc($licence);
+        $ceased->setCeasedDate('2026-01-02T03:04:05+0000');
+
+        $kept = null;
+        $licence->shouldReceive('serialize')
+            ->once()
+            ->andReturnUsing(
+                function (array $bundle) use ($current, $ceased, &$kept) {
+                    $kept = (new ArrayCollection([$ceased, $current]))
+                        ->matching($bundle['psvDiscs']['criteria'])
+                        ->getValues();
+
+                    return ['id' => 7];
+                }
+            );
+        $licence->shouldReceive('getOpenCases')->andReturn([]);
+        $licence->shouldReceive('getTradingName')->andReturn('Foo plc');
+        $licence->shouldReceive('getOpenComplaintsCount')->andReturn(0);
+        $licence->shouldReceive('getActiveVehicles')->andReturn(new ArrayCollection());
+        $licence->shouldReceive('getOrganisation->getActiveLicences')->andReturn(new ArrayCollection());
+        $licence->shouldReceive('getOrganisation->getId')->andReturn(1);
+        $licence->shouldReceive('getFirstApplicationId')->andReturn(1);
+        $licence->shouldReceive('getApplicableAuthProperties')->andReturn([]);
+
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')->with($query)->andReturn($licence);
+        $this->repoMap['BusRegSearchView']->shouldReceive('fetchCount')->andReturn(0);
+        $this->repoMap['Application']->shouldReceive('fetchActiveForOrganisation')->with(1)->andReturn([]);
+        $this->repoMap['TrafficArea']->shouldReceive('getValueOptions')->andReturn([]);
+
+        $this->sut->handleQuery($query)->serialize();
+
+        $this->assertSame([$current], $kept);
     }
 
     protected function getMockApplication(mixed $id): m\MockInterface

@@ -12,8 +12,10 @@ use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\PrintScan\Printer;
 use Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter;
+use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\User\Team;
+use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Service\ConvertToPdf\WebServiceClient;
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
@@ -31,6 +33,7 @@ final class PrintJobTest extends AbstractCommandHandlerTestCase
     private $convertToPdfService;
     /** @var m\MockInterface | \Dvsa\Olcs\Api\Entity\User\User */
     private $mockUser;
+    private $mockDocument;
 
     public function setUp(): void
     {
@@ -59,7 +62,7 @@ final class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->repoMap['User']->shouldReceive('fetchById')->with('USER_ID')->andReturn($this->mockUser);
 
         /** @var Document $mockDocument */
-        $mockDocument = m::mock(Document::class)->makePartial();
+        $mockDocument = $this->mockDocument = m::mock(Document::class)->makePartial();
         $mockDocument->setIdentifier('IDENTIFIER');
         $mockDocument->setFilename('FILENAME');
         $mockDocument->setDescription('DESC');
@@ -572,6 +575,61 @@ final class PrintJobTest extends AbstractCommandHandlerTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot find printer for User LOGIN_ID');
         $this->sut->handleCommand($command);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPrinterLookupFilters')]
+    public function testHandleCommandInternalUserUsesFirstMatchingPrinterFilter(
+        bool $printerHasUser,
+        bool $printerHasSubCategory
+    ): void {
+        $command = Cmd::create(['id' => 'QUEUE_ID', 'documents' => ['DOC_ID'], 'title' => 'JOB', 'user' => 'USER_ID']);
+
+        $subCategory = new SubCategory();
+        $this->mockDocument->setSubCategory($subCategory);
+
+        $team = new Team();
+
+        $otherPrinter = new Printer();
+        $otherPrinter->setPrinterName('OTHER_QUEUE');
+        $otherTeamPrinter = new TeamPrinter($team, $otherPrinter);
+        $otherTeamPrinter->setUser(new User('PID', User::USER_TYPE_INTERNAL));
+        $otherTeamPrinter->setSubCategory(new SubCategory());
+        $team->addTeamPrinters($otherTeamPrinter);
+
+        $printer = new Printer();
+        $printer->setPrinterName('QUEUE1');
+        $teamPrinter = new TeamPrinter($team, $printer);
+        $teamPrinter->setUser($printerHasUser ? $this->mockUser : null);
+        $teamPrinter->setSubCategory($printerHasSubCategory ? $subCategory : null);
+        $team->addTeamPrinters($teamPrinter);
+        $this->mockUser->setTeam($team);
+
+        $mockFile = m::mock(File::class);
+        $this->mockFileUploader->shouldReceive('download')->with('IDENTIFIER')->once()
+            ->andReturn($mockFile);
+
+        $this->sut->shouldReceive('createTmpFile')
+            ->with($mockFile, CommandHandler::TEMP_FILE_PREFIX . '-QUEUE_ID-', 'FILENAME')
+            ->once()
+            ->andReturn('TEMP_FILE.rtf');
+
+        $this->expectPrintFile();
+
+        $this->sut->shouldReceive('deleteTempFiles')->withNoArgs()->once();
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(["Printed successfully"], $result->getMessages());
+    }
+
+    public static function dpPrinterLookupFilters(): array
+    {
+        return [
+            'user and sub category' => [true, true],
+            'team and sub category' => [false, true],
+            'user default' => [true, false],
+            'team default' => [false, false],
+        ];
     }
 
     public function testHandleCommandStubLicence(): void

@@ -48,6 +48,7 @@ use Dvsa\Olcs\Api\Entity\SectionableInterface;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * IrhpApplication Entity Unit Tests
@@ -1413,6 +1414,43 @@ final class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
+    #[Group('pins-current-behaviour')]
+    public function testGetFeesByAgeKeepsLoadedDateStringsOnBothSidesOfTheCutoff(): void
+    {
+        $older = m::mock(Fee::class)->makePartial();
+        $older->setInvoicedDate('2000-01-02T03:04:05+0000');
+        $newer = m::mock(Fee::class)->makePartial();
+        $newer->setInvoicedDate('2999-01-02T03:04:05+0000');
+
+        $this->sut->setFees(new ArrayCollection([$older, $newer]));
+
+        $result = $this->sut->getFeesByAge(10);
+
+        $this->assertSame([$newer, $older], $result->getValues());
+    }
+
+    public function testGetLatestIssueFeeSortsAFeeWithNoInvoicedDateLast(): void
+    {
+        $dated = m::mock(Fee::class)->makePartial();
+        $dated->setInvoicedDate('2019-01-04T00:00:00+0000');
+        $dated->shouldReceive('getFeeType->getFeeType->getId')->andReturn(FeeType::FEE_TYPE_IRHP_ISSUE);
+        $newer = m::mock(Fee::class)->makePartial();
+        $newer->setInvoicedDate('2019-01-08T00:00:00+0000');
+        $newer->shouldReceive('getFeeType->getFeeType->getId')->andReturn(FeeType::FEE_TYPE_IRHP_ISSUE);
+        $undated = m::mock(Fee::class)->makePartial();
+        $undated->setInvoicedDate(null);
+        $undated->shouldReceive('getFeeType->getFeeType->getId')->andReturn(FeeType::FEE_TYPE_IRHP_ISSUE);
+
+        $this->sut->setFees(new ArrayCollection([$undated, $dated, $newer]));
+        $this->assertSame($newer, $this->sut->getLatestIssueFee());
+
+        $this->sut->setFees(new ArrayCollection([$undated, $dated]));
+        $this->assertSame($dated, $this->sut->getLatestIssueFee());
+
+        $this->sut->setFees(new ArrayCollection([$undated]));
+        $this->assertSame($undated, $this->sut->getLatestIssueFee());
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIssueFeeOverdueBoundary')]
     public function testIssueFeeOverdueBoundary(mixed $days, mixed $expected): void
     {
@@ -1711,13 +1749,14 @@ final class IrhpApplicationEntityTest extends EntityTester
     {
         $fees = [];
         foreach ($feesData as $feeData) {
-            $fee = m::mock(Fee::class);
+            $fee = m::mock(Fee::class)->makePartial();
             $fee->shouldReceive('isOutstanding')
                 ->andReturn($feeData['isOutstanding'])
-                ->shouldReceive('getInvoicedDate')
-                ->andReturn(new DateTime($feeData['invoicedDate']))
                 ->shouldReceive('getFeeType->getFeeType->getId')
                 ->andReturn($feeData['feeTypeId']);
+            $fee->setInvoicedDate(
+                $feeData['invoicedDate'] === null ? null : $feeData['invoicedDate'] . 'T00:00:00+0000'
+            );
 
             $fees[] = $fee;
         }
@@ -5501,13 +5540,9 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     private function createMockTask(mixed $description, mixed $isClosed, mixed $categoryId, mixed $subcategoryId): mixed
     {
-        $task = m::mock(Task::class);
-        $task->shouldReceive('getDescription')
-            ->withNoArgs()
-            ->andReturn($description);
-        $task->shouldReceive('getIsClosed')
-            ->withNoArgs()
-            ->andReturn($isClosed);
+        $task = m::mock(Task::class)->makePartial();
+        $task->setDescription($description);
+        $task->setIsClosed($isClosed);
         $task->shouldReceive('getCategory->getId')
             ->withNoArgs()
             ->andReturn($categoryId);

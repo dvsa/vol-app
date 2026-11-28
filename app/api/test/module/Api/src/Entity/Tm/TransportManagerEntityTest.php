@@ -683,4 +683,37 @@ final class TransportManagerEntityTest extends EntityTester
 
         $this->assertEquals($qual3, $entity->getMostRecentQualification()->first());
     }
+
+    private function createQualificationIssued(string $issuedDate, int $id): TmQualification
+    {
+        $qualification = new TmQualification();
+        $qualification->setIssuedDate($issuedDate);
+        $qualification->setId($id);
+
+        return $qualification;
+    }
+
+    public function testGetMostRecentQualificationSortsLoadedDateStringsNewestFirst(): void
+    {
+        $middle = $this->createQualificationIssued('2015-12-24', 1);
+        $oldest = $this->createQualificationIssued('2015-12-23', 2);
+        $newest = $this->createQualificationIssued('2015-12-25', 3);
+
+        $entity = new Entity();
+        $entity->setQualifications(new ArrayCollection([$middle, $oldest, $newest]));
+
+        $this->assertSame([$newest], $entity->getMostRecentQualification()->getValues());
+    }
+
+    public function testGetMostRecentQualificationUsesTheHighestIdForLoadedDateStringsOnTheSameDay(): void
+    {
+        $lowerId = $this->createQualificationIssued('2015-12-25', 1);
+        $higherId = $this->createQualificationIssued('2015-12-25', 2);
+        $older = $this->createQualificationIssued('2015-12-24', 3);
+
+        $entity = new Entity();
+        $entity->setQualifications(new ArrayCollection([$lowerId, $higherId, $older]));
+
+        $this->assertSame([$higherId], $entity->getMostRecentQualification()->getValues());
+    }
 }

@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusReg;
 use Dvsa\Olcs\Api\Entity\Cases\Cases;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\Olcs\Api\Entity\Person\Person;
 use Dvsa\Olcs\Api\Entity\Submission\Submission;
@@ -614,6 +615,119 @@ final class CreateTaskTest extends AbstractCommandHandlerTestCase
                 m::mock()
                 ->shouldReceive('getType')
                 ->andReturn($orgType)
+                ->once()
+                ->getMock()
+                ->shouldReceive('getOrganisationPersons')
+                ->andReturn($organisationPersons)
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->ruleForAlphaSplit
+            ->shouldReceive('getTaskAlphaSplits')
+            ->andReturn($taskAlphaSplits)
+            ->once()
+            ->getMock();
+
+        $this->repoMap[Repository\TaskAllocationRule::class]->shouldReceive('fetchByParametersWithFallbackWhenSubCategoryNotFound')
+            ->with(1, 2, Licence::LICENCE_CATEGORY_PSV, 'B')
+            ->once()
+            ->andReturn($this->rulesForAlphaSplit);
+
+        $this->mockSaveTask($this->references[User::class][888]);
+        $result = $this->sut->handleCommand($command);
+        $expected = [
+            'id' => ['task' => 123, 'assignedToUser' => 888],
+            'messages' => ['Task created successfully']
+        ];
+        $this->assertEquals($expected, $result->toArray());
+    }
+
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitIgnoresSplitWithoutTheLetter(): void
+    {
+        $command = Cmd::create($this->getData());
+
+        $this->mockLicence();
+
+        $otherTaskAlphaSplit = m::mock(TaskAlphaSplit::class)->makePartial();
+        $otherTaskAlphaSplit->setLetters('XYZ');
+        $otherTaskAlphaSplit->setUser($this->references[User::class][999]);
+
+        $mockTaskAlphaSplit = m::mock(TaskAlphaSplit::class)->makePartial();
+        $mockTaskAlphaSplit->setLetters('ABOC');
+        $mockTaskAlphaSplit->setUser($this->references[User::class][888]);
+
+        $taskAlphaSplits = new ArrayCollection([$otherTaskAlphaSplit, $mockTaskAlphaSplit]);
+
+        $this->mockLicence
+            ->shouldReceive('getOrganisation')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getType')
+                ->andReturn(Organisation::ORG_TYPE_REGISTERED_COMPANY)
+                ->once()
+                ->shouldReceive('getName')
+                ->andReturn('bar company')
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->ruleForAlphaSplit
+            ->shouldReceive('getTaskAlphaSplits')
+            ->andReturn($taskAlphaSplits)
+            ->once()
+            ->getMock();
+
+        $this->repoMap[Repository\TaskAllocationRule::class]->shouldReceive('fetchByParametersWithFallbackWhenSubCategoryNotFound')
+            ->with(1, 2, Licence::LICENCE_CATEGORY_PSV, 'B')
+            ->once()
+            ->andReturn($this->rulesForAlphaSplit);
+
+        $this->mockSaveTask($this->references[User::class][888]);
+        $result = $this->sut->handleCommand($command);
+        $expected = [
+            'id' => ['task' => 123, 'assignedToUser' => 888],
+            'messages' => ['Task created successfully']
+        ];
+        $this->assertEquals($expected, $result->toArray());
+    }
+
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitPartnershipUsesLowestIdPerson(): void
+    {
+        $command = Cmd::create($this->getData());
+
+        $this->mockLicence();
+
+        $mockTaskAlphaSplit = m::mock(TaskAlphaSplit::class)->makePartial();
+        $mockTaskAlphaSplit->setLetters('ABOC');
+        $mockTaskAlphaSplit->setUser($this->references[User::class][888]);
+
+        $taskAlphaSplits = new ArrayCollection([$mockTaskAlphaSplit]);
+
+        $laterPerson = m::mock(Person::class)->makePartial();
+        $laterPerson->setFamilyName('xray');
+        $laterOrganisationPerson = m::mock(OrganisationPerson::class)->makePartial();
+        $laterOrganisationPerson->setId(9);
+        $laterOrganisationPerson->setPerson($laterPerson);
+
+        $earlierPerson = m::mock(Person::class)->makePartial();
+        $earlierPerson->setFamilyName('bar');
+        $earlierOrganisationPerson = m::mock(OrganisationPerson::class)->makePartial();
+        $earlierOrganisationPerson->setId(3);
+        $earlierOrganisationPerson->setPerson($earlierPerson);
+
+        $organisationPersons = new ArrayCollection([$laterOrganisationPerson, $earlierOrganisationPerson]);
+
+        $this->mockLicence
+            ->shouldReceive('getOrganisation')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getType')
+                ->andReturn(Organisation::ORG_TYPE_PARTNERSHIP)
                 ->once()
                 ->getMock()
                 ->shouldReceive('getOrganisationPersons')

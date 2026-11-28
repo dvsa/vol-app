@@ -10,7 +10,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bookmark;
 
-use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\QueryHandler\Bookmark\InterimOperatingCentres;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
@@ -56,18 +57,19 @@ final class InterimOperatingCentresTest extends QueryHandlerTestCase
             ]
         ];
 
-        $oc1 = m::mock();
+        $oc1 = $this->operatingCentre('Y');
         $oc1->shouldReceive('serialize')
             ->with($bundle)
             ->andReturn('foo');
-        $oc2 = m::mock();
+        $oc2 = $this->operatingCentre('Y');
         $oc2->shouldReceive('serialize')
             ->with($bundle)
             ->andReturn('bar');
+        $notInterim = $this->operatingCentre('N');
+        $notInterim->shouldReceive('serialize')->never();
 
-        $entity->shouldReceive('getOperatingCentres->matching')
-            ->with(m::type(Criteria::class))
-            ->andReturn([$oc1, $oc2]);
+        $entity->shouldReceive('getOperatingCentres')
+            ->andReturn(new ArrayCollection([$oc1, $notInterim, $oc2]));
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')
             ->with($query)
@@ -80,5 +82,13 @@ final class InterimOperatingCentresTest extends QueryHandlerTestCase
             ],
             $this->sut->handleQuery($query)
         );
+    }
+
+    private function operatingCentre(string $isInterim): m\MockInterface
+    {
+        $oc = m::mock(ApplicationOperatingCentre::class)->makePartial();
+        $oc->setIsInterim($isInterim);
+
+        return $oc;
     }
 }
