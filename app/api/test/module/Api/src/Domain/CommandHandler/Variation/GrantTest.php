@@ -127,76 +127,7 @@ final class GrantTest extends AbstractCommandHandlerTestCase
             ->with($newLicenceVehicle)
             ->getMock();
 
-        $this->expectedSideEffectAsSystemUser(EndInterimCmd::class, ['id' => 111], new Result());
-
-        $licence->shouldReceive('copyInformationFromApplication')
-            ->with($application);
-
-        $this->repoMap['Application']->shouldReceive('fetchUsingId')
-            ->with($command)
-            ->andReturn($application)
-            ->shouldReceive('save')
-            ->once()
-            ->with($application);
-
-        $result1 = new Result();
-        $result1->addMessage('CreateSnapshot');
-        $this->expectedSideEffectAsSystemUser(
-            CreateSnapshot::class,
-            ['id' => 111, 'event' => CreateSnapshot::ON_GRANT],
-            $result1
-        );
-
-        $this->expectedSideEffectAsSystemUser(
-            \Dvsa\Olcs\Transfer\Command\Publication\Application::class,
-            [
-                'id' => 111,
-                'trafficArea' => 'TA',
-                'publicationSection' => \Dvsa\Olcs\Api\Entity\Publication\PublicationSection::VAR_GRANTED_SECTION,
-            ],
-            new Result()
-        );
-        $this->expectedSideEffectAsSystemUser(
-            \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
-            [
-                'id' => 111,
-            ],
-            new Result()
-        );
-
-        $result2 = new Result();
-        $result2->addMessage('CreateDiscRecords');
-        $expectedCommandData = ['id' => $data['id']];
-        $expectedCommandData['currentTotAuth'] = 10;
-        $this->expectedSideEffectAsSystemUser(CreateDiscRecords::class, $expectedCommandData, $result2);
-
-        $result3 = new Result();
-        $result3->addMessage('ProcessApplicationOperatingCentres');
-        $this->expectedSideEffectAsSystemUser(ProcessApplicationOperatingCentres::class, ['id' => $data['id']], $result3);
-
-        $result4 = new Result();
-        $result4->addMessage('CommonGrant');
-        $expectedCommandData = ['id' => $data['id']];
-        $this->expectedSideEffectAsSystemUser(CommonGrant::class, $expectedCommandData, $result4);
-
-        $result = $this->sut->handleCommand($command);
-
-        $expected = [
-            'id' => [
-                'Application' => 111
-            ],
-            'messages' => [
-                'CreateSnapshot',
-                'CreateDiscRecords',
-                'ProcessApplicationOperatingCentres',
-                'CommonGrant',
-                'Application 111 granted'
-            ]
-        ];
-
-        $this->assertEquals($expected, $result->toArray());
-
-        $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
+        $this->expectGrantSideEffectsAndAssertGranted($command, $application, $licence);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpDuplicateVehicleRemovalDates')]
@@ -268,6 +199,23 @@ final class GrantTest extends AbstractCommandHandlerTestCase
             ->times($expectRemoved ? 1 : 0)
             ->getMock();
 
+        $this->expectGrantSideEffectsAndAssertGranted($command, $application, $licence);
+
+        if ($expectRemoved) {
+            $this->assertInstanceOf(\DateTime::class, $newLicenceVehicle->getRemovalDate());
+        } else {
+            $this->assertNull($newLicenceVehicle->getRemovalDate());
+        }
+    }
+
+    public static function dpDuplicateVehicleRemovalDates(): \Iterator
+    {
+        yield 'existing vehicle still specified' => [null, true];
+        yield 'existing vehicle already removed' => ['2026-02-03T04:05:06+0000', false];
+    }
+
+    private function expectGrantSideEffectsAndAssertGranted(Cmd $command, ApplicationEntity $application, Licence $licence): void
+    {
         $this->expectedSideEffectAsSystemUser(EndInterimCmd::class, ['id' => 111], new Result());
 
         $licence->shouldReceive('copyInformationFromApplication')
@@ -307,17 +255,17 @@ final class GrantTest extends AbstractCommandHandlerTestCase
 
         $result2 = new Result();
         $result2->addMessage('CreateDiscRecords');
-        $expectedCommandData = ['id' => $data['id']];
+        $expectedCommandData = ['id' => 111];
         $expectedCommandData['currentTotAuth'] = 10;
         $this->expectedSideEffectAsSystemUser(CreateDiscRecords::class, $expectedCommandData, $result2);
 
         $result3 = new Result();
         $result3->addMessage('ProcessApplicationOperatingCentres');
-        $this->expectedSideEffectAsSystemUser(ProcessApplicationOperatingCentres::class, ['id' => $data['id']], $result3);
+        $this->expectedSideEffectAsSystemUser(ProcessApplicationOperatingCentres::class, ['id' => 111], $result3);
 
         $result4 = new Result();
         $result4->addMessage('CommonGrant');
-        $expectedCommandData = ['id' => $data['id']];
+        $expectedCommandData = ['id' => 111];
         $this->expectedSideEffectAsSystemUser(CommonGrant::class, $expectedCommandData, $result4);
 
         $result = $this->sut->handleCommand($command);
@@ -338,18 +286,6 @@ final class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
-
-        if ($expectRemoved) {
-            $this->assertInstanceOf(\DateTime::class, $newLicenceVehicle->getRemovalDate());
-        } else {
-            $this->assertNull($newLicenceVehicle->getRemovalDate());
-        }
-    }
-
-    public static function dpDuplicateVehicleRemovalDates(): \Iterator
-    {
-        yield 'existing vehicle still specified' => [null, true];
-        yield 'existing vehicle already removed' => ['2026-02-03T04:05:06+0000', false];
     }
 
     public function testHandleCommandUpgradeGoods(): void
