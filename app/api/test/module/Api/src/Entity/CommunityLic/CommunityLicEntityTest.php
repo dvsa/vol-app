@@ -296,7 +296,7 @@ final class CommunityLicEntityTest extends EntityTester
         return $withdrawal;
     }
 
-    public function testGetFutureSuspensionUsesTheSuspensionStartingTomorrow(): void
+    public function testGetFutureSuspensionUsesTheSuspensionStartingInAYear(): void
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_ACTIVE);
         $sut->setCommunityLicSuspensions(
@@ -348,7 +348,7 @@ final class CommunityLicEntityTest extends EntityTester
         $this->assertSame(1, $sut->getCurrentSuspension()['id']);
     }
 
-    public function testGetCurrentSuspensionIgnoresASuspensionStartingTomorrow(): void
+    public function testGetCurrentSuspensionIgnoresASuspensionStartingInAYear(): void
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_SUSPENDED);
         $sut->setCommunityLicSuspensions(
@@ -384,7 +384,7 @@ final class CommunityLicEntityTest extends EntityTester
         $this->assertSame(1, $sut->getCurrentWithdrawal()['id']);
     }
 
-    public function testGetCurrentWithdrawalIgnoresAWithdrawalStartingTomorrow(): void
+    public function testGetCurrentWithdrawalIgnoresAWithdrawalStartingInAYear(): void
     {
         $sut = $this->createCommunityLicWithStatus(CommunityLicEntity::STATUS_WITHDRAWN);
         $sut->setCommunityLicWithdrawals(

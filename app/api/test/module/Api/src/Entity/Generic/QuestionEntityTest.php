@@ -180,7 +180,7 @@ final class QuestionEntityTest extends EntityTester
         );
     }
 
-    public function testActiveQuestionTextReturnsTheLaterOfTwoLoadedDateStringsBeforeTheDate(): void
+    public function testGetActiveQuestionTextReturnsTheLaterOfTwoLoadedDateStringsBeforeTheDate(): void
     {
         $earlier = new QuestionTextEntity();
         $earlier->setEffectiveFrom('2020-01-02T03:04:05+0000');
@@ -194,7 +194,7 @@ final class QuestionEntityTest extends EntityTester
     }
 
     #[Group('pins-current-behaviour')]
-    public function testActiveQuestionTextReturnsALoadedDateStringAfterTheDate(): void
+    public function testGetActiveQuestionTextReturnsALoadedDateStringAfterTheDate(): void
     {
         $before = new QuestionTextEntity();
         $before->setEffectiveFrom('2020-01-02T03:04:05+0000');

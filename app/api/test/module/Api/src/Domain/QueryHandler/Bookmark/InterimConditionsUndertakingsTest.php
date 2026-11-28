@@ -72,7 +72,7 @@ final class InterimConditionsUndertakingsTest extends QueryHandlerTestCase
         $this->assertEquals(['id' => 111], $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryBundleKeepsOnlyConditionsOfTheRequestedTypeHoldingTheDefaultsWhenTheConditionListIsLoaded(): void
+    public function testHandleQueryBundleKeepsOnlyConditionsOfTheRequestedTypeHoldingIntZeroWhenTheConditionListIsLoaded(): void
     {
         $attachedTo = m::mock(RefData::class);
         $conditionType = m::mock(RefData::class);
@@ -88,7 +88,7 @@ final class InterimConditionsUndertakingsTest extends QueryHandlerTestCase
     }
 
     #[Group('pins-current-behaviour')]
-    public function testHandleQueryBundleDropsAConditionLoadedWithNoAndNoWhenTheConditionListIsLoaded(): void
+    public function testHandleQueryBundleDropsALoadedApprovedUnfulfilledConditionWhenTheConditionListIsLoaded(): void
     {
         $attachedTo = m::mock(RefData::class);
         $conditionType = m::mock(RefData::class);

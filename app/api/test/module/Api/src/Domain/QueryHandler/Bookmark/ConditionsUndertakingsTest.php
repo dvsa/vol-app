@@ -80,7 +80,7 @@ final class ConditionsUndertakingsTest extends QueryHandlerTestCase
         $this->assertEquals(['id' => 111, 'conditionUndertakings' => ['foo', 'bar']], $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryKeepsOnlyConditionsOfTheRequestedTypeHoldingTheDefaultsWhenTheConditionListIsLoaded(): void
+    public function testHandleQueryKeepsOnlyConditionsOfTheRequestedTypeHoldingIntZeroWhenTheConditionListIsLoaded(): void
     {
         $attachedTo = m::mock(RefData::class);
         $conditionType = m::mock(RefData::class);
@@ -99,7 +99,7 @@ final class ConditionsUndertakingsTest extends QueryHandlerTestCase
     }
 
     #[Group('pins-current-behaviour')]
-    public function testHandleQueryDropsAConditionLoadedWithNoAndNoWhenTheConditionListIsLoaded(): void
+    public function testHandleQueryDropsALoadedApprovedUnfulfilledConditionWhenTheConditionListIsLoaded(): void
     {
         $attachedTo = m::mock(RefData::class);
         $conditionType = m::mock(RefData::class);

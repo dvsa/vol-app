@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
 use Dvsa\Olcs\Api\Entity\Cases\Complaint as ComplaintEntity;
 use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
+use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\Licence\Continuation;
 use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
@@ -23,7 +24,6 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
 use Dvsa\Olcs\Api\Entity\Licence\PsvDisc;
-use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\TradingName as TradingNameEntity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -31,7 +31,9 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType;
 use Dvsa\Olcs\Api\Entity\Publication\Publication;
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
+use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -1570,9 +1572,9 @@ final class LicenceEntityTest extends EntityTester
     public function testGetApplicationDocuments(): void
     {
         $licence = m::mock(Entity::class)->makePartial();
-        $category = m::mock(RefData::class)->makePartial();
-        $subCategory = m::mock(RefData::class)->makePartial();
-        $otherSubCategory = m::mock(RefData::class)->makePartial();
+        $category = new Category();
+        $subCategory = new SubCategory();
+        $otherSubCategory = new SubCategory();
 
         $mockDocument1 = m::mock(Document::class)->makePartial();
         $mockDocument1->setCategory($category);
@@ -1583,7 +1585,7 @@ final class LicenceEntityTest extends EntityTester
         $mockDocument2->setSubCategory($otherSubCategory);
 
         $mockDocument3 = m::mock(Document::class)->makePartial();
-        $mockDocument3->setCategory(m::mock(RefData::class)->makePartial());
+        $mockDocument3->setCategory(new Category());
         $mockDocument3->setSubCategory($subCategory);
 
         $documentsCollection = new ArrayCollection([$mockDocument1, $mockDocument2, $mockDocument3]);

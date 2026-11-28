@@ -448,10 +448,10 @@ final class ApplicationEntityTest extends EntityTester
         $keptDocument->setSubCategory($subCategory);
         $keptDocument->setOperatingCentre($operatingCentre);
 
-        $droppedDocument = new Entities\Doc\Document('dropped');
-        $droppedDocument->setCategory($category);
-        $droppedDocument->setSubCategory($otherSubCategory);
-        $droppedDocument->setOperatingCentre($operatingCentre);
+        $otherSubCategoryDocument = new Entities\Doc\Document('other-sub-category');
+        $otherSubCategoryDocument->setCategory($category);
+        $otherSubCategoryDocument->setSubCategory($otherSubCategory);
+        $otherSubCategoryDocument->setOperatingCentre($operatingCentre);
 
         $otherCategoryDocument = new Entities\Doc\Document('other-category');
         $otherCategoryDocument->setCategory(new Entities\System\Category());
@@ -464,7 +464,7 @@ final class ApplicationEntityTest extends EntityTester
         $otherOperatingCentreDocument->setOperatingCentre(new OperatingCentre());
 
         $this->entity->setDocuments(
-            new ArrayCollection([$otherCategoryDocument, $keptDocument, $droppedDocument, $otherOperatingCentreDocument])
+            new ArrayCollection([$otherCategoryDocument, $keptDocument, $otherSubCategoryDocument, $otherOperatingCentreDocument])
         );
 
         $this->assertSame(
@@ -4499,7 +4499,7 @@ final class ApplicationEntityTest extends EntityTester
     }
 
     #[Group('pins-current-behaviour')]
-    public function testGetLatestOutstandingApplicationFeePutsAnEarlierDateTimeBeforeALoadedDateString(): void
+    public function testGetLatestOutstandingApplicationFeePrefersAnEarlierDateTimeOverALaterLoadedDateString(): void
     {
         $string = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_APP, '2026-03-02T03:04:05+0000');
         $dateTime = $this->buildOutstandingFee(Entities\Fee\FeeType::FEE_TYPE_APP, new \DateTime('2026-01-02T03:04:05+0000'));

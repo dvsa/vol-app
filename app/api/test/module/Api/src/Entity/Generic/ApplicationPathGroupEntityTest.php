@@ -143,7 +143,7 @@ final class ApplicationPathGroupEntityTest extends EntityTester
         yield [Entity::BILATERALS_STANDARD_AND_CABOTAGE_PERMITS_ID, true];
     }
 
-    public function testActiveApplicationPathReturnsTheLaterOfTwoLoadedDateStringsBeforeTheDate(): void
+    public function testGetActiveApplicationPathReturnsTheLaterOfTwoLoadedDateStringsBeforeTheDate(): void
     {
         $earlier = new ApplicationPathEntity();
         $earlier->setEffectiveFrom('2020-01-02T03:04:05+0000');
@@ -157,7 +157,7 @@ final class ApplicationPathGroupEntityTest extends EntityTester
     }
 
     #[Group('pins-current-behaviour')]
-    public function testActiveApplicationPathReturnsALoadedDateStringAfterTheDate(): void
+    public function testGetActiveApplicationPathReturnsALoadedDateStringAfterTheDate(): void
     {
         $before = new ApplicationPathEntity();
         $before->setEffectiveFrom('2020-01-02T03:04:05+0000');

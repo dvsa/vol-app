@@ -242,7 +242,7 @@ abstract class AbstractEcmtAnnualPermitTestCase extends AbstractPermitTestCase
         $this->refData[Fee::STATUS_OUTSTANDING] = $outstandingStatus;
 
         $paidFee = m::mock(Fee::class)->makePartial();
-        $paidFee->setFeeStatus(m::mock(RefData::class));
+        $paidFee->setFeeStatus(new RefData(Fee::STATUS_PAID));
         $paidFee->shouldReceive('isEcmtIssuingFee')->withNoArgs()->andReturn(true);
         $paidFee->shouldReceive('getFeeTypeAmount')->withNoArgs()->andReturn(999);
         $paidFee->shouldReceive('getOutstandingAmount')->withNoArgs()->andReturn(999);

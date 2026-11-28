@@ -232,11 +232,6 @@ final class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         $licenceVehicle3->setVehicle($vehicle3);
         $licenceVehicle3->setId(999);
 
-        $licenceVehicles = [
-            $licenceVehicle1,
-            $licenceVehicle2
-        ];
-
         /** @var Licence $sourceLicence */
         $sourceLicence = m::mock(Licence::class)->makePartial();
         $sourceLicence->shouldReceive('getLicenceVehicles')
