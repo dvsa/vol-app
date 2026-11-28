@@ -104,7 +104,7 @@ class GetterReadsStoredValueTest extends TestCase
         $expected = self::KNOWN_DIFFERENCES;
         sort($expected);
 
-        $this->assertGreaterThan(10000, $comparisons);
+        $this->assertGreaterThan(10000, $comparisons, 'The walk over entity metadata made far fewer comparisons than expected, so it may have skipped most entities.');
         $this->assertSame(
             $expected,
             $differing,

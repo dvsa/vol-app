@@ -461,14 +461,15 @@ REGENERATE_SCHEMA_DRIFT_BASELINE=1 vendor/bin/phpunit \
 
 An in-memory `Criteria` filter (`$collection->matching($criteria)` on a list
 that is already loaded) can read a field of each record in two ways: by calling
-its getter, or by reading the stored property. doctrine/collections 3 always
+its getter, or by reading the stored property. From version 3, doctrine/collections always
 reads the stored property, and our `Criteria` filters are being moved to that
 way of reading (VOL-7595).
 
 `app/api/test/module/Api/src/Entity/GetterReadsStoredValueTest.php` checks that
 the two reads give the same value for every mapped field of every entity, with
-the property untouched, set to representative values and set to null. This
-guarantees that the move cannot change which records a filter returns. It lives
+the property untouched, set to representative values and set to null. Where the
+two reads agree, moving a filter to the stored read cannot change which records it
+returns. It lives
 in the normal unit suite, so it runs on every PR. Four fields are listed as
 known differences:
 
